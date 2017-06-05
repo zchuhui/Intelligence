@@ -1,0 +1,56 @@
+@import '../../common/styles/base.less';
+
+.header {
+    width:100%;
+    height:50px;
+    background: #262d36;
+    color:#fff;
+
+    .content{
+    	min-width: 1200px;
+    	max-width: 1600px;
+        width:100%;
+        height:50px;
+    	margin: 0 auto;
+
+        .logo{
+            margin-top: 10px;
+        }
+
+        .msgWrap{
+            float:right;
+
+            .msgItem{
+                position: relative;
+                display: inline-block;  
+                height:30px;
+                margin-top:15px;
+                margin-right:20px; 
+                vertical-align: top;
+            }
+            
+            .msgLine{
+                display: inline-block; 
+                width:1px;
+                height:30px;
+                background: #fff;
+                border:0;
+                margin-top:10px;
+                margin-right:20px;
+                vertical-align: top;
+            }
+
+            .msgCircle{
+                position: absolute;
+                top:-2px;
+                right:-10px;
+                display: block;
+                width: 9px;
+                height: 9px;
+                background: red;
+                border-radius:50%;
+                border:1px solid #fff;
+            }
+        }
+    }
+}
