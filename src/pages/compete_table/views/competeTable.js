@@ -67,9 +67,13 @@ class CompteTable extends React.Component {
 			          onCancel={this.handleCancel} 
 			        >
 			          <p>Some contents...</p>
+<<<<<<< HEAD
 			          <p>Some contents...</p>
 			          <p>Some contents...</p>
 						
+=======
+						 
+>>>>>>> batch-1
 			        </Modal>
             	</div>
 
