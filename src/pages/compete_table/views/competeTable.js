@@ -62,9 +62,9 @@ class CompteTable extends React.Component {
 
 				     <Modal
 			          title="自定义列"
-			          visible={this.state.visible}
+			          visible={this.state.visible}  
 			          onOk={this.handleOk}
-			          onCancel={this.handleCancel}
+			          onCancel={this.handleCancel} 
 			        >
 			          <p>Some contents...</p>
 			          <p>Some contents...</p>
