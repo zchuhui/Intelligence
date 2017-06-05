@@ -6,7 +6,7 @@ import HomeTable from '../views/HomeTable.js';
 function IndexPage() {
     return (
         <MainLayout>
-        	<div>content</div>
+        	<HomeTable /> 
         </MainLayout>
     );
 }

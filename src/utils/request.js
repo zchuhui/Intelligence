@@ -14,6 +14,7 @@ function checkStatus(response) {
   throw error;
 }
 
+
 /**
  * 异步请求url，获取数据
  *
