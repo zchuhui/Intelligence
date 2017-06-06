@@ -1,15 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import MainLayout from '../../../components/MainLayout/MainLayout';
-import CompeteTable from '../views/competeTable';
-import Searcher from '../../../components/Searcher/Searcher';
+import CompeteTable from './CompeteTable/CompeteTable';
 
 class CompteRoute extends React.Component {
 
 	render(){
 		return (
 			<MainLayout>
-                <Searcher /> 
 	        	<CompeteTable />
 	        </MainLayout>
 		)
@@ -19,3 +17,4 @@ class CompteRoute extends React.Component {
 CompteRoute.propTypes = {}
 
 export default connect()(CompteRoute);
+

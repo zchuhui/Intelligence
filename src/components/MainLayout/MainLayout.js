@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import styles from './MainLayout.less';
 import Header from '../../components/Header/Header';
 import Menus from '../../components/Menu/Menu';
+import Searcher from '../../components/Searcher/Searcher';
 
 
 class MainLayout extends Component {
@@ -14,7 +15,11 @@ class MainLayout extends Component {
             
             <div className={styles.contentWrap}>
               <div className={styles.mainWrap}>
-                <Menus />
+                <div className={styles.mainHeader}>
+                  <Menus />
+                  <Searcher /> 
+                </div>
+
                 <div>
                   {this.props.children}
                 </div>

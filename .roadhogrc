@@ -1,28 +1,45 @@
 {
-  "entry": "src/entry_pages/index.js",
-  "env": {
-    "development": {
-      "extraBabelPlugins": [
-        "dva-hmr",
-        "transform-runtime",
-        ["import", { "libraryName": "antd", "style": "css" }]
-      ]
-    },
-    "production": {
-      "extraBabelPlugins": [
-        "transform-runtime"
-      ]
-    }
-  },
+  "entry": ["src/pages/login/index.js","src/pages/test/index.js","src/pages/compete_table/index.js"],
+  "disableCSSModules": false,
+  "publicPath": "/",
+  "theme": null,
+  "outputPath": "./dist",
+  "autoprefixer": null,
   "proxy": {
     "/api": {
-      "target": "http://jsonplaceholder.typicode.com/",
+      "target": "https://betabia.banggood.com/index.php?com=api&t=productList",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     },
     "/login": {
       "target": "http://localhost:8000/",
       "pathRewrite": { "^/login" : "/login.html" }
+    },
+    "/test": {
+      "target": "http://localhost:8000/",
+      "pathRewrite": { "^/test" : "/test.html" }
     }
+  },
+  "extraBabelPlugins": [
+    "transform-runtime",
+    ["import", { "libraryName": "antd", "style": true }]
+  ],
+  "env": {
+    "development": {
+      "extraBabelPlugins": [
+        "dva-hmr"
+      ]
+    }
+  },
+  "multipage": false,
+  "dllPlugin": {
+    "exclude": [
+      "babel-runtime"
+    ],
+    "include": [
+      "dva/router",
+      "dva/saga",
+      "dva/fetch"
+    ]
   }
 }

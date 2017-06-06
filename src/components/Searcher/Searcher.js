@@ -9,7 +9,7 @@ const dateFormat = "YYYY-MM-DD";
 
 const menu = (
 	<Menu>
-		<Menu.Item key="0">
+		<Menu.Item key="0" onClick={ log() }>
 			<span>menu item</span>
 		</Menu.Item>
 		<Menu.Item key="1">
@@ -24,18 +24,44 @@ const menu = (
 	</Menu>
 )
 
+
 function log(e) {
-  console.log(e);
+   console.log(e);
+}
+
+function onChange(dates, dateStrings) {
+  console.log('From: ', dates[0], ', to: ', dates[1]);
+  console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
 }
 
 class Searcher extends Component {
+	
+	constructor(props, context) {
+        super(props, context);
+        this.state = {
+        	site:null,
+			classification:null,
+			brand:null,
+        }
+    }
+
+    handleMenuItem(e){
+		console.log("handle")
+	}
+
+
+
 	render() {
 		return (
 			<div className={ styles.searchWrap}>
 				<div className={ styles.searchLeft }>
 					<Dropdown overlay={ menu } trigger={['click']}>
 						<Button style={{ marginRight:10, marginBottom:10}}> 
-							站点 <Icon type="down" />
+							{ 
+								this.state.site != null
+								? this.state.site
+								: "站点"
+							} <Icon type="down" />
 						</Button>
 					</Dropdown>
 					<Dropdown overlay={ menu } trigger={['click']}>
@@ -74,9 +100,6 @@ class Searcher extends Component {
 
 					<div>
 						<Tag closable onClose={log}>Tag 2</Tag>
-						<Tag closable onClose={log}>Tag 2</Tag>
-						<Tag closable onClose={log}>Tag 2</Tag>
-						<Tag closable onClose={log}>Tag 2</Tag>
 					</div>
 				</div>
 
@@ -87,10 +110,11 @@ class Searcher extends Component {
 						<Button style={{ marginLeft:10, pointerEvents: 'none' }}> 
 							抓取时间
 						</Button> 
-						<RangePicker
-					      defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]}
-					      format={dateFormat} 
-					      style={{ width:250 }}
+						
+					    <RangePicker
+					      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}
+					      format="YYYY/MM/DD"
+					      style={{width:240}}
 					    />
 					</InputGroup> 
 				</div>
