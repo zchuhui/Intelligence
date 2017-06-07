@@ -8,6 +8,7 @@ const app = dva();
 
 // 3. Model
 app.model(require('./models/CompeteGoods'));
+app.model(require('../test/models/Users'));
 
 // 4. Router
 app.router(require('./router'));

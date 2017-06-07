@@ -22,14 +22,31 @@ const menu = (
   </Menu>
 )
 
+
+let argument = {
+	site:null,      
+	cid:null,       
+	bid:null,       
+	status:null,    
+	startTime:null, 
+	endTime:null,	
+	price1:null,
+	price2:null,
+	sku:null,
+	page:1
+}
+
 function handleMenuClick() {}
 
 
-class CompteTable extends React.Component {
+class CompteTable extends React.Component {	
+	constructor(props, context) {
+        super(props, context);
+    }
 
     state = { 
     	// 自定义弹框
-    	visible: false 
+    	visible: false,
     }
 
     showModal = () => {
@@ -48,19 +65,31 @@ class CompteTable extends React.Component {
             visible: false,
         });
     }
+
+    // 搜索
+    handleSearch = (argument) => {
+    	this.props.dispatch({
+    		type: 'CompeteGoods',
+	     	payload: argument,
+    	})
+    }
+
+    handlerClick(){
+      this.props.searchClick('i love you');
+    }
     
-    
+    /* 渲染模块 */
     render() {
         return (
         	<div>
                 <div className={ styles.main } > 
-				
-	            	{ /*操作栏*/ }
+
+	            	{ /* 操作栏 */ }
 	            	<div className={ styles.clear } style={{ paddingBottom:20 }}>
 
-					    <Button type="primary" className={styles.fr} onClick={this.showModal}>自定义列</Button>
+					    <Button type="primary" className={styles.fr} onClick={this.showModal }>自定义列</Button>
 						
-	            		<Button type="primary" className={styles.fr} style={{marginRight:10}}>批量操作</Button>
+	            		<Button type="primary" className={styles.fr} onClick={this.handlerClick } style={{marginRight:10}}>批量操作</Button>
 
 					    <Modal
 				          title="自定义列"
@@ -73,17 +102,19 @@ class CompteTable extends React.Component {
 				        </Modal>
 	            	</div>
 					
-					{ /*表格*/ }
-					<Table dataSource={data} bordered>
+					{ /* 表格 */ }
+					<Table dataSource={ this.props.data.list } pagination={true} bordered>
 						<Column
 					      title="主图"
-					      dataIndex="firstName"
-					      key="firstName"
+					      key="img_url"
+					      render={(text,record) => (
+								<img src={ record.img_url} style={{ width:80, height:80}} />
+					      )}
 					    />
 					    <Column
 					      title="SKU"
-					      dataIndex="age"
-					      key="age"
+					      dataIndex="sku"
+					      key="sku"
 					    />
 					    <Column
 					      title="操作"
@@ -92,43 +123,43 @@ class CompteTable extends React.Component {
 					    />
 					    <Column
 					      title="标题"
-					      dataIndex=""
-					      key=""
+					      dataIndex="pname"
+					      key="pname"
 					    />
 					     <Column
 					      title="价格"
-					      dataIndex=""
-					      key=""
+					      dataIndex="price"
+					      key="price"
 					    />
 					     <Column
 					      title="销量"
-					      dataIndex=""
-					      key=""
+					      dataIndex="sales"
+					      key="sales"
 					    />
 					     <Column
 					      title="评分"
-					      dataIndex=""
-					      key=""
+					      dataIndex="score"
+					      key="score"
 					    />
 					     <Column
 					      title="评论数"
-					      dataIndex=""
-					      key=""
+					      dataIndex="reviews"
+					      key="reviews"
 					    />
 					     <Column
 					      title="关注数"
-					      dataIndex=""
-					      key=""
+					      dataIndex="favorites"
+					      key="favorites"
 					    />
 					    <Column
 					      title="提问数"
-					      dataIndex=""
-					      key=""
+					      dataIndex="questions"
+					      key="questions"
 					    />
 					    <Column
 					      title="站点"
 					      dataIndex=""
-					      key=""
+					      key="site"
 					    />
 					    
 					  </Table>

@@ -3,18 +3,50 @@ import { connect } from 'dva';
 import MainLayout from '../../../components/MainLayout/MainLayout';
 import CompeteTable from './CompeteTable/CompeteTable';
 
-class CompteRoute extends React.Component {
+
+class Index extends React.Component {
+
+	constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+        	msg:"start",
+        }
+    }
+
+    searchClick(msg){
+    	this.setState({
+    		msg
+    	})
+    }
 
 	render(){
 		return (
-			<MainLayout>
-	        	<CompeteTable />
+			<div>
+			<MainLayout searchArguments={this.props.search}>
+				<div>{ this.state.msg }</div>
+	        	<CompeteTable data={this.props.data} searchClick={ msg => this.searchClick(msg)}/> 
 	        </MainLayout>
+	        </div>
 		)
 	}
 }
 
-CompteRoute.propTypes = {}
 
-export default connect()(CompteRoute);
+function mapStateToProps(state) {
+    const { data } = state.CompeteGoods;
+
+    const list = data.list;
+    const page = data.page;
+    const search = data.search;
+	console.log(search)
+    return {
+    	data,
+        list,
+        page,
+        search
+    };
+}
+
+export default connect(mapStateToProps)(Index);
 

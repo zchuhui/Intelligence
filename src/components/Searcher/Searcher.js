@@ -7,50 +7,55 @@ const { MonthPicker, RangePicker } = DatePicker;
 const InputGroup = Input.Group;
 const dateFormat = "YYYY-MM-DD";
 
+const log = ({ item,key }) => {
+   console.log(`点击了菜单${key}`);
+   let text = item.props.children.props.children;
+
+}
+
+// 站点
 const menu = (
-	<Menu>
-		<Menu.Item key="0" onClick={ log() }>
-			<span>menu item</span>
+	<Menu onClick={ log }>
+		<Menu.Item key="keid1">
+			<span>menu item1</span>
 		</Menu.Item>
-		<Menu.Item key="1">
-			<span>menu item</span>
+		<Menu.Item key="keid2">
+			<span>menu item2</span>
 		</Menu.Item>
-		<Menu.Item key="2">
-			<span>menu item</span>
+		<Menu.Item key="keid3">
+			<span>menu item3</span>
 		</Menu.Item>
-		<Menu.Item key="3">
-			<span>menu item</span>
+		<Menu.Item key="keid4">
+			<span>menu item4</span>
 		</Menu.Item>
 	</Menu>
 )
 
 
-function log(e) {
-   console.log(e);
-}
-
-function onChange(dates, dateStrings) {
-  console.log('From: ', dates[0], ', to: ', dates[1]);
-  console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-}
-
 class Searcher extends Component {
 	
 	constructor(props, context) {
         super(props, context);
+
         this.state = {
-        	site:null,
-			classification:null,
-			brand:null,
+        	arguments:{
+        		site:'棒谷',      
+				cid:null,       
+				bid:null,       
+				status:null,    
+				startTime:null, 
+				endTime:null,	
+				price1:null,
+				price2:null,
+				sku:null,
+        	}
         }
     }
 
-    handleMenuItem(e){
-		console.log("handle")
-	}
-
-
-
+    handlerClick(){
+    	this.props.searchClick('i love you');
+    }
+    
 	render() {
 		return (
 			<div className={ styles.searchWrap}>
@@ -58,8 +63,8 @@ class Searcher extends Component {
 					<Dropdown overlay={ menu } trigger={['click']}>
 						<Button style={{ marginRight:10, marginBottom:10}}> 
 							{ 
-								this.state.site != null
-								? this.state.site
+								this.state.arguments.site != null
+								? this.state.arguments.site
 								: "站点"
 							} <Icon type="down" />
 						</Button>
@@ -102,9 +107,8 @@ class Searcher extends Component {
 						<Tag closable onClose={log}>Tag 2</Tag>
 					</div>
 				</div>
-
 				<div className={ styles.searchRight }>
-					<Button type="primary" style={{ width: 100 }}>搜索</Button>
+					<Button type="primary" style={{ width: 100 }} onClick={ this.handlerClick }>搜索</Button>
 
 					<InputGroup compact className={styles.dateGroup}>
 						<Button style={{ marginLeft:10, pointerEvents: 'none' }}> 
@@ -118,12 +122,19 @@ class Searcher extends Component {
 					    />
 					</InputGroup> 
 				</div>
-				
 
-				
+				{ /*传参数进来*/ }
+				{/*<p>{this.props.searchArguments.com}</p>*/}
+
 			</div>
 			
 		);
+	}
+
+	componentDidMount() {
+		/*setTimeout(() => {
+	      this.props.transferMsg('end')
+	    }, 1000);*/
 	}
 }
 

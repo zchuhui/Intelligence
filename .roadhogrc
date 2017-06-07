@@ -7,9 +7,14 @@
   "autoprefixer": null,
   "proxy": {
     "/api": {
-      "target": "https://betabia.banggood.com/index.php?com=api&t=productList",
+      "target": "http://jsonplaceholder.typicode.com/",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
+    },
+    "/php": {
+      "target": "https://betabia.banggood.com/index.php?com=api&t=productList",
+      "changeOrigin": true,
+      "pathRewrite": { "^/php" : "" }
     },
     "/login": {
       "target": "http://localhost:8000/",
