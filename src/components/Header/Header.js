@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import {  Menu, Dropdown, Icon } from 'antd';
 import styles from './Header.less';
 import Logo from './logo.png';
+import Menus from '../../components/Menu/Menu';
 
 
 // 用户设置
@@ -25,7 +26,7 @@ const messages = (
     <Menu.Item key="1">
       <a href="javascript:;">消息2......</a>
     </Menu.Item>
-  </Menu>
+  </Menu> 
 )
 
 
@@ -37,21 +38,22 @@ class Header extends Component{
             <div className={ styles.header }>
                 <div className={ styles.content }>
                     <img className={ styles.logo } src={ Logo } title="情报员系统"/>
-                    
+                    {/*菜单组件*/}
+                    <Menus />
+
                     <div className={styles.msgWrap }>
                         <div className={ styles.msgItem }>
                             <Dropdown overlay={messages}>
                                 <span className={ styles.pointer }> 
-                                  消息中心 
+                                  <Icon className={ styles.emil} type="mail" />消息中心 
                                 </span>
                             </Dropdown>
-                            <em className={ styles.msgCircle }></em>
+                            <span className={ styles.msgCircle }>55</span>
                         </div>
-                        <div className={ styles.msgLine }></div>
                         <div className={ styles.msgItem }>
-                            <Dropdown overlay={setup} trigger={['click']}>
+                            <Dropdown overlay={setup}>
                                 <span className={ styles.pointer } >
-                                  小马哥 <Icon type="down" />
+                                  <img className={ styles.head } src={Logo}/> <Icon type="down" /> 
                                 </span>
                             </Dropdown>
                         </div>

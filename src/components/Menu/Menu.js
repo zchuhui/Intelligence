@@ -27,7 +27,7 @@ class Menus extends Component {
 				<em className={ styles.leftTip }></em>
 				<Dropdown overlay={menu} >
                     <span className={ styles.menus }> 
-                      竞品报表 <Icon className={ styles.iconDown} type="down" />
+                    <Icon className={ styles.menuIcon} type="bars" />   竞品报表 
                     </span>
                 </Dropdown>
 			</div>

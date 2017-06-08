@@ -7,7 +7,7 @@ import Test from '../test/views/Index';
 function RouterConfig({ history }) {
     return (
         <Router history={history}>
-      		<Route path="/index" component={Index} />
+      		<Route path="/" component={Index} />
       		<Route path="/users" component={Test} />
    		</Router>
     );

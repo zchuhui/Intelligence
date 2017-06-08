@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table, Icon, Menu, Dropdown, Button, message, Modal } from 'antd';
+import { Table, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
+import moment from 'moment';
 import styles from './CompeteTable.less';
 
 const { Column, ColumnGroup } = Table;
-
+const { MonthPicker, RangePicker } = DatePicker;
 
 const data = [{
     key: '1',
@@ -86,20 +87,24 @@ class CompteTable extends React.Component {
 
 	            	{ /* 操作栏 */ }
 	            	<div className={ styles.clear } style={{ paddingBottom:20 }}>
-
-					    <Button type="primary" className={styles.fr} onClick={this.showModal }>自定义列</Button>
-						
-	            		<Button type="primary" className={styles.fr} onClick={this.handlerClick } style={{marginRight:10}}>批量操作</Button>
+	            		<RangePicker
+					      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}
+					      format="YYYY/MM/DD"
+					      style={{width:240}}
+					    />
+					    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
+	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
 
 					    <Modal
 				          title="自定义列"
 				          visible={this.state.visible}  
 				          onOk={this.handleOk}
 				          onCancel={this.handleCancel} 
-				        >
+				          >
 				          <p>Some contents...</p>
 							
 				        </Modal>
+
 	            	</div>
 					
 					{ /* 表格 */ }

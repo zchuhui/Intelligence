@@ -2,32 +2,31 @@ import React from 'react';
 import { connect } from 'dva';
 import MainLayout from '../../../components/MainLayout/MainLayout';
 import CompeteTable from './CompeteTable/CompeteTable';
-
+import Searcher from '../../../components/Searcher/Searcher';
 
 class Index extends React.Component {
 
 	constructor(props, context) {
         super(props, context);
 
-        this.state = {
+        /*this.state = {
         	msg:"start",
-        }
+        }*/
     }
 
-    searchClick(msg){
+    /*searchClick(msg){
     	this.setState({
     		msg
     	})
-    }
+    }*/
 
 	render(){
 		return (
-			<div>
 			<MainLayout searchArguments={this.props.search}>
-				<div>{ this.state.msg }</div>
+				{/*<div>{ this.state.msg }</div>*/}
+                <Searcher />
 	        	<CompeteTable data={this.props.data} searchClick={ msg => this.searchClick(msg)}/> 
 	        </MainLayout>
-	        </div>
 		)
 	}
 }
