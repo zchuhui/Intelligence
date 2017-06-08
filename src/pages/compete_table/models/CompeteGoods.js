@@ -1,7 +1,6 @@
 import * as competeServices from '../../../services/competeGoods';
 
 export default {
-
   namespace: 'CompeteGoods',
 
   state: {
@@ -21,7 +20,6 @@ export default {
     *search({ payload }, { call , put}){
       const { data } = yield call(competeServices.search, payload); 
       yield put({ type: 'save', payload: data});
-
     }
 
   },

@@ -133,6 +133,7 @@ class IndexPage extends React.Component {
 			          onChange={this.pageChangeHandler}
 			        />
 			        <div>total: { this.props.total }</div>
+
 			        <div>{this.props.list.map((item,i) => <span>{item.phone}</span>)}</div>
 	    	</div>
         );
@@ -141,7 +142,6 @@ class IndexPage extends React.Component {
     componentDidMount() {
 		console.log("Did");
 		console.log(this.props.list);
-
 	}
 }
 

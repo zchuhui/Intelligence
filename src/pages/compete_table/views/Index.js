@@ -6,51 +6,63 @@ import Searcher from '../../../components/Searcher/Searcher';
 
 class Index extends React.Component {
 
-	constructor(props, context) {
+    constructor(props, context) {
         super(props, context);
 
         /*this.state = {
-        	msg:"start",
+            msg:"start",
         }*/
     }
 
     /*searchClick(msg){
-    	this.setState({
-    		msg
-    	})
+        this.setState({
+            msg
+        })
+
+        // searchClick={ msg => this.searchClick(msg)}
     }*/
 
-	render(){
-		return (
-			<MainLayout searchArguments={this.props.search}>
-				{/*<div>{ this.state.msg }</div>*/}
+    render() {
+        return (
+            <MainLayout searchArguments={this.props.search}>
+                {/*<div>{ this.state.msg }</div>*/}
                 <Searcher menus={this.props.menus}/>
-	        	<CompeteTable data={this.props.data} searchClick={ msg => this.searchClick(msg)}/> 
-	        </MainLayout>
-		)
-	}
+                <CompeteTable data={this.props.data}/> 
+            </MainLayout>
+        )
+    }
 }
 
 
 function mapStateToProps(state) {
     // 获取菜单数据
     const menus = state.Menus;
-    console.log(menus.site)
 
     // 获取竞品数据
     const { data } = state.CompeteGoods;
-    const list = data.list;
+    
+    // 如果page参数为空，给一个默认值
     const page = data.page;
-    const search = data.search;
+    if (page !== undefined) {
+        let count = parseInt(page.count);
+        data.page.count = count;
+    } 
+    else {
+        const pageDefault = {
+            "page": 0,
+            "pageSize": 0,
+            "count": 0,
+            "pageNum": 0
+        }
+        data.page = pageDefault;
+        console.log(data)
+    }
 
+    // 输出数据
     return {
         menus,
-    	data,
-        list,
-        page,
-        search
+        data,
     };
 }
 
 export default connect(mapStateToProps)(Index);
-

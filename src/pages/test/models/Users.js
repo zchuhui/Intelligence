@@ -21,7 +21,7 @@ export default {
       console.log(data);
       yield put({ type: 'save', payload: { data, total: headers['x-total-count'] } });
     },
-   /* // 删除数据
+    // 删除数据
     *remote({ payload: id},{ call, put, select}) {
     	yield call(usersService.remove,id);
     	const page = yield select(state => state.users.page);
@@ -32,7 +32,7 @@ export default {
     	yield call(usersService.patch,id,values);
     	const page = yield select(state => state.users.page);
     	yield put({ type: 'fetch',payload: { page }});
-    }*/
+    }
   },
   subscriptions: {
   	setup({ dispatch, history }) {

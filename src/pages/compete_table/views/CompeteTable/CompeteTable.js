@@ -1,7 +1,10 @@
 import React from 'react';
-import { Table, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
+import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
+import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import styles from './CompeteTable.less';
+
+import { PAGE_SIZE } from '../../../../constants/constant';
 
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
@@ -25,31 +28,30 @@ const menu = (
 
 
 let argument = {
-	site:null,      
-	cid:null,       
-	bid:null,       
-	status:null,    
-	startTime:null, 
-	endTime:null,	
-	price1:null,
-	price2:null,
-	sku:null,
-	page:1
+    site: null,
+    cid: null,
+    bid: null,
+    status: null,
+    startTime: null,
+    endTime: null,
+    price1: null,
+    price2: null,
+    sku: null,
+    page: 1
 }
 
 function handleMenuClick() {}
 
 
-class CompteTable extends React.Component {	
-	constructor(props, context) {
+class CompteTable extends React.Component {
+    constructor(props, context) {
         super(props, context);
     }
 
-    state = { 
-    	// 自定义弹框
-    	visible: false,
+    state = {
+        // 自定义弹框
+        visible: false,
     }
-
     showModal = () => {
         this.setState({
             visible: true,
@@ -68,21 +70,29 @@ class CompteTable extends React.Component {
     }
 
     // 搜索
-    handleSearch = (argument) => {
-    	this.props.dispatch({
-    		type: 'CompeteGoods',
-	     	payload: argument,
-    	})
+    handleSearch = (query) => {
+        this.props.dispatch({
+            type: 'CompeteGoods',
+            payload: query,
+        })
     }
 
-    handlerClick(){
+    /*handlerClick(){
       this.props.searchClick('i love you');
+    }*/
+
+    // 分页
+    pageChangeHandler(page) {
+        this.props.dispatch(routerRedux.push({
+            pathname: '/',
+            query: { page },
+        }));
     }
-    
+
     /* 渲染模块 */
     render() {
         return (
-        	<div>
+            <div>
                 <div className={ styles.main } > 
 
 	            	{ /* 操作栏 */ }
@@ -107,8 +117,8 @@ class CompteTable extends React.Component {
 
 	            	</div>
 					
-					{ /* 表格 */ }
-					<Table dataSource={ this.props.data.list } pagination={true} bordered>
+					{ /*表格*/ }
+					<Table dataSource={ this.props.data.list } pagination={false} bordered>
 						<Column
 					      title="主图"
 					      key="img_url"
@@ -169,12 +179,21 @@ class CompteTable extends React.Component {
 					    
 					  </Table>
 					
+					{/*分页*/}
+					<Pagination
+			          className="ant-table-pagination"
+			          showQuickJumper 
+			          total={this.props.data.page.count} 
+			          current={this.props.data.page.page}
+			          pageSize={PAGE_SIZE} 
+			          onChange={this.pageChangeHandler}
+			        />
 				</div>
         	</div>
-            
+
         )
     }
-    
+
 }
 
 

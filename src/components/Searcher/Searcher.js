@@ -31,7 +31,7 @@ class Searcher extends Component {
 				price2:null,
 				sku:['sku1','sku23231','sku12323','sku122','sku33'],
         	},*/
-        	sku:['sku1','sku23231','sku12323','sku122','sku33'],
+        	/*sku:['sku1','sku23231','sku12323','sku122','sku33'],*/
         }
     }
 
@@ -40,7 +40,7 @@ class Searcher extends Component {
     }
     
 	render() {
-		const { sku } = this.state;
+		/*const { sku } = this.state;*/
 
 		// 站点菜单
 		const siteMenu = (
@@ -81,7 +81,7 @@ class Searcher extends Component {
 			<div className={ styles.searchWrap}>
 				<div className={ styles.searchArgs }>
 					<span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
-					<Tag closable className={styles.tag} onClose={log}> {sku[0]} </Tag>
+					<Tag closable className={styles.tag} onClose={log}> test </Tag>
 					{ /*sku.map((i,index) => { <Tag closable className={styles.tag} onClose={log}> item </Tag> }) */}  
 				</div>
 				<div className={ styles.main }>
@@ -143,7 +143,7 @@ class Searcher extends Component {
 					</div>
 
 				</div>
-
+				
 				{ /*传参数进来*/ }
 				{/*<p>{this.props.searchArguments.com}</p>*/} 
 				{/*<p>{ this.props.menus.cate.map((i,index) => <p>{ i.cname }</p>) }</p>*/}
@@ -154,8 +154,8 @@ class Searcher extends Component {
 	}
 
 	componentDidMount() {
-       console.log("menus");
-       console.log(this.props.menus);
+       /*console.log("menus");
+       console.log(this.props.menus);*/
     }
 
 	
