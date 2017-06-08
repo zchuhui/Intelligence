@@ -24,7 +24,7 @@ class Index extends React.Component {
 		return (
 			<MainLayout searchArguments={this.props.search}>
 				{/*<div>{ this.state.msg }</div>*/}
-                <Searcher />
+                <Searcher menus={this.props.menus}/>
 	        	<CompeteTable data={this.props.data} searchClick={ msg => this.searchClick(msg)}/> 
 	        </MainLayout>
 		)
@@ -33,13 +33,18 @@ class Index extends React.Component {
 
 
 function mapStateToProps(state) {
-    const { data } = state.CompeteGoods;
+    // 获取菜单数据
+    const menus = state.Menus;
+    console.log(menus.site)
 
+    // 获取竞品数据
+    const { data } = state.CompeteGoods;
     const list = data.list;
     const page = data.page;
     const search = data.search;
-	console.log(search)
+
     return {
+        menus,
     	data,
         list,
         page,

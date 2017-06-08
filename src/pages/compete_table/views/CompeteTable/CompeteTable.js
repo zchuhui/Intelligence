@@ -174,6 +174,7 @@ class CompteTable extends React.Component {
             
         )
     }
+    
 }
 
 

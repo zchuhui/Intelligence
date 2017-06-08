@@ -13,24 +13,6 @@ const log = ({ item,key }) => {
    
 }
 
-// 站点
-const menu = (
-	<Menu onClick={ log }>
-		<Menu.Item key="keid1">
-			<span>menu item1</span>
-		</Menu.Item>
-		<Menu.Item key="keid2">
-			<span>menu item2</span>
-		</Menu.Item>
-		<Menu.Item key="keid3">
-			<span>menu item3</span>
-		</Menu.Item>
-		<Menu.Item key="keid4">
-			<span>menu item4</span>
-		</Menu.Item>
-	</Menu>
-)
-
 
 class Searcher extends Component {
 	
@@ -38,7 +20,7 @@ class Searcher extends Component {
         super(props, context);
 
         this.state = {
-        	arguments:{
+        	/*arguments:{
         		site:'棒谷',      
 				cid:null,       
 				bid:null,       
@@ -48,7 +30,7 @@ class Searcher extends Component {
 				price1:null,
 				price2:null,
 				sku:['sku1','sku23231','sku12323','sku122','sku33'],
-        	},
+        	},*/
         	sku:['sku1','sku23231','sku12323','sku122','sku33'],
         }
     }
@@ -59,6 +41,42 @@ class Searcher extends Component {
     
 	render() {
 		const { sku } = this.state;
+
+		// 站点菜单
+		const siteMenu = (
+			<Menu onClick={ log }>
+				{
+					this.props.menus.site.map((i,index) => <Menu.Item key={index}><span>{i.banggood}</span></Menu.Item>)
+				}
+			</Menu>
+		)
+
+		// 分类菜单
+		const cateMenu = (
+			<Menu onClick={ log }>
+				{
+					this.props.menus.cate.map((i,index) => <Menu.Item key={i.cid}><span>{i.cname}</span></Menu.Item>)
+				}
+			</Menu>
+		)
+
+		// 品牌菜单
+		const brandMenu = (
+			<Menu onClick={ log }>
+				{
+					this.props.menus.brand.map((i,index) => <Menu.Item key={i.bid}><span>{i.bname}</span></Menu.Item>)
+				}
+			</Menu>
+		)
+
+		// 关联菜单
+		const relatedMenu = (
+			<Menu onClick={ log }>
+				<Menu.Item key="0"><span>已关联</span></Menu.Item>
+				<Menu.Item key="0"><span>未关联</span></Menu.Item>
+			</Menu>
+		)
+
 		return (
 			<div className={ styles.searchWrap}>
 				<div className={ styles.searchArgs }>
@@ -72,26 +90,28 @@ class Searcher extends Component {
 					</div>
 					<div className={ styles.searchContent}>
 						<div className={ styles.searchLeft }>
-							<Dropdown overlay={ menu } trigger={['click']}>
+							<Dropdown overlay={ siteMenu } trigger={['click']}>
 								<Button style={{ marginRight:10, marginBottom:10}}> 
 									{
-										this.state.arguments.site != null
+										/*this.state.arguments.site != null
 										? this.state.arguments.site
-										: "站点"
-									} <Icon type="down" />
+										: "站点"*/
+									} 
+									站点
+									<Icon type="down" />
 								</Button>
 							</Dropdown>
-							<Dropdown overlay={ menu } trigger={['click']}>
+							<Dropdown overlay={ cateMenu } trigger={['click']}>
 								<Button style={{ marginRight:10, marginBottom:10}}> 
 									分类 <Icon type="down" />
 								</Button>
 							</Dropdown>
-							<Dropdown overlay={ menu } trigger={['click']}>
+							<Dropdown overlay={ brandMenu } trigger={['click']}> 
 								<Button style={{ marginRight:10 }}> 
 									品牌 <Icon type="down" />
 								</Button>
 							</Dropdown>
-							<Dropdown overlay={ menu } trigger={['click']}>
+							<Dropdown overlay={ relatedMenu } trigger={['click']}>
 								<Button style={{ marginRight:10, marginBottom:10}}> 
 									关联状态 <Icon type="down" />
 								</Button>
@@ -125,12 +145,18 @@ class Searcher extends Component {
 				</div>
 
 				{ /*传参数进来*/ }
-				{/*<p>{this.props.searchArguments.com}</p>*/}
+				{/*<p>{this.props.searchArguments.com}</p>*/} 
+				{/*<p>{ this.props.menus.cate.map((i,index) => <p>{ i.cname }</p>) }</p>*/}
 
 			</div>
 			
 		);
 	}
+
+	componentDidMount() {
+       console.log("menus");
+       console.log(this.props.menus);
+    }
 
 	
 }
