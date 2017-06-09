@@ -1,3 +1,5 @@
+/*登录页入口*/
+
 import dva from 'dva';
 
 // 1. Initialize
@@ -7,10 +9,7 @@ const app = dva();
 // app.use({});
 
 // 3. Model
-app.model(require('./models/CompeteGoods'));
-app.model(require('../../models/Menus')); 
-app.model(require('../test/models/Users'));   
-
+app.model(require('./models/Login'));
 
 // 4. Router
 app.router(require('./router'));

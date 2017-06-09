@@ -7,7 +7,7 @@ function RouterConfig({ history }) {
 	
     return (
         <Router history={history}>
-      		<Route path="/test" component={HomeTable} /> 
+      		<Route path="/" component={HomeTable} /> 
    		</Router>
     );
 }

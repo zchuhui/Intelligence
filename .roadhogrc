@@ -1,20 +1,24 @@
 {
-  "entry": ["src/pages/login/index.js","src/pages/test/index.js","src/pages/compete_table/index.js"],
+  "entry": [
+    "src/pages/compete_goods/index.js",
+    "src/pages/login/login_start.js",
+    "src/pages/test/test_start.js"
+    ],
   "disableCSSModules": false,
   "publicPath": "/",
   "theme": null,
   "outputPath": "./dist",
   "autoprefixer": null,
   "proxy": {
-    "/api": {
+    "/test": {
       "target": "http://jsonplaceholder.typicode.com/",
       "changeOrigin": true,
-      "pathRewrite": { "^/api" : "" }
+      "pathRewrite": { "^/test" : "" }
     },
-    "/php": {
+    "/api": {
       "target": "https://betabia.banggood.com/index.php?com=api&t=productList",
       "changeOrigin": true,
-      "pathRewrite": { "^/php" : "" }
+      "pathRewrite": { "^/api" : "" }
     },
     "/login": {
       "target": "http://localhost:8000/",

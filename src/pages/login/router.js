@@ -1,13 +1,13 @@
 import React from 'react';
 import { Router, Route } from 'dva/router';
-import Login from './views/Login';
+import LoginRouter from './routes/LoginRouter';
 
-// 入口路由
+// 登录页入口路由
 function RouterConfig({ history }) {
 	
     return (
         <Router history={history}>
-      		<Route path="/login" component={Login} /> 
+      		<Route path="/" component={LoginRouter} /> 
    		</Router>
     );
 }

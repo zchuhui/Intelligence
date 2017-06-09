@@ -4,19 +4,19 @@ import { PAGE_SIZE } from '../constants/constant';
 // users表数据操作
 // 获取数据
 export function fetch({ page }) {
-  return request(`/api/users?_page=${page}&_limit=${PAGE_SIZE}`);
+  return request(`/test/users?_page=${page}&_limit=${PAGE_SIZE}`);
 }
 
 // 删除
 export function remove(id){
-	return request(`/api/users/${id}`,{
+	return request(`/test/users/${id}`,{
 		method: 'DELETE',
 	});
 }
 
 // 编辑
 export function patch(id,values){
-	return request(`/api/users/${id}`,{
+	return request(`/test/users/${id}`,{
 		method: 'PATCH',
 		body: JSON.stringify(values),
 	});

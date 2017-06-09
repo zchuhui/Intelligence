@@ -1,46 +1,12 @@
 import React from 'react';
-import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
 import { routerRedux } from 'dva/router';
 import moment from 'moment';
-import styles from './CompeteTable.less';
-
 import { PAGE_SIZE } from '../../../../constants/constant';
+import styles from './CompeteList.less';
+import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
 
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
-
-const data = [{
-    key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-}];
-
-
-const menu = (
-    <Menu onClick={handleMenuClick}>
-    <Menu.Item key="1">批量对比</Menu.Item>
-    <Menu.Item key="2">批量关联</Menu.Item>
-    <Menu.Item key="3">取消批量</Menu.Item>
-  </Menu>
-)
-
-
-let argument = {
-    site: null,
-    cid: null,
-    bid: null,
-    status: null,
-    startTime: null,
-    endTime: null,
-    price1: null,
-    price2: null,
-    sku: null,
-    page: 1
-}
-
-function handleMenuClick() {}
 
 
 class CompteTable extends React.Component {
@@ -48,38 +14,6 @@ class CompteTable extends React.Component {
         super(props, context);
     }
 
-    state = {
-        // 自定义弹框
-        visible: false,
-    }
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
-    handleOk = (e) => {
-        this.setState({
-            visible: false,
-        });
-    }
-    handleCancel = (e) => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
-
-    // 搜索
-    handleSearch = (query) => {
-        this.props.dispatch({
-            type: 'CompeteGoods',
-            payload: query,
-        })
-    }
-
-    /*handlerClick(){
-      this.props.searchClick('i love you');
-    }*/
 
     // 分页
     pageChangeHandler(page) {
@@ -105,7 +39,7 @@ class CompteTable extends React.Component {
 					    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
 	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
 
-					    <Modal
+					    {/*<Modal
 				          title="自定义列"
 				          visible={this.state.visible}  
 				          onOk={this.handleOk}
@@ -113,12 +47,17 @@ class CompteTable extends React.Component {
 				          >
 				          <p>Some contents...</p>
 							
-				        </Modal>
+				        </Modal>*/}
 
 	            	</div>
 					
 					{ /*表格*/ }
-					<Table dataSource={ this.props.data.list } pagination={false} bordered>
+					<Table 
+					dataSource={ this.props.data.list } 
+					loading={ this.props.loading } 
+					pagination={false} 
+					bordered 
+					>
 						<Column
 					      title="主图"
 					      key="img_url"
@@ -183,7 +122,7 @@ class CompteTable extends React.Component {
 					<Pagination
 			          className="ant-table-pagination"
 			          showQuickJumper 
-			          total={this.props.data.page.count} 
+			          total={parseInt(this.props.data.page.count)} 
 			          current={this.props.data.page.page}
 			          pageSize={PAGE_SIZE} 
 			          onChange={this.pageChangeHandler}

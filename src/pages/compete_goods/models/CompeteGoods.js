@@ -4,12 +4,20 @@ export default {
   namespace: 'CompeteGoods',
 
   state: {
-      data:[],
-      total: null, 
+      data: {
+        page: {
+          page:0,
+          pageSize:0,
+          count:0,
+          pageNum:0
+        },
+        list:[],
+      },
+      loading: false, 
   },
   reducers: {
-    save(state,  { payload: { data: data} }) {
-      return { ...state, data }; 
+    save(state, { payload: { data: data} }) {
+      return { ...state, data, loading: false }; 
     },
   },
   effects: {
@@ -19,7 +27,13 @@ export default {
     },
     *search({ payload }, { call , put}){
       const { data } = yield call(competeServices.search, payload); 
-      yield put({ type: 'save', payload: data});
+      if (data) {
+        yield put({
+          type: 'save', 
+          payload: data
+        }); 
+      }
+      
     }
 
   },

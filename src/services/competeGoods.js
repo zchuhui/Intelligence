@@ -3,7 +3,7 @@ import { PAGE_SIZE } from '../constants/constant';
 
 // 获取数据
 export function fetch() { 
-  	return request(`/php`);
+  	return request(`/api`);
 }
 
 
