@@ -9,38 +9,34 @@ export function fetch() {
 
 // 搜索条件，分别是：站点、分类ID、品牌ID、关联状态
 // 开始时间、结束时间、价格区间1、价格区间2、sku、请求页数
-const argument = {
-	site:null,      
-	cid:null,       
-	bid:null,       
-	status:null,    
-	startTime:null, 
-	endTime:null,	
-	price1:null,
-	price2:null,
-	sku:null,
+/*const argument = {
+	site:'',      
+	cid:'',       
+	bid:'',       
+	status:'',    
+	startTime:'', 
+	endTime:'',	
+	price1:'',
+	price2:'',
+	sku:'',
 	page:1
-}
+}*/
 
 
 // 搜索数据
-export function search(argument) { 
-
-	let argumentStr = `com=api&t=productList
-	&site=${argument.site}
-	&cid=${argument.cid}
-	&bid=${argument.bid}
-	&status=${argument.status}
-	&startTime=${argument.startTime}
-	&endTime=${argument.endTime}
-	&price1=${argument.price1}
-	&price2=${argument.price2}
-	&sku=${argument.sku}
-	&page=${argument.page}
-	`
-
-	let url = `/php?${argumentStr}`;
-
+export function search(args) { 
+	
+	const argument = args.searchArgs;
+	let argumentStr = `com=api&t=productList`;
+	
+	for(let i in argument){ 
+		if(argument[i] !== ''){ 
+			argumentStr += `&${i}=${argument[i]}`
+		}
+	}
+	 
+	let url = `/api?${argumentStr}`;
+	console.log("url:"+url) 
   	return request(url);
 }
 

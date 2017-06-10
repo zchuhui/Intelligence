@@ -7,7 +7,11 @@ const defautSite = [
 	{
 		banggood: "banggood",
 		gearbest: "gearbest"
-	}
+	},
+    {
+        banggood: "banggood2",
+        gearbest: "gearbest2"
+    }
 ]
 
 // 默认分类
