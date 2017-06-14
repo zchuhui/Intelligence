@@ -15,7 +15,7 @@ const log = ({ item, key }) => {
 class Searcher extends Component {
     constructor(props, context) {
         super(props, context);
-
+        
         // 搜索条件
         this.state = {
             args: {
@@ -26,7 +26,6 @@ class Searcher extends Component {
                 related: '',
                 price1: '',
                 price2: '',
-                page: 1
             }
         }
     }
@@ -34,7 +33,6 @@ class Searcher extends Component {
     // 搜索
     handlerSearchClick(e) {
         e.preventDefault();
-
 
         // 赋值
         const price1 = document.getElementById('price1').value,

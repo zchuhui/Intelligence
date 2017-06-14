@@ -14,13 +14,14 @@ class CompteTable extends React.Component {
         super(props, context);
     }
 
-
-    // 分页
-    pageChangeHandler(page) {
-        this.props.dispatch(routerRedux.push({
-            pathname: '/',
-            query: { page },
-        }));
+    // 搜索时间段
+    onSearchDateQuantum(value, dateString){
+    	let dateQuantum = {
+    		startTime: dateString[0],
+    		endTime: dateString[1]
+    	}
+    	
+    	this.props.handleSearchArgsToDate(dateQuantum);
     }
 
     /* 渲染模块 */
@@ -28,13 +29,15 @@ class CompteTable extends React.Component {
         return (
             <div>
                 <div className={ styles.main } > 
-
+                	
 	            	{ /* 操作栏 */ }
 	            	<div className={ styles.clear } style={{ paddingBottom:20 }}>
 	            		<RangePicker
 					      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}
-					      format="YYYY/MM/DD"
+					      format="YYYYMMDD"
 					      style={{width:240}}
+					      onChange={this.onSearchDateQuantum.bind(this)}
+
 					    />
 					    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
 	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
@@ -51,82 +54,86 @@ class CompteTable extends React.Component {
 
 	            	</div>
 					
-					{ /*表格*/ }
-					<Table 
-					dataSource={ this.props.data.list } 
-					loading={ this.props.loading } 
-					pagination={false} 
-					bordered 
-					>
-						<Column
-					      title="主图"
-					      key="img_url"
-					      render={(text,record) => (
-								<img src={ record.img_url} style={{ width:80, height:80}} />
-					      )}
-					    />
-					    <Column
-					      title="SKU"
-					      dataIndex="sku"
-					      key="sku"
-					    />
-					    <Column
-					      title="操作"
-					      dataIndex="address"
-					      key="address"
-					    />
-					    <Column
-					      title="标题"
-					      dataIndex="pname"
-					      key="pname"
-					    />
-					     <Column
-					      title="价格"
-					      dataIndex="price"
-					      key="price"
-					    />
-					     <Column
-					      title="销量"
-					      dataIndex="sales"
-					      key="sales"
-					    />
-					     <Column
-					      title="评分"
-					      dataIndex="score"
-					      key="score"
-					    />
-					     <Column
-					      title="评论数"
-					      dataIndex="reviews"
-					      key="reviews"
-					    />
-					     <Column
-					      title="关注数"
-					      dataIndex="favorites"
-					      key="favorites"
-					    />
-					    <Column
-					      title="提问数"
-					      dataIndex="questions"
-					      key="questions"
-					    />
-					    <Column
-					      title="站点"
-					      dataIndex=""
-					      key="site"
-					    />
-					    
-					  </Table>
-					
-					{/*分页*/}
-					<Pagination
-			          className="ant-table-pagination"
-			          showQuickJumper 
-			          total={parseInt(this.props.data.page.count)} 
-			          current={this.props.data.page.page}
-			          pageSize={PAGE_SIZE} 
-			          onChange={this.pageChangeHandler}
-			        />
+					<div className={ styles.tableWrap }>
+						{ /*表格*/ }
+						<Table 
+							dataSource={ this.props.data.list } 
+							loading={ this.props.loading } 
+							pagination={false} 
+							bordered 
+							>
+							<Column
+						      title="主图"
+						      key="img_url"
+						      render={(text,record) => (
+									<img src={ record.img_url} style={{ width:80, height:80}} />
+						      )}
+						    />
+						    <Column
+						      title="SKU"
+						      dataIndex="sku"
+						      key="sku"
+						    />
+						    <Column
+						      title="操作"
+						      dataIndex="address"
+						      key="address"
+						    />
+						    <Column
+						      title="标题"
+						      dataIndex="pname"
+						      key="pname"
+						    />
+						     <Column
+						      title="价格"
+						      dataIndex="price"
+						      key="price"
+						    />
+						     <Column
+						      title="销量"
+						      dataIndex="sales"
+						      key="sales"
+						    />
+						     <Column
+						      title="评分"
+						      dataIndex="score"
+						      key="score"
+						    />
+						     <Column
+						      title="评论数"
+						      dataIndex="reviews"
+						      key="reviews"
+						    />
+						     <Column
+						      title="关注数"
+						      dataIndex="favorites"
+						      key="favorites"
+						    />
+						    <Column
+						      title="提问数"
+						      dataIndex="questions"
+						      key="questions"
+						    />
+						    <Column
+						      title="站点"
+						      dataIndex=""
+						      key="site"
+						    />
+						    
+						  </Table>
+						
+						<div className={styles.piginationWrap}>
+							{/*分页*/}
+							<Pagination
+					          className="ant-table-pagination"
+					          showQuickJumper 
+					          total={parseInt(this.props.data.page.count)} 
+					          current={this.props.data.page.page}
+					          pageSize={10} 
+					          onChange={this.props.handlePagination.bind(this)}
+					        />
+						</div>
+					</div>
 				</div>
         	</div>
 

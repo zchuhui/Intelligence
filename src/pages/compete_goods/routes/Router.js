@@ -11,8 +11,8 @@ class CompeteRouter extends React.Component {
     }
 
     // 搜索
+    // args: 搜索参数
     handleSearchArgs(args) {
-        //console.log(args)
         this.props.dispatch({
             type: 'CompeteGoods/search',
             payload: {
@@ -21,16 +21,31 @@ class CompeteRouter extends React.Component {
         });
 
     }
-
-    // 更改loading状态
-    checkLoading(i) {
+    
+    // 分页操作
+    // current: 当前页数
+    handlePagination(current) {
         this.props.dispatch({
-            type: 'CompeteGoods/showLoading',
+            type: 'CompeteGoods/query',
             payload: {
-                loading: i
+                page: current
             }
         });
     }
+
+    // 抓取时间段
+    // args: 时间段
+    handleSearchArgsToDate(args) {
+        console.log(args)
+        this.props.dispatch({
+            type: 'CompeteGoods/search',
+            payload: {
+                searchArgs: args
+            }
+        });
+    }
+
+    
 
     render() {
         return (
@@ -38,17 +53,19 @@ class CompeteRouter extends React.Component {
                 {/* <p>{this.state.msg}</p>*/}
                 {/*搜索模块*/}
                 <Searcher 
-                menus={this.props.menus} 
-                searchArgs={this.props.searchArgs}  
-                handleSearchArgs={args => this.handleSearchArgs(args)}
-                /*checkLoading={i => this.checkLoading(i)} */
+                    menus={this.props.menus} 
+                    searchArgs={this.props.searchArgs}  
+                    handleSearchArgs={args => this.handleSearchArgs(args)}
+                    /*checkLoading={i => this.checkLoading(i)} */
 
                 />
 
                 {/*列表模块*/}
                 <CompeteList 
-                data={this.props.data}
-                loading={this.props.loading}
+                    data={this.props.data}
+                    loading={this.props.loading} 
+                    handlePagination={current => this.handlePagination(current) } 
+                    handleSearchArgsToDate={args => this.handleSearchArgsToDate(args)}
                 /> 
             </MainLayout>
         )

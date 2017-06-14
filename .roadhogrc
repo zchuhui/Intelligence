@@ -16,7 +16,7 @@
       "pathRewrite": { "^/test" : "" }
     },
     "/api": {
-      "target": "https://betabia.banggood.com/index.php?com=api&t=productList",
+      "target": "https://betabia.banggood.com/index.php",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     },
