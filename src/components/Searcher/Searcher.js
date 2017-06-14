@@ -4,6 +4,7 @@ import moment from 'moment';
 import styles from './Searcher.less';
 
 const { MonthPicker, RangePicker } = DatePicker;
+const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const dateFormat = "YYYY-MM-DD";
 
@@ -20,8 +21,9 @@ class Searcher extends Component {
         this.state = {
             args: {
                 site: '',
-                cate: '',
-                brand: '',
+                cid: '',
+                bid: '',
+                status: '',
                 sku: '',
                 related: '',
                 price1: '',
@@ -34,7 +36,7 @@ class Searcher extends Component {
     handlerSearchClick(e) {
         e.preventDefault();
 
-        // 赋值
+        // 搜索条件赋值
         const price1 = document.getElementById('price1').value,
             price2 = document.getElementById('price2').value,
             sku = document.getElementById('sku').value;
@@ -49,28 +51,32 @@ class Searcher extends Component {
 
     }
 
-    // 选择分类
-    handleCateMenu = ({ item, key }) => {
-        const text = item.props.children.props.children;
-        this.state.args.cate = text;
-    }
-
     // 选择站点
     handleSiteMenu = ({ item, key }) => {
         const text = item.props.children.props.children;
         this.state.args.site = text;
+        this.refs.siteMenu.innerText = text;
+    }
+
+    // 选择分类
+    handleCateMenu = ({ item, key }) => {
+        const text = item.props.children.props.children;
+        this.state.args.cid = text;
+        this.refs.cateMenu.innerText = text;
     }
 
     // 选择品牌
     handleBrandMenu = ({ item, key }) => {
         const text = item.props.children.props.children;
-        this.state.args.brand = text;
+        this.state.args.bid = text;
+        this.refs.brandMenu.innerText = text;
     }
 
     // 选择是否关联产品
     handleRelatedMenu = ({ item, key }) => {
         const text = item.props.children.props.children;
-        this.state.args.related = text;
+        this.state.args.status = text;
+        this.refs.relatedMenu.innerText = text;
     }
 
     // 把搜索条件转换成数组
@@ -79,10 +85,39 @@ class Searcher extends Component {
         let str = [];
         for (let i in objectArgs) {
             if (objectArgs[i] !== "") {
-                str.push(`${i}:  ${objectArgs[i]}`);
+                let tagString = this.tagString(i);
+                str.push(`${tagString}:  ${objectArgs[i]}`);
             }
         }
         return str;
+    }
+
+    tagString = (tag) => {
+        let tagString = "";
+        switch(tag){
+            case "site":
+                tagString = "站点";
+                break;
+            case "cid":
+                tagString = "分类";
+                break 
+            case "bid":
+                tagString = "品牌";
+                break 
+            case "status":
+                tagString = "关联状态";
+                break 
+            case "price1":
+                tagString = "价格区间1";
+                break 
+            case "price2":
+                tagString = "价格区间2";
+                break 
+            case "sku":
+                tagString = "SKU";
+                break 
+        }
+        return tagString; 
     }
 
 
@@ -92,7 +127,7 @@ class Searcher extends Component {
         const siteMenu = (
             <Menu onClick={ this.handleSiteMenu }>
 				{
-					this.props.menus.site.map((i,index) => <Menu.Item key={index}><span>{i.banggood}</span></Menu.Item>)
+					this.props.menus.site.map((i,index) => <Menu.Item key={index}><span>{i}</span></Menu.Item>)
 				}
 			</Menu>
         )
@@ -101,8 +136,24 @@ class Searcher extends Component {
         const cateMenu = (
             <Menu onClick={ this.handleCateMenu }>
 				{
-					this.props.menus.cate.map((i,index) => <Menu.Item key={i.cid}><span>{i.cname}</span></Menu.Item>)
+					//this.props.menus.cate.gearbest.map((i,index) => <Menu.Item key={i.cid}><span>{i.cname}</span></Menu.Item>)
+                    /*this.props.menus.cate.gearbest.map((i,index) => 
+                        i.children !=null ?  
+                        <SubMenu title={i.cname}>
+                            <Menu.Item ><span> {i.children[0]} 00000</span></Menu.Item>)
+                        </SubMenu>
+                        :<Menu.Item key={i.cid}><span>{i.cname}</span></Menu.Item>) */
 				}
+
+                <SubMenu title='gearbest'>
+                     <Menu.Item key="2"><span>Remote Control Toys</span></Menu.Item>
+                     <Menu.Item key="31"><span>Movies & TV Action Figures</span></Menu.Item>
+                </SubMenu>
+                <SubMenu title='banggood'>
+                     <Menu.Item key="40565"><span>EDC Gadgets</span></Menu.Item>
+                     <Menu.Item key="40617"><span>Home Audio & Video</span></Menu.Item>
+                </SubMenu>
+
 			</Menu>
         )
 
@@ -118,8 +169,8 @@ class Searcher extends Component {
         // 关联菜单
         const relatedMenu = (
             <Menu onClick={ this.handleRelatedMenu }>
+                <Menu.Item key="0"><span>未关联</span></Menu.Item>
 				<Menu.Item key="1"><span>已关联</span></Menu.Item>
-				<Menu.Item key="0"><span>未关联</span></Menu.Item>
 			</Menu>
         )
 
@@ -130,7 +181,7 @@ class Searcher extends Component {
 					<span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
 					<span id="tagList"></span>
 					{ 
-						this.getObjectValToArray().map((item,index) => <Tag closable className={styles.tag} onClose={log}> { item } </Tag>)
+						this.getObjectValToArray().map((item,index) => <Tag closable className={styles.tag} onClose={ log }> { item } </Tag>)
 					}
 					{/*<Tag closable className={styles.tag} onClose={log}> sku: { this.props.searchArgs.sku } </Tag>*/}
 				</div>
@@ -141,24 +192,27 @@ class Searcher extends Component {
 					<div className={ styles.searchContent}>
 						<div className={ styles.searchLeft }>
 							<Dropdown overlay={ siteMenu } trigger={['click']}>
-								<Button style={{ marginRight:10, marginBottom:10}}> 
+								<Button style={{ marginRight:10, marginBottom:10}}>
 									<span ref="siteMenu">站点</span>
 									<Icon type="down" />
 								</Button>
 							</Dropdown>
 							<Dropdown overlay={ cateMenu } trigger={['click']}>
 								<Button style={{ marginRight:10, marginBottom:10}}> 
-									分类 <Icon type="down" />
+                                    <span ref="cateMenu">分类</span>
+									<Icon type="down" />
 								</Button>
 							</Dropdown>
-							<Dropdown overlay={ brandMenu } trigger={['click']}> 
-								<Button style={{ marginRight:10 }}> 
-									品牌 <Icon type="down" />
+							<Dropdown overlay={ brandMenu } trigger={['click']} style="maxHeight:100,overFlow:hidden,"> 
+								<Button style={{ marginRight:10, maxHeight:100 }}> 
+                                    <span ref="brandMenu">品牌</span>
+									<Icon type="down" />
 								</Button>
 							</Dropdown>
 							<Dropdown overlay={ relatedMenu } trigger={['click']}>
 								<Button style={{ marginRight:10, marginBottom:10}}> 
-									关联状态 <Icon type="down" />
+                                    <span ref="relatedMenu">关联状态</span>
+									<Icon type="down" />
 								</Button>
 							</Dropdown>
 							<InputGroup compact className={styles.dateGroup}>

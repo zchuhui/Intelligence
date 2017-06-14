@@ -8,6 +8,14 @@ import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePi
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
 
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  getCheckboxProps: record => ({
+    disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+  }),
+};
 
 class CompteTable extends React.Component {
     constructor(props, context) {
@@ -61,16 +69,17 @@ class CompteTable extends React.Component {
 							loading={ this.props.loading } 
 							pagination={false} 
 							bordered 
+							rowSelection={rowSelection}
 							>
 							<Column
 						      title="主图"
 						      key="img_url"
 						      render={(text,record) => (
-									<img src={ record.img_url} style={{ width:80, height:80}} />
+									<img src={ record.img_url} className={ styles.img } />
 						      )}
 						    />
 						    <Column
-						      title="SKU"
+						      title="编码"
 						      dataIndex="sku"
 						      key="sku"
 						    />
@@ -80,9 +89,15 @@ class CompteTable extends React.Component {
 						      key="address"
 						    />
 						    <Column
+						      title="站点"
+						      dataIndex=""
+						      key="site"
+						    />
+						    <Column
 						      title="标题"
 						      dataIndex="pname"
 						      key="pname"
+						      className={ styles.columnTitle }
 						    />
 						     <Column
 						      title="价格"
@@ -114,12 +129,12 @@ class CompteTable extends React.Component {
 						      dataIndex="questions"
 						      key="questions"
 						    />
-						    <Column
-						      title="站点"
-						      dataIndex=""
-						      key="site"
+						     <Column
+						      title="分类"
+						      dataIndex="cateName"
+						      key="cateName"
+						      className={ styles.columnCate }
 						    />
-						    
 						  </Table>
 						
 						<div className={styles.piginationWrap}>
