@@ -8,21 +8,13 @@ import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePi
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: record => ({
-    disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-  }),
-};
 
 class CompteTable extends React.Component {
     constructor(props, context) {
         super(props, context);
     }
 
-    // 搜索时间段
+    // 搜索时间段（未完成）
     onSearchDateQuantum(value, dateString){
     	let dateQuantum = {
     		startTime: dateString[0],
@@ -32,23 +24,69 @@ class CompteTable extends React.Component {
     	this.props.handleSearchArgsToDate(dateQuantum);
     }
 
+    // 子表（未完成） 
+    /*expandedRowRender = () =>{
+    	const columns = [
+	      { title: 'Date', dataIndex: 'date', key: 'date' },
+	      { title: 'Name', dataIndex: 'name', key: 'name' },
+	      { title: 'Status', key: 'state', render: () => <span><Badge status="success" />Finished</span> },
+	      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
+	      {
+	        title: 'Action',
+	        dataIndex: 'operation',
+	        key: 'operation',
+	        render: () => (
+	          <span className={'table-operation'}>
+	            <a href="#">Pause</a>
+	            <a href="#">Stop</a>
+	            <Dropdown overlay={menu}>
+	              <a href="#">
+	                More <Icon type="down" />
+	              </a>
+	            </Dropdown>
+	          </span>
+	        ),
+	      },
+	    ];
+
+	    const data = [];
+	    for (let i = 0; i < 3; ++i) {
+	      data.push({
+	        key: i,
+	        date: '2014-12-24 23:12:00',
+	        name: 'This is production name',
+	        upgradeNum: 'Upgraded: 56',
+	      });
+	    }
+	    return (
+	      <Table
+	        columns={columns}
+	        dataSource={data}
+	        pagination={false}
+	      />
+	    );
+    }*/
+    
+
     /* 渲染模块 */
     render() {
         return (
+
             <div>
                 <div className={ styles.main } > 
                 	
 	            	{ /* 操作栏 */ }
 	            	<div className={ styles.clear } style={{ paddingBottom:20 }}>
-	            		<RangePicker
+	            		
+	            		{/*<RangePicker
 					      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}
 					      format="YYYYMMDD"
 					      style={{width:240}}
 					      onChange={this.onSearchDateQuantum.bind(this)}
 
-					    />
-					    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
-	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
+					    />*/}
+					   {/* <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
+	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>*/}
 
 					    {/*<Modal
 				          title="自定义列"
@@ -65,11 +103,10 @@ class CompteTable extends React.Component {
 					<div className={ styles.tableWrap }>
 						{ /*表格*/ }
 						<Table 
+							expandedRowRender={this.expandedRowRender}
 							dataSource={ this.props.data.list } 
 							loading={ this.props.loading } 
 							pagination={false} 
-							bordered 
-							rowSelection={rowSelection}
 							>
 							<Column
 						      title="主图"
@@ -144,7 +181,7 @@ class CompteTable extends React.Component {
 					          showQuickJumper 
 					          total={parseInt(this.props.data.page.count)} 
 					          current={this.props.data.page.page}
-					          pageSize={10} 
+					          pageSize={20}
 					          onChange={this.props.handlePagination.bind(this)}
 					        />
 						</div>

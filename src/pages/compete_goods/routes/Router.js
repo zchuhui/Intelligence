@@ -26,7 +26,7 @@ class CompeteRouter extends React.Component {
     // current: 当前页数
     handlePagination(current) {
         this.props.dispatch({
-            type: 'CompeteGoods/query',
+            type: 'CompeteGoods/paginationQuery',
             payload: {
                 page: current
             }
