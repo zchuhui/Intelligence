@@ -13,8 +13,6 @@ const log = ({ item, key }) => {
     console.log(`点击了菜单${text}`);*/
 }
 
-let cateOptions = [];
-
 
 class Searcher extends Component {
     constructor(props, context) {
@@ -78,7 +76,7 @@ class Searcher extends Component {
     handleCateMenu = (value, selectedOptions) => {
 
         var len = value.length;
-        console.log(selectedOptions)
+
         if (len == 1) {
             this.state.args.site = value[0];
             this.state.args.cid = '';
@@ -96,8 +94,6 @@ class Searcher extends Component {
     handleBrandMenu = (value,select) => {
         this.state.args.bid = value;
         this.state.argsShow.bid = select.props.children;
-
-        //this.state.argsShow.bid = value;
     }
 
     // 选择是否关联产品
@@ -158,8 +154,7 @@ class Searcher extends Component {
 
     render() {
 
-
-        // 关联菜单
+        // 关联状态菜单
         const relatedMenu = (
             <Menu onClick={ this.handleRelatedMenu }>
                 <Menu.Item key="1"><span>已关联</span></Menu.Item>
@@ -191,6 +186,7 @@ class Searcher extends Component {
                                 onChange={ this.handleCateMenu } 
                                 placeholder="站点-分类" 
                                 changeOnSelect 
+                                allowClear={false}
                                 style={{ marginRight:10, width:300, marginBottom:10}}
                             />
                             
@@ -235,19 +231,10 @@ class Searcher extends Component {
                     {/*搜索栏 end*/}
 
                 </div>
-                
-                { /*传参数进来*/ }
-                {/*<p>{this.props.searchArguments.com}</p>*/} 
-                {/*<p>{ this.props.menus.cate.map((i,index) => <p>{ i.cname }</p>) }</p>*/}
 
             </div>
 
         );
-    }
-
-    componentDidMount() {
-        /*console.log("menus");
-        console.log(this.props.menus);*/
     }
 
 }

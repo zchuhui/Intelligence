@@ -67,8 +67,7 @@ class CompteTable extends React.Component {
 	    );
     }*/
     
-
-    /* 渲染模块 */
+    
     render() {
         return (
 
@@ -120,14 +119,14 @@ class CompteTable extends React.Component {
 						      dataIndex="sku"
 						      key="sku"
 						    />
-						    <Column
+						    {/*<Column
 						      title="操作"
 						      dataIndex="address"
 						      key="address"
-						    />
+						    />*/}
 						    <Column
 						      title="站点"
-						      dataIndex=""
+						      dataIndex="site"
 						      key="site"
 						    />
 						    <Column

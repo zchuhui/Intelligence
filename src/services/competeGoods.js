@@ -16,10 +16,10 @@ export function search(args) {
 	
 	const argument = args.searchArgs;
 	let argumentStr = `com=api&t=productList`;
-
+	
 	// 把参数转为url格式
 	for(let i in argument){ 
-		if(argument[i] !== ''){ 
+		if(argument[i] !== '' && argument[i] !== undefined && argument[i] !== null ){ 
 			argumentStr += `&${i}=${argument[i]}`
 		}
 	}

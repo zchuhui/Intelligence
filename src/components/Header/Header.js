@@ -1,5 +1,5 @@
-import React, { Component }  from 'react';
-import {  Menu, Dropdown, Icon } from 'antd';
+import React, { Component } from 'react';
+import { Menu, Dropdown, Icon } from 'antd';
 import styles from './Header.less';
 import Logo from './logo.png';
 import Menus from '../../components/Menu/Menu';
@@ -7,32 +7,29 @@ import Menus from '../../components/Menu/Menu';
 
 // 用户设置
 const setup = (
-  <Menu>
+    <Menu>
     <Menu.Item key="0">
-      <a href="javascript:;">设置</a>
+      <a href="javascript:;">开发中...</a>
     </Menu.Item>
-    <Menu.Item key="1">
+    {/*<Menu.Item key="1">
       <a href="javascript:;">退出</a>
-    </Menu.Item>
-  </Menu> 
+    </Menu.Item>*/}
+  </Menu>
 )
 
 // 用户消息
 const messages = (
-  <Menu>
+    <Menu>
     <Menu.Item key="0">
-      <a href="javascript:;">消息1......</a>
+      <a href="javascript:;">开发中...</a>
     </Menu.Item>
-    <Menu.Item key="1">
-      <a href="javascript:;">消息2......</a>
-    </Menu.Item>
-  </Menu> 
+  </Menu>
 )
 
 
 // 公共头部
-class Header extends Component{
-    
+class Header extends Component {
+
     render() {
         return (
             <div className={ styles.header }>
@@ -65,4 +62,3 @@ class Header extends Component{
 }
 
 export default Header;
-

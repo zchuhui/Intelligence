@@ -5,9 +5,9 @@ import styles from './Menu.less';
 const menu = (
     <Menu>
 		<Menu.Item key="0">
-			<a href="#">竞品报表</a> 
+			<a href="javascript:;">竞品报表</a> 
 		</Menu.Item>
-		<Menu.Item key="1">
+		{/*<Menu.Item key="1">
 			<a href="#">BG关联报表</a>
 		</Menu.Item>
 		<Menu.Item key="2">
@@ -15,7 +15,7 @@ const menu = (
 		</Menu.Item>
 		<Menu.Item key="3">
 			<a href="#">BG关联报表</a>
-		</Menu.Item>
+		</Menu.Item>*/}
 	</Menu>
 );
 

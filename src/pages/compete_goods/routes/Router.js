@@ -33,7 +33,7 @@ class CompeteRouter extends React.Component {
         });
     }
 
-    // 抓取时间段
+    // 抓取时间段(未完成)
     // args: 时间段
     handleSearchArgsToDate(args) {
         console.log(args)
@@ -45,12 +45,10 @@ class CompeteRouter extends React.Component {
         });
     }
 
-    
-
     render() {
         return (
             <MainLayout searchArguments={this.props.search}>
-                {/* <p>{this.state.msg}</p>*/}
+
                 {/*搜索模块*/}
                 <Searcher 
                     menus={this.props.menus} 
@@ -70,12 +68,7 @@ class CompeteRouter extends React.Component {
             </MainLayout>
         )
     }
-    componentDidMount() {
-        /*this.props.dispatch({
-            type: 'CompeteGoods/updateSearchArgs',
-
-        });*/
-    }
+    
 }
 
 
@@ -85,8 +78,6 @@ function mapStateToProps(state) {
 
     // 竞品数据
     const { data, searchArgs, loading } = state.CompeteGoods;
-
-    //console.log(loading)
 
     // 输出数据
     return {

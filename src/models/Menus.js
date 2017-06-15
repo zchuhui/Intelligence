@@ -9,6 +9,68 @@ const defautSite = ["banggood", "gearbest"];
 
 // 默认分类
 const defautCate = [
+    {
+        value:'banggood',
+        label:'banggood',
+        children:[
+            {
+                value: "40564",
+                label: "Electronics",
+                parent_cid: "0",
+                site: "banggood"
+            },
+            {
+                value: "41100",
+                label: "",
+                parent_cid: "0",
+                site: "banggood"
+            },
+        ]
+    },
+    {
+        value:'gearbest',
+        label:'gearbest',
+        children:[
+            {
+                value: "1",
+                label: "Toys & Hobbies",
+                parent_cid: "0",
+                site: "gearbest",
+                children: [
+                    {
+                        value: "5",
+                        label: "ESC",
+                        parent_cid: "3",
+                        site: "gearbest"
+                    },
+                    {
+                        value: "10",
+                        label: "Motor",
+                        parent_cid: "3",
+                        site: "gearbest"
+                    },
+                    {
+                        value: "12",
+                        label: "Flight Controller",
+                        parent_cid: "3",
+                        site: "gearbest"
+                    },
+                    {
+                        value: "14",
+                        label: "Charger",
+                        parent_cid: "3",
+                        site: "gearbest"
+                    },
+                ]
+            },
+            {
+                value: "2",
+                label: "Remote Control Toys",
+                parent_cid: "1",
+                site: "gearbest",
+            },
+        ]
+    }
 ]
 
 // 默认品牌
@@ -133,8 +195,10 @@ const cateToMenu = (cate) =>{
 
     const mapCateToString = (item) => {
         item.map((i,index) => {
+
             i.value = i.cid;
             i.label = i.cname; 
+
             if (i.children) {
                 mapCateToString(i.children);
             }
@@ -142,7 +206,7 @@ const cateToMenu = (cate) =>{
     };
 
     for(let i in cate){
-        //console.log(cate[i]);
+
         mapCateToString(cate[i]);
 
         var obj = {
@@ -150,9 +214,11 @@ const cateToMenu = (cate) =>{
             label:i,
             children:cate[i],
         }
-        arr.push(obj);
+        if (i !== "") {
+            arr.push(obj);
+        }
+        
     }
 
-    console.log(arr)
     return arr;
 }
