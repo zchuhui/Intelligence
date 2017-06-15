@@ -81,6 +81,7 @@ class Searcher extends Component {
             this.state.args.site = value[0];
             this.state.args.cid = '';
             this.state.argsShow.site = value[0];
+            this.state.argsShow.cid = '';
         }
         if (len > 1) {
             this.state.args.site = value[0];

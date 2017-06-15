@@ -15,13 +15,13 @@ class CompteTable extends React.Component {
     }
 
     // 搜索时间段（未完成）
-    onSearchDateQuantum(value, dateString){
-    	let dateQuantum = {
-    		startTime: dateString[0],
-    		endTime: dateString[1]
-    	}
-    	
-    	this.props.handleSearchArgsToDate(dateQuantum);
+    onSearchDateQuantum(value, dateString) {
+        let dateQuantum = {
+            startTime: dateString[0],
+            endTime: dateString[1]
+        }
+
+        this.props.handleSearchArgsToDate(dateQuantum);
     }
 
     // 子表（未完成） 
@@ -66,8 +66,8 @@ class CompteTable extends React.Component {
 	      />
 	    );
     }*/
-    
-    
+
+
     render() {
         return (
 
@@ -180,7 +180,7 @@ class CompteTable extends React.Component {
 					          showQuickJumper 
 					          total={parseInt(this.props.data.page.count)} 
 					          current={this.props.data.page.page}
-					          pageSize={20}
+					          pageSize={PAGE_SIZE}
 					          onChange={this.props.handlePagination.bind(this)}
 					        />
 						</div>
