@@ -142,38 +142,40 @@ export default {
         brand: defautBrand, // 品牌列表
     },
     reducers: {
-
         saveCate(state, { payload: { data: data} }) {
             // 把数据转为想要的参数
             data = cateToMenu(data);
             return {...state, cate:data};
         },
         saveBrand(state, { payload: { data: data} }) {
-            //console.log(data)
+            data = data.banggood;
             return {...state, brand:data};
         },
     },
     effects: {
         // 获取品牌数据
         * getBrands({ payload }, { select, call, put }) {
+
+            // 获取分类数据
+            const  { data }  = yield call(menusService.getMenuCate);
+            // 存储数据
+            if(data){
+                yield put({ type: 'saveCate', payload: data});
+            }else{
+                console.log("cate menu null")
+            }
+
             // 开始请求数据
-            const  brand = yield call(menusService.getMenuBrand);
-
-            // 保存数据
-            if(brand.data){
+            const brand = yield call(menusService.getMenuBrand);
+            // 存储数据
+            if(brand){
                 yield put({ type: 'saveBrand', payload: brand.data});
-
-                // 获取分类数据
-                const  {data}  = yield call(menusService.getMenuCate);
-                if(data){
-                    yield put({ type: 'saveCate', payload: data});
-                }else{
-                    console.log("cate menu null")
-                }
-
             }else{
                 console.log("brand menu null")
-            }
+            } 
+
+            
+
         },
     },
     subscriptions: {

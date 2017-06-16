@@ -1,12 +1,23 @@
 import request from '../utils/request';
-import { PAGE_SIZE } from '../constants/constant';
+import { IS_SERVER } from '../constants/constant';
 
 // 根据页数获取数据
 // page: 页数
 export function fetch({page}) { 
 	//添加两个默认参数，并加上页数
 	const apiArgs= `com=api&t=productList&page=${page}`;
-  	return request(`/api?${apiArgs}`);
+
+	// 开发环境
+	let url = `/api?${apiArgs}`;
+
+	if(IS_SERVER){
+		// 线上环境
+		url = `https://betabia.banggood.com/index.php?${apiArgs}`;
+	}
+
+	console.log(url);
+
+  	return request(url);
 }
 
 
@@ -24,8 +35,15 @@ export function search(args) {
 		}
 	}
 	 
+	// 开发环境：代理
 	let url = `/api?${argumentStr}`;
-	console.log("url:"+url) 
+	
+	if(IS_SERVER){
+		// 线上环境
+		url = `https://betabia.banggood.com/index.php?${argumentStr}`;
+	}
+
+	console.log(url) 
 	
   	return request(url);
 }

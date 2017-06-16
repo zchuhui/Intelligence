@@ -10,11 +10,6 @@
   "outputPath": "./dist",
   "autoprefixer": null,
   "proxy": {
-    "/test": {
-      "target": "http://jsonplaceholder.typicode.com/",
-      "changeOrigin": true,
-      "pathRewrite": { "^/test" : "" }
-    },
     "/api": {
       "target": "https://betabia.banggood.com/index.php",
       "changeOrigin": true,
@@ -36,11 +31,12 @@
   "env": {
     "development": {
       "extraBabelPlugins": [
-        "dva-hmr"
+        "dva-hmr",
+        "transform-runtime",
+        ["import", { "libraryName": "antd", "style": true }]
       ]
     }
   },
-  "multipage": false,
   "dllPlugin": {
     "exclude": [
       "babel-runtime"

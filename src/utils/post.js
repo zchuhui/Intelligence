@@ -30,3 +30,18 @@ export function post(url, paramsObj) {
 
     return result;
 }
+
+
+export function getArgs(url, paramsObj) {
+    var result = fetch(url, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/jsonp, text/plain, */*',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: obj2params(paramsObj)
+    });
+    console.log("result:"+result)
+    return result;
+}

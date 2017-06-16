@@ -1,4 +1,5 @@
 import request from '../utils/request';
+import { IS_SERVER } from '../constants/constant';
 
 // 获取站点菜单
 export function getMenuSite() { 
@@ -8,12 +9,30 @@ export function getMenuSite() {
 
 // 获取分类菜单
 export function getMenuCate() { 
-  	return request(`/api?com=api&t=getCateList`);
+	
+	//开发环境
+	let url = `/api?com=api&t=getCateList`;
+	
+	if(IS_SERVER){
+		// 线上环境
+		url = `https://betabia.banggood.com/index.php?com=api&t=getCateList`;
+	}
+
+  	return request(url);
 }
 
 
 // 获取所有品牌菜单
 export function getMenuBrand() { 
-  	return request(`/api?com=api&t=getBrandList`);
+
+	//开发环境
+	let url = `/api?com=api&t=getBrandList`;
+	
+	if(IS_SERVER){
+		// 线上环境
+		url = `https://betabia.banggood.com/index.php?com=api&t=getBrandList`;
+	}
+
+  	return request(url);
 }
 

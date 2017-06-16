@@ -48,12 +48,13 @@ export default {
     effects: {
         // 获取数据
         * query({ payload }, { select, call, put }) {
-            const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
+            //const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
 
             // 请求数据时，显示loading状态
             yield put({ type: 'showLoading', payload: { loading: true } });
             // 开始请求数据
             const { data } = yield call(competeServices.fetch, payload);
+            //console.log(data)
             // 保存数据
             if (data) {
                 yield put({ type: 'save', payload: data });

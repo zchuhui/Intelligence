@@ -193,7 +193,7 @@ class Searcher extends Component {
                             
                             <Select
                                 showSearch
-                                style={{ width: 200, marginRight:10 }}
+                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
                                 placeholder="品牌"
                                 optionFilterProp="children" 
                                 onSelect={ this.handleBrandMenu } 
@@ -205,7 +205,7 @@ class Searcher extends Component {
                             </Select>
 
                             <Dropdown overlay={ relatedMenu } trigger={['click']}>
-                                <Button style={{ marginRight:10, marginBottom:10}}> 
+                                <Button style={{ marginRight:10, marginBottom:10 ,verticalAlign:'top'}}> 
                                     <span ref="relatedMenu">关联状态</span>
                                     <Icon type="down" />
                                 </Button>
@@ -222,7 +222,7 @@ class Searcher extends Component {
                                 />
                             </InputGroup>
 
-                            <Input id="sku" style={{ width: 140 }} placeholder="sku" />
+                            <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
                             
                         </div>
                         <div className={ styles.searchRight }>
