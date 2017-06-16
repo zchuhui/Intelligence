@@ -1,7 +1,7 @@
 {
   "entry": [
     "src/pages/compete_goods/index.js",
-    "src/pages/login/login_start.js",
+    "src/pages/login/login.js",
     "src/pages/test/test_start.js"
     ],
   "disableCSSModules": false,

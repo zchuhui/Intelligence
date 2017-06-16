@@ -2,4 +2,4 @@
 export const PAGE_SIZE = 20;
 
 // 是否服务器环境
-export const IS_SERVER = false; 
+export const IS_SERVER = true; 
