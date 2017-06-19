@@ -89,6 +89,10 @@ class Searcher extends Component {
             this.state.argsShow.cid = selectedOptions[len-1].label;
         }
 
+
+        this.props.getMenuBrands(this.state.args.site);
+        
+
     }
 
     // 选择品牌

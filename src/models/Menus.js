@@ -142,47 +142,59 @@ export default {
         brand: defautBrand, // 品牌列表
     },
     reducers: {
+        // 存储分类表
         saveCate(state, { payload: { data: data} }) {
-            // 把数据转为想要的参数
+            // 把获取数据转为组件可用的数据格式
             data = cateToMenu(data);
             return {...state, cate:data};
         },
+        // 存储品牌表
         saveBrand(state, { payload: { data: data} }) {
+            // 暂时固定为banggood
             data = data.banggood;
             return {...state, brand:data};
         },
     },
     effects: {
-        // 获取品牌数据
-        * getBrands({ payload }, { select, call, put }) {
+        // 获取分类表
+        * getCates({ payload },{ select, call, put }){
 
             // 获取分类数据
             const  { data }  = yield call(menusService.getMenuCate);
+
             // 存储数据
             if(data){
                 yield put({ type: 'saveCate', payload: data});
             }else{
                 console.log("cate menu null")
             }
+        },
 
+        // 获取品牌表
+        * getBrands({ payload }, { select, call, put }) {
+            
             // 开始请求数据
-            const brand = yield call(menusService.getMenuBrand);
+            const brand = yield call(menusService.getMenuBrand, payload: { site: payload.site });
+            console.log(brand);
             // 存储数据
             if(brand){
                 yield put({ type: 'saveBrand', payload: brand.data});
             }else{
                 console.log("brand menu null")
             } 
-
-            
-
         },
+
     },
     subscriptions: {
         setup({ dispatch, history }) {
+
+            /*dispatch({ type: 'getCates' });
+            dispatch({ type: 'getBrands' });*/
+
             return history.listen(({ pathname, query }) => {
                 if (pathname === '/') {
-                    dispatch({ type: 'getBrands' });
+                    dispatch({ type: 'getCates'});
+                    //dispatch({ type: 'getBrands'});
                 }
             })
         },
@@ -190,8 +202,10 @@ export default {
 };
 
 
-// 用递归遍历所有参数，
-// 并添加value、label值，用于插件的参数
+/**
+ * 用递归遍历所有参数，
+ * 并添加value、label值，用于植入插件的参数
+ */
 const cateToMenu = (cate) =>{
     var arr = [];
 

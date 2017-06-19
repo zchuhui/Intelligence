@@ -45,6 +45,17 @@ class CompeteRouter extends React.Component {
         });
     }
 
+    // 获取品牌
+    getMenuBrands(site) {
+        this.props.dispatch({
+            type: 'Menus/getBrands',
+            payload: {
+                site: site
+            }
+        });
+    }
+
+
     render() {
         return (
             <MainLayout searchArguments={this.props.search}>
@@ -54,8 +65,7 @@ class CompeteRouter extends React.Component {
                     menus={this.props.menus} 
                     searchArgs={this.props.searchArgs}  
                     handleSearchArgs={args => this.handleSearchArgs(args)}
-                    /*checkLoading={i => this.checkLoading(i)} */
-
+                    getMenuBrands={site => this.getMenuBrands(site)}
                 />
 
                 {/*列表模块*/}

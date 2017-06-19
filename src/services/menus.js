@@ -1,38 +1,27 @@
 import request from '../utils/request';
 import { IS_SERVER } from '../constants/constant';
+import { url } from '../config/config.url';
 
 // 获取站点菜单
 export function getMenuSite() { 
-  	return request(`/api?com=api&t=getSite`);
+  	return request(`${url}?com=api&t=getSite`);
 }
 
 
 // 获取分类菜单
 export function getMenuCate() { 
 	
-	//开发环境
-	let url = `/api?com=api&t=getCateList`;
-	
-	if(IS_SERVER){
-		// 线上环境
-		url = `http://betabia.banggood.com/index.php?com=api&t=getCateList`;
-	}
+	let currentUrl = `${url}?com=api&t=getCateList`;
 
-  	return request(url);
+  	return request(currentUrl);
 }
 
 
 // 获取所有品牌菜单
-export function getMenuBrand() { 
+export function getMenuBrand(site) { 
 
-	//开发环境
-	let url = `/api?com=api&t=getBrandList`;
+	let currentUrl = `${url}?com=api&t=getBrandList&site=${site.site}`;
 	
-	if(IS_SERVER){
-		// 线上环境
-		url = `http://betabia.banggood.com/index.php?com=api&t=getBrandList`;
-	}
-
-  	return request(url);
+  	return request(currentUrl);
 }
 

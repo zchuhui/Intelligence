@@ -1,4 +1,8 @@
-//import * as competeServices from '../../../services/competeGoods';
+/**
+ * BG关联表model
+ */
+
+import * as BgService from '../../../services/relevanceBG';
 
 export default {
     namespace: 'RelevanceBG',
@@ -17,7 +21,7 @@ export default {
             },
             list: [],
         },
-        
+
         // 搜索参数
         searchArgs: {
             site: '',
@@ -34,40 +38,37 @@ export default {
     },
     reducers: {
         // 把数据存储到state
-        /*save(state, { payload: { data: data } }) {
+        save(state, { payload: { data: data } }) {
             return {...state, data, loading: false };
-        },*/
+        },
+        // 切换loading状态
+        toggleLoading(state, { payload }) {
+            return {...state, loading: payload.loading };
+        }
     },
     effects: {
         // 获取数据
-        /** query({ payload }, { select, call, put }) {
-            //const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
-
+        * fetch({ payload }, { select, call, put }) {
+            
             // 请求数据时，显示loading状态
-            yield put({ type: 'showLoading', payload: { loading: true } });
+            yield put({ type: 'toggleLoading', payload: { loading: true } });
+
             // 开始请求数据
-            const { data } = yield call(competeServices.fetch, payload);
-            //console.log(data)
+            const { data } = yield call(BgService.fetch, payload);
+
             // 保存数据
             if (data) {
                 yield put({ type: 'save', payload: data });
             } else {
                 console.log("data null")
             }
-
-        },*/
+        },
 
     },
     subscriptions: {
-        /*setup({ dispatch, history }) {
-            return history.listen(({ pathname, query }) => {
-                // 监听url，但ulr为‘/’时，执行query
-                if (pathname === '/bg') {
-                    console.log("bg...")
-                    //dispatch({ type: 'query', payload: { page: 1 } });
-                }
-            })
-        },*/
+        setup({ dispatch, history }) {
+             dispatch({ type: 'fetch', payload: { page: 1 } });
+        },
 
     },
 
