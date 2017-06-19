@@ -15,7 +15,7 @@ export function getMenuCate() {
 	
 	if(IS_SERVER){
 		// 线上环境
-		url = `https://betabia.banggood.com/index.php?com=api&t=getCateList`;
+		url = `http://betabia.banggood.com/index.php?com=api&t=getCateList`;
 	}
 
   	return request(url);
@@ -30,7 +30,7 @@ export function getMenuBrand() {
 	
 	if(IS_SERVER){
 		// 线上环境
-		url = `https://betabia.banggood.com/index.php?com=api&t=getBrandList`;
+		url = `http://betabia.banggood.com/index.php?com=api&t=getBrandList`;
 	}
 
   	return request(url);

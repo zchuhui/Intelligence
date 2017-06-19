@@ -12,7 +12,7 @@ export function fetch({page}) {
 
 	if(IS_SERVER){
 		// 线上环境
-		url = `https://betabia.banggood.com/index.php?${apiArgs}`;
+		url = `http://betabia.banggood.com/index.php?${apiArgs}`;
 	}
 
 	console.log(url);
@@ -40,7 +40,7 @@ export function search(args) {
 	
 	if(IS_SERVER){
 		// 线上环境
-		url = `https://betabia.banggood.com/index.php?${argumentStr}`;
+		url = `http://betabia.banggood.com/index.php?${argumentStr}`;
 	}
 
 	console.log(url) 

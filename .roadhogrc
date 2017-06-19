@@ -2,7 +2,7 @@
   "entry": [
     "src/pages/compete_goods/index.js",
     "src/pages/login/login.js",
-    "src/pages/test/test_start.js"
+    "src/pages/relevance_bg/bg.js"
     ],
   "disableCSSModules": false,
   "publicPath": "/",
@@ -19,9 +19,9 @@
       "target": "http://localhost:8000/",
       "pathRewrite": { "^/login" : "/login.html" }
     },
-    "/test": {
+    "/bg": {
       "target": "http://localhost:8000/",
-      "pathRewrite": { "^/test" : "/test.html" }
+      "pathRewrite": { "^/bg" : "/bg.html" }
     }
   },
   "extraBabelPlugins": [
