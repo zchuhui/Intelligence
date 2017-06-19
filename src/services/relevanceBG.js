@@ -1,5 +1,5 @@
 import request from '../utils/request';
-import { url } from '../config/config.url';
+import { Url } from '../config/config.url';
 
 // 获取BG报表数据
 // page: 页数
@@ -9,7 +9,7 @@ export function fetch({page}) {
 	const apiArgs= `com=api&t=productList&site=banggood&page=${page}`;
 	
 	// 合成Url
-	let currentUrl = `${url}?${apiArgs}`;
+	let currentUrl = `${Url}?${apiArgs}`;
 	
   	return request(currentUrl);
 }

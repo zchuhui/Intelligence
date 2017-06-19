@@ -16,5 +16,5 @@ else{
 }
 
 export default {
-	url: url
+	Url: url
 }
