@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './RelevanceList.less';
+import moment from 'moment';
 import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
 
 const { Column, ColumnGroup } = Table;
@@ -17,14 +18,16 @@ class RelevanceList extends React.Component {
             	<div className={ styles.clear } style={{ paddingBottom:20 }}>
             		
             		{/*<RangePicker
-				      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}
-				      format="YYYYMMDD"
-				      style={{width:240}}
+				      ranges={{ 今天: [moment(), moment()],
+				      	'本周': [moment(), moment().endOf('week')], 
+				      	'本月': [moment(), moment().endOf('month')] }}
+				      	format="YYYYMMDD"
+				      	style={{width:240}}
 				      onChange={this.onSearchDateQuantum.bind(this)}
 
 				    />*/}
-				   {/* <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
-            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>*/}
+				    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
+            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
 
 				    {/*<Modal
 			          title="自定义列"
@@ -119,6 +122,7 @@ class RelevanceList extends React.Component {
 					          total={parseInt(this.props.data.page.count)} 
 					          current={this.props.data.page.page}
 					          pageSize={this.props.data.page.pageSize}
+					          onChange={this.props.changePagination.bind(this)}
 					        />
 						</div>
 					</div>

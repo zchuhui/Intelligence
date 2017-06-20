@@ -11,11 +11,25 @@ class BgRouter extends React.Component {
         super(props, context);
     }
 
+    /**
+     * 搜索
+     * @param  args [搜索参数]
+     */
+    handleSearchArgs(args) {
+        this.props.dispatch({
+            type: 'RelevanceBG/search',
+            payload: {
+                searchArgs: args
+            }
+        });
+
+    }
+
     // 分页操作
     // current: 当前页数
     changePagination(current) {
         this.props.dispatch({
-            type: 'RelevanceBG/fetch',
+            type: 'RelevanceBG/pagination',
             payload: {
                 page: current
             }
@@ -23,14 +37,14 @@ class BgRouter extends React.Component {
     }
 
     // 获取品牌
-    getMenuBrands(site) {
+    /*getMenuBrands(site) {
         this.props.dispatch({
             type: 'Menus/getBrands',
             payload: {
                 site: site
             }
         });
-    }
+    }*/
     
 
     render() {
@@ -38,11 +52,13 @@ class BgRouter extends React.Component {
             <MainLayout>
                 <Searcher 
                     menus={this.props.menus}
+                    handleSearchArgs={args => this.handleSearchArgs(args)}
                     
                 />
                 <RelevanceList 
                     data={this.props.data}
                     loading={this.props.loading} 
+                    changePagination={current => this.changePagination(current)}
                 />
             </MainLayout>
         )

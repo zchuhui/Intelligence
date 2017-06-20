@@ -9,9 +9,12 @@
         .tag {
             border: 1px dashed #3197eb;
             color: #3197eb;
-            line-height: 20px;
-            border-radius: 10px;
-            background: transparent;
+            height:10px;
+            line-height: 10px;
+            padding:3px 10px;
+            border-radius: 15px;
+            cursor:pointer;
+            margin-right: 10px;
         }
     }
     .main {
@@ -21,11 +24,19 @@
             width: 100%;
             padding: 30px 20px;
             .searchLeft {
+                position:relative;
                 display: inline-block;
                 width: 85%;
                 vertical-align: top;
 
                 .ant-select,.ant-btn,.ant-input{ vertical-align: top; } 
+                
+                .pickerDate{
+                    position: absolute;
+                    width:340px; 
+                    bottom:-100px;
+                    left:0px;
+                }
             }
             .searchRight {
                 display: inline-block;

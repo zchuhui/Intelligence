@@ -17,9 +17,9 @@ export function getMenuCate() {
 
 
 // 获取所有品牌菜单
-export function getMenuBrand(site) { 
+export function getMenuBrand() { 
 
-	let currentUrl = `${Url}?com=api&t=getBrandList&site=${site.site}`;
+	let currentUrl = `${Url}?com=api&t=getBrandList`;
 	
   	return request(currentUrl);
 }

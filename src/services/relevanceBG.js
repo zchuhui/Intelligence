@@ -13,3 +13,29 @@ export function fetch({page}) {
 	
   	return request(currentUrl);
 }
+
+
+
+/**
+ * 搜索数据
+ * @param  {[type]} args [搜索参数]
+ * @return {[type]}      [请求数据的集合]
+ */
+export function search(args) { 
+	
+	const argument = args.searchArgs;
+	
+	let argumentStr = `com=api&t=productList&site=banggood`;
+	
+	// 把参数转为url格式
+	for(let i in argument){ 
+		if(argument[i] !== '' && argument[i] !== undefined && argument[i] !== null ){ 
+			argumentStr += `&${i}=${argument[i]}`
+		}
+	}
+	
+	let url = `${Url}?${argumentStr}`;
+	
+	console.log(url);
+  	return request(url);
+}

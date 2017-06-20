@@ -1,4 +1,8 @@
-/*菜单类集合，所以菜单载入都放这里*/
+/**
+ * 通用菜单集合
+ * Date:2017/6/20
+ * Author:zhuangchuhui
+ */
 
 import * as menusService from '../services/menus';
 
@@ -146,12 +150,14 @@ export default {
         saveCate(state, { payload: { data: data} }) {
             // 把获取数据转为组件可用的数据格式
             data = cateToMenu(data);
+
+            console.log("分类获取完毕")
             return {...state, cate:data};
         },
         // 存储品牌表
         saveBrand(state, { payload: { data: data} }) {
-            // 暂时固定为banggood
-            data = data.banggood;
+
+            console.log("品牌表获取完毕")
             return {...state, brand:data};
         },
     },
@@ -172,10 +178,10 @@ export default {
 
         // 获取品牌表
         * getBrands({ payload }, { select, call, put }) {
-            
+
             // 开始请求数据
-            const brand = yield call(menusService.getMenuBrand, payload: { site: payload.site });
-            console.log(brand);
+            const brand = yield call(menusService.getMenuBrand);
+
             // 存储数据
             if(brand){
                 yield put({ type: 'saveBrand', payload: brand.data});
@@ -188,15 +194,15 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
 
-            /*dispatch({ type: 'getCates' });
-            dispatch({ type: 'getBrands' });*/
+            dispatch({ type: 'getCates' });
+            dispatch({ type: 'getBrands' }); 
 
-            return history.listen(({ pathname, query }) => {
+            /*return history.listen(({ pathname, query }) => {
                 if (pathname === '/') {
                     dispatch({ type: 'getCates'});
-                    //dispatch({ type: 'getBrands'});
+                    dispatch({ type: 'getBrands'});
                 }
-            })
+            })*/
         },
     },
 };

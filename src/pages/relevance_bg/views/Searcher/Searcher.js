@@ -6,6 +6,7 @@
 
 import React from 'react';
 import styles from './Searcher.less'
+import moment from 'moment';
 import { Menu, Dropdown, Button, Icon, DatePicker, Input, InputNumber, Select, Tag, Cascader } from 'antd';
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -14,7 +15,7 @@ const InputGroup = Input.Group;
 
 
 class Searcher extends React.Component {
-	constructor(props, context) {
+    constructor(props, context) {
         super(props, context);
 
         // 搜索条件
@@ -28,6 +29,8 @@ class Searcher extends React.Component {
                 sku: '',
                 price1: '',
                 price2: '',
+                startTime:'',
+                endTime:'',
                 page: 1,
             },
             // label
@@ -43,14 +46,16 @@ class Searcher extends React.Component {
         }
     }
 
-    // 搜索
+    /**
+     * 搜索
+     */
     handlerSearchClick(e) {
         e.preventDefault();
 
         // 搜索条件赋值
         const price1 = document.getElementById('price1').value,
-              price2 = document.getElementById('price2').value,
-              sku = document.getElementById('sku').value;
+            price2 = document.getElementById('price2').value,
+            sku = document.getElementById('sku').value;
 
         this.state.args.price1 = price1;
         this.state.args.price2 = price2;
@@ -67,13 +72,141 @@ class Searcher extends React.Component {
 
     }
 
-    
-	render(){
-		return (
-			<div className={ styles.searchWrap}>
+    // 选择分类
+    handleCateMenu = (value, selectedOptions) => {
+
+        var len = value.length;
+
+        if (len == 1) {
+            this.state.args.site = value[0];
+            this.state.args.cid = '';
+            this.state.argsShow.site = value[0];
+            this.state.argsShow.cid = '';
+        }
+        if (len > 1) {
+            this.state.args.site = value[0];
+            this.state.args.cid = value[len - 1];
+            this.state.argsShow.cid = selectedOptions[len - 1].label;
+        }
+
+
+        //this.props.getMenuBrands(this.state.args.site);   
+
+    }
+
+    /**
+     * 把搜索条件转换成数组
+     * @return {[array]} [字符串数组]
+     */
+    getObjectValToArray = () => {
+
+        const objectArgs = this.state.argsShow;
+
+        let str = [];
+        for (let i in objectArgs) {
+            if (objectArgs[i] !== "" && i !== "page") {
+                let tag = this.tagString(i);
+                let tagObj = {
+                    cid: i,
+                    label: tag,
+                    value: objectArgs[i]
+                }
+                //str.push(`${tag}:  ${objectArgs[i]}`);
+                str.push(tagObj);
+            }
+        }
+
+        console.log(str)
+
+        return str;
+    }
+
+    /**
+     * 搜索参数显示名称替换
+     * @param  {[type]} tag [id]
+     * @return {[string]}     [显示名称]
+     */
+    tagString = (tag) => {
+
+        let tagString = "";
+
+        switch (tag) {
+            case "site":
+                tagString = "站点";
+                break;
+            case "cid":
+                tagString = "分类";
+                break
+            case "bid":
+                tagString = "品牌";
+                break
+            case "status":
+                tagString = "关联状态";
+                break
+            case "price1":
+                tagString = "价格区间1";
+                break
+            case "price2":
+                tagString = "价格区间2";
+                break
+            case "sku":
+                tagString = "SKU";
+                break
+        }
+        return tagString;
+    }
+
+
+    /**
+     * 获取关联状态
+     */
+    getStatus = (value) => {
+
+        this.state.args.status = value;
+
+        if (value == 1) {
+            this.state.argsShow.status = "已关联";
+        } else {
+            this.state.argsShow.status = "未关联";
+        }
+    }
+
+    // 关闭标签
+    closeTag = (e) => {
+        console.log(e);
+    }
+
+    // 根据时间搜索
+    getTime = (date, dateString) => {
+
+        if(dateString[0]){
+            this.state.args.startTime = dateString[0];
+            this.state.args.endTime = dateString[1];
+
+            this.props.handleSearchArgs(this.state.args);
+        }
+
+    }
+
+
+    render() {
+        return (
+            <div className={ styles.searchWrap}>
                 <div className={ styles.searchArgs }>
                     <span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
-                    
+                    <span id="tagList"></span>
+                    { 
+                        this.getObjectValToArray().map((item,index) => 
+                            <span 
+
+                                key={item.cid} 
+                                className={ styles.tag } 
+                                onClick={this.closeTag.bind(this)}
+                                >
+                                {item.label} : { item.value } 
+                            </span>)
+                            
+                    }
                 </div>
                 <div className={ styles.main }>
                     <div className={ styles.title }>
@@ -87,6 +220,7 @@ class Searcher extends React.Component {
                             <Cascader 
                                 options={ this.props.menus.cate } 
                                 placeholder="分类" 
+                                onChange={ this.handleCateMenu } 
                                 changeOnSelect 
                                 allowClear={false}
                                 style={{ marginRight:10, width:300, marginBottom:10}}
@@ -96,20 +230,22 @@ class Searcher extends React.Component {
                                 showSearch
                                 style={{ width: 200, marginRight:10, verticalAlign:'top'}}
                                 placeholder="品牌"
-                                optionFilterProp="children" 
+                                optionFilterProp="children"
                                 >
 
                                 {
-                                    /*this.props.menus.brand.map((i,index) => <Option key={i.bid}>{i.bname}</Option>)*/
+                                    this.props.menus.brand.map((i,index) => <Option key={i.bid}>{i.bname}</Option>)
                                 }
                             </Select>
 
-                            {/*<Dropdown overlay={ relatedMenu } trigger={['click']}>
-                                <Button style={{ marginRight:10, marginBottom:10 ,verticalAlign:'top'}}> 
-                                    <span ref="relatedMenu">关联状态</span>
-                                    <Icon type="down" />
-                                </Button>
-                            </Dropdown>*/}
+                            <Select
+                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
+                                placeholder="关注状态" 
+                                onChange={ this.getStatus }
+                                >
+                                <Option key="1">已关联</Option>
+                                <Option key="2">未关联</Option>
+                            </Select>
 
                             <InputGroup compact className={styles.dateGroup}>
                                 <Input id="price1" 
@@ -123,6 +259,18 @@ class Searcher extends React.Component {
                             </InputGroup>
 
                             <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
+
+                            <div className={ styles.pickerDate }  >
+                                <RangePicker 
+                                    ranges={{ 今天: [moment(), moment()],
+                                    '本周': [moment(), moment().endOf('week')], 
+                                    '本月': [moment(), moment().endOf('month')] }}
+                                    format="YYYY-MM-DD" 
+                                    style={{ width:240 }}
+                                    onChange={ this.getTime }
+                                    allowClear="true"
+                                />
+                            </div>
                             
                         </div>
                         <div className={ styles.searchRight }>
@@ -134,8 +282,9 @@ class Searcher extends React.Component {
                 </div>
 
             </div>
-		)
-	}
+        )
+    }
 }
+
 
 export default Searcher;

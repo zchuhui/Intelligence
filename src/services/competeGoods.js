@@ -28,8 +28,7 @@ export function search(args) {
 			argumentStr += `&${i}=${argument[i]}`
 		}
 	}
-	 
-	// 开发环境：代理
+	
 	let url = `${Url}?${argumentStr}`;
 	
 	console.log(url);
