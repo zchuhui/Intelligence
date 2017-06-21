@@ -9,6 +9,22 @@ const { MonthPicker, RangePicker } = DatePicker;
 class RelevanceList extends React.Component {
 	constructor(props, context) {
         super(props, context);
+
+        this.state = {
+        	customRowVisible:false
+        }
+    }
+
+    hideCustomRowModal = () => {
+    	this.setState({
+    		customRowVisible:false
+    	})
+    }
+
+    showCustomRowModal = () => {
+    	this.setState({
+    		customRowVisible:true
+    	})
     }
 
 	render(){
@@ -26,18 +42,21 @@ class RelevanceList extends React.Component {
 				      onChange={this.onSearchDateQuantum.bind(this)}
 
 				    />*/}
-				    <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
+				    <Button type="primary" className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>
             		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
 
-				    {/*<Modal
+				    <Modal
 			          title="自定义列"
-			          visible={this.state.visible}  
-			          onOk={this.handleOk}
-			          onCancel={this.handleCancel} 
-			          >
-			          <p>Some contents...</p>
+			          visible={this.state.customRowVisible}  
+			          onCancel={this.hideCustomRowModal} 
+			          okText="确认"
+          			  cancelText="取消"
+			        >
+			        	<div>
+			        		
+			        	</div>
 						
-			        </Modal>*/}
+			        </Modal>
 
             	</div>
 

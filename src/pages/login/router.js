@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Route } from 'dva/router';
-import LoginRouter from './routes/LoginRouter';
+import LoginRouter from './routes/Router';
 
 // 登录页入口路由
 function RouterConfig({ history }) {

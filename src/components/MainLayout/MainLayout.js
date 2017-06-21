@@ -2,12 +2,13 @@ import React from 'react';
 import styles from './MainLayout.less';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import localStorage from '../../utils/localStorage';
 
 /*布局组件*/
 class MainLayout extends React.Component {
     constructor(props, context) {
         super(props, context);
-    } 
+    }
 
     render() {
         return (
@@ -39,7 +40,14 @@ class MainLayout extends React.Component {
     }
 
     componentDidMount() {
-       
+
+        /*// 获取登录信息
+        let username = localStorage.get('username');
+        let password = localStorage.get('password');
+
+        console.log("user",username);
+        console.log("pwd",password);*/
+        
     }
 
 
