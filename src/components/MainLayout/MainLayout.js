@@ -41,13 +41,12 @@ class MainLayout extends React.Component {
 
     componentDidMount() {
 
-        /*// 获取登录信息
-        let username = localStorage.get('username');
-        let password = localStorage.get('password');
+        // 获取登录信息,如果为登录，则转到登录页面
+        let loginStatus = localStorage.get('loginStatus');
+        if (!loginStatus) {
+            window.location.href = "/login"; 
+        }
 
-        console.log("user",username);
-        console.log("pwd",password);*/
-        
     }
 
 

@@ -5,12 +5,12 @@ import styles from './Menu.less';
 const menu = (
     <Menu>
 		<Menu.Item key="0">
-			<a href="javascript:;">竞品报表</a> 
+			<a href="/">竞品报表</a> 
 		</Menu.Item>
-		{/*<Menu.Item key="1">
-			<a href="#">BG关联报表</a>
+		<Menu.Item key="1">
+			<a href="/bg">BG关联报表</a>
 		</Menu.Item>
-		<Menu.Item key="2">
+		{/*<Menu.Item key="2">
 			<a href="#">BG关联报表</a> 
 		</Menu.Item>
 		<Menu.Item key="3">

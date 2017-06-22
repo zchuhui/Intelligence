@@ -132,7 +132,7 @@ export default {
 
             // 判断是否存在，存在则自动登录
             if (username && password) {
-
+                
                 const loginInfo = {
                     username: username,
                     password: password
