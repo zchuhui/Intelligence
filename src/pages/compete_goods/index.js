@@ -9,9 +9,10 @@ const app = dva();
 app.use(createLoading());
 
 // 3. Model
-app.model(require('./models/CompeteGoods'));
 app.model(require('../../models/Menus'));
-app.model(require('../test/models/Users'));
+app.model(require('../../models/User'));
+app.model(require('./models/CompeteGoods'));
+
 
 // 4. Router
 app.router(require('./router'));

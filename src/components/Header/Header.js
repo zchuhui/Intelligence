@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'dva';
 import { Menu, Dropdown, Icon } from 'antd';
 import styles from './Header.less';
 import Logo from './logo.png';
@@ -6,32 +7,41 @@ import Menus from '../../components/Menu/Menu';
 
 
 // 公共头部
-class Header extends Component {
+class Header extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
+
+    /**
+     * 退出登录
+     */
+    loginOut() {
+        this.props.dispatch({
+            type: 'User/logout',
+            payload: ''
+        });
+    }
 
     // 用户设置
     setups = (
         <Menu>
         <Menu.Item key="0">
-            <a href="javascript:;">
-            {
-                this.props.status?<span>{this.props.userInfo.admin_name}</span>:<span>...</span>
-            }
-            </a>
+            <a href="javascript:;">设置</a>
         </Menu.Item>
         <Menu.Item key="1">
-          <a href="javascript:;">退出</a>
+            <a href="javascript:;" onClick={this.loginOut}>退出</a>
         </Menu.Item>
       </Menu>
-    );
-
+    )
+    
     // 用户消息
-    messages = (
+    /*messages = (
         <Menu>
         <Menu.Item key="0">
           <a href="javascript:;">开发中...</a>
         </Menu.Item>
       </Menu>
-    )
+    )*/
 
 
     render() {
@@ -43,26 +53,44 @@ class Header extends Component {
                     <Menus />
 
                     <div className={styles.msgWrap }>
-                        <div className={ styles.msgItem }>
+                        {/*<div className={ styles.msgItem }>
                             <Dropdown overlay={this.messages}>
                                 <span className={ styles.pointer }> 
                                   <Icon className={ styles.emil} type="mail" />消息中心 
                                 </span>
                             </Dropdown>
                             <span className={ styles.msgCircle }>55</span>
-                        </div>
+                        </div>*/}
                         <div className={ styles.msgItem }>
-                            <Dropdown overlay={this.setups}>
-                                <span className={ styles.pointer } >
-                                    <img className={ styles.head } src={Logo}/> <Icon type="down" /> 
-                                </span>
-                            </Dropdown>
+                            {   
+                                /*判断是否已经登录*/
+                                this.props.user.loginStatus?
+                                <Dropdown overlay={this.setups}>
+                                    <span className={ styles.pointer } >
+                                        <span>{this.props.user.userInfo.admin_name}</span>
+                                    </span>
+                                </Dropdown>
+                                :
+                                <a href="/login" className={ styles.pointer } >登录</a>
+                            }
+                            
                         </div>
                     </div>
                 </div>
             </div>
         );
     }
+
 }
 
-export default Header;
+
+function mapStateToProps(state) {
+    // 登录信息
+    const user = state.User;
+
+    return {
+        user: user
+    };
+}
+
+export default connect(mapStateToProps)(Header);
