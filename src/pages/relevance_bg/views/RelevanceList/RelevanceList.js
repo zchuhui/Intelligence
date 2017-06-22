@@ -1,35 +1,54 @@
 import React from 'react';
 import styles from './RelevanceList.less';
 import moment from 'moment';
-import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker } from 'antd';
+import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker, Checkbox } from 'antd';
 
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
+const CheckboxGroup = Checkbox.Group;
+
+
+const plainOptions = ['环球', '速卖通', '兰亭集势','DX','亚马逊','Tom Top'];
+const defaultCheckedList = [];
+
 
 class RelevanceList extends React.Component {
-	constructor(props, context) {
+    constructor(props, context) {
         super(props, context);
 
         this.state = {
-        	customRowVisible:false
+            customRowVisible: false, // 自定列
+
+            customGoods: {
+                visible: false, // 自定义竞品
+
+            },
+
+            checkedList: defaultCheckedList,
+            indeterminate: true,
+            checkAll: false,
         }
     }
 
+
+    // 显示自定义列弹框
     hideCustomRowModal = () => {
-    	this.setState({
-    		customRowVisible:false
-    	})
+        this.setState({
+            customRowVisible: false
+        })
     }
 
+    // 隐藏自定义列弹框
     showCustomRowModal = () => {
-    	this.setState({
-    		customRowVisible:true
-    	})
+        this.setState({
+            customRowVisible: true
+        })
     }
 
-	render(){
-		return (
-			<div className={ styles.main }>
+    
+    render() {
+        return (
+            <div className={ styles.main }>
 				{ /* 操作栏 */ }
             	<div className={ styles.clear } style={{ paddingBottom:20 }}>
             		
@@ -42,18 +61,47 @@ class RelevanceList extends React.Component {
 				      onChange={this.onSearchDateQuantum.bind(this)}
 
 				    />*/}
-				    <Button type="primary" className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>
-            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>
+
+				    <Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>
+            		<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>
+            		<Button className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>创建关系</Button>
 
 				    <Modal
-			          title="自定义列"
-			          visible={this.state.customRowVisible}  
-			          onCancel={this.hideCustomRowModal} 
-			          okText="确认"
-          			  cancelText="取消"
+			            title="自定义列"
+			            visible={this.state.customRowVisible}  
+			            onCancel={this.hideCustomRowModal} 
+			            okText="确认"
+          			    cancelText="取消"
+          			    footer={null}
 			        >
 			        	<div>
-			        		
+			        		2222222
+			        	</div>
+						
+			        </Modal>
+
+			        <Modal
+			            title="自定义竞品"
+			            visible={this.state.customGoods.visible}  
+			            onCancel={this.hideCustomGoodsModal} 
+			            okText="确认"
+          			    cancelText="取消"
+          			    footer={null}
+			        >
+			        	<div>
+			        		<div>
+					          <Checkbox
+					            indeterminate={this.state.indeterminate}
+					            onChange={this.onCheckAllChange}
+					            checked={this.state.checkAll}
+					          >
+					            全选
+					          </Checkbox>
+					        </div>
+					        <div style={{ maxWidth:400,margin:'20px 0' }}>
+					       	    <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
+					        </div>
+					        <div style={{ textAlign:'center'}}><Button type='primary'>确定</Button></div>
 			        	</div>
 						
 			        </Modal>
@@ -146,8 +194,45 @@ class RelevanceList extends React.Component {
 						</div>
 					</div>
 			</div>
-		)
-	}
+        )
+    }
+
+    
+
+    // 隐藏竞品列弹框
+    hideCustomGoodsModal = () => {
+        this.setState({
+            customGoods: {
+                visible: false
+            }
+        })
+    }
+
+    // 显示竞品列弹框
+    showCustomGoodsModal = () => {
+        this.setState({
+            customGoods: {
+                visible: true
+            }
+        })
+    }
+
+    onChange = (checkedList) => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+            checkAll: checkedList.length === plainOptions.length,
+
+        });
+    }
+    onCheckAllChange = (e) => {
+        this.setState({
+            checkedList: e.target.checked ? plainOptions : [],
+            indeterminate: false,
+            checkAll: e.target.checked,
+
+        });
+    }
 }
 
 export default RelevanceList;
