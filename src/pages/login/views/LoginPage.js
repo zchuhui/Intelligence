@@ -48,7 +48,9 @@ class LoginPage extends React.Component {
 				          )}
 				        </FormItem>
 				        <FormItem>
-				          <Button type="primary" htmlType="submit" className="login-form-button"  
+				          <Button type="primary" 
+				          	htmlType="submit" 
+				          	className="login-form-button"  
 				          	style={{ width:300 }} 
 				          	loading={this.props.loading}
 				          	>

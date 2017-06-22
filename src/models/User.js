@@ -8,56 +8,71 @@ import * as usersService from '../services/users';
 import localStorage from '../utils/localStorage';
 
 // 一天
-const oneDay =  60*24;
+const oneDay = 60 * 24;
 
 export default {
     namespace: 'User',
 
     state: {
-        loginStatus: 0,   // 登录状态，是否登录成功
-        loginMsg: '',     // 登录提示信息
-        userInfo: {},     // 登录成功获取的用户信息
-        loading:0,        // 登录中的加载状态
+        loginStatus: 0, // 登录状态，是否登录成功
+        loginMsg: '', // 登录提示信息
+        userInfo: {}, // 登录成功获取的用户信息
+        loading: 0, // 登录中的加载状态
     },
     reducers: {
         // 存储登录成功后的信息到state
         save(state, { payload: { data: data } }) {
-            return {...state,userInfo:data.data.userInfo,loginStatus:data.status, loginMsg: data.msg, loading: 0 };
+            return {...state, userInfo: data.data.userInfo, loginStatus: data.status, loginMsg: data.msg, loading: 0 };
         },
 
         // 显示登录加载状态
         showLoading(state, { payload }) {
-            return {...state, loading:1};
+            return {...state, loading: 1 };
         },
 
         // 退出登录，清除信息
         clearLoginInfo(state, { payload: { data: data } }) {
-            return {...state,userInfo:{},loginStatus:0, loginMsg: '', };
+            return {...state, userInfo: {}, loginStatus: 0, loginMsg: '', };
+        },
+
+        // 登录请求实在慢，所以先存储本地信息
+        updateStatusAndUsername(state, { payload }) {
+            let info = {
+                admin_name: payload.username
+            }
+            return {...state,loginStatus:payload.loginStatus,userInfo:info};
         },
     },
     effects: {
         // 点击登录
         * login({ payload }, { select, call, put }) {
-
+            console.log('login')
             // 显示加载状态
-            yield put({ type: 'showLoading'});  
+            yield put({ type: 'showLoading' });
 
             // 开始请求数据
             const data = yield call(usersService.login, payload.loginInfo);
-            
+
             // 存储数据
             if (data) {
 
-                // 存储数据
-                yield put({ type: 'save', payload: data });
+                if (data.data.status == 1) {
+                    // 存储数据
+                    yield put({ type: 'save', payload: data });
 
-                // 存储用户名、密码
-                localStorage.set('username',payload.loginInfo.username,oneDay);
-                localStorage.set('password',payload.loginInfo.password,oneDay);
+                    // 存储用户名、密码
+                    localStorage.set('username', payload.loginInfo.username, oneDay);
+                    localStorage.set('password', payload.loginInfo.password, oneDay);
+                    localStorage.set('loginStatus', 1, oneDay);
 
-                // 转到BG页
-                window.location.href= "/bg"; 
-
+                    // 转到BG页
+                    window.location.href = "/bg";
+                }
+                else{
+                    console.log(data.data.msg)
+                    yield put({ type: 'save', payload: data }); 
+                }
+                
             } else {
                 console.log("login err");
             }
@@ -66,14 +81,17 @@ export default {
         // 后台自动登录
         * autoLogin({ payload }, { select, call, put }) {
 
-            console.log('自动登录中...',payload.loginInfo)
+            console.log('自动登录中...', payload.loginInfo)
+
+            // 存储数据
+            yield put({ type: 'updateStatusAndUsername', payload: {username:payload.loginInfo.username,loginStatus:1}});
 
             // 开始请求数据
             const data = yield call(usersService.login, payload.loginInfo);
-            
+
             // 存储数据
             if (data) {
-                console.log("登录成功！",data)
+                console.log("登录成功！", data)
 
                 // 存储数据
                 yield put({ type: 'save', payload: data });
@@ -85,16 +103,24 @@ export default {
 
         // 退出登录
         * logout({ payload }, { select, call, put }) {
+            console.log('退出登录')
+
+            // 清空本地登录名、密码
+            localStorage.remove('username');
+            localStorage.remove('password');
+            localStorage.remove('loginStatus');
+
+            // 转到登录页
+            window.location.href = "/login";
 
             // 开始请求数据
             const data = yield call(usersService.logout);
-            
-            // 存储数据
+
+            // 清空数据
             yield put({ type: 'clearLoginInfo', payload: data });
 
+            console.log('退出处理完毕。')
         }
-
-
 
     },
     subscriptions: {
@@ -112,9 +138,9 @@ export default {
                     password: password
                 }
 
-                dispatch({ type: 'autoLogin', payload:{loginInfo:loginInfo}});
+                dispatch({ type: 'autoLogin', payload: { loginInfo: loginInfo } });
             }
         },
-        
+
     },
 };

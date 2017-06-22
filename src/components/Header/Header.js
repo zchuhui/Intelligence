@@ -15,10 +15,10 @@ class Header extends React.Component {
     /**
      * 退出登录
      */
-    loginOut() {
+    logout() {
+        console.log('logout')
         this.props.dispatch({
             type: 'User/logout',
-            payload: ''
         });
     }
 
@@ -26,10 +26,7 @@ class Header extends React.Component {
     setups = (
         <Menu>
         <Menu.Item key="0">
-            <a href="javascript:;">设置</a>
-        </Menu.Item>
-        <Menu.Item key="1">
-            <a href="javascript:;" onClick={this.loginOut}>退出</a>
+            <a href="javascript:;" onClick={this.logout.bind(this)}>退出</a>
         </Menu.Item>
       </Menu>
     )
@@ -48,7 +45,7 @@ class Header extends React.Component {
         return (
             <div className={ styles.header }>
                 <div className={ styles.content }>
-                    <img className={ styles.logo } src={ Logo } title="情报员系统"/>
+                    <img className={ styles.logo } src={ Logo } title="情报员系统" />
                     {/*菜单组件*/}
                     <Menus />
 

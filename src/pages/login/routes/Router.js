@@ -41,7 +41,6 @@ class LoginRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-    console.log(state.User)
     let msg = state.User.loginMsg;
     let userInfo = state.User.userInfo;
     let status = state.User.loginStatus;

@@ -11,6 +11,7 @@ function checkStatus(response) {
 
   const error = new Error(response.statusText);
   error.response = response;
+  console.log('error',error)
   throw error;
 }
 
