@@ -61,10 +61,10 @@ export default {
             const { data } = yield call(BgService.fetch, payload);
 
             // 保存数据
-            if (data) {
+            if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log("data null")
+                console.log('err:',data.msg)
             }
         },
 
@@ -83,16 +83,16 @@ export default {
             
             // 开始请求数据
             const { data } = yield call(BgService.search, { searchArgs: searchArgs });
-
+            
             // 保存数据
-            if (data) {
+            if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log("data null")
+                console.log('err:',data.msg)
             }
 
         },
-
+        
         // 分页，根据页数获取数据
         * pagination({ payload }, { select, call, put }) {
 
@@ -107,10 +107,10 @@ export default {
             const { data } = yield call(BgService.search, { searchArgs: searchArgs });
             
             // 保存数据
-            if (data) {
+            if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log("data null")
+                console.log('err:',data.msg)
             }
 
         },

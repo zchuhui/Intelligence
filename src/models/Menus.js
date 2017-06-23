@@ -150,14 +150,10 @@ export default {
         saveCate(state, { payload: { data: data} }) {
             // 把获取数据转为组件可用的数据格式
             data = cateToMenu(data);
-
-            console.log("分类获取完毕")
             return {...state, cate:data};
         },
         // 存储品牌表
         saveBrand(state, { payload: { data: data} }) {
-
-            console.log("品牌表获取完毕")
             return {...state, brand:data};
         },
     },

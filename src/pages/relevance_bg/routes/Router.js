@@ -74,6 +74,21 @@ function mapStateToProps(state) {
     // 竞品数据
     const { data, searchArgs, loading } = state.RelevanceBG;
 
+
+    data.list.map((item,index) => {
+        if (item.relate_info) {
+
+            let array = Object.keys(item.relate_info).map((el)=>{
+                return item.relate_info[el];
+            })
+            item['children']=array;
+            delete item.relate_info;
+            console.log('children',item.children);
+        }
+    });
+
+    console.log('data.list',data.list)
+
     // 输出数据
     return {
         menus,

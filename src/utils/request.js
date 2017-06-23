@@ -24,7 +24,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
-
+  console.log('url',url)
   const response = await fetch(url, options);
   
   checkStatus(response);

@@ -18,6 +18,10 @@ class Searcher extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        // 默认抓取时间为当月
+        let firstDay = moment().startOf('month').format('YYYY-MM-DD');
+        let endDay = moment().endOf('month').format('YYYY-MM-DD');
+
         // 搜索条件
         this.state = {
             // value
@@ -29,8 +33,8 @@ class Searcher extends React.Component {
                 sku: '',
                 price1: '',
                 price2: '',
-                startTime:'',
-                endTime:'',
+                startTime:firstDay,
+                endTime:endDay,
                 page: 1,
             },
             // label
@@ -42,6 +46,8 @@ class Searcher extends React.Component {
                 sku: '',
                 price1: '',
                 price2: '',
+                startTime:'',
+                endTime:'',
             }
         }
     }
@@ -268,7 +274,7 @@ class Searcher extends React.Component {
                                     format="YYYY-MM-DD" 
                                     style={{ width:240 }}
                                     onChange={ this.getTime }
-                                    allowClear="true"
+                                    allowClear={false}
                                 />
                             </div>
                             

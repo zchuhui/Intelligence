@@ -1,12 +1,16 @@
 import request from '../utils/request';
 import { Url } from '../config/config.url';
+import moment from 'moment';
 
 // 获取BG报表数据
 // page: 页数
 export function fetch({page}) { 
+	// 默认抓取时间为当月数据
+	let firstDay = moment().startOf('month').format('YYYY-MM-DD')
+	let endDay = moment().endOf('month').format('YYYY-MM-DD')
 
 	//默认参数，并加上页数	
-	const apiArgs= `com=api&t=productList&site=banggood&page=${page}`;
+	const apiArgs= `com=api&t=getBgProductList&site=banggood&startTime=${firstDay}&endTime=${endDay}&page=${page}`;
 	
 	// 合成Url
 	let currentUrl = `${Url}?${apiArgs}`;
@@ -25,7 +29,7 @@ export function search(args) {
 	
 	const argument = args.searchArgs;
 	
-	let argumentStr = `com=api&t=productList&site=banggood`;
+	let argumentStr = `com=api&t=getBgProductList&site=banggood`;
 	
 	// 把参数转为url格式
 	for(let i in argument){ 

@@ -1,3 +1,9 @@
+/**
+ * BG关联表
+ * Date: 2017-06-19
+ * Author: zhuangchuhui
+ */
+
 import React from 'react';
 import styles from './RelevanceList.less';
 import moment from 'moment';
@@ -8,48 +14,191 @@ const { MonthPicker, RangePicker } = DatePicker;
 const CheckboxGroup = Checkbox.Group;
 
 
-const plainOptions = ['环球', '速卖通', '兰亭集势','DX','亚马逊','Tom Top'];
+const plainOptions = ['环球', '速卖通', '兰亭集势', 'DX', '亚马逊', 'Tom Top'];
 const defaultCheckedList = [];
 
 
+const tableColumns = [
+	{
+		title:"主图",
+		key:"img_url", 
+		render:(text,record) => (<img src={ record.img_url} className={ styles.img } />),
+	},
+	{
+		title:"编码",
+		dataIndex:"sku",
+		key:"sku", 
+	},
+	{
+		title:"操作",
+		dataIndex:"",
+		key:"", 
+	},
+	{
+		title:"站点",
+		dataIndex:"site",
+		key:"site", 
+	},
+	{
+		title:"标题",
+		dataIndex:"pname",
+		key:"pname", 
+		className:styles.columnTitle 
+	},
+	{
+		title:"价格",
+		dataIndex:"price",
+		key:"price", 
+	},
+	{
+		title:"销量",
+		dataIndex:"sales",
+		key:"sales", 
+	},
+	{
+		title:"评分",
+		dataIndex:"score",
+		key:"score", 
+	},
+	{
+		title:"评论数",
+		dataIndex:"reviews",
+		key:"reviews", 
+	},
+	{
+		title:"关注数",
+		dataIndex:"favorites",
+		key:"favorites", 
+	},
+	{
+		title:"提问数",
+		dataIndex:"questions",
+		key:"questions", 
+	},
+	{
+		title:"分类",
+		dataIndex:"cateName",
+		key:"cateName", 
+		className:styles.columnCate
+	},
+
+]
+
+//const expandedRowRender = record => <p>{record.description}</p>;
+
+// 测试
+/*const columns = [
+	{
+	  title: 'Name',
+	  dataIndex: 'name',
+	  key: 'name',
+	  width: '40%',
+	}, {
+	  title: 'Age',
+	  dataIndex: 'age',
+	  key: 'age',
+	  width: '30%',
+	}, {
+	  title: 'Address',
+	  dataIndex: 'address',
+	  key: 'address',
+	}
+];
+
+const data = 
+[
+	{
+	  key: 1,
+	  name: 'John Brown sr.',
+	  age: 60,
+	  address: 'New York No. 1 Lake Park',
+	  children: [{
+	    key: 11,
+	    name: 'John Brown',
+	    age: 42,
+	    address: 'New York No. 2 Lake Park',
+	  }, {
+	    key: 12,
+	    name: 'John Brown jr.',
+	    age: 30,
+	    address: 'New York No. 3 Lake Park',
+	    children: [{
+	      key: 121,
+	      name: 'Jimmy Brown',
+	      age: 16,
+	      address: 'New York No. 3 Lake Park',
+	    }],
+	  }, {
+	    key: 13,
+	    name: 'Jim Green sr.',
+	    age: 72,
+	    address: 'London No. 1 Lake Park',
+	    children: [{
+	      key: 131,
+	      name: 'Jim Green',
+	      age: 42,
+	      address: 'London No. 2 Lake Park',
+	      children: [{
+	        key: 1311,
+	        name: 'Jim Green jr.',
+	        age: 25,
+	        address: 'London No. 3 Lake Park',
+	      }, {
+	        key: 1312,
+	        name: 'Jimmy Green sr.',
+	        age: 18,
+	        address: 'London No. 4 Lake Park',
+	      }],
+	    }],
+	  }],
+	}, 
+	{
+	  key: 2,
+	  name: 'Joe Black',
+	  age: 32,
+	  address: 'Sidney No. 1 Lake Park',
+	}
+];
+
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  onSelect: (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+  },
+  onSelectAll: (selected, selectedRows, changeRows) => {
+    console.log(selected, selectedRows, changeRows);
+  },
+};
+*/
+
 class RelevanceList extends React.Component {
+
     constructor(props, context) {
         super(props, context);
 
         this.state = {
             customRowVisible: false, // 自定列
 
+            // 自定义竞品
             customGoods: {
-                visible: false, // 自定义竞品
-
+                visible: false, 
             },
-
             checkedList: defaultCheckedList,
             indeterminate: true,
             checkAll: false,
+
         }
     }
 
 
-    // 显示自定义列弹框
-    hideCustomRowModal = () => {
-        this.setState({
-            customRowVisible: false
-        })
-    }
-
-    // 隐藏自定义列弹框
-    showCustomRowModal = () => {
-        this.setState({
-            customRowVisible: true
-        })
-    }
-
-    
     render() {
+
         return (
             <div className={ styles.main }>
-				{ /* 操作栏 */ }
+
+				{ /* 操作栏 start*/ }
             	<div className={ styles.clear } style={{ paddingBottom:20 }}>
             		
             		{/*<RangePicker
@@ -73,7 +222,7 @@ class RelevanceList extends React.Component {
 			            okText="确认"
           			    cancelText="取消"
           			    footer={null}
-			        >
+			        	>
 			        	<div>
 			        		2222222
 			        	</div>
@@ -87,7 +236,7 @@ class RelevanceList extends React.Component {
 			            okText="确认"
           			    cancelText="取消"
           			    footer={null}
-			        >
+			        	>
 			        	<div>
 			        		<div>
 					          <Checkbox
@@ -107,97 +256,69 @@ class RelevanceList extends React.Component {
 			        </Modal>
 
             	</div>
+            	{ /* 操作栏 end*/ }
 
             	<div className={ styles.tableWrap }>
-						{ /*表格*/ }
-						<Table 
-							dataSource={ this.props.data.list } 
-							loading={ this.props.loading } 
-							pagination={false} 
-							>
-							<Column
-						      title="主图"
-						      key="img_url"
-						      render={(text,record) => (
-									<img src={ record.img_url} className={ styles.img } />
-						      )}
-						    />
-						    <Column
-						      title="编码"
-						      dataIndex="sku"
-						      key="sku"
-						    />
-						    {/*<Column
-						      title="操作"
-						      dataIndex="address"
-						      key="address"
-						    />*/}
-						    <Column
-						      title="站点"
-						      dataIndex="site"
-						      key="site"
-						    />
-						    <Column
-						      title="标题"
-						      dataIndex="pname"
-						      key="pname"
-						      className={ styles.columnTitle }
-						    />
-						     <Column
-						      title="价格"
-						      dataIndex="price"
-						      key="price"
-						    />
-						     <Column
-						      title="销量"
-						      dataIndex="sales"
-						      key="sales"
-						    />
-						     <Column
-						      title="评分"
-						      dataIndex="score"
-						      key="score"
-						    />
-						     <Column
-						      title="评论数"
-						      dataIndex="reviews"
-						      key="reviews"
-						    />
-						     <Column
-						      title="关注数"
-						      dataIndex="favorites"
-						      key="favorites"
-						    />
-						    <Column
-						      title="提问数"
-						      dataIndex="questions"
-						      key="questions"
-						    />
-						     <Column
-						      title="分类"
-						      dataIndex="cateName"
-						      key="cateName"
-						      className={ styles.columnCate }
-						    />
-						  </Table>
+            		{
+					  	  this.props.data.list.map((i,index)=>{
+					  	  	<p>{i.cid}</p> 
+					  	  })
+					}
+
+					{ /* 数据列表 start */ }
+					<Table 
+						dataSource={ this.props.data.list }
+						loading={ this.props.loading } 
+						pagination={false} 
+						columns={tableColumns}
+						>
 						
-						<div className={styles.piginationWrap}>
-							{/*分页*/}
-							<Pagination
-					          className="ant-table-pagination"
-					          showQuickJumper 
-					          total={parseInt(this.props.data.page.count)} 
-					          current={this.props.data.page.page}
-					          pageSize={this.props.data.page.pageSize}
-					          onChange={this.props.changePagination.bind(this)}
-					        />
-						</div>
+					  </Table>
+
+
+					  {/*<Table 
+						  columns={columns}
+						  dataSource={data}
+						  rowSelection={rowSelection}
+						>
+						
+					  </Table>*/}
+
+
+					{ /* 数据列表 end */ }
+
+					<div className={styles.piginationWrap}>
+						{/* 分页 start*/}
+						<Pagination
+				          className="ant-table-pagination"
+				          showQuickJumper 
+				          total={parseInt(this.props.data.page.count)} 
+				          current={this.props.data.page.page}
+				          pageSize={this.props.data.page.pageSize}
+				          onChange={this.props.changePagination.bind(this)}
+				        />
+				    	{/* 分页 end */}
 					</div>
+				</div>
 			</div>
         )
     }
 
-    
+
+    // 显示自定义列弹框
+    hideCustomRowModal = () => {
+        this.setState({
+            customRowVisible: false
+        })
+    }
+
+    // 隐藏自定义列弹框
+    showCustomRowModal = () => {
+        this.setState({
+            customRowVisible: true
+        })
+    }
+
 
     // 隐藏竞品列弹框
     hideCustomGoodsModal = () => {
