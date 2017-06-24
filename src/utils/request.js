@@ -5,14 +5,18 @@ import fetch from 'dva/fetch';
 }*/
 
 function checkStatus(response) {
+
+  // 返回的状态码为请求成功
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
 
   const error = new Error(response.statusText);
+
   error.response = response;
-  console.log('error',error)
+
   throw error;
+
 }
 
 
@@ -24,18 +28,21 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
-  console.log('url',url)
+
+  // 请求数据
   const response = await fetch(url, options);
-  
+
+  // 检查请求是否成功
   checkStatus(response);
 
+  // 转为json格式
   const data = await response.json();
 
   const ret = {
     data,
     headers: {},
   };
-
+  
   if (response.headers.get('x-total-count')) {
     ret.headers['x-total-count'] = response.headers.get('x-total-count');
   }

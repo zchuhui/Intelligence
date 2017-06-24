@@ -12,15 +12,16 @@ import { Menu, Dropdown, Button, Icon, DatePicker, Input, InputNumber, Select, T
 const { MonthPicker, RangePicker } = DatePicker;
 const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
+const Option = Select.Option;
+
+// 默认抓取时间为当月
+let firstDay = moment().startOf('month').format('YYYY-MM-DD');
+let endDay = moment().endOf('month').format('YYYY-MM-DD');
 
 
 class Searcher extends React.Component {
     constructor(props, context) {
         super(props, context);
-
-        // 默认抓取时间为当月
-        let firstDay = moment().startOf('month').format('YYYY-MM-DD');
-        let endDay = moment().endOf('month').format('YYYY-MM-DD');
 
         // 搜索条件
         this.state = {
@@ -37,6 +38,7 @@ class Searcher extends React.Component {
                 endTime:endDay,
                 page: 1,
             },
+            
             // label
             argsShow: {
                 site: '',
@@ -77,6 +79,115 @@ class Searcher extends React.Component {
         this.props.handleSearchArgs(this.state.args);
 
     }
+
+
+    render() {
+        return (
+            <div className={ styles.searchWrap}>
+                <div className={ styles.searchArgs }>
+                    <span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
+                    <span id="tagList"></span>
+                    { 
+                        this.getObjectValToArray().map((item,index) => 
+                            <span 
+
+                                key={item.cid} 
+                                className={ styles.tag } 
+                                onClick={this.closeTag.bind(this)}
+                                >
+                                {item.label} : { item.value } 
+                            </span>)
+                            
+                    }
+                    
+                </div>
+                <div className={ styles.main }>
+                    <div className={ styles.title }>
+                        <span>筛选分类</span>
+                    </div>
+
+                    {/*搜索栏 start*/}
+                    <div className={ styles.searchContent}>
+                        <div className={ styles.searchLeft }>
+
+                            <Cascader 
+                                options={ this.props.menus.cate } 
+                                placeholder="分类" 
+                                onChange={ this.handleCateMenu } 
+                                changeOnSelect 
+                                allowClear={false}
+                                style={{ marginRight:10, width:300, marginBottom:10}}
+                            />
+                            
+                            <Select
+                                showSearch
+                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
+                                placeholder="品牌"
+                                optionFilterProp="children"
+                                onChange={ this.getBrand } 
+                                labelInValue 
+                                >
+
+                                {
+                                    this.props.menus.brand.map((i,index) => <Option key={index} value={i.bid}>{i.bname}</Option>)
+                                }
+                            </Select>
+
+                            <Select
+                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
+                                placeholder="关注状态" 
+                                onChange={ this.getStatus }
+                                >
+                                <Option key="1">已关联</Option>
+                                <Option key="2">未关联</Option>
+                            </Select>
+
+                            <InputGroup compact className={styles.dateGroup}>
+                                <Input id="price1" 
+                                    style={{ width: 80, textAlign: 'center' }} 
+                                    placeholder="价格区间"  />
+                                <Input style={{ width: 24, borderLeft: 0, pointerEvents: 'none' }} placeholder="~" />
+                                <Input id="price2" 
+                                    style={{ width: 80, textAlign: 'center', borderLeft: 0,marginRight:10 }} 
+                                    placeholder="价格区间" 
+                                />
+                            </InputGroup>
+
+                            <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
+                            
+                        </div>
+                        <div className={ styles.searchRight }>
+                            <Button type="primary" 
+                                style={{ width: 210,marginBottom: 10 }} 
+                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
+
+                            <div className={ styles.pickerDate }  >
+                                <RangePicker 
+                                    defaultValue={[
+                                        moment().startOf('month'), 
+                                        moment().endOf('month')
+                                    ]} 
+                                    ranges={{ 
+                                        '今天': [moment(), moment()],
+                                        '本周': [moment(), moment().endOf('week')], 
+                                        '本月': [moment(), moment().endOf('month')] 
+                                    }} 
+                                    format="YYYY-MM-DD" 
+                                    style={{ width:210 }}
+                                    onChange={ this.getTime }
+                                    allowClear={false}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    {/*搜索栏 end*/}
+
+                </div>
+
+            </div>
+        )
+    }
+
 
     // 选择分类
     handleCateMenu = (value, selectedOptions) => {
@@ -121,8 +232,6 @@ class Searcher extends React.Component {
                 str.push(tagObj);
             }
         }
-
-        console.log(str)
 
         return str;
     }
@@ -177,9 +286,17 @@ class Searcher extends React.Component {
         }
     }
 
+    /**
+     * 获取品牌
+     */
+    getBrand = (value) => {
+        this.state.args.bid = value.key;
+        this.state.argsShow.bid = value.label;
+    }
+
     // 关闭标签
-    closeTag = (e) => {
-        console.log(e);
+    closeTag = (value) => {
+        console.log(value);
     }
 
     // 根据时间搜索
@@ -191,104 +308,6 @@ class Searcher extends React.Component {
 
             this.props.handleSearchArgs(this.state.args);
         }
-
-    }
-
-
-    render() {
-        return (
-            <div className={ styles.searchWrap}>
-                <div className={ styles.searchArgs }>
-                    <span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
-                    <span id="tagList"></span>
-                    { 
-                        this.getObjectValToArray().map((item,index) => 
-                            <span 
-
-                                key={item.cid} 
-                                className={ styles.tag } 
-                                onClick={this.closeTag.bind(this)}
-                                >
-                                {item.label} : { item.value } 
-                            </span>)
-                            
-                    }
-                </div>
-                <div className={ styles.main }>
-                    <div className={ styles.title }>
-                        <span>筛选分类</span>
-                    </div>
-
-                    {/*搜索栏 start*/}
-                    <div className={ styles.searchContent}>
-                        <div className={ styles.searchLeft }>
-
-                            <Cascader 
-                                options={ this.props.menus.cate } 
-                                placeholder="分类" 
-                                onChange={ this.handleCateMenu } 
-                                changeOnSelect 
-                                allowClear={false}
-                                style={{ marginRight:10, width:300, marginBottom:10}}
-                            />
-                            
-                            <Select
-                                showSearch
-                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
-                                placeholder="品牌"
-                                optionFilterProp="children"
-                                >
-
-                                {
-                                    this.props.menus.brand.map((i,index) => <Option key={i.bid}>{i.bname}</Option>)
-                                }
-                            </Select>
-
-                            <Select
-                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
-                                placeholder="关注状态" 
-                                onChange={ this.getStatus }
-                                >
-                                <Option key="1">已关联</Option>
-                                <Option key="2">未关联</Option>
-                            </Select>
-
-                            <InputGroup compact className={styles.dateGroup}>
-                                <Input id="price1" 
-                                    style={{ width: 80, textAlign: 'center' }} 
-                                    placeholder="价格区间"  />
-                                <Input style={{ width: 24, borderLeft: 0, pointerEvents: 'none' }} placeholder="~" />
-                                <Input id="price2" 
-                                    style={{ width: 80, textAlign: 'center', borderLeft: 0,marginRight:10 }} 
-                                    placeholder="价格区间" 
-                                />
-                            </InputGroup>
-
-                            <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
-
-                            <div className={ styles.pickerDate }  >
-                                <RangePicker 
-                                    ranges={{ 今天: [moment(), moment()],
-                                    '本周': [moment(), moment().endOf('week')], 
-                                    '本月': [moment(), moment().endOf('month')] }}
-                                    format="YYYY-MM-DD" 
-                                    style={{ width:240 }}
-                                    onChange={ this.getTime }
-                                    allowClear={false}
-                                />
-                            </div>
-                            
-                        </div>
-                        <div className={ styles.searchRight }>
-                            <Button type="primary" style={{ width: 150 }} onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
-                        </div>
-                    </div>
-                    {/*搜索栏 end*/}
-
-                </div>
-
-            </div>
-        )
     }
 }
 

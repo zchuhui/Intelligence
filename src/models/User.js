@@ -21,8 +21,8 @@ export default {
     },
     reducers: {
         // 存储登录成功后的信息到state
-        save(state, { payload: { data: data } }) {
-            return {...state, userInfo: data.data.userInfo, loginStatus: data.status, loginMsg: data.msg, loading: 0 };
+        save(state, { payload }) {
+            return {...state, userInfo: payload.data.userInfo, loginStatus: payload.status, loginMsg: payload.msg, loading: 0 };
         },
 
         // 显示登录加载状态
@@ -40,23 +40,22 @@ export default {
             let info = {
                 admin_name: payload.username
             }
-            return {...state,loginStatus:payload.loginStatus,userInfo:info};
+            return {...state, loginStatus: payload.loginStatus, userInfo: info };
         },
     },
     effects: {
         // 点击登录
         * login({ payload }, { select, call, put }) {
-            console.log('login')
-            // 显示加载状态
-            yield put({ type: 'showLoading' });
 
-            // 开始请求数据
-            const data = yield call(usersService.login, payload.loginInfo);
+            try{
+                // 显示加载状态
+                yield put({ type: 'showLoading' });
 
-            // 存储数据
-            if (data) {
+                // 开始请求数据
+                const { data } = yield call(usersService.login, payload.loginInfo);
 
-                if (data.data.status == 1) {
+                if (data.status == 1) {
+
                     // 存储数据
                     yield put({ type: 'save', payload: data });
 
@@ -67,28 +66,32 @@ export default {
 
                     // 转到BG页
                     window.location.href = "/bg";
+
+                } else {
+                    console.log('登录失败：',data.msg)
+
+                    // 传入失败信息，用于页面展示
+                    yield put({ type: 'save', payload: data });
                 }
-                else{
-                    console.log(data.data.msg)
-                    yield put({ type: 'save', payload: data }); 
-                }
-                
-            } else {
-                console.log("login err");
             }
+            catch(e){
+                console.log('catch',e.message)
+            }
+
+
         },
 
         // 后台自动登录
         * autoLogin({ payload }, { select, call, put }) {
 
-            console.log('自动登录中...', payload.loginInfo)
+            //console.log('自动登录中...', payload.loginInfo)
 
             // 存储数据
-            yield put({ type: 'updateStatusAndUsername', payload: {username:payload.loginInfo.username,loginStatus:1}});
+            yield put({ type: 'updateStatusAndUsername', payload: { username: payload.loginInfo.username, loginStatus: 1 } });
 
-            // 开始请求数据
+
+            /*// 开始请求数据
             const data = yield call(usersService.login, payload.loginInfo);
-
             // 存储数据
             if (data) {
                 console.log("登录成功！", data)
@@ -98,12 +101,11 @@ export default {
 
             } else {
                 console.log("login err");
-            }
+            }*/
         },
 
         // 退出登录
         * logout({ payload }, { select, call, put }) {
-            console.log('退出登录')
 
             // 清空本地登录名、密码
             localStorage.remove('username');
@@ -113,13 +115,12 @@ export default {
             // 转到登录页
             window.location.href = "/login";
 
-            // 开始请求数据
+            // 请求响应后台
             const data = yield call(usersService.logout);
 
-            // 清空数据
+            // 清空state数据
             yield put({ type: 'clearLoginInfo', payload: data });
 
-            console.log('退出处理完毕。')
         }
 
     },
@@ -130,9 +131,11 @@ export default {
             let username = localStorage.get('username');
             let password = localStorage.get('password');
 
-            // 判断是否存在，存在则自动登录
+            // 判断是否存在，存在则自动获取登录信息，不在请求
             if (username && password) {
-                
+
+                console.log('本地已有数据，自登录');
+
                 const loginInfo = {
                     username: username,
                     password: password

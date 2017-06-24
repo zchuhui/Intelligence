@@ -3,6 +3,11 @@
  */
 
 import * as BgService from '../../../services/relevanceBG';
+import moment from 'moment';
+
+// 默认抓取时间为当月
+let firstDay = moment().startOf('month').format('YYYY-MM-DD');
+let endDay = moment().endOf('month').format('YYYY-MM-DD');
 
 export default {
     namespace: 'RelevanceBG',
@@ -30,8 +35,8 @@ export default {
             status: '',
             price1: '',
             price2: '',
-            startTime: '',
-            endTime: '',
+            startTime: firstDay,
+            endTime: endDay,
             sku: '',
             page: 1
         }
@@ -59,12 +64,12 @@ export default {
 
             // 开始请求数据
             const { data } = yield call(BgService.fetch, payload);
-
+            
             // 保存数据
             if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('err:',data.msg)
+                console.log('载入数据失败:',data.msg)
             }
         },
 
@@ -88,7 +93,7 @@ export default {
             if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('err:',data.msg)
+                console.log('搜索失败:',data.msg)
             }
 
         },
@@ -110,7 +115,7 @@ export default {
             if (data.status==1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('err:',data.msg)
+                console.log('分页失败:',data.msg)
             }
 
         },

@@ -45,7 +45,7 @@ class BgRouter extends React.Component {
             }
         });
     }*/
-    
+
 
     render() {
         return (
@@ -74,20 +74,22 @@ function mapStateToProps(state) {
     // 竞品数据
     const { data, searchArgs, loading } = state.RelevanceBG;
 
+    // 遍历数据，转换成组件可用的数据
+    data.list.map((item, index) => {
 
-    data.list.map((item,index) => {
+        // 添加key，不然会报错
+        item['key'] = `td_${index}`; 
+
         if (item.relate_info) {
 
-            let array = Object.keys(item.relate_info).map((el)=>{
+            let array = Object.keys(item.relate_info).map((el) => {
                 return item.relate_info[el];
             })
-            item['children']=array;
-            delete item.relate_info;
-            console.log('children',item.children);
+
+            item['children'] = array;
+
         }
     });
-
-    console.log('data.list',data.list)
 
     // 输出数据
     return {
