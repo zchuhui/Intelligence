@@ -5,9 +5,12 @@
  */
 
 import React from 'react';
+import { Link } from 'dva/router';
 import styles from './RelevanceList.less';
 import moment from 'moment';
-import { Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker, Checkbox, Select } from 'antd';
+import { Table, Pagination, Icon, Menu, Dropdown, 
+    Button, message, Modal, DatePicker, Checkbox, Select } from 'antd';
+
 
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
@@ -128,8 +131,8 @@ class RelevanceList extends React.Component {
 
 				    <Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>
             		<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>
-            		<Button className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>创建关系</Button>
-
+            		<Button className={styles.fr} style={{marginRight:10}}><Link to='/create'>创建关系</Link></Button>
+                    
             		{/*自定义列弹框 star*/}
 				    <Modal
 			            title="自定义列"

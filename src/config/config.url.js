@@ -8,7 +8,7 @@ let url;
 
 if (document.domain === 'betabia.banggood.com') {
 	// 测试环境
-	url = 'http://betabia.banggood.com/index.php';
+	url = 'https://betabia.banggood.com/index.php';
 }
 else{
 	// 本地
