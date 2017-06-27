@@ -36,7 +36,6 @@ class CompeteRouter extends React.Component {
     // 抓取时间段(未完成)
     // args: 时间段
     handleSearchArgsToDate(args) {
-        console.log(args)
         this.props.dispatch({
             type: 'CompeteGoods/search',
             payload: {
@@ -45,20 +44,13 @@ class CompeteRouter extends React.Component {
         });
     }
 
-    // 获取品牌
-   /* getMenuBrands(site) {
-        this.props.dispatch({
-            type: 'Menus/getBrands',
-            payload: {
-                site: site
-            }
-        });
-    }*/
-
 
     render() {
         return (
-            <MainLayout searchArguments={this.props.search}>
+            <MainLayout 
+                searchArguments={this.props.search}
+                headerMenuText="竞品报表"
+                >
 
                 {/*搜索模块*/}
                 <Searcher 

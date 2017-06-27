@@ -15,7 +15,6 @@ export default {
     state: {
         // 加载状态
         loading: false,
-
         // 列表参数
         data: {
             page: {
@@ -26,7 +25,6 @@ export default {
             },
             list: [],
         },
-
         // 搜索参数
         searchArgs: {
             site: '',
@@ -39,7 +37,15 @@ export default {
             endTime: endDay,
             sku: '',
             page: 1
-        }
+        },
+
+
+        // 单个商品
+        goods: {},
+
+        // 关联的商品
+        relevanceGoodsList: [],
+
     },
     reducers: {
         // 把数据存储到state
@@ -54,22 +60,32 @@ export default {
         updateSearchArgs(state, { payload }) {
             return {...state, searchArgs: payload.searchArgs };
         },
+        // 保存获取的商品
+        saveRelevanceGoods(state, { payload }) {
+            return {...state, goods: payload.data };
+        },
+        // 保存关联的商品
+        saveRelevanceGoodsList(state, { payload }) {
+            console.log('arr',payload);
+
+            return {...state, relevanceGoodsList: payload };
+        },
     },
     effects: {
         // 获取数据
         * fetch({ payload }, { select, call, put }) {
-            
+
             // 请求数据时，显示loading状态
             yield put({ type: 'toggleLoading', payload: { loading: true } });
 
             // 开始请求数据
             const { data } = yield call(BgService.fetch, payload);
-            
+
             // 保存数据
-            if (data.status==1) {
+            if (data.status == 1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('载入数据失败:',data.msg)
+                console.log('载入数据失败:', data.msg)
             }
         },
 
@@ -81,51 +97,86 @@ export default {
 
             // 请求数据时，显示loading状态
             yield put({ type: 'toggleLoading', payload: { loading: true } });
-            
+
             // 从state中获取搜索参数
             const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
-            searchArgs.page = payload.page; 
-            
+            searchArgs.page = payload.page;
+
             // 开始请求数据
             const { data } = yield call(BgService.search, { searchArgs: searchArgs });
-            
+
             // 保存数据
-            if (data.status==1) {
+            if (data.status == 1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('搜索失败:',data.msg)
+                console.log('搜索失败:', data.msg)
             }
 
         },
-        
+
         // 分页，根据页数获取数据
         * pagination({ payload }, { select, call, put }) {
 
             // 请求数据时，显示loading状态
             yield put({ type: 'toggleLoading', payload: { loading: true } });
-            
+
             // 从state中获取搜索参数
             const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
-            searchArgs.page = payload.page; 
-            
+            searchArgs.page = payload.page;
+
             // 开始请求数据
             const { data } = yield call(BgService.search, { searchArgs: searchArgs });
-            
+
             // 保存数据
-            if (data.status==1) {
+            if (data.status == 1) {
                 yield put({ type: 'save', payload: data });
             } else {
-                console.log('分页失败:',data.msg)
+                console.log('分页失败:', data.msg)
             }
 
         },
 
+        // 获取单个商品详情
+        * fetchGoodsDetailBySku({ payload }, { select, call, put }) {
+
+            try {
+                const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+
+                // 保存数据
+                if (data.status == 1) {
+                    yield put({ type: 'saveRelevanceGoods', payload: data });
+                } else {
+                    console.log('获取商品失败:', data.msg)
+                }
+            } catch (e) {
+                console.log('获取商品失败:', e.msg)
+            }
+        },
+
+        // 获取单个商品,并选中
+        * fetchGoodsBySkuAndSite({ payload }, { select, call, put }) {
+            try {
+                const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+                
+                // 保存数据
+                if (data.status == 1) {
+
+                    let list = yield select(state => state.RelevanceBG.relevanceGoodsList);
+                    list.push(data.data);
+
+                    yield put({ type: 'saveRelevanceGoodsList', payload: list });
+                } else {
+                    console.log('获取商品失败:', data.msg)
+                }
+            } catch (e) {
+                console.log('获取商品失败:', e)
+            }
+        }
     },
     subscriptions: {
         setup({ dispatch, history }) {
-             dispatch({ type: 'fetch', payload: { page: 1 } });
+            dispatch({ type: 'fetch', payload: { page: 1 } });
         },
-
     },
 
 };

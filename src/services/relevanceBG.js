@@ -40,6 +40,19 @@ export function search(args) {
 	
 	let url = `${Url}?${argumentStr}`;
 	
-	console.log(url);
+  	return request(url);
+}
+
+/**
+ * 获取单个商品信息
+ * @param  {[type]} args [site,sku]
+ * @return {[type]}      [data]
+ */
+export function fetchGoodsDetailBySku(args){
+	
+	let argumentStr = `com=api&t=productInfo&site=${args.site}&sku=${args.sku}`;
+
+	let url = `${Url}?${argumentStr}`;
+
   	return request(url);
 }

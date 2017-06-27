@@ -15,12 +15,13 @@ class MainLayout extends React.Component {
             <div className={styles.wrapper}>
 
                 {/*头部组件*/}
-                <Header location={ this.props.location } />
-                
+                <Header 
+                    location={ this.props.location } 
+                    headerMenuText={this.props.headerMenuText}
+                    />
                 <div className={styles.contentWrap}>
                   <div className={styles.mainWrap}>
                     <div className={styles.mainHeader}>
-                      
                       {/*搜索组件*/}
                       {/*<Searcher { ...this.props} /> */}
                       {/*父组件传过来的数据，可以通过...this.props传给子组件，如上*/}

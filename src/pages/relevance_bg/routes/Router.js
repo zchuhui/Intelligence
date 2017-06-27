@@ -36,20 +36,9 @@ class BgRouter extends React.Component {
         });
     }
 
-    // 获取品牌
-    /*getMenuBrands(site) {
-        this.props.dispatch({
-            type: 'Menus/getBrands',
-            payload: {
-                site: site
-            }
-        });
-    }*/
-
-
     render() {
         return (
-            <MainLayout>
+            <MainLayout headerMenuText="BG关联报表">
                 <Searcher 
                     menus={this.props.menus}
                     handleSearchArgs={args => this.handleSearchArgs(args)}
@@ -62,6 +51,9 @@ class BgRouter extends React.Component {
                 />
             </MainLayout>
         )
+    }
+
+    componentDidMount() {
     }
 
 }
@@ -87,7 +79,7 @@ function mapStateToProps(state) {
             })
 
             item['children'] = array;
-
+            
         }
     });
 

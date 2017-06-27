@@ -12,7 +12,8 @@ const defautSite = ["banggood", "gearbest"];
 
 
 // 默认分类
-const defautCate = [{
+const defautCate = [
+{
     value: 'banggood',
     label: 'banggood',
     children: [{
@@ -25,41 +26,6 @@ const defautCate = [{
         label: "",
         parent_cid: "0",
         site: "banggood"
-    }, ]
-}, {
-    value: 'gearbest',
-    label: 'gearbest',
-    children: [{
-        value: "1",
-        label: "Toys & Hobbies",
-        parent_cid: "0",
-        site: "gearbest",
-        children: [{
-            value: "5",
-            label: "ESC",
-            parent_cid: "3",
-            site: "gearbest"
-        }, {
-            value: "10",
-            label: "Motor",
-            parent_cid: "3",
-            site: "gearbest"
-        }, {
-            value: "12",
-            label: "Flight Controller",
-            parent_cid: "3",
-            site: "gearbest"
-        }, {
-            value: "14",
-            label: "Charger",
-            parent_cid: "3",
-            site: "gearbest"
-        }, ]
-    }, {
-        value: "2",
-        label: "Remote Control Toys",
-        parent_cid: "1",
-        site: "gearbest",
     }, ]
 }]
 
@@ -76,39 +42,7 @@ const defautBrand = [{
     bid: "4",
     bname: "Furibee",
     site: "gearbest"
-}, {
-    bid: "5",
-    bname: "Holybro",
-    site: "gearbest"
-}, {
-    bid: "6",
-    bname: "JJRC",
-    site: "gearbest"
-}, {
-    bid: "7",
-    bname: "MJX",
-    site: "gearbest"
-}, {
-    bid: "8",
-    bname: "Flysky",
-    site: "gearbest"
-}, {
-    bid: "9",
-    bname: "WLTOYS",
-    site: "gearbest"
-}, {
-    bid: "10",
-    bname: "SYMA",
-    site: "gearbest"
-}, {
-    bid: "11",
-    bname: "LENENGTOYS",
-    site: "gearbest"
-}, {
-    bid: "12",
-    bname: "DYS",
-    site: "gearbest"
-}, ]
+}]
 
 
 export default {
@@ -152,7 +86,6 @@ export default {
 
         // 获取品牌表
         * getBrands({ payload }, { select, call, put }) {
-
             try {
                 // 开始请求数据
                 const { data } = yield call(menusService.getMenuBrand);
@@ -176,12 +109,6 @@ export default {
             dispatch({ type: 'getCates' });
             dispatch({ type: 'getBrands' });
 
-            /*return history.listen(({ pathname, query }) => {
-                if (pathname === '/') {
-                    dispatch({ type: 'getCates'});
-                    dispatch({ type: 'getBrands'});
-                }
-            })*/
         },
     },
 };
