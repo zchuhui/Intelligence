@@ -88,7 +88,7 @@
         .stepOneWrap {
             width: 400px;
             height: 250px;
-            margin: 60px auto;
+            margin: 10px auto;
             margin-bottom: 0;
             .imgWrap {
                 float: left;
@@ -146,6 +146,35 @@
                     line-height: 30px;
                 }
             }
+
+            .goodsShowPanelCurrent{
+                .goodsShowPanel;
+                
+                position:relative;
+
+                .imgWrap{
+                    border:1px solid #1b91eb;
+                }:after{
+                    content: ' '; 
+                    font-size: 14px;
+                    color:#fff;
+                    position:absolute;
+                    top:0;
+                    right:0;
+                    width: 0;
+                    height: 0;
+                    border-top: 30px solid #1b91eb;
+                    border-left: 30px solid transparent; 
+                }
+
+            }:before{
+                    content: '√'; 
+                    font-size: 14px;
+                    color:#fff;
+                    position:absolute;
+                    top:0;
+                    right:0;
+                }
         }
         .panel {
             border-bottom: 1px solid #eee;

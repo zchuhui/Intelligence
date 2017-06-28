@@ -150,3 +150,20 @@ const cateToMenu = (cate) => {
 
     return arr;
 }
+
+
+
+/**
+ * 数组操作：判断元素是否在素组里面
+ * @param  {[type]} val [元素1]
+ * @return {[type]}     [description]
+ */
+Array.prototype.contains = function(val){
+    var len = this.length;
+    while(len--){
+        if (this[len] === val) {
+            return true;
+        }
+    }
+    return false;
+}
