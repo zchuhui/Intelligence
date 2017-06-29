@@ -12,6 +12,7 @@ app.use(createLoading());
 app.model(require('../../models/User'));
 app.model(require('../../models/Menus'));
 app.model(require('./models/RelevanceBG'));
+app.model(require('./models/create-relevance-model'));
 
 
 // 4. Router

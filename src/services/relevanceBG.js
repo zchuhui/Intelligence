@@ -90,3 +90,18 @@ export function setRelevanceGoods(args) {
   	
 }
 
+
+/**
+ * 获取主体商品趋势图
+ * @param  {[type]} args [pid,startTime,endTime]
+ * @return {[type]}      [data]
+ */
+export function fetchGoodsEchartByPidAndTime(args) {
+
+    let argumentStr = `com=api&t=getBgProductRunChart&pid=${args.pid}&startTime=${args.startTime}&endTime=${args.endTime}`;
+
+	let url = `${Url}?${argumentStr}`;
+	
+  	return request(url);	
+}
+

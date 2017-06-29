@@ -42,7 +42,7 @@ class CreateRelevance extends React.Component {
 
     render() {
         return (
-            <MainLayout>
+            <MainLayout headerMenuText="BG关联报表">
                 <Spin spinning={this.props.createRelevanceLoading}>
     				<div className={styles.relevanceWrap}>
 
@@ -168,7 +168,14 @@ class CreateRelevance extends React.Component {
                                         {/*手动输入商品*/}
     									<div style={{ marginLeft:25,marginTop:20 }}>
     										<Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
-                        					<Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>添加</Button>
+                                            <Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                        					{
+                                                this.props.goodsBySite.status?
+                                                <Button style={{ marginLeft:5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
+                                                : null
+                                                
+                                            }
+                                            
                                             <span style={{ marginLeft:10,color:'red' }}>
                                                 {
                                                     this.props.goodsBySite.status?
@@ -268,7 +275,7 @@ class CreateRelevance extends React.Component {
         if (sku !== '') {
             // 根据sku获取商品详情
             this.props.dispatch({
-                type: 'RelevanceBG/fetchGoodsDetailBySku',
+                type: 'createRelevanceModel/fetchGoodsDetailBySku',
                 payload: {
                     site: 'banggood',
                     sku: sku
@@ -281,9 +288,12 @@ class CreateRelevance extends React.Component {
 
     // 获取单个商品,根据site and sku
     getGoodsBySiteAndSku(){
+
     	// 获取Input框的sku值
         let sku = this.refs.inputSku2.refs.input.value;
+
         let site;
+
         if (this.state.currentSite) {
         	site = this.state.currentSite
         }
@@ -294,28 +304,37 @@ class CreateRelevance extends React.Component {
         if (sku !== '') {
             // 根据sku获取商品详情
             this.props.dispatch({
-                type: 'RelevanceBG/fetchGoodsBySkuAndSite',
+                type: 'createRelevanceModel/fetchGoodsBySkuAndSite',
                 payload: {
                     site: site,
                     sku: sku
                 }
             });
-
-
-            console.log(this.props.goodsBySite); 
-
         } else {
             message.warning("请输入商品的SKU!");
         }
     }
 
-    // 选择站点
+    // 选择、获取站点
     getSite(key){
+        // 选择站点
     	let site = this.state.similarGoodsList[key].tname;
+
+        // 存储到state中
     	this.setState({
     		currentSite:site,
             siteKey:key,
     	});
+
+
+        // 清除搜索的商品
+        this.props.dispatch({
+            type: 'createRelevanceModel/saveRelevanceGoodsBySite',
+            payload: {}
+        });
+        
+        this.refs.inputSku2.refs.input.value = '';
+
     }
 
     // 跳转到步骤二
@@ -353,7 +372,7 @@ class CreateRelevance extends React.Component {
 
             // 设置关联产品
             this.props.dispatch({
-                type: 'RelevanceBG/setRelevanceGoods',
+                type: 'createRelevanceModel/setRelevanceGoods',
                 payload: {
                     sku: sku,
                     relevanceGoodsList: relevanceGoodsList,
@@ -397,9 +416,7 @@ class CreateRelevance extends React.Component {
                     similarGoodsList: parentArray
                 })
             }
-
         }
-
 
 
         // 加入已选队列中
@@ -413,20 +430,51 @@ class CreateRelevance extends React.Component {
 
             this.setState({
                 relevanceGoodsList:relevanceArray
-            })
+            });
         }
+
+    }
+
+    // 选择搜索的商品
+    selectGoodsBySite(){
+
+        // 获取site key
+        let parentKey = this.state.siteKey; 
+        let goodsite= this.props.goodsBySite;
+
+        // 如果已有数据
+        if (goodsite.status == 1) {
+
+            // 加入已选队列中
+            const relevanceArray = this.state.relevanceGoodsList;
+
+            // 判断是否已选
+            if (!relevanceArray.contains(goodsite.data)) {
+
+                // 每个子表，只能选中一个，所以引用子表的key赋值
+                relevanceArray[parentKey] = goodsite.data;
+
+                this.setState({
+                    relevanceGoodsList:relevanceArray
+                });
+
+            }
+
+        }
+        else{
+            console.log('5555');
+        }
+        
     }
 
 
+
     componentDidMount() {
+        console.log("Did")
     	this.setState({
     		similarGoodsList:this.props.similarGoodsList,
     	})
     }
-
-    /*componentDidUpdate() {
-        console.log('Did',this.state.similarGoodsList);
-    }*/
 
 }
 
@@ -438,7 +486,10 @@ function mapStateToProps(state) {
         similarGoodsList, 
         createRelevanceLoading, 
         setRevanceStatus, 
-        goodsBySite } = state.RelevanceBG;
+        goodsBySite } = state.createRelevanceModel;
+
+        //console.log('goodsBySite',goodsBySite);
+
 
     return {
         goods: goods,
