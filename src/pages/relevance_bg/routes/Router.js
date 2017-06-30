@@ -36,11 +36,8 @@ class BgRouter extends React.Component {
         });
     }
 
-    // 根据pid与时间获取主商品的趋势图
+    // 根据商品的pid与时间获取趋势图数据
     getGoodsEcharData(args){
-        
-        console.log('args',args);
-
         this.props.dispatch({
             type:'RelevanceBG/fetchGoodsEchartByPidAndTime',
             payload:{
@@ -50,6 +47,7 @@ class BgRouter extends React.Component {
             },
         })
     }
+
 
     render() {
         return (
@@ -63,6 +61,7 @@ class BgRouter extends React.Component {
                     data={this.props.data}
                     loading={this.props.loading} 
                     goodsEchartData={this.props.goodsEchartData}
+                    goodsEchartDataLoading={this.props.goodsEchartDataLoading}
                     changePagination={current => this.changePagination(current)}
                     getGoodsEcharData={args => this.getGoodsEcharData(args)}
 
@@ -70,8 +69,6 @@ class BgRouter extends React.Component {
             </MainLayout>
         )
     }
-
-
 }
 
 
@@ -79,9 +76,14 @@ function mapStateToProps(state) {
     // 菜单
     const menus = state.Menus;
 
-    // 竞品数据
-    const { data, searchArgs, loading, goodsEchartData } = state.RelevanceBG;
-
+    // 竞品表数据
+    const { data, 
+        searchArgs, 
+        loading, 
+        goodsEchartData, 
+        goodsEchartDataLoading 
+    } = state.RelevanceBG;
+    console.log(goodsEchartData)
     if (data) {
         // 遍历数据，转换成组件可用的数据
         data.list.map((item, index) => {
@@ -98,12 +100,8 @@ function mapStateToProps(state) {
             }
         });
     }
-    
-
-    console.log('map',goodsEchartData)
 
     return {
-
         // 搜索模块
         menus,     
         searchArgs,
@@ -114,6 +112,7 @@ function mapStateToProps(state) {
 
         // 趋势图模块
         goodsEchartData,
+        goodsEchartDataLoading,
     };
 }
 

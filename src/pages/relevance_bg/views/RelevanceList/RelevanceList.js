@@ -10,7 +10,7 @@ import styles from './RelevanceList.less';
 import moment from 'moment';
 import echarts from 'echarts';
 import { Table, Pagination, Icon, Menu, Dropdown, 
-    Button, message, Modal, DatePicker, Checkbox, Select,Radio  } from 'antd';
+    Button, message, Modal, DatePicker, Checkbox, Select, Radio,Spin } from 'antd';
 
 
 const { Column, ColumnGroup } = Table;
@@ -47,24 +47,14 @@ class RelevanceList extends React.Component {
             },
 
             goodsEchartVisible:false,
+            goodsEchartPid:0,
             goodsEchartRadioValue:1,
         }
 
     }
 
     render() {
-
-        const menu = (
-          <Menu onClick={this.onClickSelct.bind(this)}>
-            <Menu.Item key="0">
-              <a rel='xx' href="javascript:;">对比</a>
-            </Menu.Item>
-            <Menu.Item key="1">
-              <a rel='xx' href="javascript:;">趋势图</a>
-            </Menu.Item>
-          </Menu>
-        )
-
+        
         // 主表Columns
         const tableColumns = [
             {
@@ -79,10 +69,10 @@ class RelevanceList extends React.Component {
                 title: "操作",
                 dataIndex: "pid",
                 render: (text, record) => (
-                   <Dropdown overlay={menu}>
-                    <a className="ant-dropdown-link" onClick={this.showGoodsEchartModal.bind(this,record.pid)} href="javascript:;">
-                      趋势图 <Icon type="down" />
-                    </a>
+                   <Dropdown overlay={this.tableColumnsMenu(record.pid)}>
+                        <Button>
+                          操作 <Icon type="down" />
+                        </Button>
                   </Dropdown>
                 ),
             }, {
@@ -132,7 +122,6 @@ class RelevanceList extends React.Component {
             },
         ]
 
-
         return (
             <div className={ styles.main }>
 
@@ -163,7 +152,7 @@ class RelevanceList extends React.Component {
           			    footer={null}
 			        	>
 			        	<div>
-			        		2222222
+			        		开发中...
 			        	</div>
 			        </Modal>
 			    	{/*自定义列弹框 end*/}
@@ -209,7 +198,8 @@ class RelevanceList extends React.Component {
                         >
                         <div style={{ }}>
                             <div>
-                                <div style={{display:'inline-block',height:40, width:'60%',verticalAlign:'top'}}>
+                                {
+                                    /*<div style={{display:'inline-block',height:40, width:'60%',verticalAlign:'top'}}>
                                     <RadioGroup onChange={ this.selectOption.bind(this) } value={this.state.goodsEchartRadioValue}>
                                         <Radio value={1}>价格</Radio>
                                         <Radio value={2}>销量</Radio>
@@ -217,11 +207,13 @@ class RelevanceList extends React.Component {
                                         <Radio value={4}>评分</Radio>
                                         <Radio value={5}>关注</Radio>
                                     </RadioGroup>
-                                </div>
+                                     </div>*/
+
+                                }
+
                                 <div style={{display:'inline-block',
-                                    height:40, width:'40%',verticalAlign:'top',
-                                    textAlign:'center',borderLeft:'1px solid #eee'}}>
-                                    <RangePicker
+                                    height:40,}}>
+                                    <RangePicker onChange={ this.getGoodsEcharData }
                                         defaultValue={[
                                             moment().startOf('month'), 
                                             moment().endOf('month')
@@ -235,8 +227,16 @@ class RelevanceList extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <div>
-                                <div id="echartId" ref='echartId' style={{width:600,height:500,margin:'0 auto'}}></div>
+                            <div style={{width:768,height:550,position:'relative'}}>
+                                { 
+                                    this.props.goodsEchartDataLoading==false?
+                                    <div style={{width:768,height:550,textAlign:'center',position:'absolute',background:'rgba(49,151,235,0.1)',zIndex:1000}}>
+                                        <Spin tip="Loading..." style={{ marginTop:250 }}/>
+                                    </div>
+                                    :null
+                                }
+                                <div id="echartId" ref='echartId' style={{width:768,height:500,margin:'0 auto'}}></div>
+                                
                             </div>
                         </div>
                     </Modal>
@@ -278,17 +278,27 @@ class RelevanceList extends React.Component {
         )
     }
 
+    // 主表Columns里面的menu
+    tableColumnsMenu(record){
+        return (
+            <Menu onClick={this.onClickSelct.bind(this,record)}>
+                <Menu.Item key="0">
+                  <a rel='xx' href="javascript:;">对比</a>
+                </Menu.Item>
+                <Menu.Item key="1">
+                  <a rel='xx' href="javascript:;">趋势图</a>
+                </Menu.Item>
+            </Menu>
+        )
+    }
+
+    // 数据变动，渲染完成后，执行
     componentDidUpdate(prevProps, prevState) {
-        console.log('update',this.props.goodsEchartData);
+        if (this.props.goodsEchartDataLoading) {
+            this.loadEchart();
+        }
     }
 
-
-    // 显示自定义列弹框
-    hideCustomRowModal = () => {
-        this.setState({
-            customRowVisible: false
-        })
-    }
 
     // 隐藏自定义列弹框
     showCustomRowModal = () => {
@@ -296,15 +306,13 @@ class RelevanceList extends React.Component {
             customRowVisible: true
         })
     }
-
-    // 隐藏竞品列弹框
-    hideCustomGoodsModal = () => {
+    // 显示自定义列弹框
+    hideCustomRowModal = () => {
         this.setState({
-            customGoods: {
-                visible: false
-            }
+            customRowVisible: false
         })
     }
+
 
     // 显示竞品列弹框
     showCustomGoodsModal = () => {
@@ -314,29 +322,56 @@ class RelevanceList extends React.Component {
             }
         })
     }
-
-
-    onClickSelct = (_this) => {
+    // 隐藏竞品列弹框
+    hideCustomGoodsModal = () => {
+        this.setState({
+            customGoods: {
+                visible: false
+            }
+        })
     }
+
+    // 选择操作:对比 or 趋势图
+    onClickSelct = (pid,item) => {
+        // 趋势图
+        if (item.key==1) {
+            this.showGoodsEchartModal(pid)
+        }
+
+    }
+
 
     // 显示主体商品趋势图
     showGoodsEchartModal = (pid) => {
 
-        this.setState({goodsEchartVisible: true  });
+        // 显示弹框
+        this.setState({
+            goodsEchartVisible: true,
+            goodsEchartPid: pid
+        });
 
-        const goodsPid = pid;
-
+        // 参数
         let args = {
             pid:pid,
             startTime:startTime,
             endTime:endTime
         }
 
-        this.props.getGoodsEcharData(args);
+        // 请求数据
+        this.props.getGoodsEcharData(args); 
+        
+    }
+    // 隐藏主体商品趋势图
+    hideGoodsEchartModal = () => {
+        this.setState({
+            goodsEchartVisible: false 
+        })
+    }
 
-
+    // 载入Echart图
+    loadEchart = () => {
+        console.log('loadEchart')
         if (this.refs.echartId) {
-
             // 基于准备好的dom，初始化echarts实例
             let myChart = echarts.init(this.refs.echartId);
 
@@ -349,7 +384,7 @@ class RelevanceList extends React.Component {
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['邮件营销1','联盟广告','视频广告','直接访问','搜索引擎']
+                    data:this.props.goodsEchartData.legendData
                 },
                 grid: {
                     left: '3%',
@@ -359,81 +394,39 @@ class RelevanceList extends React.Component {
                 },
                 toolbox: {
                     feature: {
-                        saveAsImage: {}
                     }
                 },
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['6.1','6.2','6.3','6.4','6.5','6.6','6.7']
+                    data: this.props.goodsEchartData.xAxisData,
                 },
                 yAxis: {
                     type: 'value'
                 },
-                series: [
-                    {
-                        name:'邮件营销1',
-                        type:'line',
-                        stack: '总量',
-                        data:[120, 132, 101, 134, 90, 230, 210]
-                    },
-                    {
-                        name:'联盟广告',
-                        type:'line',
-                        stack: '总量',
-                        data:[220, 182, 191, 234, 290, 330, 310]
-                    },
-                    {
-                        name:'视频广告',
-                        type:'line',
-                        stack: '总量',
-                        data:[150, 232, 201, 154, 190, 330, 410]
-                    },
-                    {
-                        name:'直接访问',
-                        type:'line',
-                        stack: '总量',
-                        data:[320, 332, 301, 334, 390, 330, 320]
-                    },
-                    {
-                        name:'搜索引擎',
-                        type:'line',
-                        stack: '总量',
-                        data:[820, 932, 901, 934, 1290, 1330, 1320]
-                    }
-                ]
+                series: this.props.goodsEchartData.seriesData,
             });
-        } 
+        }   
+    }
+
+    // 根据pid与时间获取主商品的趋势图
+    getGoodsEcharData = (date, dateString) => {
+
+        // 参数
+        let args = {
+            pid:this.state.goodsEchartPid,
+            startTime:dateString[0],
+            endTime:dateString[1]
+        }
+
+        // 请求数据
+        this.props.getGoodsEcharData(args);
         
+        this.loadEchart(); 
     }
 
-    /*// 根据pid与时间获取主商品的趋势图
-    getGoodsEcharData = (pid,startTime,endTime) => {
-        this.props.dispatch({
-            type:'RelevanceBG/fetchGoodsEchartByPidAndTime',
-            payload:{
-                pid:pid,
-                startTime:startTime,
-                endTime:endTime,
-            },
-        })
-    }*/
 
-    // 隐藏主体商品趋势图
-    hideGoodsEchartModal = () => {
-        this.setState({
-            goodsEchartVisible: false 
-        })
-    }
-
-    // 主商品趋势图单选项
-    selectOption = (e) => {
-        this.setState({
-            goodsEchartRadioValue: e.target.value,
-        });
-    }
-
-    // 单项选择竞品选项
+    // 自定义竞品-单项
     onCustomChange = (checkedList) => {
         this.setState({
             customGoods: {
@@ -445,8 +438,7 @@ class RelevanceList extends React.Component {
 
         });
     }
-
-    // 全选选择竞品选项
+    // 自定义竞品-全选
     onCheckAllChange = (e) => {
         this.setState({
             customGoods: {
@@ -457,8 +449,7 @@ class RelevanceList extends React.Component {
             }
         });
     }
-
-    // 确定竞品选项
+    // 自定义竞品-确定选项
     onCustomOK = () => {
         let list = this.state.customGoods.checkedList;
         //console.log(list);
