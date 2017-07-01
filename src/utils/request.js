@@ -31,7 +31,7 @@ export default async function request(url, options) {
 
   // 请求数据
   const response = await fetch(url, options);
-
+ 
   // 检查请求是否成功
   checkStatus(response);
 

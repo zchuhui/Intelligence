@@ -74,19 +74,28 @@ export function fetchSimilarGoodsList(args) {
 
 }
 
+
 /**
  * 设置关联的商品
  * @param  {[type]} args [sku,list]
  * @return {[type]}      [data]
  */
 export function setRelevanceGoods(args) {
-	let content = JSON.stringify(args.relevanceGoodsList); 
-	console.log('set',content);
-    let argumentStr = `com=api&t=t=setBgToOtherRelation&sku=${args.sku}&content=${content}`;
 
-	let url = `${Url}?${argumentStr}`;
+    let content = JSON.stringify(args.relevanceGoodsList); 
+    console.log('sku',args)
+    let argumentStr = `com=api&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }'`;
+    
 
-  	return request(url);
+    let argus = {
+        content:args.relevanceGoodsList
+    }
+
+    let url = `${Url}?${argumentStr}`;
+    
+  	return request(url,{
+        method:'POST',
+    });
   	
 }
 

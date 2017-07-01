@@ -197,13 +197,17 @@ export default {
             try {
 
                 const { data } = yield call(BgService.setRelevanceGoods, payload);
-
+                console.log('post',data)
                 // 保存数据
-                if (data) {
+                if (data.status === 1) {
                     // 请求数据时，显示loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: true } });
-                } 
+                }else{
+                    // 请求数据时，显示loading状态
+                    yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
+                    yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
+                }
             } catch (e) {
                 console.log(e)
 
