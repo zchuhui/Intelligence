@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Menu, Dropdown, Icon } from 'antd';
-import styles from './Header.less';
+import styles from './header.less';
 import Logo from './logo.png';
-import Menus from '../../components/Menu/Menu';
+import Menus from '../../components/menu/menu';
 
 
 // 公共头部

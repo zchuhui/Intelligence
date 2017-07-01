@@ -1,8 +1,8 @@
 {
   "entry": [
-    "src/pages/compete_goods/index.js",
+    "src/pages/compete-goods/index.js",
     "src/pages/login/login.js",
-    "src/pages/relevance_bg/bg.js"
+    "src/pages/bg-goods/bg.js"
     ],
   "disableCSSModules": false,
   "publicPath": "/",

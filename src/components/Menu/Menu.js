@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
-import styles from './Menu.less';
+import styles from './menu.less';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;

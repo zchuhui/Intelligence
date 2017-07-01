@@ -1,4 +1,8 @@
-/*登录页入口*/
+/**
+ * 登录页入口
+ * Date:2017-06-20
+ * Author:zhuangchuhui
+ */
 
 import dva from 'dva';
 
@@ -9,7 +13,7 @@ const app = dva();
 // app.use({});
 
 // 3. Model
-app.model(require('../../models/User'));
+app.model(require('../../models/user'));
 
 // 4. Router
 app.router(require('./router'));
