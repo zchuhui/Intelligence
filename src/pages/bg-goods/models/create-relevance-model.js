@@ -6,75 +6,61 @@ import * as BgService from '../../../services/service-bg-goods';
 
 
 // 接口还没提供，虚拟数据
-const similarGoodsList = [
+const similarGoodsList = 
+[
     {
-    tname: 'banggood',
+    tname: 'gearbest',
     tkey: 0,
     children: [{
         cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通1',
+        img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498266711576411825.jpg',
+        sku: '21686430',
+        site: 'gearbest',
         select: false,
-    }, {
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通2',
-        select: false,
-    }, {
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
-    }, {
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
-        select: false,
-    }, {
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通3',
-        select: false,
-    }]
-}, {
-    tname: 'gearbest',
-    tkey: 1,
-    children: [{
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
-        select: false,
-    }, {
+    },
+    {
         cid: 2,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
+        img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498260182222254373.jpg',
+        sku: '21688560',
+        site: 'gearbest',
         select: false,
-    }, {
-        cid: 3,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
+    }
+    ]
+},
+{
+    tname: 'dx',
+    tkey: 4,
+    children: [
+    {
+        cid: 1,
+        img_url: 'http://img.dxcdn.com/productimages/sku_445370_1.jpg',
+        sku: '9cfc7148f14836dfb52c1768c8a69c8d',
+        site: 'dx',
         select: false,
-    }, {
-        cid: 4,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
-        select: false,
-    }, {
-        cid: 5,
-        img_url: 'https://gloimg.gearbest.com/gb/2015/201510/goods-img/1444603895045-P-3203361.jpg',
-        sku: '56545465',
-        site: '大卖通',
-        select: false,
-    }]
-}, ];
+    }
+    ]
+}, {
+    tname: 'aliexpress',
+    tkey: 1,
+    children: []
+},
+{
+    tname: 'lightinthebox',
+    tkey: 3,
+    children: []
+}, 
+{
+    tname: 'amazon',
+    tkey: 5,
+    children: []
+}, 
+{
+    tname: 'tomtop',
+    tkey: 6,
+    children: []
+}, 
+
+];
 
 
 

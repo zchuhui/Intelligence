@@ -156,12 +156,12 @@ class CreateRelevance extends React.Component {
                                                                     )
                                                                 }
                                                                 
-                                                            </ul>
-                                                            :<span>null</span>
+                                                            </ul> 
+                                                            :<p>该站点没有相似的商品，可以选择手动输入</p>
                                                         }
                                                     </TabPane>
                                                 )
-                                                :<span>...</span>
+                                                :<span>.</span>
                                             }
     									</Tabs>
 
@@ -381,12 +381,43 @@ class CreateRelevance extends React.Component {
         // 确认已选商品
         if (relevanceArray.length > 0) {
 
+            let args = {};
+
+            relevanceArray.map((item,index) => {
+
+                if (item.site && item.sku) {
+                    switch(item.site){
+                        case 'gearbest':
+                            args = {gearbest:item.sku};
+                            break;
+                        case 'dx':
+                            args = {dx:item.sku};
+                            break;
+                        case 'aliexpress':
+                            args = {aliexpress:item.sku};
+                            break;
+                        case 'lightinthebox':
+                            args = {lightinthebox:item.sku};
+                            break;
+                        case 'amazon':
+                            args = {amazon:item.sku};
+                            break;
+                        case 'tomtop':
+                            args = {tomtop:item.sku};
+                            break;
+                    }
+                    
+                }
+            });
+
+            console.log('args',args);
+
             // 请求：设置关联产品
             this.props.dispatch({
                 type: 'createRelevanceModel/setRelevanceGoods',
                 payload: {
                     sku: this.props.goods.data.sku,
-                    relevanceGoodsList: relevanceArray,
+                    relevanceGoodsList: args,
                 }
             });
 
@@ -525,7 +556,7 @@ function mapStateToProps(state) {
         goodsBySite               // 手动添加的相似商品
     } = state.createRelevanceModel;
 
-        console.log('setRevanceStatus',setRevanceStatus);
+        //console.log('setRevanceStatus',setRevanceStatus);
 
 
     return {

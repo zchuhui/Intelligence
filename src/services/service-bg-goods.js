@@ -84,7 +84,7 @@ export function setRelevanceGoods(args) {
 
     let content = JSON.stringify(args.relevanceGoodsList); 
     console.log('sku',args)
-    let argumentStr = `com=api&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }'`;
+    let argumentStr = `com=api&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
     
 
     let argus = {
@@ -92,8 +92,10 @@ export function setRelevanceGoods(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-    
-  	return request(url,{
+
+    console.log('url',url);
+  	
+    return request(url,{
         method:'POST',
     });
   	
