@@ -41,9 +41,15 @@ export default {
         // 主商品趋势图
         goodsEchartData:{},
         goodsEchartDataLoading:false,
+
+        // 对比商品
+        goodContrastData:{},
+        goodContrastDataLoading:false,
+
     },
 
     reducers: {
+
         // 把数据存储到state
         save(state, { payload: { data: data } }) {
             return {...state, data, loading: false };
@@ -56,7 +62,8 @@ export default {
         updateSearchArgs(state, { payload }) {
             return {...state, searchArgs: payload.searchArgs };
         },
-        // 保存主商品趋势图
+
+        // 更新主商品趋势图
         updateGoodsEchartData(state, { payload }) {
 
            let data = payload.data.data; 
@@ -69,7 +76,6 @@ export default {
            let legendData = [];
            let seriesData = [];
            let xAxisData = dataScope(startTime,endTime);
-
 
            for (let i in data) {
                let obj = data[i]; 
@@ -84,7 +90,7 @@ export default {
                let arrItemData = [];
 
                for (let k in obj) {
-                   arrItemData.push((obj[k]+Math.random()*1000));
+                   arrItemData.push((obj[k])); 
                }
                arrItem.data = arrItemData;
                seriesData.push(arrItem);
@@ -99,73 +105,136 @@ export default {
 
            return {...state, goodsEchartData: goodsEchartData };
         },
-        // 保存主商品趋势图载入状态
+        // 更新主商品趋势图载入状态
         updateGoodsEchartDataLoading(state, { payload }) {
-           console.log(payload.goodsEchartDataLoading)
            return {...state, goodsEchartDataLoading: payload.goodsEchartDataLoading };
-        }
+        },
+
+        // 更新商品对比数据
+        updateGoodContrastData(state, { payload }){
+
+            let data = payload.data,
+                info = payload.data.info,
+                relateInfo = payload.data.relateInfo,
+                relateInfoArray = [];
+
+            for(let item in relateInfo){
+                relateInfoArray.push(relateInfo[item]);
+            }
+            
+
+            if (info && info.sevenRunChart) {
+                // 载入BG趋势图
+                for(let item in info.sevenRunChart){
+                    let array = [];
+                    let sevenDays = [];
+                    for(let item2 in info.sevenRunChart[item]){
+                        sevenDays.push(item2)
+                        array.push(info.sevenRunChart[item][item2]);
+                    }
+                    info[item] = array;            // 数组：值
+                    info['sevenDays'] = sevenDays; // 数组：日期
+                }
+            }
+
+            if (relateInfoArray.sevenRunChart) {
+                // 载入关联的趋势图
+                for(let item in relateInfoArray.sevenRunChart){
+                    let array = [];
+                    let sevenDays = [];
+                    for(let item2 in relateInfoArray.sevenRunChart[item]){
+                        sevenDays.push(item2)
+                        array.push(relateInfoArray.sevenRunChart[item][item2]);
+                    }
+                    relateInfoArray[item] = array;            // 数组：值
+                    relateInfoArray['sevenDays'] = sevenDays; // 数组：日期
+                }
+            }
+
+
+            data.info = info;
+            data.relateInfo = relateInfoArray;
+
+            return {...state, goodContrastData: data };
+        },
+        // 清空商品对比数据
+        clearGoodContrastData(state, { payload }){
+            console.log('clear')
+            return {...state, goodContrastData: [] };
+        },
+        // 更新商品对比数据载入状态
+        updateGoodContrastDataLoading(state, { payload }) {
+           return {...state, goodContrastDataLoading: payload.goodContrastDataLoading };
+        },
     },
 
     effects: {
-        // 获取数据
+        // 获取BG列表数据
         * fetch({ payload }, { select, call, put }) {
+            try{
+                // 请求数据时，显示loading状态
+                yield put({ type: 'toggleLoading', payload: { loading: true } });
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'toggleLoading', payload: { loading: true } });
+                // 开始请求数据
+                const { data } = yield call(BgService.fetch, payload);
 
-            // 开始请求数据
-            const { data } = yield call(BgService.fetch, payload);
-
-            // 保存数据
-            if (data.status == 1) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log('载入数据失败:', data.msg)
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data }); 
+                } 
+            }catch(e){
+                yield put({ type: 'toggleLoading', payload: { loading: false } });
+                console.log(e)
             }
         },
 
-        // 搜索
+        // BG表搜索
         * search({ payload }, { select, call, put }) {
+            try{
+                // 更新参数到state,并取回来当搜索参数
+                yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
 
-            // 更新参数到state,并取回来当搜索参数
-            yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
+                // 请求数据时，显示loading状态
+                yield put({ type: 'toggleLoading', payload: { loading: true } });
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'toggleLoading', payload: { loading: true } });
+                // 从state中获取搜索参数
+                const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
+                searchArgs.page = payload.page;
 
-            // 从state中获取搜索参数
-            const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
-            searchArgs.page = payload.page;
+                // 开始请求数据
+                const { data } = yield call(BgService.search, { searchArgs: searchArgs });
 
-            // 开始请求数据
-            const { data } = yield call(BgService.search, { searchArgs: searchArgs });
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data });
+                }
 
-            // 保存数据
-            if (data.status == 1) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log('搜索失败:', data.msg)
+            }catch(e){
+                yield put({ type: 'toggleLoading', payload: { loading: false } });
+                console.log(e)
             }
         },
 
-        // 分页，根据页数获取数据
+        // BG表分页，根据页数获取数据
         * pagination({ payload }, { select, call, put }) {
+            try{
+                // 请求数据时，显示loading状态
+                yield put({ type: 'toggleLoading', payload: { loading: true } });
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'toggleLoading', payload: { loading: true } });
+                // 从state中获取搜索参数
+                const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
+                searchArgs.page = payload.page;
 
-            // 从state中获取搜索参数
-            const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
-            searchArgs.page = payload.page;
+                // 开始请求数据
+                const { data } = yield call(BgService.search, { searchArgs: searchArgs });
 
-            // 开始请求数据
-            const { data } = yield call(BgService.search, { searchArgs: searchArgs });
-
-            // 保存数据
-            if (data.status == 1) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log('分页失败:', data.msg)
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data });
+                } 
+            }catch(e){
+                yield put({ type: 'toggleLoading', payload: { loading: false } });
+                console.log(e)
             }
         },
 
@@ -186,6 +255,24 @@ export default {
                 // 请求失败
                 yield put({type:'updateGoodsEchartDataLoading',payload:{goodsEchartDataLoading:true}});
             }
+        },
+
+        // 获取商品对比数据
+        * fetchGoodsContrastDataByPid({payload},{select,call,put}){
+            try{
+                yield put({type:'updateGoodContrastDataLoading',payload:{goodContrastDataLoading:false}});
+
+                const {data} = yield call(BgService.fetchGoodsContrastData,payload.pid);
+
+                if (data) {
+                    yield put({type:'updateGoodContrastData',payload:{data:data.data}});
+
+                    yield put({type:'updateGoodContrastDataLoading',payload:{goodContrastDataLoading:true}});
+                }
+            }catch(e){
+                console.log(e)
+                yield put({type:'updateGoodContrastDataLoading',payload:{goodContrastDataLoading:true}});
+            }
         }
     },
 
@@ -202,44 +289,37 @@ export default {
 /**
  * 计算两个日期时间段内所有日期 
  *  
- * @param value1  开始日期 YYYY-MM-DD 
- * @param value2  结束日期 
+ * @param begin  开始日期 YYYY-MM-DD 
+ * @param end  结束日期 
  * return 日期数组 
  */  
-const dataScope = (value1, value2) => {  
-    var getDate = function(str) {  
-        var tempDate = new Date();  
-        var list = str.split("-");  
-        tempDate.setFullYear(list[0]);  
-        tempDate.setMonth(list[1] - 1);  
-        tempDate.setDate(list[2]);  
-        return tempDate;  
-    }  
-    var date1 = getDate(value1);  
-    var date2 = getDate(value2);  
-    if (date1 > date2) {  
-        var tempDate = date1;  
-        date1 = date2;  
-        date2 = tempDate;  
-    }  
-    date1.setDate(date1.getDate() + 1);  
-    var dateArr = [];  
-    var i = 0;  
-    while (!(date1.getFullYear() == date2.getFullYear()  
-            && date1.getMonth() == date2.getMonth() && date1.getDate() == date2  
-            .getDate())) {  
-         var dayStr =date1.getDate().toString();  
-            if(dayStr.length ==1){  
-                dayStr="0"+dayStr;  
-            }  
-        dateArr[i] = date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-"  
-                + dayStr;  
-        i++;  
-        date1.setDate(date1.getDate() + 1);  
-    }  
-    
-    return dateArr;  
+const dataScope = (begin, end) => {
+    var ab = begin.split('-');
+    var ae = end.split('-');
+    var db = new Date();
+    db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);
+    var de = new Date();
+    de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);
+    var unixDb = db.getTime();
+    var unixDe = de.getTime();
+    var arr = [];
+    for (var k = unixDb; k <= unixDe;) {
+        arr.push((new Date(parseInt(k))).format());
+        k = k + 24 * 60 * 60 * 1000;
+    }
+    return arr;
 }
+
+Date.prototype.format = function() {
+    var s = '';
+    var mouth = (this.getMonth() + 1) >= 10 ? (this.getMonth() + 1) : ('0' + (this.getMonth() + 1));
+    var day = this.getDate() >= 10 ? this.getDate() : ('0' + this.getDate());
+    s += this.getFullYear() + '-'; // 获取年份。  
+    s += mouth + '-'; // 获取月份。  
+    s += day; // 获取日。  
+    return (s); // 返回日期。  
+};
+
 
 
 /**

@@ -93,7 +93,6 @@ export default {
         },
         // 步骤二的保存获取的单个商品，
         saveRelevanceGoodsBySite(state, { payload }) {
-            console.log('savegoodsBySite',payload)
             return {...state, goodsBySite: payload };
         },
         // 保存已关联的商品
@@ -125,11 +124,16 @@ export default {
                     yield put({ type: 'saveRelevanceGoods', payload: data });
                     // 请求成功，关闭loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
+
+                    // 请求相似数据
+                   /* yield put({ type: 'fetchSimilarGoodsList'});*/
+
                 }
+
             } catch (e) {
                 // 请求成功，关闭loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                console.log('catch:', e)
+                console.log(e)
             }
         },
 
@@ -138,15 +142,17 @@ export default {
 
             try {
                 //const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
+                // 目前是虚拟数据
                 const data = similarGoodsList;
-                console.log('fetchSimilarGoodsList', data)
 
                 // 保存数据
                 if (data) {
                     yield put({ type: 'saveSimilarGoodsList', payload: data });
+
+                    console.log('fetchSimilarGoodsList', data)
                 }
             } catch (e) {
-                console.log('catch:', e)
+                console.log(e)
             }
         },
 
@@ -183,29 +189,32 @@ export default {
             try {
 
                 const { data } = yield call(BgService.setRelevanceGoods, payload);
-                console.log('post',data)
+
                 // 保存数据
-                if (data.status === 1) {
-                    // 请求数据时，显示loading状态
+                if (data.code === 200) {
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: true } });
                 }else{
-                    // 请求数据时，显示loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
                 }
             } catch (e) {
-                console.log(e)
 
-                // 请求数据时，显示loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
+
+                console.log(e)
             }
         }
     },
     subscriptions: {
         setup({ dispatch, history }) {
-            dispatch({ type: 'fetchSimilarGoodsList' });
+            return history.listen(({ pathname, query }) => {
+                // 载入相识商品
+                if (pathname === '/create') {
+                    dispatch({ type: 'fetchSimilarGoodsList' });
+                }
+            })
         },
     },
 

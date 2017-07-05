@@ -15,18 +15,7 @@ const defautSite = ["banggood", "gearbest"];
 const defautCate = [
 {
     value: 'banggood',
-    label: 'banggood',
-    children: [{
-        value: "40564",
-        label: "Electronics",
-        parent_cid: "0",
-        site: "banggood"
-    }, {
-        value: "41100",
-        label: "",
-        parent_cid: "0",
-        site: "banggood"
-    }, ]
+    label: 'banggood'
 }]
 
 // 默认品牌
@@ -37,10 +26,6 @@ const defautBrand = [{
 }, {
     bid: "3",
     bname: "GTeng",
-    site: "gearbest"
-}, {
-    bid: "4",
-    bname: "Furibee",
     site: "gearbest"
 }]
 
@@ -74,13 +59,11 @@ export default {
                 const { data } = yield call(menusService.getMenuCate);
 
                 // 存储数据
-                if (data.status == 1) {
+                if (data) {
                     yield put({ type: 'saveCate', payload: data });
-                } else {
-                    console.log("获取分类失败：", data.msg)
                 }
             } catch (e) {
-                console.log('catch', e.message)
+                console.log(e.message)
             }
         },
 
@@ -91,21 +74,19 @@ export default {
                 const { data } = yield call(menusService.getMenuBrand);
 
                 // 存储数据
-                if (data.status == 1) {
+                if (data) {
                     yield put({ type: 'saveBrand', payload: data });
-                } else {
-                    console.log('获取品牌失败：', data.msg)
-                }
-
+                } 
+                
             } catch (e) {
-                console.log('catch', e.message)
+                console.log(e.message)
             }
         },
 
     },
     subscriptions: {
         setup({ dispatch, history }) {
-
+            
             dispatch({ type: 'getCates' });
             dispatch({ type: 'getBrands' });
 

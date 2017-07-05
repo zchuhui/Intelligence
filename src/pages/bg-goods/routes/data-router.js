@@ -48,6 +48,24 @@ class BgRouter extends React.Component {
         })
     }
 
+    // 根据商品的pid获取对比数据
+    getGoodsContrastDataByPid(pid){
+        this.props.dispatch({
+            type:'RelevanceBG/fetchGoodsContrastDataByPid',
+            payload:{
+                pid:pid,
+            }
+        })
+    }
+
+    // 清空对比数据
+    clearGoodsContrastData(args){
+        this.props.dispatch({
+            type:'RelevanceBG/clearGoodContrastData',
+            payload:{}
+        })
+    }
+
 
     render() {
         return (
@@ -58,12 +76,18 @@ class BgRouter extends React.Component {
                     
                 />
                 <GoodsList 
-                    data={this.props.data}
+                    data={this.props.data} 
                     loading={this.props.loading} 
-                    goodsEchartData={this.props.goodsEchartData}
-                    goodsEchartDataLoading={this.props.goodsEchartDataLoading}
-                    changePagination={current => this.changePagination(current)}
-                    getGoodsEcharData={args => this.getGoodsEcharData(args)}
+                    changePagination={current => this.changePagination(current)} 
+
+                    goodsEchartData={this.props.goodsEchartData} 
+                    goodsEchartDataLoading={this.props.goodsEchartDataLoading} 
+                    getGoodsEcharData={args => this.getGoodsEcharData(args)} 
+
+                    getGoodsContrastDataByPid={pid => this.getGoodsContrastDataByPid(pid)} 
+                    clearGoodsContrastData={args => this.clearGoodsContrastData(args)}
+                    goodContrastData={this.props.goodContrastData}
+                    goodContrastDataLoading={this.props.goodContrastDataLoading} 
 
                 />
             </MainLayout>
@@ -76,26 +100,31 @@ function mapStateToProps(state) {
     // 菜单
     const menus = state.Menus;
 
-    // 竞品表数据
-    const { data, 
-        searchArgs, 
-        loading, 
-        goodsEchartData, 
-        goodsEchartDataLoading 
+    // BG表数据
+    const { 
+        data,                     // BG 表数据
+        searchArgs,               // 搜索参数
+        loading,                  // BG 表加载状态
+        goodsEchartData,          // 主商品趋势图
+        goodsEchartDataLoading,   // 主商品趋势图加载状态
+        goodContrastData,         // 商品对比数据
+        goodContrastDataLoading,  // 商品对比数据加载状态
     } = state.RelevanceBG;
-    console.log(goodsEchartData)
+    
+
     if (data) {
-        // 遍历数据，转换成组件可用的数据
+        // 遍历列表数据，转换成组件可用的数据
         data.list.map((item, index) => {
             
             // 添加key，不然会报错
             item['key'] = `td_${index}`; 
 
             if (item.relate_info) {
-
                 let array = Object.keys(item.relate_info).map((el) => {
+                    // 添加children标示
+                    item.relate_info[el]['isChildren'] = 1;
                     return item.relate_info[el];
-                })
+                });
                 item['children'] = array;
             }
         });
@@ -113,6 +142,10 @@ function mapStateToProps(state) {
         // 趋势图模块
         goodsEchartData,
         goodsEchartDataLoading,
+
+        // 商品对比数据
+        goodContrastData,
+        goodContrastDataLoading
     };
 }
 

@@ -170,7 +170,7 @@ class CreateRelevance extends React.Component {
     										<Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
                                             <Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
                         					{
-                                                this.props.goodsBySite.status?
+                                                this.props.goodsBySite.code==200?
                                                 <Button style={{ marginLeft:5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
                                                 : null
                                                 
@@ -178,7 +178,7 @@ class CreateRelevance extends React.Component {
                                             
                                             <span style={{ marginLeft:10,color:'red' }}>
                                                 {
-                                                    this.props.goodsBySite.status?
+                                                    this.props.goodsBySite.code==200?
                                                     <span>{this.props.goodsBySite.msg}</span>
                                                     :<span>{this.props.goodsBySite.msg}</span>
                                                 }
@@ -350,7 +350,7 @@ class CreateRelevance extends React.Component {
 
     // 跳转到步骤二
     toStepTwo() {
-        if (this.props.goods.status === 1) {
+        if (this.props.goods.code === 200) {
             this.setState({
                 step1: 'none',
                 step2: '',
@@ -485,7 +485,7 @@ class CreateRelevance extends React.Component {
         let goodsite= this.props.goodsBySite;
 
         // 如果已有数据
-        if (goodsite.status == 1) {
+        if (goodsite.code == 200) {
 
             // 加入已选队列中
             const relevanceArray = this.state.relevanceGoodsList;
@@ -547,7 +547,7 @@ class CreateRelevance extends React.Component {
 
 
 function mapStateToProps(state) {
-
+    
     const { 
         goods,                    // 步骤选择的商品
         similarGoodsList,         // 相似的商品列表
@@ -556,8 +556,8 @@ function mapStateToProps(state) {
         goodsBySite               // 手动添加的相似商品
     } = state.createRelevanceModel;
 
-        //console.log('setRevanceStatus',setRevanceStatus);
-
+        //console.log('similarGoodsList',similarGoodsList);
+        
 
     return {
         goods: goods,

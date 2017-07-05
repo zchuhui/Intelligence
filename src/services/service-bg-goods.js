@@ -116,3 +116,17 @@ export function fetchGoodsEchartByPidAndTime(args) {
   	return request(url);	
 }
 
+
+/**
+ * 获取对比商品数据
+ * @param  {[type]} pid [商品pid]
+ * @return {[type]}     [data]
+ */
+export function fetchGoodsContrastData(pid){
+
+    let argumentStr = `com=api&t=getBgRelateProductComtrastInfo&pid=${pid}`;
+
+    let url = `${Url}?${argumentStr}`;
+    
+    return request(url);    
+}

@@ -6,9 +6,10 @@
 
 import * as usersService from '../services/users';
 import localStorage from '../utils/localStorage';
+import {CODE200} from '../constants/constant';
 
-// 一天
-const oneDay = 60 * 24;
+// 天数，设定为保存一周
+const dayCount = 60 * 24 * 7;
 
 export default {
     namespace: 'User',
@@ -46,7 +47,6 @@ export default {
     effects: {
         // 点击登录
         * login({ payload }, { select, call, put }) {
-
             try{
                 // 显示加载状态
                 yield put({ type: 'showLoading' });
@@ -54,28 +54,26 @@ export default {
                 // 开始请求数据
                 const { data } = yield call(usersService.login, payload.loginInfo);
 
-                if (data.status == 1) {
+                if (data.code == CODE200) {
 
                     // 存储数据
                     yield put({ type: 'save', payload: data });
 
                     // 存储用户名、密码
-                    localStorage.set('username', payload.loginInfo.username, oneDay);
-                    localStorage.set('password', payload.loginInfo.password, oneDay);
-                    localStorage.set('loginStatus', 1, oneDay);
+                    localStorage.set('username', payload.loginInfo.username, dayCount);
+                    localStorage.set('password', payload.loginInfo.password, dayCount);
+                    localStorage.set('loginStatus', 1, dayCount);
 
                     // 转到BG页
                     window.location.href = "/bg";
 
                 } else {
-                    console.log('登录失败：',data.msg)
-
                     // 传入失败信息，用于页面展示
                     yield put({ type: 'save', payload: data });
                 }
             }
             catch(e){
-                console.log('catch',e.message)
+                console.log(e.message)
             }
 
 
@@ -133,8 +131,6 @@ export default {
 
             // 判断是否存在，存在则自动获取登录信息，不在请求
             if (username && password) {
-
-                console.log('本地已有数据，自登录');
 
                 const loginInfo = {
                     username: username,

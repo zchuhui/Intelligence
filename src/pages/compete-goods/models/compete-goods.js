@@ -48,18 +48,22 @@ export default {
     effects: {
         // 获取数据
         * query({ payload }, { select, call, put }) {
-            //const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'showLoading', payload: { loading: true } });
-            // 开始请求数据
-            const { data } = yield call(competeServices.fetch, payload);
-            //console.log(data)
-            // 保存数据
-            if (data) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log("data null")
+            try{
+                // 请求数据时，显示loading状态
+                yield put({ type: 'showLoading', payload: { loading: true } });
+
+                // 开始请求数据
+                const { data } = yield call(competeServices.fetch, payload);
+
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data });
+                } 
+            }
+            catch(e){
+                yield put({ type: 'showLoading', payload: { loading: false } });
+                console.log(e);
             }
 
         },
@@ -67,23 +71,26 @@ export default {
         // 搜索
         * search({ payload }, { select, call, put }) {
 
-            // 更新参数到state,并取回来当搜索参数
-            yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
+            try{
+                // 更新参数到state,并取回来当搜索参数
+                yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'showLoading', payload: { loading: true } });
+                // 请求数据时，显示loading状态
+                yield put({ type: 'showLoading', payload: { loading: true } });
 
 
-            const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
+                const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
 
-            // 开始请求数据
-            const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
+                // 开始请求数据
+                const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
 
-            // 保存数据
-            if (data) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log("data null")
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data });
+                } 
+
+            }catch(e){
+                yield put({ type: 'showLoading', payload: { loading: false } });
             }
 
         },
@@ -91,20 +98,23 @@ export default {
         // 分页
         * paginationQuery({ payload }, { select, call, put }) {
 
-            // 请求数据时，显示loading状态
-            yield put({ type: 'showLoading', payload: { loading: true } });
+            try{
+                // 请求数据时，显示loading状态
+                yield put({ type: 'showLoading', payload: { loading: true } });
 
-            let searchArgs = yield select(state => state.CompeteGoods.searchArgs);
-            searchArgs.page = payload.page;
+                let searchArgs = yield select(state => state.CompeteGoods.searchArgs);
+                searchArgs.page = payload.page;
 
-            // 开始请求数据
-            const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
+                // 开始请求数据
+                const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
 
-            // 保存数据
-            if (data) {
-                yield put({ type: 'save', payload: data });
-            } else {
-                console.log("data null")
+                // 保存数据
+                if (data) {
+                    yield put({ type: 'save', payload: data });
+                }
+            }catch(e){
+                yield put({ type: 'showLoading', payload: { loading: false } });
+                console.log(e)
             }
         }
 

@@ -9,8 +9,11 @@ import { Link } from 'dva/router';
 import styles from './goods-list.less';
 import moment from 'moment';
 import echarts from 'echarts';
-import { Table, Pagination, Icon, Menu, Dropdown, 
-    Button, message, Modal, DatePicker, Checkbox, Select, Radio,Spin } from 'antd';
+import { 
+    Table, Pagination, Icon, Menu, Dropdown, 
+    Button, message, Modal, DatePicker, Checkbox, 
+    Select, Radio, Spin, Row, Col
+} from 'antd';
 
 
 const { Column, ColumnGroup } = Table;
@@ -46,9 +49,15 @@ class GoodsList extends React.Component {
                 checkAll: false,
             },
 
+            //主商品趋势图
             goodsEchartVisible:false,
             goodsEchartPid:0,
             goodsEchartRadioValue:1,
+
+            //对比
+            goodsContrastVisible:false,
+            goodContrastData:[],
+        
         }
 
     }
@@ -60,20 +69,46 @@ class GoodsList extends React.Component {
             {
                 title: "主图",
                 key: "img_url",
-                render: (text, record) => (<img src={ record.img_url} className={ styles.img } />),
+                render: (text, record) => (
+                    <span>
+                        {
+                            !record.isChildren?
+                            <img src={ record.img_url} className={ styles.img } />
+                            :null
+                        }
+                       
+                   </span>
+                    
+                ),
             }, {
                 title: "编码",
                 dataIndex: "sku",
                 key: "sku",
+                render:(text,record) => (
+                    <span>
+                        {
+                            !record.isChildren?
+                            record.sku
+                            :null
+                        }
+                   </span>
+                )
             }, {
                 title: "操作",
                 dataIndex: "pid",
                 render: (text, record) => (
-                   <Dropdown overlay={this.tableColumnsMenu(record.pid)}>
-                        <Button>
-                          操作 <Icon type="down" />
-                        </Button>
-                  </Dropdown>
+                   <span>
+                        {
+                            !record.isChildren?
+                            <Dropdown overlay={this.tableColumnsMenu(record.pid)}>
+                                <Button>
+                                  操作 <Icon type="down" />
+                                </Button>
+                          </Dropdown>
+                          :null
+                        }
+                       
+                   </span>
                 ),
             }, {
                 title: "站点",
@@ -127,126 +162,15 @@ class GoodsList extends React.Component {
 
 				{ /* 操作栏 start*/ }
             	<div className={ styles.clear } style={{ paddingBottom:20 }}>
-            		
-            		{/*<RangePicker
-				      ranges={{ 今天: [moment(), moment()],
-				      	'本周': [moment(), moment().endOf('week')], 
-				      	'本月': [moment(), moment().endOf('month')] }}
-				      	format="YYYYMMDD"
-				      	style={{width:240}}
-				      onChange={this.onSearchDateQuantum.bind(this)}
 
-				    />*/}
-
-				    <Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>
-            		<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>
+				    {/*<Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>*/}
+            		{/*<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>*/}
             		<Button className={styles.fr} style={{marginRight:10}}><Link to='/create'>创建关系</Link></Button>
                     
-            		{/*自定义列弹框 star*/}
-				    <Modal
-			            title="自定义列"
-			            visible={this.state.customRowVisible}  
-			            onCancel={this.hideCustomRowModal} 
-			            okText="确认"
-          			    cancelText="取消"
-          			    footer={null}
-			        	>
-			        	<div>
-			        		开发中...
-			        	</div>
-			        </Modal>
-			    	{/*自定义列弹框 end*/}
-
-			    	{/*自定义竞品弹框 star*/}
-			        <Modal
-			            title="自定义竞品"
-			            visible={this.state.customGoods.visible}  
-			            onCancel={this.hideCustomGoodsModal} 
-			            okText="确认"
-          			    cancelText="取消"
-          			    footer={null}
-			        	>
-			        	<div>
-			        		<div>
-					          <Checkbox
-					            indeterminate={this.state.customGoods.indeterminate}
-					            onChange={this.onCheckAllChange}
-					            checked={this.state.customGoods.checkAll}>
-					            全选
-					          </Checkbox>
-					        </div>
-					        <div style={{ maxWidth:400,margin:'20px 0' }}>
-					       	    <CheckboxGroup 
-					       	    	options={plainOptions} 
-					       	    	value={this.state.customGoods.checkedList} 
-					       	    	onChange={this.onCustomChange} />
-					        </div>
-					        <div style={{ textAlign:'center'}}><Button type='primary' onClick={this.onCustomOK.bind(this)}>确定</Button></div>
-			        	</div>
-			        </Modal>
-			    	{/*自定义竞品弹框 end*/}
-
-                    {/*主商品趋势图弹框 star*/}
-                    <Modal
-                        title="主体商品的趋势图"
-                        visible={this.state.goodsEchartVisible}  
-                        onCancel={this.hideGoodsEchartModal} 
-                        okText="确认"
-                        cancelText="取消"
-                        footer={null}
-                        width={800}
-                        >
-                        <div style={{ }}>
-                            <div>
-                                {
-                                    /*<div style={{display:'inline-block',height:40, width:'60%',verticalAlign:'top'}}>
-                                    <RadioGroup onChange={ this.selectOption.bind(this) } value={this.state.goodsEchartRadioValue}>
-                                        <Radio value={1}>价格</Radio>
-                                        <Radio value={2}>销量</Radio>
-                                        <Radio value={3}>评论</Radio>
-                                        <Radio value={4}>评分</Radio>
-                                        <Radio value={5}>关注</Radio>
-                                    </RadioGroup>
-                                     </div>*/
-
-                                }
-
-                                <div style={{display:'inline-block',
-                                    height:40,}}>
-                                    <RangePicker onChange={ this.getGoodsEcharData }
-                                        defaultValue={[
-                                            moment().startOf('month'), 
-                                            moment().endOf('month')
-                                        ]}  
-                                        ranges={{ 今天: [moment(), moment()],
-                                        '本周': [moment(), moment().endOf('week')], 
-                                        '本月': [moment(), moment().endOf('month')] }}
-                                        format="YYYY-MM-DD"
-                                        style={{width:240, margin:'0 auto'}}
-                                        ref='echartTime'
-                                    />
-                                </div>
-                            </div>
-                            <div style={{width:768,height:550,position:'relative'}}>
-                                { 
-                                    this.props.goodsEchartDataLoading==false?
-                                    <div style={{width:768,height:550,textAlign:'center',position:'absolute',background:'rgba(49,151,235,0.1)',zIndex:1000}}>
-                                        <Spin tip="Loading..." style={{ marginTop:250 }}/>
-                                    </div>
-                                    :null
-                                }
-                                <div id="echartId" ref='echartId' style={{width:768,height:500,margin:'0 auto'}}></div>
-                                
-                            </div>
-                        </div>
-                    </Modal>
-                    {/*主商品趋势图弹框 end*/}
-
             	</div>
             	{ /* 操作栏 end*/ }
 
             	<div className={ styles.tableWrap }>
-
 					{ /* 数据列表 start */ }
 					<Table 
 						dataSource={ this.props.data.list }
@@ -254,7 +178,6 @@ class GoodsList extends React.Component {
 						pagination={false} 
 						columns={tableColumns}
 						indentSize = {30}
-
 						>
 						
 					  </Table>
@@ -274,12 +197,156 @@ class GoodsList extends React.Component {
 					{/* 分页 end */}
 
 				</div>
+
+
+                {/*自定义列弹框 star*/}
+                <Modal
+                    title="自定义列"
+                    visible={this.state.customRowVisible}  
+                    onCancel={this.hideCustomRowModal} 
+                    okText="确认"
+                    cancelText="取消"
+                    footer={null}
+                    >
+                    <div>
+                        开发中...
+                    </div>
+                </Modal>
+                {/*自定义列弹框 end*/}
+
+
+                {/*自定义竞品弹框 star*/}
+                <Modal
+                    title="自定义竞品"
+                    visible={this.state.customGoods.visible}  
+                    onCancel={this.hideCustomGoodsModal} 
+                    okText="确认"
+                    cancelText="取消"
+                    footer={null}
+                    >
+                    <div>
+                        <div>
+                          <Checkbox
+                            indeterminate={this.state.customGoods.indeterminate}
+                            onChange={this.onCheckAllChange}
+                            checked={this.state.customGoods.checkAll}>
+                            全选
+                          </Checkbox>
+                        </div>
+                        <div style={{ maxWidth:400,margin:'20px 0' }}>
+                            <CheckboxGroup 
+                                options={plainOptions} 
+                                value={this.state.customGoods.checkedList} 
+                                onChange={this.onCustomChange} />
+                        </div>
+                        <div style={{ textAlign:'center'}}><Button type='primary' onClick={this.onCustomOK.bind(this)}>确定</Button></div>
+                    </div>
+                </Modal>
+                {/*自定义竞品弹框 end*/}
+
+
+                {/*主商品趋势图弹框 star*/}
+                <Modal
+                    title="主体商品的趋势图"
+                    visible={this.state.goodsEchartVisible}  
+                    onCancel={this.hideGoodsEchartModal} 
+                    okText="确认"
+                    cancelText="取消"
+                    footer={null}
+                    width={800}
+                    >
+                    <div style={{ }}>
+                        <div>
+                            <div style={{display:'inline-block',
+                                height:40,}}>
+                                <RangePicker onChange={ this.getGoodsEcharData }
+                                    defaultValue={[
+                                        moment().startOf('month'), 
+                                        moment().endOf('month')
+                                    ]}  
+                                    ranges={{ 今天: [moment(), moment()],
+                                    '本周': [moment(), moment().endOf('week')], 
+                                    '本月': [moment(), moment().endOf('month')] }}
+                                    format="YYYY-MM-DD"
+                                    style={{width:240, margin:'0 auto'}}
+                                    ref='echartTime'
+                                />
+                            </div>
+                        </div>
+                        <div style={{width:768,height:550,position:'relative'}}>
+                            {
+                                this.props.goodsEchartDataLoading==false?
+                                <div style={{width:768,height:550,textAlign:'center',position:'absolute',background:'rgba(255,255,255,0.7)',zIndex:1000}}>
+                                    <Spin tip="Loading..." style={{ marginTop:250 }}/>
+                                </div>
+                                :null
+                            }
+                            <div ref='echartId' style={{width:768,height:500,margin:'0 auto'}}></div>
+                            
+                        </div>
+                    </div>
+                </Modal>
+                {/*主商品趋势图弹框 end*/}
+
+
+                {/* 商品对比弹框 star*/}
+                <Modal
+                    title="对比（多个商品对比模式）"
+                    visible={this.state.goodsContrastVisible}
+                    onCancel={this.hideGoodsContrastTable}
+                    footer={null}
+                    width={900}
+                    >
+                    {
+                        this.goodsContrastTable()
+                    }
+                </Modal>
+                {/* 商品对比弹框 end*/}
 			</div>
         )
     }
 
-    // 主表Columns里面的menu
-    tableColumnsMenu(record){
+
+    componentDidMount() {
+
+        /* this.setState({
+            goodContrastData:this.props.goodContrastData,
+        });*/
+
+        //console.log('state',this.state.goodContrastData)
+
+    }
+
+    // 数据变动，渲染完成后，执行
+    componentDidUpdate(prevProps, prevState) {
+
+        // 主商品趋势图载入
+        if (this.props.goodsEchartDataLoading) {
+            this.loadEchart();
+        }
+
+        // 对比商品趋势图载入
+        if (this.props.goodContrastDataLoading) {
+
+            this.timeout(1000).then((value) => {
+                  this.eachEcharts();
+            });
+        }
+
+    }
+
+
+
+    // 异步定时器
+    timeout = (ms) => {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, ms, 'done');
+      });
+    }
+
+
+    // 主表操作菜单
+    tableColumnsMenu = (record) => {
         return (
             <Menu onClick={this.onClickSelct.bind(this,record)}>
                 <Menu.Item key="0">
@@ -291,11 +358,216 @@ class GoodsList extends React.Component {
             </Menu>
         )
     }
+    
+    // 对比商品模块
+    goodsContrastTable = () => {
+        return(
+            <div className={styles.contrastTableWrap}>
+                {   
+                    this.props.goodContrastDataLoading == false?
+                    <div style={{width:900,height:500,textAlign:'center',background:'rgba(255,255,255,0.5)'}}>
+                        <Spin tip="Loading..." style={{ marginTop:250 }}/>
+                    </div>
+                    :
+                    <div>
+                        {
+                            this.props.goodContrastData.info?
+                            <Row>
+                                <Col span={4}>
+                                    <ul className={styles.tableColTitle}>
+                                        <li>商品主图</li>
+                                        <li>站点</li>
+                                        <li>SKU</li>
+                                        <li>类目</li>
+                                        <li>POA</li>
+                                        <li>当前价格</li>
+                                        <li>3天均价</li>
+                                        <li>7天均价</li>
+                                        <li>30天均价</li>
+                                        <li>历史均价</li>
+                                        <li>销量</li>
+                                        <li>评分</li>
+                                        <li className={ styles.chartWrap}>价格</li>
+                                        <li className={ styles.chartWrap}>销量</li>
+                                        <li className={ styles.chartWrap}>评论</li>
+                                    </ul>
+                                </Col>
+                                {/*BG 商品*/}
+                                <Col span={10}>
+                                        <ul className={styles.tableCol}>
+                                            <li><img src={this.props.goodContrastData.info.img_url}/></li>
+                                            <li>{this.props.goodContrastData.info.site}</li>
+                                            <li>{this.props.goodContrastData.info.sku}</li>
+                                            <li>{this.props.goodContrastData.info.cateName}</li>
+                                            <li>{this.props.goodContrastData.info.sku}</li>
+                                            <li>{this.props.goodContrastData.info.price}</li>
+                                            <li>{this.props.goodContrastData.info.threePrice}</li>
+                                            <li>{this.props.goodContrastData.info.sevenPrice}</li>
+                                            <li>{this.props.goodContrastData.info.thirtyPrice}</li>
+                                            <li>{this.props.goodContrastData.info.historyPrice}</li>
+                                            <li>{this.props.goodContrastData.info.sales}</li>
+                                            <li>{this.props.goodContrastData.info.score}</li>
 
-    // 数据变动，渲染完成后，执行
-    componentDidUpdate(prevProps, prevState) {
-        if (this.props.goodsEchartDataLoading) {
-            this.loadEchart();
+                                            <li className={ styles.chartWrap}><div ref='priceSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
+                                            <li className={ styles.chartWrap}><div ref='salesSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
+                                            <li className={ styles.chartWrap}><div ref='scoreSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
+
+                                        </ul>
+                                </Col>
+                                {/*关联的商品*/}
+                                {
+                                    this.props.goodContrastData.relateInfo.map((item,index) => {
+                                        let sets = [];
+                                        if (index == 0) {
+                                            sets = ['priceSet1','salesSet1','scoreSet1']
+                                        }
+                                        else if (index == 1) {
+                                            sets = ['priceSet2','salesSet2','scoreSet2']
+                                        }
+
+                                        return(
+                                            <ul className={styles.tableCol}>
+                                                <li><img src={item.img_url}/></li>
+                                                <li>{item.site}</li>
+                                                <li>{item.sku}</li>
+                                                <li>{item.cateName}</li>
+                                                <li>{item.sku}</li>
+                                                <li>{item.price}</li>
+                                                <li>{item.threePrice}</li>
+                                                <li>{item.sevenPrice}</li>
+                                                <li>{item.thirtyPrice}</li>
+                                                <li>{item.historyPrice}</li>
+                                                <li>{item.sales}</li>
+                                                <li>{item.score}</li>
+                                                <li className={ styles.chartWrap}>
+                                                    <div ref={ sets[0] } style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                </li>
+                                                <li className={ styles.chartWrap}>
+                                                     <div ref={sets[1]} style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                </li>
+                                                <li className={ styles.chartWrap}>
+                                                     <div ref={sets[2]} style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                </li>
+                                            </ul>
+                                        )
+                                    })  
+                                }
+                            </Row>
+                            :
+                            <div style={{textAlign:'center',paddingTop:250}}>该商品尚未关联</div>
+                        }
+                    </div>
+                }
+            </div>
+        )
+    }
+
+    // 显示对比数据弹框
+    showGoodsContrastTable = (pid) => {
+        
+        this.setState({
+            goodsContrastVisible: true,
+        });
+
+        // 请求数据
+        this.props.getGoodsContrastDataByPid(pid);
+
+
+        this.timeout(3000).then((value) => {
+              this.eachEcharts();
+        });
+
+    }
+
+    // 隐藏对比数据弹框
+    hideGoodsContrastTable = () => {
+        
+        this.props.clearGoodsContrastData();
+
+        this.setState({
+            goodsContrastVisible: false,
+        })
+    }
+
+    // 对比商品Echart图载入
+    eachEcharts = () => {
+
+        // BG 趋势图
+        if (this.refs.priceSet) {
+            this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet);
+            this.loadGoodContrastEchart(this.refs.salesSet,this.props.goodContrastData.info.salesSet);
+            this.loadGoodContrastEchart(this.refs.scoreSet,this.props.goodContrastData.info.scoreSet);
+        }
+
+        // 关联商品Echart图，目前最多只显示两个关联
+        if (this.props.goodContrastData.relateInfo) {
+            this.props.goodContrastData.relateInfo.map((item,index) => {
+                if (index == 0) {
+                    this.loadGoodContrastEchart(this.refs.priceSet1,this.props.goodContrastData.info.priceSet);
+                    this.loadGoodContrastEchart(this.refs.salesSet1,this.props.goodContrastData.info.salesSet);
+                    this.loadGoodContrastEchart(this.refs.scoreSet1,this.props.goodContrastData.info.scoreSet);
+                }
+                if (index == 1) {
+                    this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet);
+                    this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet);
+                    this.loadGoodContrastEchart(this.refs.scoreSet2,this.props.goodContrastData.info.scoreSet);
+                }
+            })
+        }
+    }
+
+    // 载入对比商品数据
+    loadGoodContrastEchart = (id,seriesData) => {
+
+        if (id) {
+            // 初始化Echart
+            let myChart = echarts.init(id);
+            // 获取日期表
+            let sevenDays = this.props.goodContrastData.info.sevenDays
+
+            // 绘制图表
+            myChart.setOption({
+                    tooltip: {},
+                    legend: {
+                    },
+                    xAxis: {
+                        splitNumber: 2,  
+                        scale: true,  
+                        show:false,  
+                        axisLabel:{
+                            interval:0
+                        },
+                        splitLine:{  
+                    　　　　show:false  
+                    　　} ,
+                        data: sevenDays
+                    },
+                    yAxis: {
+                        type : 'value',  
+                        splitNumber: 2,  
+                        scale: true,  
+                        show:false,  
+                        splitLine:{  
+                    　　　　show:false  
+                    　　 } 
+                    },
+                    series: [{
+                        name: '销量',
+                        type: 'line',
+                        itemStyle : {  
+                                normal : {  
+                                    color:'#29a5fe',
+                                    lineStyle:{  
+                                        color:'#29a5fe'  
+                                    }
+                                }  
+                            },  
+                        data: seriesData
+                    }]
+            });
+        }
+        else{
+            console.log('not id')
         }
     }
 
@@ -334,10 +606,12 @@ class GoodsList extends React.Component {
     // 选择操作:对比 or 趋势图
     onClickSelct = (pid,item) => {
         // 趋势图
-        if (item.key==1) {
+        if (item.key == 1) {
             this.showGoodsEchartModal(pid)
         }
-
+        else if(item.key == 0) {
+            this.showGoodsContrastTable(pid);
+        }
     }
 
 
@@ -370,7 +644,6 @@ class GoodsList extends React.Component {
 
     // 载入Echart图
     loadEchart = () => {
-        console.log('loadEchart')
         if (this.refs.echartId) {
             // 基于准备好的dom，初始化echarts实例
             let myChart = echarts.init(this.refs.echartId);
