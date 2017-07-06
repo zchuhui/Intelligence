@@ -71,7 +71,7 @@ class GoodsList extends React.Component {
                 key: "img_url",
                 render: (text, record) => (
                     <span>
-                        {
+                        {   // 子表不显示该项
                             !record.isChildren?
                             <img src={ record.img_url} className={ styles.img } />
                             :null
@@ -85,13 +85,25 @@ class GoodsList extends React.Component {
                 dataIndex: "sku",
                 key: "sku",
                 render:(text,record) => (
-                    <span>
+                    <div >
                         {
                             !record.isChildren?
-                            record.sku
+                            <div>
+                                {record.sku}
+                                <p style={{ marginTop:5}}>
+                                    {   
+                                        // 是否关联，如果为关联，则显示关联连接
+                                        record.relate_sku?
+                                        <Link to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                        :
+                                        <span><Icon type="check-circle-o" />&nbsp;已关联</span>
+                                    }
+                                </p>
+                            </div>
                             :null
                         }
-                   </span>
+                        
+                   </div>
                 )
             }, {
                 title: "操作",
@@ -153,7 +165,17 @@ class GoodsList extends React.Component {
                 title: "分类",
                 dataIndex: "cateName",
                 key: "cateName",
-                className: styles.columnCate
+                className: styles.columnCate,
+                render:(text,record) => (
+                    <span>
+                    {
+                        record.cateName?
+                        record.cateName.split('>').map((item,index) => <p>{item}</p>)
+                        :
+                        record.cateName
+                    }
+                    </span>
+                )
             },
         ]
 
@@ -376,17 +398,16 @@ class GoodsList extends React.Component {
                                 <Col span={4}>
                                     <ul className={styles.tableColTitle}>
                                         <li>商品主图</li>
-                                        <li>站点</li>
-                                        <li>SKU</li>
-                                        <li>类目</li>
-                                        <li>POA</li>
+                                        <li>站点名称</li>
+                                        <li>类目树</li>
+                                        <li>属性</li>
                                         <li>当前价格</li>
-                                        <li>3天均价</li>
-                                        <li>7天均价</li>
                                         <li>30天均价</li>
-                                        <li>历史均价</li>
-                                        <li>销量</li>
-                                        <li>评分</li>
+                                        <li>总销量</li>
+                                        <li>30天销量</li>
+                                        <li>关注量（收藏量）</li>
+                                        <li>评论数</li>
+
                                         <li className={ styles.chartWrap}>价格</li>
                                         <li className={ styles.chartWrap}>销量</li>
                                         <li className={ styles.chartWrap}>评论</li>
@@ -397,16 +418,14 @@ class GoodsList extends React.Component {
                                         <ul className={styles.tableCol}>
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
-                                            <li>{this.props.goodContrastData.info.sku}</li>
                                             <li>{this.props.goodContrastData.info.cateName}</li>
-                                            <li>{this.props.goodContrastData.info.sku}</li>
+                                            <li>{this.props.goodContrastData.info.atids}</li>
                                             <li>{this.props.goodContrastData.info.price}</li>
-                                            <li>{this.props.goodContrastData.info.threePrice}</li>
-                                            <li>{this.props.goodContrastData.info.sevenPrice}</li>
                                             <li>{this.props.goodContrastData.info.thirtyPrice}</li>
-                                            <li>{this.props.goodContrastData.info.historyPrice}</li>
                                             <li>{this.props.goodContrastData.info.sales}</li>
-                                            <li>{this.props.goodContrastData.info.score}</li>
+                                            <li>{this.props.goodContrastData.info.thirtySales}</li>
+                                            <li>{this.props.goodContrastData.info.favorites}</li>
+                                            <li>{this.props.goodContrastData.info.reviews}</li>
 
                                             <li className={ styles.chartWrap}><div ref='priceSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
                                             <li className={ styles.chartWrap}><div ref='salesSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
@@ -429,16 +448,15 @@ class GoodsList extends React.Component {
                                             <ul className={styles.tableCol}>
                                                 <li><img src={item.img_url}/></li>
                                                 <li>{item.site}</li>
-                                                <li>{item.sku}</li>
                                                 <li>{item.cateName}</li>
-                                                <li>{item.sku}</li>
+                                                <li>{item.atids}</li>
                                                 <li>{item.price}</li>
-                                                <li>{item.threePrice}</li>
-                                                <li>{item.sevenPrice}</li>
                                                 <li>{item.thirtyPrice}</li>
-                                                <li>{item.historyPrice}</li>
                                                 <li>{item.sales}</li>
-                                                <li>{item.score}</li>
+                                                <li>{item.thirtySales}</li>
+                                                <li>{item.favorites}</li>
+                                                <li>{item.reviews}</li>
+
                                                 <li className={ styles.chartWrap}>
                                                     <div ref={ sets[0] } style={{width:200,height:100,margin:'0 auto'}}></div>
                                                 </li>

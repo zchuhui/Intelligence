@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import styles from './create-relevance.less';
 import MainLayout from '../../../../components/layout-main/layout-main';
 import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
@@ -93,7 +94,7 @@ class CreateRelevance extends React.Component {
                         			<div className={styles.inputWrap}>
                         				<p>输入BG-SKU，<br/>根据SKU获取其主图并显示</p>
                         				<Input style={{ width:150 }}  placeholder="输入SKU" ref="inputSku"/>
-                        				<Button style={{ marginLeft:5 }} onClick={this.getGoodsBySku.bind(this)}>获取</Button>
+                        				<Button style={{ marginLeft:5 }} onClick={this.getGoodsBySku.bind(this,null)}>获取</Button>
                                         <div style={{ height:50}}>
                                             {
                                                 this.props.goods.msg?
@@ -146,7 +147,9 @@ class CreateRelevance extends React.Component {
                                                                 {
                                                                     item.children.map((item2,index2)=> 
                                                                         <li>
-                                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+
+                                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
                                                                                 <div className={styles.imgWrap}>
                                                                                     <img src={item2.img_url} />
                                                                                 </div>
@@ -196,7 +199,7 @@ class CreateRelevance extends React.Component {
     	                    			{
     	                    				this.state.relevanceGoodsList.map((item,index)=>
     	                    					<li>
-    								    			<div className={styles.goodsShowPanel}>
+    								    			<div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this,index,item)}>
     								    				<div className={styles.imgWrap}><img src={item.img_url} /></div>
     					                    			<p className={styles.brand}>{item.site}</p>
     					                    			<p>SKU: {item.sku}</p>
@@ -210,7 +213,7 @@ class CreateRelevance extends React.Component {
 
     						    	<div style={{ textAlign:'center', height:100, margin:'60px auto'}}>
     						    		<Button style={{ marginRight:10,width:100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
-    						    		<Button type="primary" style={{ width:100 }} onClick={this.toStepThree.bind(this)}>下一步</Button>
+    						    		<Button type="primary" style={{ width:100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
     						    	</div>	
     	                    	</div>
     	                    	
@@ -232,11 +235,13 @@ class CreateRelevance extends React.Component {
                                                 <div style={{textAlign:'center',}}>
                                                     <Icon type="check-circle" style={{fontSize:30, color:'#79bb51',verticalAlign:'top'}}/>
                                                     <span style={{display:'inline-block',height:60, lineHeight:2, marginLeft:10, fontSize:16}}>已成功关联！</span>
+                                                    <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
                                                 </div>
                                                 :
                                                 <div style={{textAlign:'center',}}>
                                                     <Icon type="frown" style={{fontSize:30, color:'#999',verticalAlign:'top'}}/>
                                                     <span style={{display:'inline-block',height:60, lineHeight:2, marginLeft:10, fontSize:16}}>关联失败</span>
+                                                    <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
                                                 </div>
                                             }
                                         </div>
@@ -277,10 +282,21 @@ class CreateRelevance extends React.Component {
         )
     }
 
-    // 获取单个商品
-    getGoodsBySku() {
-        // 获取Input框的sku值
-        let sku = this.refs.inputSku.refs.input.value;
+    // 根据sku获取单个商品
+    getGoodsBySku(urlSku) {
+
+        let sku;
+
+        // 如果已经传入sku，则直接使用，否则获取输入框的sku
+        if (urlSku) {
+            sku = urlSku;
+        }
+        else{
+            // 获取Input框的sku值
+            sku = this.refs.inputSku.refs.input.value;
+        }
+        console.log(sku)
+
         if (sku !== '') {
             // 根据sku获取商品详情
             this.props.dispatch({
@@ -295,7 +311,7 @@ class CreateRelevance extends React.Component {
         }
     }
 
-    // 获取单个商品,根据site and sku
+    // 手动输入sku获取单个商品
     getGoodsBySiteAndSku(){
 
     	// 获取Input框的sku值
@@ -379,7 +395,7 @@ class CreateRelevance extends React.Component {
         const relevanceArray = this.state.relevanceGoodsList;
 
         // 确认已选商品
-        if (relevanceArray.length > 0) {
+        if (relevanceArray.length > 0 && relevanceArray[0]) {
 
             let args = {};
 
@@ -438,33 +454,36 @@ class CreateRelevance extends React.Component {
     // 选择相似产品
     selectSimilarGoods(index,item) {
 
-        // 获取父表
-        let parentKey = this.state.siteKey; 
+        // 所有站点相似商品
         let parentArray = this.state.similarGoodsList;
+        // 该站点的标示
+        let parentKey = this.state.siteKey; 
 
         // 修改子表，呈现选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
+
+            // 循环遍历
             parentArray[parentKey].children.map((obj,childIndex)=>{
                 if (childIndex == index) {
                     obj.select = true;
+                    //console.log(obj.select)
                 }
                 else{
                      obj.select = false;
                 }
             });
 
-            if (parentArray) {
-                this.setState({
-                    similarGoodsList: parentArray
-                })
-            }
+            this.setState({
+                similarGoodsList: parentArray
+            });
+
         }
 
 
-        // 加入已选队列中
+        // 已经选择的商品
     	const relevanceArray = this.state.relevanceGoodsList;
 
-        // 判断是否已选
+        // 判断该商品是否已选
         if (!relevanceArray.contains(item)) {
 
             // 每个子表，只能选中一个，所以引用子表的key赋值
@@ -477,7 +496,7 @@ class CreateRelevance extends React.Component {
 
     }
 
-    // 选择搜索的商品
+    // 选择手动输入的商品
     selectGoodsBySite(){
 
         // 获取site key
@@ -500,21 +519,28 @@ class CreateRelevance extends React.Component {
                     relevanceGoodsList:relevanceArray
                 });
             }
+            else{
 
+            }
+
+            // 取消其他已经选中的
             this.cancelGoodsSelectStyle();
 
         }
     }
 
+
     // 取消相似商品列表的选中状态
     cancelGoodsSelectStyle(){
 
-        // 取消相似商品的选项
-        let parentKey = this.state.siteKey; 
+        // 搜索站点相似商品
         let parentArray = this.state.similarGoodsList;
+        // 当前站点的key
+        let parentKey = this.state.siteKey; 
         
-        // 修改子表，呈现选中状态
+        // 修改子表，取消选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
+
             parentArray[parentKey].children.map((obj,childIndex)=>{
                 if (obj.select == true) {
                     obj.select=false
@@ -529,12 +555,60 @@ class CreateRelevance extends React.Component {
         }
     }
 
+    // 移除已选的商品
+    cancelRelevanceGoods(index,item){
+        // 所有站点的相似商品
+        let parentArray = this.state.similarGoodsList;
+        // 已经选择的商品
+        const relevanceArray = this.state.relevanceGoodsList;
+
+        if (item) {
+
+            // 移除已选商品列表的商品
+            relevanceArray.map((obj,index) => {
+                if (obj.sku == item.sku) {
+                    delete relevanceArray[index];
+                }
+            });
+
+            // 移除相似商品表的选中状态
+            parentArray.map((obj,index) => {
+                obj.children.map((obj2,index2) => {
+                    if (obj2.sku == item.sku) {
+                        obj2.select = false;
+                    }
+                })
+            });
+
+            this.setState({
+                relevanceGoodsList:relevanceArray,
+                similarGoodsList: parentArray
+            });
+        }
+
+    }
+
+
 
     // 第一次实例化时，再render渲染后调用
     componentDidMount() {
-    	this.setState({
-    		similarGoodsList:this.props.similarGoodsList,
-    	})
+        
+        // 如果是点击sku进来的，跳到步骤二
+        if (this.props.params.sku) {
+            this.setState({
+                step1:'none',
+                step2:'',
+            })
+
+            // 根据sku获取商品信息
+            this.getGoodsBySku(this.props.params.sku);
+        }
+
+        // 获取相识商品数据
+        this.setState({
+            similarGoodsList:this.props.similarGoodsList,
+        })
+
     }
 
     // 数据变动时，render渲染后调用
@@ -556,7 +630,7 @@ function mapStateToProps(state) {
         goodsBySite               // 手动添加的相似商品
     } = state.createRelevanceModel;
 
-        //console.log('similarGoodsList',similarGoodsList);
+    console.log('similarGoodsList',similarGoodsList);
         
 
     return {

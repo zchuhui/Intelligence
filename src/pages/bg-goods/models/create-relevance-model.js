@@ -39,19 +39,9 @@ const similarGoodsList =
         select: false,
     }
     ]
-}, {
-    tname: 'aliexpress',
-    tkey: 1,
-    children: []
-},
-{
+},{
     tname: 'lightinthebox',
     tkey: 3,
-    children: []
-}, 
-{
-    tname: 'amazon',
-    tkey: 5,
     children: []
 }, 
 {
@@ -126,7 +116,7 @@ export default {
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
 
                     // 请求相似数据
-                   /* yield put({ type: 'fetchSimilarGoodsList'});*/
+                    //yield put({ type: 'fetchSimilarGoodsList'});
 
                 }
 
@@ -210,8 +200,11 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname, query }) => {
-                // 载入相识商品
-                if (pathname === '/create') {
+                
+                pathname = pathname.split('/')[1];
+
+                if (pathname == 'create') {
+                    // 载入相识商品
                     dispatch({ type: 'fetchSimilarGoodsList' });
                 }
             })

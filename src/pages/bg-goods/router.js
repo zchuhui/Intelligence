@@ -8,7 +8,9 @@ function RouterConfig({ history }) {
     return (
         <Router history={history}>
       		<Route path="/" component={ DataRouter } />
-      		<Route path="/create" component={ CreateRelevance } />
+      		<Route path="/create" component={ CreateRelevance }>
+      			<Route path="/create/:sku" component={ CreateRelevance } />
+      		</Route>
    		</Router>
     );
 }

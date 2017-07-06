@@ -129,7 +129,7 @@ function mapStateToProps(state) {
             }
         });
     }
-
+    
     return {
         // 搜索模块
         menus,     
