@@ -22,7 +22,6 @@ class BgRouter extends React.Component {
                 searchArgs: args
             }
         });
-
     }
 
     // 分页操作
@@ -104,6 +103,7 @@ function mapStateToProps(state) {
     const { 
         data,                     // BG 表数据
         searchArgs,               // 搜索参数
+        searchArguments,
         loading,                  // BG 表加载状态
         goodsEchartData,          // 主商品趋势图
         goodsEchartDataLoading,   // 主商品趋势图加载状态
@@ -134,6 +134,7 @@ function mapStateToProps(state) {
         // 搜索模块
         menus,     
         searchArgs,
+        searchArguments,
 
         // 列表模块
         data,

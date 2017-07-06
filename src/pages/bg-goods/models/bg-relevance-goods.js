@@ -26,7 +26,7 @@ export default {
             list: [],
         },
         // 搜索参数
-        searchArgs: {
+        searchArguments: {
             site: '',
             cid: '',
             bid: '',
@@ -38,6 +38,7 @@ export default {
             sku: '',
             page: 1
         },
+
         // 主商品趋势图
         goodsEchartData:{},
         goodsEchartDataLoading:false,
@@ -191,8 +192,9 @@ export default {
         // BG表搜索
         * search({ payload }, { select, call, put }) {
             try{
-                // 更新参数到state,并取回来当搜索参数
+                // 更新参数到state
                 yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
+                
 
                 // 请求数据时，显示loading状态
                 yield put({ type: 'toggleLoading', payload: { loading: true } });

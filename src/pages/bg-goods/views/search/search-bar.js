@@ -14,7 +14,7 @@ const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const Option = Select.Option;
 
-// 默认抓取时间为当月
+// 默认抓取时间为当月 
 let firstDay = moment().startOf('month').format('YYYY-MM-DD');
 let endDay = moment().endOf('month').format('YYYY-MM-DD');
 
@@ -25,6 +25,8 @@ class Searcher extends React.Component {
 
         // 搜索条件
         this.state = {
+            status: '',
+
             // value
             args: {
                 site: '',
@@ -50,53 +52,18 @@ class Searcher extends React.Component {
                 price2: '',
                 startTime:'',
                 endTime:'',
-            }
+            },
         }
     }
-
-    /**
-     * 搜索
-     */
-    handlerSearchClick(e) {
-        
-        e.preventDefault();
-
-        // 搜索条件赋值
-        const price1 = document.getElementById('price1').value,
-            price2 = document.getElementById('price2').value,
-            sku = document.getElementById('sku').value;
-
-        this.state.args.price1 = price1;
-        this.state.args.price2 = price2;
-        this.state.args.sku = sku;
-        this.state.args.page = 1;
-
-        this.state.argsShow.price1 = price1;
-        this.state.argsShow.price2 = price2;
-        this.state.argsShow.sku = sku;
-
-        // 开始搜索
-        this.props.handleSearchArgs(this.state.args);
-
-    }
-
 
     render() {
         return (
             <div className={ styles.searchWrap}>
                 <div className={ styles.searchArgs }>
                     <span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
-                    <span id="tagList"></span>
-                    { 
-                        this.getObjectValToArray()
-                        /*this.getObjectValToArray().map((item,index) => 
-                            <span 
-                                className={ styles.tag } 
-                                onClick={this.closeTag.bind(this,item)}
-                                >
-                                { item.label } : { item.value } 
-                            </span>)*/
-                    }
+                    <span id="tagList" ref='tagList'> 
+                        { this.getObjectValToArray() }
+                    </span>
                     
                 </div>
                 <div className={ styles.main }>
@@ -140,15 +107,15 @@ class Searcher extends React.Component {
                             </Select>
 
                             <InputGroup compact className={styles.dateGroup}>
-                                <InputNumber  
+                                <Input
                                     id="price1" 
-                                    min = {0}
+                                    ref = "price1"
                                     style={{ width: 100, textAlign: 'center' }} 
                                     placeholder="价格区间"  />
                                 <Input style={{ width: 24, borderLeft: 0, pointerEvents: 'none' }} placeholder="~" />
-                                <InputNumber  
+                                <Input
                                     id="price2" 
-                                    min = {0}
+                                    ref = "price2"
                                     style={{ width: 100, textAlign: 'center', borderLeft: 0,marginRight:10 }} 
                                     placeholder="价格区间" 
                                 />
@@ -191,6 +158,34 @@ class Searcher extends React.Component {
     }
 
 
+    /**
+     * 搜索
+     */
+    handlerSearchClick = (e) => {
+        e.preventDefault();
+
+        // 搜索条件赋值
+        const price1 = document.getElementById('price1').value,
+            price2 = document.getElementById('price2').value,
+            sku = document.getElementById('sku').value;
+
+        this.state.args.price1 = price1;
+        this.state.args.price2 = price2;
+        this.state.args.sku = sku;
+
+        this.state.argsShow.price1 = price1;
+        this.state.argsShow.price2 = price2;
+        this.state.argsShow.sku = sku;
+
+        this.state.args.page = 1;
+
+
+        // 开始搜索
+        this.props.handleSearchArgs(this.state.args);
+
+    }
+
+
     // 选择分类
     handleCateMenu = (value, selectedOptions) => {
 
@@ -213,15 +208,16 @@ class Searcher extends React.Component {
 
     }
 
+
     /**
-     * 把搜索条件转换成数组
-     * @return {[array]} [字符串数组]
+     * 生成标签
+     * @return {[array]} [标签]
      */
     getObjectValToArray = () => {
 
         const objectArgs = this.state.argsShow;
-
         let str = [];
+
         for (let i in objectArgs) {
             if (objectArgs[i] !== "" && i !== "page") {
                 let tag = this.tagString(i);
@@ -230,7 +226,6 @@ class Searcher extends React.Component {
                     label: tag,
                     value: objectArgs[i]
                 }
-                //str.push(`${tag}:  ${objectArgs[i]}`);
                 str.push(tagObj);
             }
         }
@@ -245,13 +240,16 @@ class Searcher extends React.Component {
                             onClick={this.closeTag.bind(this,item)}
                             >
                             { item.label } : { item.value } 
+                            <Icon type="close" style={{marginLeft:5}} />
                         </span>
+
                     )
                     :null
                 }
             </span>
         )
     }
+
 
     /**
      * 搜索参数显示名称替换
@@ -288,7 +286,6 @@ class Searcher extends React.Component {
         return tagString;
     }
 
-
     /**
      * 获取关联状态
      */
@@ -311,13 +308,56 @@ class Searcher extends React.Component {
         this.state.argsShow.bid = value.label;
     }
 
-    // 关闭标签
+    /**
+     * 关闭标签,并重新搜索
+     * @param  {type} item [标签信息]
+     */
     closeTag = (item) => {
-        console.log(item);
+
+        switch(item.type){
+            case 'sku':
+                this.state.args.sku = '';
+                this.state.argsShow.sku = '';
+                break;
+            case 'price1':
+                this.state.args.price1 = '';
+                this.state.argsShow.price1 = '';
+                this.state.args.price2 = '';
+                this.state.argsShow.price2 = '';
+                break;
+            case 'price2':
+                this.state.args.price1 = '';
+                this.state.argsShow.price1 = '';
+                this.state.args.price2 = '';
+                this.state.argsShow.price2 = '';
+                break;
+            case 'site':
+                this.state.args.site = '';
+                this.state.argsShow.site = '';
+                break;
+            case 'cid':
+                this.state.args.cid = '';
+                this.state.argsShow.cid = '';
+                break;
+            case 'bid':
+                this.state.args.bid = '';
+                this.state.argsShow.bid = '';
+                break;
+            case 'status':
+                this.state.args.status = '';
+                this.state.argsShow.status = '';
+                break;
+        }
+
+        
+        this.setState({status:1});
+
+        // 开始搜索
+        this.props.handleSearchArgs(this.state.args); 
     }
 
     // 根据时间搜索
-    getTime = (date, dateString) => {
+    /*getTime = (date, dateString) => {
 
         if(dateString[0]){
             this.state.args.startTime = dateString[0];
@@ -325,7 +365,8 @@ class Searcher extends React.Component {
 
             this.props.handleSearchArgs(this.state.args);
         }
-    }
+    }*/
+
 }
 
 

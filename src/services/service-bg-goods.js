@@ -25,10 +25,10 @@ export function fetch({ page }) {
  * @return {[type]}      [请求数据的集合]
  */
 export function search(args) {
-
+    
     const argument = args.searchArgs;
-
-    let argumentStr = `com=api&t=getBgProductList&site=banggood`;
+    
+    let argumentStr = `com=api&t=getBgProductList&`;
 
     // 把参数转为url格式
     for (let i in argument) {
