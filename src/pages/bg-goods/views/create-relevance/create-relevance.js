@@ -371,7 +371,7 @@ class CreateRelevance extends React.Component {
                 step1: 'none',
                 step2: '',
 
-                progress2: true
+                progress2: true,
             })
         } else {
             message.warning("请先输入一个商品");
@@ -598,6 +598,8 @@ class CreateRelevance extends React.Component {
             this.setState({
                 step1:'none',
                 step2:'',
+
+                progress2: true,
             })
 
             // 根据sku获取商品信息

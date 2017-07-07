@@ -16,6 +16,15 @@ export function getMenuCate() {
 }
 
 
+// 获取banggood站点的分类菜单
+export function getMenuCateByBanggood() { 
+	
+	let currentUrl = `${Url}?com=api&t=getCateList&site=banggood`;
+
+  	return request(currentUrl);
+}
+
+
 // 获取所有品牌菜单
 export function getMenuBrand() { 
 

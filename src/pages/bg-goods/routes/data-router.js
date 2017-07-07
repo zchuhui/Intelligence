@@ -112,7 +112,7 @@ function mapStateToProps(state) {
     } = state.RelevanceBG;
     
 
-    if (data) {
+    if (data && data.list) {
         // 遍历列表数据，转换成组件可用的数据
         data.list.map((item, index) => {
             
@@ -129,6 +129,8 @@ function mapStateToProps(state) {
             }
         });
     }
+
+    //console.log('menus',menus);
     
     return {
         // 搜索模块

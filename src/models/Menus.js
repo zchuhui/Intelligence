@@ -18,6 +18,13 @@ const defautCate = [
     label: 'banggood'
 }]
 
+// 默认banggood分类
+const defautBanggoodCate = [
+{
+    value: 'Electronics',
+    label: 'Electronics'
+}]
+
 // 默认品牌
 const defautBrand = [{
     bid: "2",
@@ -34,9 +41,9 @@ export default {
     namespace: 'Menus',
 
     state: {
-        site: defautSite, // 站点列表
-        cate: defautCate, // 分类列表
-        brand: defautBrand, // 品牌列表
+        cate: defautCate,   // 所有分类
+        brand: defautBrand, // 品牌
+        banggoodCate: defautBanggoodCate,   // banggood站点分类
     },
     reducers: {
         // 存储分类表
@@ -45,6 +52,14 @@ export default {
             data = cateToMenu(data);
             return {...state, cate: data };
         },
+
+        // 存储Banggood分类表
+        saveBanggoodCate(state, { payload: { data: data } }) {
+            // 把获取数据转为组件可用的数据格式
+            data = cateToMenu(data);
+            return {...state, banggoodCate: data };
+        },
+
         // 存储品牌表
         saveBrand(state, { payload: { data: data } }) {
             return {...state, brand: data };
@@ -61,6 +76,22 @@ export default {
                 // 存储数据
                 if (data) {
                     yield put({ type: 'saveCate', payload: data });
+                }
+            } catch (e) {
+                console.log(e.message)
+            }
+        },
+
+        // 获取分类表
+        * getBanggoodCates({ payload }, { select, call, put }) {
+
+            try {
+                // 获取分类数据
+                const { data, code } = yield call(menusService.getMenuCateByBanggood);
+
+                // 存储数据
+                if (data) {
+                    yield put({ type: 'saveBanggoodCate', payload: data });
                 }
             } catch (e) {
                 console.log(e.message)
@@ -88,6 +119,7 @@ export default {
         setup({ dispatch, history }) {
             
             dispatch({ type: 'getCates' });
+            dispatch({ type: 'getBanggoodCates' });
             dispatch({ type: 'getBrands' });
 
         },

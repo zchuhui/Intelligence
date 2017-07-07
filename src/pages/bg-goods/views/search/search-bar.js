@@ -76,9 +76,13 @@ class Searcher extends React.Component {
                         <div className={ styles.searchLeft }>
 
                             <Cascader 
-                                options={ this.props.menus.cate } 
+                                options={ 
+                                    this.props.menus.banggoodCate[0].children?
+                                    this.props.menus.banggoodCate[0].children
+                                    :this.props.menus.banggoodCate
+                                 } 
                                 placeholder="分类" 
-                                onChange={ this.handleCateMenu } 
+                                onChange={ this.handleCateMenu.bind(this) } 
                                 changeOnSelect 
                                 style={{ marginRight:10, width:300, marginBottom:10}}
                             />
@@ -93,7 +97,9 @@ class Searcher extends React.Component {
                                 >
 
                                 {
+                                    this.props.menus.brand?
                                     this.props.menus.brand.map((i,index) => <Option key={index} value={i.bid}>{i.bname}</Option>)
+                                    :null
                                 }
                             </Select>
 
@@ -192,19 +198,17 @@ class Searcher extends React.Component {
         var len = value.length;
 
         if (len == 1) {
-            this.state.args.site = value[0];
-            this.state.args.cid = '';
-            this.state.argsShow.site = value[0];
-            this.state.argsShow.cid = '';
+            //this.state.args.site = value[0];
+            //this.state.argsShow.site = value[0];
+            this.state.args.cid = value[0];
+            this.state.argsShow.cid = selectedOptions[0].label;
+
         }
         if (len > 1) {
-            this.state.args.site = value[0];
+            //this.state.args.site = value[0];
             this.state.args.cid = value[len - 1];
             this.state.argsShow.cid = selectedOptions[len - 1].label;
         }
-
-
-        //this.props.getMenuBrands(this.state.args.site);   
 
     }
 

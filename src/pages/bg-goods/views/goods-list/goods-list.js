@@ -53,11 +53,15 @@ class GoodsList extends React.Component {
             goodsEchartVisible:false,
             goodsEchartPid:0,
             goodsEchartRadioValue:1,
+            defaultStartDate:moment().startOf('week').format('YYYY-MM-DD'),  //本周第一天
+            defaultEndDate:moment().endOf('week').format('YYYY-MM-DD'),      //本周最后一天
 
             //对比
             goodsContrastVisible:false,
+            goodsContrastSku:null,
             goodContrastData:[],
-        
+
+            
         }
 
     }
@@ -93,10 +97,10 @@ class GoodsList extends React.Component {
                                 <p style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接
-                                        record.relate_sku?
-                                        <Link to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                        record.relate_sku==0?
+                                        <Link  to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
                                         :
-                                        <span><Icon type="check-circle-o" />&nbsp;已关联</span>
+                                        <Link  to={"/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link>
                                     }
                                 </p>
                             </div>
@@ -112,7 +116,7 @@ class GoodsList extends React.Component {
                    <span>
                         {
                             !record.isChildren?
-                            <Dropdown overlay={this.tableColumnsMenu(record.pid)}>
+                            <Dropdown overlay={this.tableColumnsMenu(record)}>
                                 <Button>
                                   操作 <Icon type="down" />
                                 </Button>
@@ -222,7 +226,7 @@ class GoodsList extends React.Component {
 
 
                 {/*自定义列弹框 star*/}
-                <Modal
+                {/*<Modal
                     title="自定义列"
                     visible={this.state.customRowVisible}  
                     onCancel={this.hideCustomRowModal} 
@@ -233,12 +237,12 @@ class GoodsList extends React.Component {
                     <div>
                         开发中...
                     </div>
-                </Modal>
+                </Modal>*/}
                 {/*自定义列弹框 end*/}
 
 
                 {/*自定义竞品弹框 star*/}
-                <Modal
+                {/*<Modal
                     title="自定义竞品"
                     visible={this.state.customGoods.visible}  
                     onCancel={this.hideCustomGoodsModal} 
@@ -263,13 +267,14 @@ class GoodsList extends React.Component {
                         </div>
                         <div style={{ textAlign:'center'}}><Button type='primary' onClick={this.onCustomOK.bind(this)}>确定</Button></div>
                     </div>
-                </Modal>
+                </Modal>*/}
                 {/*自定义竞品弹框 end*/}
 
 
                 {/*主商品趋势图弹框 star*/}
                 <Modal
                     title="主体商品的趋势图"
+                    key="modal1"
                     visible={this.state.goodsEchartVisible}  
                     onCancel={this.hideGoodsEchartModal} 
                     okText="确认"
@@ -282,17 +287,20 @@ class GoodsList extends React.Component {
                             <div style={{display:'inline-block',
                                 height:40,}}>
                                 <RangePicker onChange={ this.getGoodsEcharData }
-                                    defaultValue={[
-                                        moment().startOf('month'), 
-                                        moment().endOf('month')
-                                    ]}  
-                                    ranges={{ 今天: [moment(), moment()],
-                                    '本周': [moment(), moment().endOf('week')], 
-                                    '本月': [moment(), moment().endOf('month')] }}
+                                    value={[
+                                        moment(this.state.defaultStartDate),
+                                        moment(this.state.defaultEndDate)
+                                    ]}
                                     format="YYYY-MM-DD"
                                     style={{width:240, margin:'0 auto'}}
                                     ref='echartTime'
+                                    disabledDate = {this.disabledDate}
                                 />
+                                <span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,3)}>最近3天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
+                                </span>
                             </div>
                         </div>
                         <div style={{width:768,height:550,position:'relative'}}>
@@ -314,6 +322,7 @@ class GoodsList extends React.Component {
                 {/* 商品对比弹框 star*/}
                 <Modal
                     title="对比（多个商品对比模式）"
+                    key="modal2"
                     visible={this.state.goodsContrastVisible}
                     onCancel={this.hideGoodsContrastTable}
                     footer={null}
@@ -329,15 +338,6 @@ class GoodsList extends React.Component {
     }
 
 
-    componentDidMount() {
-
-        /* this.setState({
-            goodContrastData:this.props.goodContrastData,
-        });*/
-
-        //console.log('state',this.state.goodContrastData)
-
-    }
 
     // 数据变动，渲染完成后，执行
     componentDidUpdate(prevProps, prevState) {
@@ -354,7 +354,6 @@ class GoodsList extends React.Component {
                   this.eachEcharts();
             });
         }
-
     }
 
 
@@ -372,10 +371,10 @@ class GoodsList extends React.Component {
         return (
             <Menu onClick={this.onClickSelct.bind(this,record)}>
                 <Menu.Item key="0">
-                  <a rel='xx' href="javascript:;">对比</a>
+                  <a key="cd_1" href="javascript:;">对比</a>
                 </Menu.Item>
                 <Menu.Item key="1">
-                  <a rel='xx' href="javascript:;">趋势图</a>
+                  <a key="cd_2" href="javascript:;">趋势图</a>
                 </Menu.Item>
             </Menu>
         )
@@ -385,7 +384,7 @@ class GoodsList extends React.Component {
     goodsContrastTable = () => {
         return(
             <div className={styles.contrastTableWrap}>
-                {   
+                {    
                     this.props.goodContrastDataLoading == false?
                     <div style={{width:900,height:500,textAlign:'center',background:'rgba(255,255,255,0.5)'}}>
                         <Spin tip="Loading..." style={{ marginTop:250 }}/>
@@ -397,7 +396,7 @@ class GoodsList extends React.Component {
                             <Row>
                                 <Col span={4}>
                                     <ul className={styles.tableColTitle}>
-                                        <li>商品主图</li>
+                                        <li>商品首图</li>
                                         <li>站点名称</li>
                                         <li>类目树</li>
                                         <li>属性</li>
@@ -408,9 +407,9 @@ class GoodsList extends React.Component {
                                         <li>关注量（收藏量）</li>
                                         <li>评论数</li>
 
-                                        <li className={ styles.chartWrap}>价格</li>
-                                        <li className={ styles.chartWrap}>销量</li>
-                                        <li className={ styles.chartWrap}>评论</li>
+                                        <li className={ styles.chartWrap}>价格7天趋势图</li>
+                                        <li className={ styles.chartWrap}>销量7天趋势图</li>
+                                        <li className={ styles.chartWrap}>评论7天趋势图</li>
                                     </ul>
                                 </Col>
                                 {/*BG 商品*/}
@@ -419,7 +418,7 @@ class GoodsList extends React.Component {
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
                                             <li>{this.props.goodContrastData.info.cateName}</li>
-                                            <li>{this.props.goodContrastData.info.atids}</li>
+                                            <li>{this.props.goodContrastData.info.attrName}</li>
                                             <li>{this.props.goodContrastData.info.price}</li>
                                             <li>{this.props.goodContrastData.info.thirtyPrice}</li>
                                             <li>{this.props.goodContrastData.info.sales}</li>
@@ -429,7 +428,7 @@ class GoodsList extends React.Component {
 
                                             <li className={ styles.chartWrap}><div ref='priceSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
                                             <li className={ styles.chartWrap}><div ref='salesSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
-                                            <li className={ styles.chartWrap}><div ref='scoreSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
+                                            <li className={ styles.chartWrap}><div ref='reviewSet' style={{width:200,height:100,margin:'0 auto'}}></div></li>
 
                                         </ul>
                                 </Col>
@@ -438,10 +437,10 @@ class GoodsList extends React.Component {
                                     this.props.goodContrastData.relateInfo.map((item,index) => {
                                         let sets = [];
                                         if (index == 0) {
-                                            sets = ['priceSet1','salesSet1','scoreSet1']
+                                            sets = ['priceSet1','salesSet1','reviewSet1']
                                         }
                                         else if (index == 1) {
-                                            sets = ['priceSet2','salesSet2','scoreSet2']
+                                            sets = ['priceSet2','salesSet2','reviewSet2']
                                         }
 
                                         return(
@@ -449,7 +448,7 @@ class GoodsList extends React.Component {
                                                 <li><img src={item.img_url}/></li>
                                                 <li>{item.site}</li>
                                                 <li>{item.cateName}</li>
-                                                <li>{item.atids}</li>
+                                                <li>{item.attrName}</li>
                                                 <li>{item.price}</li>
                                                 <li>{item.thirtyPrice}</li>
                                                 <li>{item.sales}</li>
@@ -472,7 +471,10 @@ class GoodsList extends React.Component {
                                 }
                             </Row>
                             :
-                            <div style={{textAlign:'center',paddingTop:250}}>该商品尚未关联</div>
+                            <div style={{textAlign:'center',paddingTop:250}}>
+                                <p>你要对比的商品还在天涯海角，试试把TA寻回呗。</p>
+                                <Link  to={"/create/"+this.state.goodsContrastSku}>点击试试</Link>
+                            </div>
                         }
                     </div>
                 }
@@ -481,10 +483,11 @@ class GoodsList extends React.Component {
     }
 
     // 显示对比数据弹框
-    showGoodsContrastTable = (pid) => {
-        
+    showGoodsContrastTable = (pid,sku) => {
+
         this.setState({
             goodsContrastVisible: true,
+            goodsContrastSku:sku
         });
 
         // 请求数据
@@ -514,7 +517,7 @@ class GoodsList extends React.Component {
         if (this.refs.priceSet) {
             this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet);
             this.loadGoodContrastEchart(this.refs.salesSet,this.props.goodContrastData.info.salesSet);
-            this.loadGoodContrastEchart(this.refs.scoreSet,this.props.goodContrastData.info.scoreSet);
+            this.loadGoodContrastEchart(this.refs.reviewSet,this.props.goodContrastData.info.reviewSet);
         }
 
         // 关联商品Echart图，目前最多只显示两个关联
@@ -523,12 +526,12 @@ class GoodsList extends React.Component {
                 if (index == 0) {
                     this.loadGoodContrastEchart(this.refs.priceSet1,this.props.goodContrastData.info.priceSet);
                     this.loadGoodContrastEchart(this.refs.salesSet1,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.scoreSet1,this.props.goodContrastData.info.scoreSet);
+                    this.loadGoodContrastEchart(this.refs.reviewSet1,this.props.goodContrastData.info.reviewSet);
                 }
                 if (index == 1) {
                     this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet);
                     this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.scoreSet2,this.props.goodContrastData.info.scoreSet);
+                    this.loadGoodContrastEchart(this.refs.reviewSet2,this.props.goodContrastData.info.reviewSet);
                 }
             })
         }
@@ -585,7 +588,7 @@ class GoodsList extends React.Component {
             });
         }
         else{
-            console.log('not id')
+            //console.log('not id')
         }
     }
 
@@ -596,6 +599,7 @@ class GoodsList extends React.Component {
             customRowVisible: true
         })
     }
+
     // 显示自定义列弹框
     hideCustomRowModal = () => {
         this.setState({
@@ -612,6 +616,7 @@ class GoodsList extends React.Component {
             }
         })
     }
+
     // 隐藏竞品列弹框
     hideCustomGoodsModal = () => {
         this.setState({
@@ -622,13 +627,13 @@ class GoodsList extends React.Component {
     }
 
     // 选择操作:对比 or 趋势图
-    onClickSelct = (pid,item) => {
+    onClickSelct = (obj,item) => {
         // 趋势图
         if (item.key == 1) {
-            this.showGoodsEchartModal(pid)
+            this.showGoodsEchartModal(obj.pid)
         }
         else if(item.key == 0) {
-            this.showGoodsContrastTable(pid);
+            this.showGoodsContrastTable(obj.pid,obj.sku);
         }
     }
 
@@ -700,9 +705,8 @@ class GoodsList extends React.Component {
         }   
     }
 
-    // 根据pid与时间获取主商品的趋势图
+    // 选择控件日期，获取趋势图数据
     getGoodsEcharData = (date, dateString) => {
-
         // 参数
         let args = {
             pid:this.state.goodsEchartPid,
@@ -714,6 +718,40 @@ class GoodsList extends React.Component {
         this.props.getGoodsEcharData(args);
         
         this.loadEchart(); 
+    }
+
+
+    // 最近N天
+    onLatelyDate = (dayCount) => {
+        // 今天日期
+        let currentDate = moment().format('YYYY-MM-DD');
+        // daycount 前的日期
+        let latelyDate = moment().subtract(dayCount, "days").format("YYYY-MM-DD");
+
+        // 赋值给文本框
+        this.setState({
+            defaultStartDate:latelyDate,
+            defaultEndDate:currentDate,
+        })
+
+
+        // 参数
+        let args = {
+            pid:this.state.goodsEchartPid,
+            startTime:latelyDate,
+            endTime:currentDate
+        }
+
+        // 请求数据
+        this.props.getGoodsEcharData(args);
+        
+        this.loadEchart(); 
+
+    }
+
+    // 限制日期控件只能选今天或今天前的日期
+    disabledDate(current) {
+      return current && current.valueOf() > Date.now();
     }
 
 
