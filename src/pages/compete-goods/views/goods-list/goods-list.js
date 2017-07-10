@@ -25,7 +25,124 @@ class GoodsList extends React.Component {
     }
 
     render() {
-        return (
+
+    	// 主表Columns
+        const tableColumns = [
+            {
+                title: "主图",
+                key: "img_url",
+                render: (text, record) => (
+                    <span>
+                        {   // 子表不显示该项
+                            !record.isChildren?
+                            <img src={ record.img_url} className={ styles.img } />
+                            :null
+                        }
+                       
+                   </span>
+                    
+                ),
+            }, {
+                title: "编码",
+                dataIndex: "sku",
+                key: "sku",
+                render:(text,record) => (
+                    <div >
+                        {
+                            !record.isChildren?
+                            <div>
+                                {record.sku}
+                                <p style={{ marginTop:5}}>
+                                    {   
+                                        // 是否关联，如果为关联，则显示关联连接
+                                       /* record.relate_sku==0?
+                                        <Link  to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                        :
+                                        <Link  to={"/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link>
+                                    */}
+                                </p>
+                            </div>
+                            :null
+                        }
+                        
+                   </div>
+                )
+            },/* {
+                title: "操作",
+                dataIndex: "pid",
+                render: (text, record) => (
+                   <span>
+                        {
+                            !record.isChildren?
+                            <Dropdown overlay={this.tableColumnsMenu(record)}>
+                                <Button>
+                                  操作 <Icon type="down" />
+                                </Button>
+                          </Dropdown>
+                          :null
+                        }
+                       
+                   </span>
+                ),
+            }, */
+            {
+                title: "站点",
+                dataIndex: "site",
+                key: "site",
+            }, {
+                title: "标题",
+                dataIndex: "pname",
+                key: "pname",
+                className: styles.columnTitle
+            }, {
+                title: "价格",
+                dataIndex: "price",
+                key: "price",
+                sorter: (a, b) => a.price - b.price,
+            }, {
+                title: "销量",
+                dataIndex: "sales",
+                key: "sales",
+                sorter: (a, b) => a.sales - b.sales,
+            }, {
+                title: "评分",
+                dataIndex: "score",
+                key: "score",
+                sorter: (a, b) => a.score - b.score,
+            }, {
+                title: "评论数",
+                dataIndex: "reviews",
+                key: "reviews",
+                sorter: (a, b) => a.reviews - b.reviews,
+            }, {
+                title: "关注数",
+                dataIndex: "favorites",
+                key: "favorites",
+                sorter: (a, b) => a.favorites - b.favorites,
+            }, {
+                title: "提问数",
+                dataIndex: "questions",
+                key: "questions",
+                sorter: (a, b) => a.questions - b.questions,
+            }, {
+                title: "分类",
+                dataIndex: "cateName",
+                key: "cateName",
+                className: styles.columnCate,
+                render:(text,record) => (
+                    <span>
+                    {
+                        record.cateName?
+                        record.cateName.split('>').map((item,index) => <p>{item}</p>)
+                        :
+                        record.cateName
+                    }
+                    </span>
+                )
+            },
+        ]
+
+        return (  
 
             <div>
                 <div className={ styles.main } > 
@@ -56,81 +173,20 @@ class GoodsList extends React.Component {
 	            	</div>
 					
 					<div className={ styles.tableWrap }>
-						{ /*表格*/ }
+						{ /* 数据列表 start */ }
 						<Table 
 							expandedRowRender={this.expandedRowRender}
 							dataSource={ this.props.data.list } 
 							loading={ this.props.loading } 
+							columns={tableColumns}
 							pagination={false} 
 							>
-							<Column
-						      title="主图"
-						      key="img_url"
-						      render={(text,record) => (
-									<img src={ record.img_url} className={ styles.img } />
-						      )}
-						    />
-						    <Column
-						      title="编码"
-						      dataIndex="sku"
-						      key="sku"
-						    />
-						    {/*<Column
-						      title="操作"
-						      dataIndex="address"
-						      key="address"
-						    />*/}
-						    <Column
-						      title="站点"
-						      dataIndex="site"
-						      key="site"
-						    />
-						    <Column
-						      title="标题"
-						      dataIndex="pname"
-						      key="pname"
-						      className={ styles.columnTitle }
-						    />
-						     <Column
-						      title="价格"
-						      dataIndex="price"
-						      key="price"
-						    />
-						     <Column
-						      title="销量"
-						      dataIndex="sales"
-						      key="sales"
-						    />
-						     <Column
-						      title="评分"
-						      dataIndex="score"
-						      key="score"
-						    />
-						     <Column
-						      title="评论数"
-						      dataIndex="reviews"
-						      key="reviews"
-						    />
-						     <Column
-						      title="关注数"
-						      dataIndex="favorites"
-						      key="favorites"
-						    />
-						    <Column
-						      title="提问数"
-						      dataIndex="questions"
-						      key="questions"
-						    />
-						     <Column
-						      title="分类"
-						      dataIndex="cateName"
-						      key="cateName"
-						      className={ styles.columnCate }
-						    />
+							
 						  </Table>
+						{ /* 数据列表 end */ }
 						
+						{/* 分页 start*/}
 						<div className={styles.piginationWrap}>
-							{/*分页*/}
 							<Pagination
 					          className="ant-table-pagination"
 					          showQuickJumper 
@@ -140,6 +196,8 @@ class GoodsList extends React.Component {
 					          onChange={this.props.handlePagination.bind(this)}
 					        />
 						</div>
+						{/* 分页 end*/}
+
 					</div>
 				</div>
         	</div>

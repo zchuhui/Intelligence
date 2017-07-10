@@ -15,9 +15,11 @@ const log = ({ item, key }) => {
 class SearchBar extends Component {
     constructor(props, context) {
         super(props, context);
-
+ 
         // 搜索条件
         this.state = {
+            status: '',
+
             args: {
                 site: '',
                 cid: '',
@@ -56,9 +58,11 @@ class SearchBar extends Component {
             <div className={ styles.searchWrap}>
                 <div className={ styles.searchArgs }>
                     <span>筛选范围 <Icon type="right" className={styles.iconRight}/> </span>
-                    <span id="tagList"></span>
+                    <span id="tagList">
+                        { this.getObjectValToArray() }
+                    </span>
                     { 
-                        this.getObjectValToArray().map((item,index) => <Tag className={styles.tag} onClose={ this.delTag.bind(this) }> { item } </Tag>)
+                        /*this.getObjectValToArray().map((item,index) => <Tag className={styles.tag} onClose={ this.delTag.bind(this) }> { item } </Tag>)*/
                     }
                 </div>
                 <div className={ styles.main }>
@@ -194,15 +198,38 @@ class SearchBar extends Component {
     getObjectValToArray = () => {
 
         const objectArgs = this.state.argsShow;
-
         let str = [];
+
         for (let i in objectArgs) {
             if (objectArgs[i] !== "" && i !== "page") {
                 let tag = this.tagString(i);
-                str.push(`${tag}:  ${objectArgs[i]}`);
+                let tagObj = {
+                    type: i,
+                    label: tag,
+                    value: objectArgs[i]
+                }
+                str.push(tagObj);
             }
         }
-        return str;
+
+        return(
+            <span>
+                {
+                    str?
+                    str.map((item,index) => 
+                        <span 
+                            className={ styles.tag } 
+                            onClick={this.closeTag.bind(this,item)}
+                            >
+                            { item.label } : { item.value } 
+                            <Icon type="close" style={{marginLeft:5}} />
+                        </span>
+
+                    )
+                    :null
+                }
+            </span>
+        )
     }
 
     // 搜索参数显示名称替换
@@ -236,6 +263,54 @@ class SearchBar extends Component {
         return tagString;
     }
 
+    /**
+     * 关闭标签,并重新搜索
+     * @param  {type} item [标签信息]
+     */
+    closeTag = (item) => {
+
+        switch(item.type){
+            case 'sku':
+                this.state.args.sku = '';
+                this.state.argsShow.sku = '';
+                break;
+            case 'price1':
+                this.state.args.price1 = '';
+                this.state.argsShow.price1 = '';
+                this.state.args.price2 = '';
+                this.state.argsShow.price2 = '';
+                break;
+            case 'price2':
+                this.state.args.price1 = '';
+                this.state.argsShow.price1 = '';
+                this.state.args.price2 = '';
+                this.state.argsShow.price2 = '';
+                break;
+            case 'site':
+                this.state.args.site = '';
+                this.state.argsShow.site = '';
+                break;
+            case 'cid':
+                this.state.args.cid = '';
+                this.state.argsShow.cid = '';
+                break;
+            case 'bid':
+                this.state.args.bid = '';
+                this.state.argsShow.bid = '';
+                break;
+            case 'status':
+                this.state.args.status = '';
+                this.state.argsShow.status = '';
+                break;
+        }
+
+        
+        this.setState({status:1});
+
+        // 开始搜索
+        this.props.handleSearchArgs(this.state.args); 
+    }
+    
 
 }
 
