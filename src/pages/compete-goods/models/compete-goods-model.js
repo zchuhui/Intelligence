@@ -1,4 +1,12 @@
+/**
+ * 竞品报表 model
+ * Date: 2017-06-01
+ * Author: zhuangchuhui
+ */
+
 import * as competeServices from '../../../services/service-compete-goods';
+import { CODE200 } from '../../../constants/constant';
+
 
 export default {
     namespace: 'CompeteGoods',
@@ -57,13 +65,13 @@ export default {
                 const { data } = yield call(competeServices.fetch, payload);
 
                 // 保存数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
                 } 
             }
             catch(e){
                 yield put({ type: 'showLoading', payload: { loading: false } });
-                console.log(e);
+                console.log(e.message);
             }
 
         },
@@ -78,19 +86,20 @@ export default {
                 // 请求数据时，显示loading状态
                 yield put({ type: 'showLoading', payload: { loading: true } });
 
-
+                // 获取搜索条件
                 const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
 
                 // 开始请求数据
                 const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
 
                 // 保存数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
                 } 
 
             }catch(e){
                 yield put({ type: 'showLoading', payload: { loading: false } });
+                console.log(e.message);
             }
 
         },
@@ -102,6 +111,7 @@ export default {
                 // 请求数据时，显示loading状态
                 yield put({ type: 'showLoading', payload: { loading: true } });
 
+                // 获取搜索条件
                 let searchArgs = yield select(state => state.CompeteGoods.searchArgs);
                 searchArgs.page = payload.page;
 
@@ -109,16 +119,14 @@ export default {
                 const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
 
                 // 保存数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
                 }
             }catch(e){
                 yield put({ type: 'showLoading', payload: { loading: false } });
-                console.log(e)
+                console.log(e.message)
             }
         }
-
-
     },
     subscriptions: {
         setup({ dispatch, history }) {

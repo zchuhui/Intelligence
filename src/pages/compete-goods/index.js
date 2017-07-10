@@ -11,7 +11,7 @@ app.use(createLoading());
 // 3. Model
 app.model(require('../../models/menus'));
 app.model(require('../../models/user'));
-app.model(require('./models/compete-goods'));
+app.model(require('./models/compete-goods-model'));
 
 
 // 4. Router

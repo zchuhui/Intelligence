@@ -1,3 +1,9 @@
+/**
+ * 竞品报表搜索模块
+ * Date: 2017-07-10
+ * Author: zhuangchuhui
+ */
+
 import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, DatePicker, Input, InputNumber, Select, Tag, Cascader } from 'antd';
 import moment from 'moment';
@@ -8,8 +14,6 @@ const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const dateFormat = "YYYY-MM-DD";
 
-const log = ({ item, key }) => {
-}
 
 
 class SearchBar extends Component {
@@ -129,6 +133,7 @@ class SearchBar extends Component {
 
         );
     }
+
 
     // 删除标签（未完成）
     delTag = (item, key) => {

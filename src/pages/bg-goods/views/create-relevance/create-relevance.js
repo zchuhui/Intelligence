@@ -302,12 +302,11 @@ class CreateRelevance extends React.Component {
             // 获取Input框的sku值
             sku = this.refs.inputSku.refs.input.value;
         }
-        console.log(sku)
 
         if (sku !== '') {
             // 根据sku获取商品详情
             this.props.dispatch({
-                type: 'createRelevanceModel/fetchGoodsDetailBySku',
+                type: 'CreateRelevanceModel/fetchGoodsDetailBySku',
                 payload: {
                     site: 'banggood',
                     sku: sku
@@ -336,7 +335,7 @@ class CreateRelevance extends React.Component {
         if (sku !== '') {
             // 根据sku获取商品详情
             this.props.dispatch({
-                type: 'createRelevanceModel/fetchGoodsBySkuAndSite',
+                type: 'CreateRelevanceModel/fetchGoodsBySkuAndSite',
                 payload: {
                     site: site,
                     sku: sku
@@ -362,7 +361,7 @@ class CreateRelevance extends React.Component {
 
         // 清除搜索的商品
         this.props.dispatch({
-            type: 'createRelevanceModel/saveRelevanceGoodsBySite',
+            type: 'CreateRelevanceModel/saveRelevanceGoodsBySite',
             payload: {}
         });
         
@@ -437,7 +436,7 @@ class CreateRelevance extends React.Component {
 
             // 请求：设置关联产品
             this.props.dispatch({
-                type: 'createRelevanceModel/setRelevanceGoods',
+                type: 'CreateRelevanceModel/setRelevanceGoods',
                 payload: {
                     sku: this.props.goods.data.sku,
                     relevanceGoodsList: args,
@@ -637,7 +636,7 @@ function mapStateToProps(state) {
         createRelevanceLoading,   // 创建关联中...
         setRevanceStatus,         // 创建关联状态
         goodsBySite               // 手动添加的相似商品
-    } = state.createRelevanceModel;
+    } = state.CreateRelevanceModel;
 
     console.log('similarGoodsList',similarGoodsList);
         

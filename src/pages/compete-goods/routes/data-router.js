@@ -74,13 +74,10 @@ class CompeteRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-    // 菜单数据
+    
     const menus = state.Menus;
-
-    // 竞品数据
     const { data, searchArgs, loading } = state.CompeteGoods;
 
-    // 输出数据
     return {
         menus,
         data,
@@ -89,5 +86,6 @@ function mapStateToProps(state) {
 
     };
 }
+
 
 export default connect(mapStateToProps)(CompeteRouter);

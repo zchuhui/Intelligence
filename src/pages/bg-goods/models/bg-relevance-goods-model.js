@@ -11,7 +11,7 @@ const firstDay = moment().startOf('month').format('YYYY-MM-DD');
 const endDay = moment().endOf('month').format('YYYY-MM-DD');
 
 export default {
-    namespace: 'RelevanceBG',
+    namespace: 'RelevanceBGModel',
 
     state: {
         // 加载状态
@@ -201,7 +201,7 @@ export default {
                 yield put({ type: 'toggleLoading', payload: { loading: true } });
 
                 // 从state中获取搜索参数
-                const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
+                const searchArgs = yield select(state => state.RelevanceBGModel.searchArgs);
                 searchArgs.page = payload.page;
 
                 // 开始请求数据
@@ -225,7 +225,7 @@ export default {
                 yield put({ type: 'toggleLoading', payload: { loading: true } });
 
                 // 从state中获取搜索参数
-                const searchArgs = yield select(state => state.RelevanceBG.searchArgs);
+                const searchArgs = yield select(state => state.RelevanceBGModel.searchArgs);
                 searchArgs.page = payload.page;
 
                 // 开始请求数据

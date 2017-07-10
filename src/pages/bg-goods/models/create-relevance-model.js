@@ -3,59 +3,59 @@
  */
 
 import * as BgService from '../../../services/service-bg-goods';
-
+import { CODE200 } from '../../../constants/constant';
 
 // 接口还没提供，虚拟数据
 const similarGoodsList = 
-[
-    {
-    tname: 'gearbest',
-    tkey: 0,
-    children: [{
-        cid: 1,
-        img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498266711576411825.jpg',
-        sku: '21686430',
-        site: 'gearbest',
-        select: false,
+    [
+        {
+        tname: 'gearbest',
+        tkey: 0,
+        children: [{
+            cid: 1,
+            img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498266711576411825.jpg',
+            sku: '21686430',
+            site: 'gearbest',
+            select: false,
+        },
+        {
+            cid: 2,
+            img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498260182222254373.jpg',
+            sku: '21688560',
+            site: 'gearbest',
+            select: false,
+        }
+        ]
     },
     {
-        cid: 2,
-        img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498260182222254373.jpg',
-        sku: '21688560',
-        site: 'gearbest',
-        select: false,
-    }
-    ]
-},
-{
-    tname: 'dx',
-    tkey: 4,
-    children: [
+        tname: 'dx',
+        tkey: 4,
+        children: [
+        {
+            cid: 1,
+            img_url: 'http://img.dxcdn.com/productimages/sku_445370_1.jpg',
+            sku: '9cfc7148f14836dfb52c1768c8a69c8d',
+            site: 'dx',
+            select: false,
+        }
+        ]
+    },{
+        tname: 'lightinthebox',
+        tkey: 3,
+        children: []
+    }, 
     {
-        cid: 1,
-        img_url: 'http://img.dxcdn.com/productimages/sku_445370_1.jpg',
-        sku: '9cfc7148f14836dfb52c1768c8a69c8d',
-        site: 'dx',
-        select: false,
-    }
-    ]
-},{
-    tname: 'lightinthebox',
-    tkey: 3,
-    children: []
-}, 
-{
-    tname: 'tomtop',
-    tkey: 6,
-    children: []
-}, 
+        tname: 'tomtop',
+        tkey: 6,
+        children: []
+    }, 
 
 ];
 
 
 
 export default {
-    namespace: 'createRelevanceModel',
+    namespace: 'CreateRelevanceModel',
 
     state: {
         // 创建关联模块的加载状态 
@@ -64,6 +64,7 @@ export default {
         goods: {},
         // 步骤二单个商品
         goodsBySite: {},
+
         // 相似的商品表
         similarGoodsList: [],
         // 选中的关联商品
@@ -110,7 +111,7 @@ export default {
                 const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
 
                 // 保存数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'saveRelevanceGoods', payload: data });
                     // 请求成功，关闭loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
@@ -123,7 +124,7 @@ export default {
             } catch (e) {
                 // 请求成功，关闭loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                console.log(e)
+                console.log(e.messge)
             }
         },
 
@@ -132,17 +133,17 @@ export default {
 
             try {
                 //const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
+                
+                // 注意！！！
                 // 目前是虚拟数据
                 const data = similarGoodsList;
 
                 // 保存数据
                 if (data) {
                     yield put({ type: 'saveSimilarGoodsList', payload: data });
-
-                    console.log('fetchSimilarGoodsList', data)
                 }
             } catch (e) {
-                console.log(e)
+                console.log(e.message)
             }
         },
 
@@ -156,7 +157,7 @@ export default {
                 const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
 
                 // 保存数据
-                if (data) {
+                if (data.code == CODE200) {
 
                     yield put({ type: 'saveRelevanceGoodsBySite', payload: data });
                     // 请求数据时，显示loading状态
@@ -166,7 +167,7 @@ export default {
             } catch (e) {
                 // 请求成功，关闭loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                console.log(e)
+                console.log(e.message)
             }
         },
 
@@ -181,7 +182,7 @@ export default {
                 const { data } = yield call(BgService.setRelevanceGoods, payload);
 
                 // 保存数据
-                if (data.code === 200) {
+                if (data.code == CODE200) {
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: true } });
                 }else{
@@ -193,14 +194,15 @@ export default {
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
 
-                console.log(e)
+                console.log(e.message)
             }
         }
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname, query }) => {
-                
+
+                // 只识别url的create,不识别后面的参数
                 pathname = pathname.split('/')[1];
 
                 if (pathname == 'create') {

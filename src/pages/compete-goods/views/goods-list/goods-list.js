@@ -180,6 +180,7 @@ class GoodsList extends React.Component {
 							loading={ this.props.loading } 
 							columns={tableColumns}
 							pagination={false} 
+                            rowKey = {record => record.sku}
 							>
 							
 						  </Table>

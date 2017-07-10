@@ -10,7 +10,7 @@ app.use(createLoading());
 // 3. Model
 app.model(require('../../models/user'));
 app.model(require('../../models/menus')); 
-app.model(require('./models/bg-relevance-goods')); 
+app.model(require('./models/bg-relevance-goods-model')); 
 app.model(require('./models/create-relevance-model'));
 
 

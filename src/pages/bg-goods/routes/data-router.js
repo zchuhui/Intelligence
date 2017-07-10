@@ -17,7 +17,7 @@ class BgRouter extends React.Component {
      */
     handleSearchArgs(args) {
         this.props.dispatch({
-            type: 'RelevanceBG/search',
+            type: 'RelevanceBGModel/search',
             payload: {
                 searchArgs: args
             }
@@ -28,7 +28,7 @@ class BgRouter extends React.Component {
     // current: 当前页数
     changePagination(current) {
         this.props.dispatch({
-            type: 'RelevanceBG/pagination',
+            type: 'RelevanceBGModel/pagination',
             payload: {
                 page: current
             }
@@ -38,7 +38,7 @@ class BgRouter extends React.Component {
     // 根据商品的pid与时间获取趋势图数据
     getGoodsEcharData(args){
         this.props.dispatch({
-            type:'RelevanceBG/fetchGoodsEchartByPidAndTime',
+            type:'RelevanceBGModel/fetchGoodsEchartByPidAndTime',
             payload:{
                 pid:args.pid,
                 startTime:args.startTime,
@@ -50,7 +50,7 @@ class BgRouter extends React.Component {
     // 根据商品的pid获取对比数据
     getGoodsContrastDataByPid(pid){
         this.props.dispatch({
-            type:'RelevanceBG/fetchGoodsContrastDataByPid',
+            type:'RelevanceBGModel/fetchGoodsContrastDataByPid',
             payload:{
                 pid:pid,
             }
@@ -60,7 +60,7 @@ class BgRouter extends React.Component {
     // 清空对比数据
     clearGoodsContrastData(args){
         this.props.dispatch({
-            type:'RelevanceBG/clearGoodContrastData',
+            type:'RelevanceBGModel/clearGoodContrastData',
             payload:{}
         })
     }
@@ -109,7 +109,7 @@ function mapStateToProps(state) {
         goodsEchartDataLoading,   // 主商品趋势图加载状态
         goodContrastData,         // 商品对比数据
         goodContrastDataLoading,  // 商品对比数据加载状态
-    } = state.RelevanceBG;
+    } = state.RelevanceBGModel;
     
 
     if (data && data.list) {
