@@ -5,11 +5,7 @@
  */
 
 import * as menusService from '../services/menus';
-
-
-// 默认站点
-const defautSite = ["banggood", "gearbest"];
-
+import {CODE200} from '../constants/constant';
 
 // 默认分类
 const defautCate = [
@@ -66,7 +62,7 @@ export default {
         },
     },
     effects: {
-        // 获取分类表
+        // 获取分类
         * getCates({ payload }, { select, call, put }) {
 
             try {
@@ -74,7 +70,7 @@ export default {
                 const { data } = yield call(menusService.getMenuCate);
 
                 // 存储数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'saveCate', payload: data });
                 }
             } catch (e) {
@@ -82,7 +78,7 @@ export default {
             }
         },
 
-        // 获取分类表
+        // 获取Bangood下的分类
         * getBanggoodCates({ payload }, { select, call, put }) {
 
             try {
@@ -90,7 +86,7 @@ export default {
                 const { data, code } = yield call(menusService.getMenuCateByBanggood);
 
                 // 存储数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'saveBanggoodCate', payload: data });
                 }
             } catch (e) {
@@ -105,7 +101,7 @@ export default {
                 const { data } = yield call(menusService.getMenuBrand);
 
                 // 存储数据
-                if (data) {
+                if (data.code == CODE200) {
                     yield put({ type: 'saveBrand', payload: data });
                 } 
                 

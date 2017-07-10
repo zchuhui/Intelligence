@@ -78,7 +78,7 @@ class GoodsList extends React.Component {
                         {   // 子表不显示该项
                             !record.isChildren?
                             <img src={ record.img_url} className={ styles.img } />
-                            :null
+                            :<span> <Icon type="arrow-right" style={{ color:'#e9e9e9',fontSize:'30px' }}/></span>
                         }
                        
                    </span>
@@ -166,7 +166,7 @@ class GoodsList extends React.Component {
                 key: "questions",
                 sorter: (a, b) => a.questions - b.questions,
             }, {
-                title: "分类",
+                title: "类目树",
                 dataIndex: "cateName",
                 key: "cateName",
                 className: styles.columnCate,
@@ -203,7 +203,7 @@ class GoodsList extends React.Component {
 						loading={ this.props.loading } 
 						pagination={false} 
 						columns={tableColumns}
-						indentSize = {30}
+                        rowKey={record => record.sku }
 						>
 						
 					  </Table>
@@ -297,9 +297,9 @@ class GoodsList extends React.Component {
                                     disabledDate = {this.disabledDate}
                                 />
                                 <span>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,3)}>最近3天</span>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,6)}>最近7天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,14)}>最近15天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,29)}>最近30天</span>
                                 </span>
                             </div>
                         </div>

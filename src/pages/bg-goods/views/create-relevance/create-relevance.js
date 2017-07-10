@@ -20,6 +20,7 @@ class CreateRelevance extends React.Component {
         super(props);
 
         this.state = {
+            title:'创建关系',
 
         	// 步骤模块
             step1: '',
@@ -48,7 +49,7 @@ class CreateRelevance extends React.Component {
     				<div className={styles.relevanceWrap}>
 
     					<div className={ styles.title }>
-                            <span>创建关系</span>
+                            <span>{ this.state.title }</span>
                         </div>
 
                         {/*进度条 start*/}
@@ -198,7 +199,7 @@ class CreateRelevance extends React.Component {
     	                    		<ul className={styles.similarGoods}>
     	                    			{
     	                    				this.state.relevanceGoodsList.map((item,index)=>
-    	                    					<li>
+    	                    					<li className={styles.deleteSelectGoods}>
     								    			<div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this,index,item)}>
     								    				<div className={styles.imgWrap}><img src={item.img_url} /></div>
     					                    			<p className={styles.brand}>{item.site}</p>
@@ -212,7 +213,13 @@ class CreateRelevance extends React.Component {
     						    	{/*选中的商品 end*/}
 
     						    	<div style={{ textAlign:'center', height:100, margin:'60px auto'}}>
-    						    		<Button style={{ marginRight:10,width:100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
+                                        {
+                                            /*如果是编辑关系，则不显示上一步*/
+                                            !this.props.params.sku?
+                                            <Button style={{ marginRight:10,width:100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
+                                            :null
+                                        }
+    						    		
     						    		<Button type="primary" style={{ width:100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
     						    	</div>	
     	                    	</div>
@@ -589,13 +596,13 @@ class CreateRelevance extends React.Component {
     }
 
 
-
     // 第一次实例化时，再render渲染后调用
     componentDidMount() {
         
         // 如果是点击sku进来的，跳到步骤二
         if (this.props.params.sku) {
             this.setState({
+                title:'编辑关系',
                 step1:'none',
                 step2:'',
 
