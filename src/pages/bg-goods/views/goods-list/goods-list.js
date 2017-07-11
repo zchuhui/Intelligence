@@ -337,8 +337,6 @@ class GoodsList extends React.Component {
         )
     }
 
-
-
     // 数据变动，渲染完成后，执行
     componentDidUpdate(prevProps, prevState) {
 

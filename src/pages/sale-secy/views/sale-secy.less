@@ -30,43 +30,161 @@
     background: #3197eb;
 }
 
-
 .main {
     background: #fff;
     box-shadow: 0px 1px 5px #ddd;
 	padding:20px;
 
-
-    
-
     .panel{
-		.dateWrap{
+
+		.panelTitle{
+			position: relative;
+			height: 30px;
+			margin-top:30px;
+			line-height: 30px;
+			font-size: 16px;
+			text-indent: 15px;
 
 		}
+		.panelTitle:after {
+			position: absolute;
+			top: 8px;
+			left: 0;
+			display: block;
+			content: ' ';
+			width: 4px;
+			height: 15px;
+			background: #3197eb;
+		}
+		.exponentTop{
+			font-family: '微软雅黑';
+			font-size: 14px;
+			color: #489200;
+			font-weight:bold;
+		}
 
-		.saleroomContent{
-			float: left;
-			display:inline-block;
-			width:65%;
-			height:520px;
-			border:1px solid #e7e7e7;
-			overflow: hidden;
-
-			ul{
-				li{
-					float: left;
-					width:25%;
-					height:210px;
-
+		.saleroomWrap{
+			.dateWrap{
+				.toDay{
+					margin-left:15px;
+					cursor:pointer;
+					color:#3197eb;
 				}
 			}
+			.head{
+				margin:10px 0;
+				font-size: 14px;
+				line-height: 40px;
+				
+				b{
+					font-size: 40px;
+					font-weight: bold;
+					color:#3197eb;
+					padding:0 5px;
+				}
+				
+			}
+			.saleroomContent{
+				display:block;
+				float:left;
+				width:69%;
+				height:520px;
+				border:1px solid #e7e7e7;
+				overflow: hidden;
+
+				ul{
+					li{
+						float: left;
+						width:25%;
+						height:210px;
+						border-bottom:1px solid #e7e7e7;
+						border-left:1px solid #e7e7e7;
+						line-height: 50px;
+
+						label{
+							display:inline-block;
+							text-indent:20px;
+							width:100px;
+						}
+
+						h3{
+							text-indent:20px;
+							font-size:14px;
+							font-weight:bold;
+							color:#3197eb;
+						}
+						b{
+							font-size:16px;
+							margin-right:10px;
+						}
+					}
+					li:first-child{
+						border-left:0;
+					}
+				}
+			}
+			.saleroomScore{
+				float:right;
+				display:block;
+				width:30%;
+				height:520px;
+				border:1px solid #e7e7e7;
+
+			}
 		}
-		.saleroomScore{
-			float:right;
-			display:inline-block;
-			width:30%;
-			height:520px;
-			border:1px solid #e7e7e7;
+		
+		.referenceIndexWrap{
+			ul{
+				li{
+					float:left;
+					width:24%;
+					min-height: 300px;
+					margin-right:1.33%;
+					border:1px solid #e7e7e7;
+					line-height: 45px;
+
+					label{
+						display:inline-block;
+						text-indent:20px;
+						width:100px;
+					}
+
+					h3{
+						text-indent:20px;
+						font-size:14px;
+						margin-top:15px;
+						font-weight:bold;
+						color:#3197eb;
+					}
+					b{
+						font-size:16px;
+						margin-right:10px;
+					}	
+				}
+				li:last-child{
+					margin-right:0;
+				}
+			}
+
+			.chartWrap{
+				padding:15px;
+			}
+			
+		}
+
+		.goodsRankWrap{
+			ul{
+				li{
+					float:left;
+					width:32%;
+					min-height: 300px;
+					margin-right:2%;
+					border:1px solid #e7e7e7;	
+				}
+				li:last-child{
+					margin-right:0;
+				}
+			}
 
 		}
 
