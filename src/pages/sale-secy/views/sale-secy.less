@@ -4,6 +4,8 @@
  * Author: zhuangchuhui
  */
 
+.fl{float:left}
+.fr{float:right}
 .clear { zoom: 1 }
 .clear:after { content: ""; display: block; height: 0; visibility: visible; clear: both } 
 
@@ -39,7 +41,7 @@
 
 		.panelTitle{
 			position: relative;
-			height: 30px;
+			height: 40px;
 			margin-top:30px;
 			line-height: 30px;
 			font-size: 16px;
@@ -60,6 +62,12 @@
 			font-family: '微软雅黑';
 			font-size: 14px;
 			color: #489200;
+			font-weight:bold;
+		}
+		.exponentOrange{
+			font-family: '微软雅黑';
+			font-size: 14px;
+			color: #ff6600;
 			font-weight:bold;
 		}
 
@@ -180,12 +188,188 @@
 					min-height: 300px;
 					margin-right:2%;
 					border:1px solid #e7e7e7;	
+
+					h3{
+						text-align: center;
+						line-height: 50px;
+						color:#3197eb;
+						font-size:14px;
+						font-weight:bold;
+					}
+
+					.itemPanel{
+						margin:15px;
+						height:90px;
+						overflow: hidden;
+
+						.imgWrap{
+							float:left;
+							width:80px;
+							height:80px;
+							overflow:hidden;
+							border:1px solid #e7e7e7;
+						}
+						.itemContent{
+							margin-left:100px;
+							
+							.itemTitle{
+								height:40px;
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+							}
+
+							.itemDetail{
+								margin-top: 20px;
+
+								.exponentOrange{
+									margin-right: 10px;
+								}
+							}
+						}
+						
+					}
 				}
 				li:last-child{
 					margin-right:0;
 				}
 			}
 
+		}
+
+		.categoryWrap{
+			ul{
+				li{
+					float:left;
+					width:25%;
+					min-height: 300px;
+					margin-right:2%;
+					border:1px solid #e7e7e7;	
+
+					h3{
+						text-align: center;
+						line-height: 50px;
+						color:#3197eb;
+						font-size:14px;
+						font-weight:bold;
+					}
+
+					.itemPanel{
+						margin:15px;
+						height:90px;
+						overflow: hidden;
+
+						.imgWrap{
+							float:left;
+							width:80px;
+							height:80px;
+							overflow:hidden;
+							border:1px solid #e7e7e7;
+						}
+						.itemContent{
+							margin-left:100px;
+							
+							.itemTitle{
+								height:40px;
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+							}
+
+							.itemDetail{
+								margin-top: 20px;
+
+								.exponentOrange{
+									margin-right: 10px;
+								}
+							}
+						}
+						
+					}
+				}
+				li:first-child{
+					width:46%;
+					border:none;
+					border-top:1px solid #e7e7e7;
+				}
+				li:last-child{
+					margin-right:0;
+				}
+			}
+		}
+
+		.correlationWrap{
+			border-top:1px solid #e7e7e7;
+
+			li{
+				h3{
+					text-align:center;
+					font-size:14px;
+					line-height: 50px;
+					font-weight:bold;
+					color:#3197eb;
+				}
+				.itemLeft{
+					float:left;
+					width:45%;
+					height: 130px;
+
+					.itemPanel{
+						width:60%;
+						height:90px;
+						overflow: hidden;
+
+						.imgWrap{
+							float:left;
+							width:80px;
+							height:80px;
+							overflow:hidden;
+							border:1px solid #e7e7e7;
+						}
+						.itemContent{
+							margin-left:100px;
+							
+							.itemTitle{
+								height:40px;
+								display: -webkit-box;
+								-webkit-box-orient: vertical;
+								-webkit-line-clamp: 2;
+								overflow: hidden;
+							}
+
+							.itemDetail{
+								margin-top: 20px;
+
+								.exponentOrange{
+									margin-right: 10px;
+								}
+							}
+						}
+						
+					}
+				}
+				.itemCenter{
+					float:left;
+					width:20%;
+					height: 130px;
+					color:#3197eb;
+					text-align: center;
+					font-size:24px;
+					line-height: 120px;
+				}
+				.itemRight{
+					float:left;
+					width:35%;
+					height: 130px;
+				}
+			}
+			li:first-child{
+				.itemLeft,.itemCenter,.itemRight{
+					height:100px;
+				}
+			}
 		}
 
 	}
