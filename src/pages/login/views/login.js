@@ -59,7 +59,7 @@ class LoginPage extends React.Component {
 				        </FormItem>
 				        <div className={ styles.warn}> 
 				        { 
-				        	!this.props.status?<span>{this.props.msg}</span>:<span></span>
+				        	 !this.props.status?<span>{this.props.msg}</span>:<span></span>
 				        } 
 				        </div>
 			      	</Form>

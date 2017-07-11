@@ -23,9 +23,13 @@ export default {
     reducers: {
         // 存储登录成功后的信息到state
         save(state, { payload }) {
-            return {...state, userInfo: payload.data.userInfo, loginStatus: payload.status, loginMsg: payload.msg, loading: 0 };
+            let loginStatus = 0;
+            if(payload.code == CODE200){
+                loginStatus = 1;
+            }
+            return {...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: payload.msg, loading: 0 };
         },
-
+        
         // 显示登录加载状态
         showLoading(state, { payload }) {
             return {...state, loading: 1 };
@@ -43,6 +47,10 @@ export default {
             }
             return {...state, loginStatus: payload.loginStatus, userInfo: info };
         },
+        // 报错时存储信息
+        saveError(state,{ payload}){
+            return {...state,  loginMsg: payload.msg, loading: 0,loginStatus:0 };
+        }
     },
     effects: {
         // 点击登录
@@ -53,7 +61,7 @@ export default {
 
                 // 开始请求数据
                 const { data } = yield call(usersService.login, payload.loginInfo);
-
+                console.log('login',data);
                 if (data.code == CODE200) {
 
                     // 存储数据
@@ -63,9 +71,10 @@ export default {
                     localStorage.set('username', payload.loginInfo.username, dayCount);
                     localStorage.set('password', payload.loginInfo.password, dayCount);
                     localStorage.set('loginStatus', 1, dayCount);
-
+                    
                     // 转到BG页
                     window.location.href = "/bg";
+                    //console.log('已登录');
 
                 } else {
                     // 传入失败信息，用于页面展示
@@ -74,6 +83,8 @@ export default {
             }
             catch(e){
                 console.log(e.message)
+                // 传入失败信息，用于页面展示
+                yield put({ type: 'saveError', payload:{msg:e.message} });
             }
 
 

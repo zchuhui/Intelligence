@@ -7,8 +7,12 @@ import { Url } from '../config/config.url';
  * @return {[type]}      [登录信息]
  */
 export function login(args) {
+
 	let url = `${Url}?com=login&t=validate&username=${args.username}&password=${args.password}`;
-  	return request(url);
+	
+	return request(url,{
+        method:'POST',
+    });
 }
 
 /**
