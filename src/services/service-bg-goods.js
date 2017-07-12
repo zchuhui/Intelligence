@@ -66,10 +66,10 @@ export function fetchGoodsDetailBySku(args) {
  */
 export function fetchSimilarGoodsList(args) {
 
-    let argumentStr = `com=api&t=productInfo&site=${args.site}&sku=${args.sku}`;
+    let argumentStr = `com=api&t=getLikeProduct&title=${args.title}`;
 
-	let url = `${Url}?${argumentStr}`;
-
+    let url = `${Url}?${argumentStr}`;
+    
   	return request(url);
 
 }
@@ -83,7 +83,7 @@ export function fetchSimilarGoodsList(args) {
 export function setRelevanceGoods(args) {
 
     let content = JSON.stringify(args.relevanceGoodsList); 
-    console.log('sku',args)
+
     let argumentStr = `com=api&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
     
 
@@ -92,8 +92,6 @@ export function setRelevanceGoods(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-
-    console.log('url',url);
   	
     return request(url,{
         method:'POST',

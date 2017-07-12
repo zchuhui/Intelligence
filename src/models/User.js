@@ -5,8 +5,8 @@
  */
 
 import * as usersService from '../services/users';
-import localStorage from '../utils/localStorage';
-import {CODE200} from '../constants/constant';
+import LocalStorage from '../utils/localStorage';
+import { CODE200, ERRORMESSAGE } from '../constants/constant';
 
 // 天数，设定为保存一周
 const dayCount = 60 * 24 * 7;
@@ -24,20 +24,20 @@ export default {
         // 存储登录成功后的信息到state
         save(state, { payload }) {
             let loginStatus = 0;
-            if(payload.code == CODE200){
+            if (payload.code == CODE200) {
                 loginStatus = 1;
             }
-            return {...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: payload.msg, loading: 0 };
+            return { ...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: payload.msg, loading: 0 };
         },
-        
+
         // 显示登录加载状态
         showLoading(state, { payload }) {
-            return {...state, loading: 1 };
+            return { ...state, loading: 1 };
         },
 
         // 退出登录，清除信息
         clearLoginInfo(state, { payload: { data: data } }) {
-            return {...state, userInfo: {}, loginStatus: 0, loginMsg: '', };
+            return { ...state, userInfo: {}, loginStatus: 0, loginMsg: '', };
         },
 
         // 登录请求实在慢，所以先存储本地信息
@@ -45,33 +45,34 @@ export default {
             let info = {
                 admin_name: payload.username
             }
-            return {...state, loginStatus: payload.loginStatus, userInfo: info };
+            return { ...state, loginStatus: payload.loginStatus, userInfo: info };
         },
         // 报错时存储信息
-        saveError(state,{ payload}){
-            return {...state,  loginMsg: payload.msg, loading: 0,loginStatus:0 };
+        saveError(state, { payload }) {
+            return { ...state, loginMsg: payload.msg, loading: 0, loginStatus: 0 };
         }
     },
     effects: {
         // 点击登录
         * login({ payload }, { select, call, put }) {
-            try{
+            try {
                 // 显示加载状态
                 yield put({ type: 'showLoading' });
 
                 // 开始请求数据
                 const { data } = yield call(usersService.login, payload.loginInfo);
-                console.log('login',data);
+
                 if (data.code == CODE200) {
 
                     // 存储数据
                     yield put({ type: 'save', payload: data });
 
                     // 存储用户名、密码
-                    localStorage.set('username', payload.loginInfo.username, dayCount);
-                    localStorage.set('password', payload.loginInfo.password, dayCount);
-                    localStorage.set('loginStatus', 1, dayCount);
-                    
+                    LocalStorage.set('username', payload.loginInfo.username, dayCount);
+                    LocalStorage.set('password', payload.loginInfo.password, dayCount);
+                    LocalStorage.set('token', data.data.token, dayCount);
+                    LocalStorage.set('loginStatus', 1, dayCount);
+
                     // 转到BG页
                     window.location.href = "/bg";
                     //console.log('已登录');
@@ -79,10 +80,12 @@ export default {
                 } else {
                     // 传入失败信息，用于页面展示
                     yield put({ type: 'save', payload: data });
+                    message.warning(data.msg)
                 }
             }
-            catch(e){
-                console.log(e.message)
+            catch (e) {
+                message.error(ERRORMESSAGE);
+                
                 // 传入失败信息，用于页面展示
                 yield put({ type: 'saveError', payload:{msg:e.message} });
             }
@@ -117,9 +120,10 @@ export default {
         * logout({ payload }, { select, call, put }) {
 
             // 清空本地登录名、密码
-            localStorage.remove('username');
-            localStorage.remove('password');
-            localStorage.remove('loginStatus');
+            LocalStorage.remove('username');
+            LocalStorage.remove('password');
+            LocalStorage.remove('token');
+            LocalStorage.remove('loginStatus');
 
             // 转到登录页
             window.location.href = "/login";
@@ -137,8 +141,8 @@ export default {
         setup({ dispatch, history }) {
 
             // 获取本地存储的登录名与密码
-            let username = localStorage.get('username');
-            let password = localStorage.get('password');
+            let username = LocalStorage.get('username');
+            let password = LocalStorage.get('password');
 
             // 判断是否存在，存在则自动获取登录信息，不在请求
             if (username && password) {

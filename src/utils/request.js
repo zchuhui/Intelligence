@@ -1,4 +1,5 @@
 import fetch from 'dva/fetch';
+import LocalStorage from './localStorage';
 
 /*function parseJSON(response) {
   return response.json();
@@ -6,16 +7,16 @@ import fetch from 'dva/fetch';
 
 function checkStatus(response) {
 
-  // 返回的状态码为请求成功
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
+	// 返回的状态码为请求成功
+	if (response.status >= 200 && response.status < 300) {
+		return response;
+	}
 
-  const error = new Error(response.statusText);
+	const error = new Error(response.statusText);
 
-  error.response = response;
+	error.response = response;
 
-  throw error;
+	throw error;
 
 }
 
@@ -29,23 +30,31 @@ function checkStatus(response) {
  */
 export default async function request(url, options) {
 
-  // 请求数据
-  const response = await fetch(url, options);
- 
-  // 检查请求是否成功
-  checkStatus(response);
+	// 加上 token
+	const token = LocalStorage.get('token');
+	if(token){
+		url = `${url}&token=${token}`;
+	}
 
-  // 转为json格式
-  const data = await response.json();
+	// 请求数据
+	const response = await fetch(url, options);
 
-  const ret = {
-    data,
-    headers: {},
-  };
-  
-  if (response.headers.get('x-total-count')) {
-    ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  }
+	// 检查请求是否成功
+	checkStatus(response);
+	
+	// 转为json格式
+	//const data = await response;
+	const data = await response.json();
+	//console.log('json',data); 
+	const ret = {
+		data,
+		headers: {
+		},
+	};
 
-  return ret;
+	if (response.headers.get('x-total-count')) {
+		ret.headers['x-total-count'] = response.headers.get('x-total-count');
+	}
+	//console.log('ret',ret);
+	return ret;
 }

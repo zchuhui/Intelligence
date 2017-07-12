@@ -12,4 +12,4 @@ export const CODE400 = 400;   // 状态码，请求失败
 
 export const CODE401 = 401;   // 状态码，需要登录
 
-
+export const ERRORMESSAGE = '服务器故障，请重试';

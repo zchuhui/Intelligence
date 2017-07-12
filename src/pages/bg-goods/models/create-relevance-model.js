@@ -3,52 +3,34 @@
  */
 
 import * as BgService from '../../../services/service-bg-goods';
-import { CODE200 } from '../../../constants/constant';
+import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
+import { message } from 'antd';
+
+
+const similarGoodsListTitle=['gearbest','dx','lightinthebox','tomtop']
 
 // 接口还没提供，虚拟数据
-const similarGoodsList = 
-    [
-        {
+const defaultSimilarGoodsList = [
+    {
         tname: 'gearbest',
         tkey: 0,
-        children: [{
-            cid: 1,
-            img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498266711576411825.jpg',
-            sku: '21686430',
-            site: 'gearbest',
-            select: false,
-        },
-        {
-            cid: 2,
-            img_url: 'https://gloimg.gearbest.com/gb/pdm-product-pic/Electronic/2017/06/24/goods-img/1498260182222254373.jpg',
-            sku: '21688560',
-            site: 'gearbest',
-            select: false,
-        }
+        children: [
         ]
     },
     {
         tname: 'dx',
-        tkey: 4,
-        children: [
-        {
-            cid: 1,
-            img_url: 'http://img.dxcdn.com/productimages/sku_445370_1.jpg',
-            sku: '9cfc7148f14836dfb52c1768c8a69c8d',
-            site: 'dx',
-            select: false,
-        }
-        ]
-    },{
-        tname: 'lightinthebox',
-        tkey: 3,
+        tkey: 1,
         children: []
-    }, 
+    }, {
+        tname: 'lightinthebox',
+        tkey: 2,
+        children: []
+    },
     {
         tname: 'tomtop',
-        tkey: 6,
+        tkey: 3,
         children: []
-    }, 
+    },
 
 ];
 
@@ -66,37 +48,37 @@ export default {
         goodsBySite: {},
 
         // 相似的商品表
-        similarGoodsList: [],
+        similarGoodsList: defaultSimilarGoodsList,
         // 选中的关联商品
         relevanceGoodsList: [],
         // 设置状态是否成功
-        setRevanceStatus:false,
+        setRevanceStatus: false,
     },
     reducers: {
 
         // 保存相似的商品表
         saveSimilarGoodsList(state, { payload }) {
-            return {...state, similarGoodsList: payload };
+            return { ...state, similarGoodsList: payload };
         },
         // 步骤一的保存获取的单个商品
         saveRelevanceGoods(state, { payload }) {
-            return {...state, goods: payload };
+            return { ...state, goods: payload };
         },
         // 步骤二的保存获取的单个商品，
         saveRelevanceGoodsBySite(state, { payload }) {
-            return {...state, goodsBySite: payload };
+            return { ...state, goodsBySite: payload };
         },
         // 保存已关联的商品
         saveRelevanceGoodsList(state, { payload }) {
-            return {...state, relevanceGoodsList: payload };
+            return { ...state, relevanceGoodsList: payload };
         },
         // 切换创建模块的loading状态
         toggleCreateRelevanceLoading(state, { payload }) {
-            return {...state, createRelevanceLoading: payload.loading };
+            return { ...state, createRelevanceLoading: payload.loading };
         },
         // 切换设置关联模块
         toggleSetRevanceStatus(state, { payload }) {
-            return {...state, setRevanceStatus: payload.status };
+            return { ...state, setRevanceStatus: payload.status };
         },
     },
     effects: {
@@ -113,38 +95,43 @@ export default {
                 // 保存数据
                 if (data.code == CODE200) {
                     yield put({ type: 'saveRelevanceGoods', payload: data });
-                    // 请求成功，关闭loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
 
                     // 请求相似数据
                     //yield put({ type: 'fetchSimilarGoodsList'});
-
+                    
+                } else {
+                    message.warning(data.msg)
+                    yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 }
 
             } catch (e) {
-                // 请求成功，关闭loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                console.log(e.messge)
+                message.error(ERRORMESSAGE);
             }
         },
 
         // 步骤二，获取相似产品表
         * fetchSimilarGoodsList({ payload }, { select, call, put }) {
-
-            try {
-                //const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
+            console.log('similar payload',payload);
+            //try {
                 
+                const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
+
                 // 注意！！！
                 // 目前是虚拟数据
-                const data = similarGoodsList;
+                // const data = similarGoodsList;
+                console.log('similar',data); 
 
                 // 保存数据
-                if (data) {
+                /* if (data.code == CODE200) {
                     yield put({ type: 'saveSimilarGoodsList', payload: data });
-                }
-            } catch (e) {
-                console.log(e.message)
-            }
+                } else {
+                    message.warning(data.msg)
+                } */
+            /* } catch (e) {
+                message.error('error',ERRORMESSAGE);
+            } */
         },
 
         // 步骤二，手动搜索单个商品
@@ -163,11 +150,15 @@ export default {
                     // 请求数据时，显示loading状态
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
 
+                } else {
+                    message.warning(data.msg)
+                    // 请求数据时，显示loading状态
+                    yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 }
             } catch (e) {
-                // 请求成功，关闭loading状态
+                // 报错，关闭loading状态
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                console.log(e.message)
+                //message.error(ERRORMESSAGE);
             }
         },
 
@@ -185,16 +176,17 @@ export default {
                 if (data.code == CODE200) {
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: true } });
-                }else{
+                } else {
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
+                    message.warning(data.msg)
                 }
             } catch (e) {
 
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });
 
-                console.log(e.message)
+                message.error(ERRORMESSAGE);
             }
         }
     },
@@ -207,7 +199,7 @@ export default {
 
                 if (pathname == 'create') {
                     // 载入相识商品
-                    dispatch({ type: 'fetchSimilarGoodsList' });
+                    dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[1]}});
                 }
             })
         },

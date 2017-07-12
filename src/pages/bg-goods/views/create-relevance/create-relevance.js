@@ -132,7 +132,7 @@ class CreateRelevance extends React.Component {
                                             <p>SKU: {this.props.goods.data.sku}</p>
                                             :<p></p>
                                         }
-    	                    			
+    	                    			 
     	                    		</div>
 
     	                    		{/*相似的商品 start*/}
@@ -638,7 +638,7 @@ function mapStateToProps(state) {
         goodsBySite               // 手动添加的相似商品
     } = state.CreateRelevanceModel;
 
-    console.log('similarGoodsList',similarGoodsList);
+    //console.log('similarGoodsList',similarGoodsList);
         
 
     return {
