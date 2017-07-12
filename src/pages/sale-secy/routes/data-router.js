@@ -19,10 +19,26 @@ class DataRouter extends React.Component {
                 </div>
 				<div className={styles.main}>
 
-					<Saleroom />
-					<ReferenceIndex />
+					{/* 销售信息 */} 
+					<Saleroom 
+						productTotal = {this.props.productTotal}
+						salesAmount = {this.props.salesAmount}
+						salesSum = {this.props.salesSum}
+						changeRate= {this.props.changeRate}
+						productNew={this.props.productNew}
+					/>
+					{/* 参考指标 */}
+					<ReferenceIndex 
+						basket = {this.props.basket}
+						favorites = {this.props.favorites}
+						visitor = {this.props.visitor}
+						pageView = {this.props.pageView}
+					/>
+					{/* 商品排名 */}
 					<GoodsRank />
+					{/* 类目情况 */}
 					<Category />
+					{/* 对比关系 */}
 					<Correlation />
 
 				</div>
@@ -33,7 +49,8 @@ class DataRouter extends React.Component {
 }
 
 function mapStateToProps(state){
-
+	console.log('salemodel:',state.SaleSecyModel);
+	return {...state.SaleSecyModel};
 }
 
 export default connect(mapStateToProps)(DataRouter);

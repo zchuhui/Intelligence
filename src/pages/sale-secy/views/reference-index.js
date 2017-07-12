@@ -20,38 +20,74 @@ class ReferenceIndex extends React.Component {
                 </div>
                 <div className={styles.referenceIndexWrap}>
                     <ul className={styles.clear}>
-                        <li>
-                            <h3>加购量</h3>
-                            <div><label>当天</label><b>100元</b><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>前天环比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>上周同比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div className={styles.chartWrap}>
-                                <div ref="refChart1" style={{width:'100%',height:110}}></div>
-                            </div>
-                        </li>
+						<li>
+							<h3>加购量</h3>
+							<div><label>当天</label><b>{this.props.basket.basket ? this.props.basket.basket : 0} 件</b></div>
+							<div><label>前天环比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{
+										this.props.basket.yesRadio ? this.props.basket.yesRadio : '0%'
+									}
+								</span>
+							</div>
+							<div><label>上周同比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{
+										this.props.basket.weekRadio ? this.props.basket.weekRadio : '0%'
+									}
+								</span>
+							</div>
+							<div className={styles.chartWrap}>
+								<div ref="refChart1" style={{ width: '100%', height: 110 }}></div>
+							</div>
+						</li>
                          <li>
                             <h3>收藏量</h3>
-                            <div><label>当天</label><b>100件</b><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>前天环比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>上周同比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div className={styles.chartWrap}>
-                                <div ref="refChart2" style={{width:'100%',height:110}}></div>
-                            </div>
+							<div><label>当天</label><b>{this.props.favorites.favorites?this.props.favorites.favorites:0}件</b></div>
+							<div><label>前天环比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.favorites.yesRadio?this.props.favorites.yesRadio:'0%'}
+								</span>
+							</div>
+							<div><label>上周同比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.favorites.weekRadio?this.props.favorites.weekRadio:'0%'}
+								</span>
+							</div>
+							<div className={styles.chartWrap}>
+								<div ref="refChart2" style={{ width: '100%', height: 110 }}></div>
+							</div>
                         </li>
                          <li>
                             <h3>访客量</h3>
-                            <div><label>当天</label><b>100位</b><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>前天环比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>上周同比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
+                            <div><label>当天</label><b>{this.props.visitor.visitor?this.props.visitor.visitor:0}位</b></div>
+                            <div><label>前天环比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.visitor.yesRadio?this.props.visitor.yesRadio:'0%'}
+								</span>
+							</div>
+                            <div><label>上周同比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.visitor.weekRadio?this.props.visitor.weekRadio:'0%'}
+								</span>
+							</div>
                             <div className={styles.chartWrap}>
                                 <div ref="refChart3" style={{width:'100%',height:110}}></div>
                             </div>
                         </li>
                          <li>
                             <h3>浏览量</h3>
-                            <div><label>当天</label><b>100次</b><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>前天环比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
-                            <div><label>上周同比</label><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></div>
+                            <div><label>当天</label><b>{this.props.pageView.pageView?this.props.pageView.pageView:0}次</b></div>
+                            <div><label>前天环比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.pageView.yesRadio?this.props.pageView.yesRadio:'0%'}
+								</span>
+							</div>
+                            <div><label>上周同比</label>
+								<span className={styles.exponentTop}><Icon type="arrow-up" />
+									{this.props.pageView.weekRadio?this.props.pageView.weekRadio:'0%'}
+								</span>
+							</div>
                             <div className={styles.chartWrap}>
                                 <div ref="refChart4" style={{width:'100%',height:110}}></div>
                             </div>
