@@ -17,7 +17,6 @@
     font-size: 16px;
     text-indent: 20px;
     border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
     background: #fff;
     box-shadow: 0px 1px 5px #ddd;
 }
@@ -74,9 +73,9 @@
 		.saleroomWrap{
 			.dateWrap{
 				.toDay{
-					margin-left:15px;
-					cursor:pointer;
+					margin-left:3px;
 					color:#3197eb;
+					border:none;
 				}
 			}
 			.head{
@@ -137,7 +136,44 @@
 				width:30%;
 				height:520px;
 				border:1px solid #e7e7e7;
+				padding:20px;
+				overflow: hidden;
 
+				h3{
+					color:#3197eb;
+					font-size:18px;
+					text-align: center;
+					
+					b{
+						font-size:60px;
+						font-weight:bold;
+						margin-right:10px;
+					}
+				}
+				p{
+					line-height:30px;
+					text-align: center;
+					font-size:16px;
+				}
+				.scoreContent{
+					border-top:1px solid #e7e7e7;
+					margin-top:20px;
+					padding-top:20px;
+					
+					ul{
+						margin:0 20px;
+
+						li{
+							height: 30px;
+							line-height: 30px;
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 1;
+							overflow: hidden;
+						}
+					}
+					
+				}
 			}
 		}
 		

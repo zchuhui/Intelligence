@@ -6,20 +6,28 @@
 
 import React from 'react';
 import styles from './sale-secy.less';
-import { DatePicker, Icon } from 'antd';
+import { DatePicker, Icon, Button } from 'antd';
 import moment from 'moment';
 import echarts from 'echarts';
 
 class Saleroom extends React.Component {
+
+	constructor(){
+		super();
+
+		this.state = {
+			date:moment(),
+		}
+	}
 
 	render() {
 		return (
 			<div className={styles.panel}>
 				<div className={styles.saleroomWrap}>
 					<div className={styles.dateWrap}>
-						<DatePicker defaultValue={moment('2015/01/01', 'YYYY-MM-DD')} format={'YYYY-MM-DD'} />
-						<span className={styles.toDay}>上一天</span>
-						<span className={styles.toDay}>下一天</span>
+						<DatePicker value={moment(this.state.date)} format="YYYY-MM-DD" />
+						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
+						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
 					</div>
 					<div className={styles.head}>
 						<span>你拥有 <b>9999</b> 件 &nbsp; &nbsp; &nbsp; &nbsp; </span> 
@@ -58,7 +66,21 @@ class Saleroom extends React.Component {
 							</div>
 						</div>
 						<div className={styles.saleroomScore}>
-							888fen
+							<h3><b>88</b>分</h3>
+							<p>优秀，超越58%的伙伴</p>
+							<div className={styles.scoreContent}>
+								<ul>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
+									<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -166,7 +188,30 @@ class Saleroom extends React.Component {
 		}
 	
 	}
-	
+
+	// 上一天、下一天
+	onPrevOrNextDay(dayId){
+
+		// 获取当前日期
+		let currentDate = this.state.date;
+
+		if(dayId == 0){
+			//上一天
+			let provDay = moment(currentDate).subtract("days",1).format("YYYY-MM-DD");
+
+			this.setState({
+				date:provDay
+			})
+		}
+		else{
+			//下一天
+			let nextDay = moment(currentDate).add(1,"days").format("YYYYMMDD")
+
+			this.setState({
+				date:nextDay
+			}) 
+		}
+	}
 
 }
 

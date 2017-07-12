@@ -181,7 +181,7 @@ class Correlation extends React.Component {
 					},
 					legend: {
                         
-                        data:['环球','DX','兰亭集势力','TOMTOP']
+                        data:['环球 us 289.9','DX us 289.9','兰亭集势力 us 289.9','TOMTOP us 289.9']
 					},
 					toolbox: {
 						feature: {
@@ -229,25 +229,25 @@ class Correlation extends React.Component {
 					],
 					series : [
 						{
-                            name:'环球',
+                            name:'环球 us 289.9',
                             type:'line',
                             stack: '总量',
                             data:[320, 312, 201, 434, 190, 230, 110]
                         },
                         {
-                            name:'DX',
+                            name:'DX us 289.9',
                             type:'line',
                             stack: '总量',
                             data:[120, 102, 191, 134, 190, 130, 110]
                         },
                         {
-                            name:'兰亭集势力',
+                            name:'兰亭集势力 us 289.9',
                             type:'line',
                             stack: '总量',
                             data:[150, 23, 201, 2, 190, 330, 410]
                         },
                         {
-                            name:'TOMTOP',
+                            name:'TOMTOP us 289.9',
                             type:'line',
                             stack: '总量',
                             data:[420, 332, 421, 311, 390, 430, 320]
