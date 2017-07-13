@@ -20,116 +20,98 @@ class GoodsRank extends React.Component {
                     <ul className={styles.clear}>
                         <li>
                             <h3>销量排行榜</h3>
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB </div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-....RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
+                            {
+                                this.props.myProductRank.salesRank?
+                                this.props.myProductRank.salesRank.map((item,index) => 
+                                    <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                        <div className={styles.itemContent}>
+                                            <div className={styles.itemTitle}>{item.pname}</div>
+                                            <div className={styles.itemDetail}>
+                                                <span>US$ {item.price}</span>
+                                                <span className={styles.fr}>
+                                                    {
+                                                        this.formatTrendNumber(item.no)
+                                                    }
+                                                </span>
+                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                )
+                                :null
+                            }
                         </li>
                         <li>
-                            <h3>销量排行榜</h3>
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB </div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-....RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
+                            <h3>销量额排行榜</h3>
+                            {
+                                this.props.myProductRank.payAmountRank?
+                                this.props.myProductRank.payAmountRank.map((item,index) => 
+                                    <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                        <div className={styles.itemContent}>
+                                            <div className={styles.itemTitle}>{item.pname}</div>
+                                            <div className={styles.itemDetail}>
+                                                <span>US$ {item.price}</span>
+                                                <span className={styles.fr}>
+                                                    {
+                                                        this.formatTrendNumber(item.no)
+                                                    }
+                                                </span>
+                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                )
+                                :null
+                            }
                         </li>
                         <li>
-                            <h3>销量排行榜</h3>
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB </div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-....RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div className={styles.itemPanel}>
-                                <div className={styles.imgWrap}><img src=''/></div>
-                                <div className={styles.itemContent}>
-                                    <div className={styles.itemTitle}>DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-DOOGEE MIX 5.5 Inch Android 7.0 6GB RAM 64GB ROM Helio P25 Octa-</div>
-                                    <div className={styles.itemDetail}>
-                                        <span>US$ 138.99</span>
-                                        <span className={styles.fr}><span className={styles.exponentTop}><Icon type="arrow-up" />11%</span></span>
-                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>99999件</b>
-                                    </div>
-                                </div>
-                            </div> 
+                            <h3>转化率排行榜</h3>
+                            {
+                                this.props.myProductRank.changeRateRank?
+                                this.props.myProductRank.changeRateRank.map((item,index) => 
+                                    <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                        <div className={styles.itemContent}>
+                                            <div className={styles.itemTitle}>{item.pname}</div>
+                                            <div className={styles.itemDetail}>
+                                                <span>US$ {item.price}</span>
+                                                <span className={styles.fr}>
+                                                    {
+                                                        this.formatTrendNumber(item.no)
+                                                    }
+                                                </span>
+                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                )
+                                :null
+                            }
                         </li>
                     </ul>
                 </div>
             </div>
         )
+    }
+
+    // 格式化热度的显示格式
+    formatTrendNumber(no){
+        //if(no){
+            if(no == 'hot'){
+                return (<span className={styles.exponentDown}>{no}</span>)
+            }
+            else if(no > 0){
+                return (<span className={styles.exponentTop}><Icon type="arrow-up" />{no}</span>)
+            }
+            else if(no < 0){
+                return (<span className={styles.exponentDown}><Icon type="arrow-down" />{no}</span>)
+            }
+            else if(no == 0){
+                return (<span className={styles.exponentZero}>{no}</span>)
+            }
+        //}
     }
 
 }

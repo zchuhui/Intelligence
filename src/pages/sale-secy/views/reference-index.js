@@ -24,17 +24,13 @@ class ReferenceIndex extends React.Component {
 							<h3>加购量</h3>
 							<div><label>当天</label><b>{this.props.basket.basket ? this.props.basket.basket : 0} 件</b></div>
 							<div><label>前天环比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{
-										this.props.basket.yesRadio ? this.props.basket.yesRadio : '0%'
-									}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.basket.yesRadio)}
 								</span>
 							</div>
 							<div><label>上周同比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{
-										this.props.basket.weekRadio ? this.props.basket.weekRadio : '0%'
-									}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.basket.weekRadio)}
 								</span>
 							</div>
 							<div className={styles.chartWrap}>
@@ -43,15 +39,15 @@ class ReferenceIndex extends React.Component {
 						</li>
                          <li>
                             <h3>收藏量</h3>
-							<div><label>当天</label><b>{this.props.favorites.favorites?this.props.favorites.favorites:0}件</b></div>
+							<div><label>当天</label><b>{this.props.favorites.favorites?this.props.favorites.favorites:0} 件</b></div>
 							<div><label>前天环比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.favorites.yesRadio?this.props.favorites.yesRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.favorites.yesRadio)}
 								</span>
 							</div>
 							<div><label>上周同比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.favorites.weekRadio?this.props.favorites.weekRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.favorites.weekRadio)}
 								</span>
 							</div>
 							<div className={styles.chartWrap}>
@@ -60,15 +56,15 @@ class ReferenceIndex extends React.Component {
                         </li>
                          <li>
                             <h3>访客量</h3>
-                            <div><label>当天</label><b>{this.props.visitor.visitor?this.props.visitor.visitor:0}位</b></div>
+                            <div><label>当天</label><b>{this.props.visitor.visitor?this.props.visitor.visitor:0} 位</b></div>
                             <div><label>前天环比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.visitor.yesRadio?this.props.visitor.yesRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.visitor.yesRadio)}
 								</span>
 							</div>
                             <div><label>上周同比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.visitor.weekRadio?this.props.visitor.weekRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.visitor.weekRadio)}
 								</span>
 							</div>
                             <div className={styles.chartWrap}>
@@ -77,15 +73,15 @@ class ReferenceIndex extends React.Component {
                         </li>
                          <li>
                             <h3>浏览量</h3>
-                            <div><label>当天</label><b>{this.props.pageView.pageView?this.props.pageView.pageView:0}次</b></div>
+                            <div><label>当天</label><b>{this.props.pageView.pageView?this.props.pageView.pageView:0} 次</b></div>
                             <div><label>前天环比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.pageView.yesRadio?this.props.pageView.yesRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.pageView.yesRadio)}
 								</span>
 							</div>
                             <div><label>上周同比</label>
-								<span className={styles.exponentTop}><Icon type="arrow-up" />
-									{this.props.pageView.weekRadio?this.props.pageView.weekRadio:'0%'}
+								<span className={styles.exponentTop}>
+									{this.formatTrendPercentage(this.props.pageView.weekRadio)}
 								</span>
 							</div>
                             <div className={styles.chartWrap}>
@@ -99,18 +95,28 @@ class ReferenceIndex extends React.Component {
     }
 
     componentDidMount(){
-		this.loadChart(this.refs.refChart1);
-        this.loadChart(this.refs.refChart2);
-        this.loadChart(this.refs.refChart3);
-        this.loadChart(this.refs.refChart4);
+		
+		this.loadChart(this.refs.refChart1,this.props.basket.runChart);
+        this.loadChart(this.refs.refChart2,this.props.basket.runChart);
+        this.loadChart(this.refs.refChart3,this.props.basket.runChart);
+		this.loadChart(this.refs.refChart4,this.props.basket.runChart);
+
     }
 
 	componentDidUpdate(){
+		
+		this.loadChart(this.refs.refChart1,this.props.basket.runChart);
+        this.loadChart(this.refs.refChart2,this.props.basket.runChart);
+        this.loadChart(this.refs.refChart3,this.props.basket.runChart);
+		this.loadChart(this.refs.refChart4,this.props.basket.runChart);
+
 	}
 
 	// 载入echart图表
-	loadChart(chartId){
+	loadChart(chartId,data){
 
+		data = this.formatDataToEchartData(data);
+		
 		if(chartId){
 
 			// 初始化Echart
@@ -138,7 +144,7 @@ class ReferenceIndex extends React.Component {
 						{
 							type : 'category',
 							boundaryGap : false,
-							data : ['6.20','6.21','6.22','6.23','6.24'],
+							data : data.dateArray,
 							axisLabel: {
 								show: false,
 							},
@@ -170,7 +176,7 @@ class ReferenceIndex extends React.Component {
 					],
 					series : [
 						{
-							name:'搜索引擎',
+							name:'',
 							type:'line',
 							stack: '总量',
 							 itemStyle:{
@@ -186,12 +192,50 @@ class ReferenceIndex extends React.Component {
 								}
 							},
 							areaStyle: {normal: {}},
-							data:[ 92, 234, 190, 230, 120]
+							data:data.valueArray
 						}
 					]
 			});
 		}
 	
+	}
+
+	// 把数据转成EChart数据
+	formatDataToEchartData(runChart) {
+
+		let obj = {
+			dateArray:[],
+			valueArray:[]
+		}
+
+		if(runChart){
+			let arr1 = [];
+			let arr2 = [];
+			for(let i in runChart){
+				arr1.push(i);
+				arr2.push(runChart[i]);
+			}
+
+			obj.dateArray = arr1;
+			obj.valueArray = arr2;
+		}
+		return obj;
+	}
+
+	// 格式化热度的显示格式
+	formatTrendPercentage(no) {
+		if (no) {
+			no = no.split('%')[0];
+			if (no > 0) {
+				return (<span className={styles.exponentTop}><Icon type="arrow-up" /> {no}%</span>)
+			}
+			else if (no < 0) {
+				return (<span className={styles.exponentDown}><Icon type="arrow-down" /> {no}%</span>)
+			}
+			else if (no == 0) {
+				return (<span className={styles.exponentZero}> {no}%</span>)
+			}
+		}
 	}
 
 }

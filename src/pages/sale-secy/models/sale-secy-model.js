@@ -5,6 +5,7 @@
 import * as SaleSecyService from '../../../services/service-sale-secy';
 import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
 import { message } from 'antd';
+import Moment from 'moment';
 
 
 export default {
@@ -22,29 +23,66 @@ export default {
 		favorites: {},           //收藏量
 		visitor: {},             //访客量
 		pageView: {},            //浏览量
+
+		myProductRank:{},        // 商品排行
+		myProductInCate:{},      // 第一个类目 你的商品排行
+		cateSet:{},              // 分类饼图
+		myCateSalesFromPrice:{}, // 第一个类目 商品排行 		
+
 	},
 
 	reducers:{
+		// 存储数据
 		saveSaleSecyInfo(state, { payload }) {
 			return {...state,...payload};
+		},
+
+		// 更新加载状态
+		updateLoading(state,{ payload }){
+			return {...state,loading: payload.loading}
 		}
 	},
 
 	effects:{
 		
+		// 获取销售数据
 		* getSaleSecyInfo({payload},{select,call,put}){
+			
+			yield put({type:'updateLoading', payload:{loading:true}})
+
 			try {
-				
-				const { data } = yield call(SaleSecyService.getSalesSecyInfo,payload);
+				const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
 
 				if(data.code == CODE200){
-					console.log(data);
+					yield put({ type:'saveSaleSecyInfo', payload:data.data});
+
+					
+					// 继续加载排行榜数据
+					yield put({ type: 'getRankAndCatetory',payload});
+
+				}else{
+					message.warning(data.msg);
+				}
+			} catch (error) {
+				message.warning(error.message);
+			}
+
+			yield put({type:'updateLoading', payload:{loading:false}})
+		},
+
+
+		// 获取排行榜与类目数据
+		* getRankAndCatetory({payload},{select,call,put}){
+			try {
+				
+				const { data } = yield call(SaleSecyService.getSalesSecretaryCateInfo,payload);
+
+				if(data.code == CODE200){
 					yield put({ type:'saveSaleSecyInfo', payload:data.data});
 				}else{
 					message.warning(data.msg);
 				}
 			} catch (error) {
-				console.log(error.message);
 				message.warning(error.message);
 			}
 		}
@@ -52,7 +90,7 @@ export default {
 
 	subscriptions:{
 		setup({ dispatch, history }) {
-			dispatch({ type: 'getSaleSecyInfo',payload:{date:'2017-07-12'}});
+			dispatch({ type: 'getSaleSecyInfo',payload:{time:Moment().format('YYYY-MM-DD')}});
         },
 	}
 

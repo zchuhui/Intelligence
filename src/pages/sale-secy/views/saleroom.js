@@ -17,7 +17,12 @@ class Saleroom extends React.Component {
 
 		this.state = {
 			date: moment(),  // 日期
-			runChart:null,
+			runChart:null,   // 图表数据
+
+			item1:1,         // 模块1
+			item2:0,         // 模块2
+			item3:0,         // 模块3
+			item4:0,		 // 模块4
 		}
 	}
 
@@ -26,14 +31,14 @@ class Saleroom extends React.Component {
 			<div className={styles.panel}>
 				<div className={styles.saleroomWrap}>
 					<div className={styles.dateWrap}>
-						<DatePicker value={moment(this.state.date)} format="YYYY-MM-DD" />
+						<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
 						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
 						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
 					</div>
 
 					<div className={styles.head}>
 						<span>你拥有 
-							<b>{this.props.productTotal.productTotal ? this.props.productTotal.productTotal : 0}</b> 件  
+							<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件  
 						</span>
 						<span>环比增长 
 							<span className={styles.exponentTop}>
@@ -46,64 +51,68 @@ class Saleroom extends React.Component {
 					<div className={styles.clear}>
 						<div className={styles.saleroomContent}>
 							<ul className={styles.clear}>
-								<li onClick={this.onSaleroomItem.bind(this,this.props.salesAmount.runChart)}>
+								<li className={this.state.item1?styles.borderBottomNone:null} 
+									onClick={this.onSaleroomItem.bind(this,this.props.salesAmount.runChart,1)}>
 									<h3>销售额</h3>
 									<div>
 										<label>当天</label>
-										<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0}元</b>
+										<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} 元</b>
 									</div>
 									<div>
 										<label>前天环比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.salesAmount.yesRadio ? this.props.salesAmount.yesRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.salesAmount.yesRadio)}
 										</span>
 									</div>
 									<div>
 										<label>上周同比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.salesAmount.weekRadio ? this.props.salesAmount.weekRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.salesAmount.weekRadio)}
 										</span>
 									</div>
 								</li>
-								<li onClick={this.onSaleroomItem.bind(this,this.props.salesSum.runChart)}>
+								<li className={this.state.item2?styles.borderBottomNone:null}
+									onClick={this.onSaleroomItem.bind(this,this.props.salesSum.runChart,2)}>
 									<h3>销量</h3>
-									<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0}元</b></div>
+									<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0} 元</b></div>
 									<div><label>前天环比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.salesSum.yesRadio ? this.props.salesSum.yesRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.salesSum.yesRadio)}
 										</span>
 									</div>
 									<div><label>上周同比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.salesSum.weekRadio ? this.props.salesSum.weekRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.salesSum.weekRadio)}
 										</span>
 									</div>
 								</li>
-								<li>
+								<li className={this.state.item3?styles.borderBottomNone:null}
+									onClick={this.onSaleroomItem.bind(this,this.props.changeRate.runChart,3)}>
 									<h3>转化率</h3>
-									<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0}元</b></div>
+									<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} 元</b></div>
 									<div><label>前天环比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.changeRate.yesRadio ? this.props.changeRate.yesRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.changeRate.yesRadio)}
 										</span>
 									</div>
 									<div><label>上周同比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.changeRate.weekRadio ? this.props.changeRate.weekRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.changeRate.weekRadio)}
 										</span>
 									</div>
 								</li>
-								<li>
+								<li className={this.state.item4?styles.borderBottomNone:null}
+									onClick={this.onSaleroomItem.bind(this,this.props.productNew.runChart,4)}>
 									<h3>新品上架数</h3>
-									<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0}元</b></div>
+									<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0} 元</b></div>
 									<div><label>前天环比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.productNew.yesRadio ? this.props.productNew.yesRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.productNew.yesRadio)}
 										</span>
 									</div>
 									<div><label>上周同比</label>
-										<span className={styles.exponentTop}><Icon type="arrow-up" />
-											{this.props.productNew.weekRadio ? this.props.productNew.weekRadio : '0%'}
+										<span className={styles.exponentTop}>
+											{this.formatTrendPercentage(this.props.productNew.weekRadio)}
 										</span>
 									</div>
 								</li>
@@ -137,21 +146,25 @@ class Saleroom extends React.Component {
 	}
 
 
-	componentDidMount() {
+	componentDidMount() { 
 
-		this.setState({
-			runChart:this.getEchartData(this.props.salesAmount.runChart)
+		// 载入图表数据
+		this.timeout(5000).then((value) => {
+			this.setState({
+				runChart:this.props.salesAmount.runChart
+			}); 
 		});
 		
-		this.timeout(3000).then((value) => {
+		this.timeout(2000).then((value) => {
 			this.setState({
-				runChart:this.getEchartData(this.props.salesAmount.runChart)
-			});
+				runChart:this.props.salesAmount.runChart
+			}); 
 		});
+		
 	}
 
 	componentDidUpdate() { 
-
+		// 每次更新数据，都重载图表
 		this.loadChart(this.getEchartData(this.state.runChart));
 	}
 
@@ -229,9 +242,9 @@ class Saleroom extends React.Component {
 				],
 				series: [
 					{
-						name: '搜索引擎',
+						name: '',
 						type: 'line',
-						stack: '总量',
+						stack: '',
 						itemStyle: {
 							normal: {
 								color: '#acdaff',
@@ -265,8 +278,10 @@ class Saleroom extends React.Component {
 			let arr1 = [];
 			let arr2 = [];
 			for(let i in runChart){
-				arr1.push(i);
-				arr2.push(runChart[i]);
+				if(i !== 'dateArray' && i !== 'valueArray'){
+					arr1.push(i);
+					arr2.push(runChart[i]);
+				}
 			}
 
 			obj.dateArray = arr1;
@@ -275,11 +290,47 @@ class Saleroom extends React.Component {
 		return obj;
 	}
 
-	// 切换
-	onSaleroomItem(runChart){
-		this.setState({
-			runChart:runChart,
-		})
+	// 点击切换模块：包括下边框、Echart数据
+	onSaleroomItem(runChart,index){
+		
+		switch(index){
+			case 1:
+				this.setState({
+					item1:1,
+					item2:0,
+					item3:0,
+					item4:0,
+					runChart:runChart,
+				});
+				break;
+			case 2:
+				this.setState({
+					item1:0,
+					item2:1,
+					item3:0,
+					item4:0,
+					runChart:runChart,
+				});
+				break;
+			case 3:
+				this.setState({
+					item1:0,
+					item2:0,
+					item3:1,
+					item4:0,
+					runChart:runChart,
+				});
+				break;
+			case 4:
+				this.setState({
+					item1:0,
+					item2:0,
+					item3:0,
+					item4:1,
+					runChart:runChart,
+				});
+				break;
+		}
 	}
 
 	// 上一天、下一天
@@ -292,17 +343,51 @@ class Saleroom extends React.Component {
 			//上一天
 			let provDay = moment(currentDate).subtract("days", 1).format("YYYY-MM-DD");
 
-			this.setState({
-				date: provDay
-			})
+			// 更新到state
+			this.setState({date: provDay});
+			
+			// 请求数据
+			this.props.getsaleSecyInfoToDate(provDay); 
 		}
 		else {
 			//下一天
-			let nextDay = moment(currentDate).add(1, "days").format("YYYYMMDD")
+			let nextDay = moment(currentDate).add(1, "days").format("YYYY-MM-DD");
 
-			this.setState({
-				date: nextDay
-			})
+			// 更新到state
+			this.setState({date: nextDay});
+			// 请求数据
+			this.props.getsaleSecyInfoToDate(nextDay); 
+
+		}
+	}
+
+	// 选择日期
+	onChangeDate(date, dateString){
+		this.setState({date:dateString});
+
+		// 请求数据
+		this.props.getsaleSecyInfoToDate(dateString); 
+	}
+
+	disabledDate(current) {
+		// Can not select days before today and today
+		return current && current.valueOf() > Date.now();  
+	}
+
+
+	// 格式化热度的显示格式
+	formatTrendPercentage(no) {
+		if (no) {
+			no = no.split('%')[0];
+			if (no > 0) {
+				return (<span className={styles.exponentTop}><Icon type="arrow-up" /> {no}%</span>)
+			}
+			else if (no < 0) {
+				return (<span className={styles.exponentDown}><Icon type="arrow-down" /> {no}%</span>)
+			}
+			else if (no == 0) {
+				return (<span className={styles.exponentZero}> {no}%</span>)
+			}
 		}
 	}
 
