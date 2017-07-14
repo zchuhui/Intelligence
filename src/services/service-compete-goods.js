@@ -6,7 +6,7 @@ import { Url } from '../config/config.url';
 // page: 页数
 export function fetch({page}) { 
 	//添加两个默认参数，并加上页数
-	const apiArgs= `com=api&t=productList&page=${page}`;
+	const apiArgs= `com=ajax&t=productList&page=${page}`;
 
 	let url = `${Url}?${apiArgs}`;
 
@@ -20,7 +20,7 @@ export function fetch({page}) {
 export function search(args) { 
 	
 	const argument = args.searchArgs;
-	let argumentStr = `com=api&t=productList`;
+	let argumentStr = `com=ajax&t=productList`;
 	
 	// 把参数转为url格式
 	for(let i in argument){ 

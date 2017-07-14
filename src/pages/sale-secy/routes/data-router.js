@@ -23,42 +23,48 @@ class DataRouter extends React.Component {
 						// 判断加载状况
 						this.props.loading ?
 							<div className={styles.loadWrap}>
-								<Spin tip="卖命加载中..." style={{ marginTop: '20%' }} />
+								<Spin tip="加载中..." style={{ marginTop: 20 }} />
 							</div>
-							: null
+							: 
+							<div>
+								{/* 销售信息 */}
+								<Saleroom 
+									productTotal={this.props.productTotal}
+									salesAmount={this.props.salesAmount} 
+									salesSum={this.props.salesSum}
+									changeRate={this.props.changeRate}
+									productNew={this.props.productNew}
+
+									getsaleSecyInfoToDate={time => this.getsaleSecyInfoToDate(time)}
+								/>
+								{/* 参考指标 */}
+								<ReferenceIndex
+									basket={this.props.basket}
+									favorites={this.props.favorites}
+									visitor={this.props.visitor}
+									pageView={this.props.pageView}
+								/>
+								{/* 商品排名 */}
+								<GoodsRank
+									myProductRank={this.props.myProductRank}
+								/>
+								{/* 类目情况 */}
+								<Category
+									loading={this.props.cateLoading}
+									cateSet={this.props.cateSet}
+									myProductInCate={this.props.myProductInCate}
+									productInCate={this.props.productInCate}
+									myCateSalesFromPrice={this.props.myCateSalesFromPrice}
+								/>
+								{/* 对比关系 */}
+								<Correlation
+									loading={this.props.comparisonLoading}
+									goodsComparisonList={this.props.goodsComparisonList} 
+								/>
+							</div>
 					}
-					{/* 销售信息 */}
-					<Saleroom
-						productTotal={this.props.productTotal}
-						salesAmount={this.props.salesAmount}
-						salesSum={this.props.salesSum}
-						changeRate={this.props.changeRate}
-						productNew={this.props.productNew}
-
-						getsaleSecyInfoToDate={time => this.getsaleSecyInfoToDate(time)}
-					/>
-					{/* 参考指标 */}
-					<ReferenceIndex
-						basket={this.props.basket}
-						favorites={this.props.favorites}
-						visitor={this.props.visitor}
-						pageView={this.props.pageView}
-					/>
-					{/* 商品排名 */}
-					<GoodsRank
-						myProductRank={this.props.myProductRank}
-					/>
-					{/* 类目情况 */}
-					<Category
-						cateSet={this.props.cateSet}
-						myProductInCate={this.props.myProductInCate}
-						myCateSalesFromPrice={this.props.myCateSalesFromPrice}
-					/>
-					{/* 对比关系 */}
-					<Correlation />
-
+					
 				</div>
-
 			</MainLayout>
 		)
 	}
@@ -72,6 +78,8 @@ class DataRouter extends React.Component {
 			}
 		})
 	}
+
+
 }
 
 function mapStateToProps(state) {

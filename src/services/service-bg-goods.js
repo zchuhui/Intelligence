@@ -10,7 +10,7 @@ export function fetch({ page }) {
     let endDay = moment().endOf('month').format('YYYY-MM-DD')
 
     //默认参数，并加上页数	
-    const apiArgs = `com=api&t=getBgProductList&site=banggood&startTime=${firstDay}&endTime=${endDay}&page=${page}`;
+    const apiArgs = `com=ajax&t=getBgProductList&site=banggood&startTime=${firstDay}&endTime=${endDay}&page=${page}`;
 
     // 合成Url
     let currentUrl = `${Url}?${apiArgs}`;
@@ -28,7 +28,7 @@ export function search(args) {
     
     const argument = args.searchArgs;
     
-    let argumentStr = `com=api&t=getBgProductList&`;
+    let argumentStr = `com=ajax&t=getBgProductList&`;
 
     // 把参数转为url格式
     for (let i in argument) {
@@ -50,7 +50,7 @@ export function search(args) {
  */
 export function fetchGoodsDetailBySku(args) {
 
-    let argumentStr = `com=api&t=productInfo&site=${args.site}&sku=${args.sku}`;
+    let argumentStr = `com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
 
     let url = `${Url}?${argumentStr}`;
 
@@ -66,7 +66,7 @@ export function fetchGoodsDetailBySku(args) {
  */
 export function fetchSimilarGoodsList(args) {
 
-    let argumentStr = `com=api&t=getLikeProduct&title=${args.title}`;
+    let argumentStr = `com=ajax&t=getLikeProduct&title=${args.title}`;
 
     let url = `${Url}?${argumentStr}`;
     
@@ -84,7 +84,7 @@ export function setRelevanceGoods(args) {
 
     let content = JSON.stringify(args.relevanceGoodsList); 
 
-    let argumentStr = `com=api&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
+    let argumentStr = `com=ajax&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
     
 
     let argus = {
@@ -107,7 +107,7 @@ export function setRelevanceGoods(args) {
  */
 export function fetchGoodsEchartByPidAndTime(args) {
 
-    let argumentStr = `com=api&t=getBgProductRunChart&pid=${args.pid}&startTime=${args.startTime}&endTime=${args.endTime}`;
+    let argumentStr = `com=ajax&t=getBgProductRunChart&pid=${args.pid}&startTime=${args.startTime}&endTime=${args.endTime}`;
 
 	let url = `${Url}?${argumentStr}`;
 	
@@ -122,7 +122,7 @@ export function fetchGoodsEchartByPidAndTime(args) {
  */
 export function fetchGoodsContrastData(pid){
 
-    let argumentStr = `com=api&t=getBgRelateProductComtrastInfo&pid=${pid}`;
+    let argumentStr = `com=ajax&t=getBgRelateProductComtrastInfo&pid=${pid}`;
 
     let url = `${Url}?${argumentStr}`;
     
