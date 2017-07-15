@@ -25,68 +25,63 @@ class Category extends React.Component {
                     </div>
                     :
                     <div className={styles.categoryWrap}>
-                        <ul className={styles.clear}>
-                            <li>
-                                {
-                                    this.props.cateSet?
+                        {
+                            this.props.myProductInCate.map?
+                            <ul className={styles.clear}>
+                                <li>
                                     <div ref='catePieChart' style={{width:'100%',height:310}}></div>
-                                    :null
-                                }
-                                {
-                                    this.props.myCateSalesFromPrice?
                                     <div ref='catePillarChart' style={{width:'100%',height:310}}></div>
-                                    :null
-                                }
-                                
-                            </li>
-                            <li>
-                                <h3>你的商品排行</h3>
-                                {
-                                    this.props.myProductInCate.map?this.props.myProductInCate.map((item,index)=>
-                                    <div className={styles.itemPanel} key={item.pid}>
-                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.itemTitle}>{item.pname}</div>
-                                            <div className={styles.itemDetail}>
-                                                <span>US$ {item.price}</span>
-                                                <span className={styles.fr}>
-                                                    {
-                                                        this.formatTrendNumber(item.no)
-                                                    }
-                                                </span>
-                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                                </li>
+                                <li>
+                                    <h3>你的商品排行</h3>
+                                    {
+                                        this.props.myProductInCate.map((item,index)=>
+                                        <div className={styles.itemPanel} key={item.pid}>
+                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>US$ {item.price}</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> 
-                                    )
-                                    :null
-                                }
-                                
-                            </li>
-                            <li>
-                                <h3>商品排行</h3>
-                                {
-                                    this.props.productInCate.map?this.props.productInCate.map((item,index)=>
-                                    <div className={styles.itemPanel}  key={item.pid}>
-                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.itemTitle}>{item.pname}</div>
-                                            <div className={styles.itemDetail}>
-                                                <span>US$ {item.price}</span>
-                                                <span className={styles.fr}>
-                                                    {
-                                                        this.formatTrendNumber(item.no)
-                                                    }
-                                                </span>
-                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                                        </div> 
+                                        )
+                                    }
+                                    
+                                </li>
+                                <li>
+                                    <h3>商品排行</h3>
+                                    {
+                                        this.props.productInCate.map((item,index)=>
+                                        <div className={styles.itemPanel}  key={item.pid}>
+                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>US$ {item.price}</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> 
-                                    )
-                                    :null
-                                }
-                            </li>
-                        </ul>
+                                        </div> 
+                                        )
+                                    }
+                                </li>
+                            </ul>
+                            :
+                            <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+                        }
+
                     </div>
                 }
                 

@@ -16,82 +16,88 @@ class GoodsRank extends React.Component {
                 <div className={styles.panelTitle}>
                     你的商品排名
                 </div>
-                <div className={styles.goodsRankWrap}>
-                    <ul className={styles.clear}>
-                        <li>
-                            <h3>销量排行榜</h3>
-                            {
-                                this.props.myProductRank.salesRank?
-                                this.props.myProductRank.salesRank.map((item,index) => 
-                                    <div className={styles.itemPanel} key={item.pid}>
-                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.itemTitle}>{item.pname}</div>
-                                            <div className={styles.itemDetail}>
-                                                <span>US$ {item.price}</span>
-                                                <span className={styles.fr}>
-                                                    {
-                                                        this.formatTrendNumber(item.no)
-                                                    }
-                                                </span>
-                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                {
+                    this.props.myProductRank.salesRank?
+                    <div className={styles.goodsRankWrap}>
+                        <ul className={styles.clear}>
+                            <li>
+                                <h3>销量排行榜</h3>
+                                {
+                                    this.props.myProductRank.salesRank?
+                                    this.props.myProductRank.salesRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={item.pid}>
+                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>US$ {item.price}</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> 
-                                )
-                                :null
-                            }
-                        </li>
-                        <li>
-                            <h3>销量额排行榜</h3>
-                            {
-                                this.props.myProductRank.payAmountRank?
-                                this.props.myProductRank.payAmountRank.map((item,index) => 
-                                    <div className={styles.itemPanel} key={item.pid}>
-                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.itemTitle}>{item.pname}</div>
-                                            <div className={styles.itemDetail}>
-                                                <span>US$ {item.price}</span>
-                                                <span className={styles.fr}>
-                                                    {
-                                                        this.formatTrendNumber(item.no)
-                                                    }
-                                                </span>
-                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                            <li>
+                                <h3>销量额排行榜</h3>
+                                {
+                                    this.props.myProductRank.payAmountRank?
+                                    this.props.myProductRank.payAmountRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={item.pid}>
+                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>US$ {item.price}</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> 
-                                )
-                                :null
-                            }
-                        </li>
-                        <li>
-                            <h3>转化率排行榜</h3>
-                            {
-                                this.props.myProductRank.changeRateRank?
-                                this.props.myProductRank.changeRateRank.map((item,index) => 
-                                    <div className={styles.itemPanel} key={item.pid}>
-                                        <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.itemTitle}>{item.pname}</div>
-                                            <div className={styles.itemDetail}>
-                                                <span>US$ {item.price}</span>
-                                                <span className={styles.fr}>
-                                                    {
-                                                        this.formatTrendNumber(item.no)
-                                                    }
-                                                </span>
-                                                <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                            <li>
+                                <h3>转化率排行榜</h3>
+                                {
+                                    this.props.myProductRank.changeRateRank?
+                                    this.props.myProductRank.changeRateRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={item.pid}>
+                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>US$ {item.price}</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div> 
-                                )
-                                :null
-                            }
-                        </li>
-                    </ul>
-                </div>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                    :
+                    <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+                }
+                
             </div>
         )
     }

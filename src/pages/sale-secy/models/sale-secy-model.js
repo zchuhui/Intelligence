@@ -32,7 +32,7 @@ export default {
 		myCateSalesFromPrice:{}, // 第一个类目 商品排行 		
 		
 		comparisonLoading:false, // 商品对比加载
-		goodsComparisonList:[]   // 商品对比信息
+		goodsComparisonList:null   // 商品对比信息
 	},
 
 	reducers:{

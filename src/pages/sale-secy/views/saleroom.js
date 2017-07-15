@@ -29,117 +29,123 @@ class Saleroom extends React.Component {
 	render() {
 		return (
 			<div className={styles.panel}>
-				<div className={styles.saleroomWrap}>
-					<div className={styles.dateWrap}>
-						<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
-						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
-						<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
-					</div>
+				{
+					this.props.salesAmount.salesAmount?
+					<div className={styles.saleroomWrap}>
+						<div className={styles.dateWrap}>
+							<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
+							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
+							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
+						</div>
 
-					<div className={styles.head}>
-						<span>你拥有 
-							<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件  
-						</span>
-						<span>环比增长 
-							<span className={styles.exponentTop}>
-								<Icon type="arrow-up" />
-								{this.props.productTotal ? this.props.productTotal.yesRadio : 0}
+						<div className={styles.head}>
+							<span>你拥有 
+								<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件  
 							</span>
-						</span>
-					</div>
+							<span>环比增长 
+								<span className={styles.exponentTop}>
+									<Icon type="arrow-up" />
+									{this.props.productTotal ? this.props.productTotal.yesRadio : 0}
+								</span>
+							</span>
+						</div>
 
-					<div className={styles.clear}>
-						<div className={styles.saleroomContent}>
-							<ul className={styles.clear}>
-								<li className={this.state.item1?styles.borderBottomNone:null} 
-									onClick={this.onSaleroomItem.bind(this,this.props.salesAmount.runChart,1)}>
-									<h3>销售额</h3>
-									<div>
-										<label>当天</label>
-										<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} 元</b>
-									</div>
-									<div>
-										<label>前天环比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.salesAmount.yesRadio)}
-										</span>
-									</div>
-									<div>
-										<label>上周同比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.salesAmount.weekRadio)}
-										</span>
-									</div>
-								</li>
-								<li className={this.state.item2?styles.borderBottomNone:null}
-									onClick={this.onSaleroomItem.bind(this,this.props.salesSum.runChart,2)}>
-									<h3>销量</h3>
-									<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0} 元</b></div>
-									<div><label>前天环比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.salesSum.yesRadio)}
-										</span>
-									</div>
-									<div><label>上周同比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.salesSum.weekRadio)}
-										</span>
-									</div>
-								</li>
-								<li className={this.state.item3?styles.borderBottomNone:null}
-									onClick={this.onSaleroomItem.bind(this,this.props.changeRate.runChart,3)}>
-									<h3>转化率</h3>
-									<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} 元</b></div>
-									<div><label>前天环比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.changeRate.yesRadio)}
-										</span>
-									</div>
-									<div><label>上周同比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.changeRate.weekRadio)}
-										</span>
-									</div>
-								</li>
-								<li className={this.state.item4?styles.borderBottomNone:null}
-									onClick={this.onSaleroomItem.bind(this,this.props.productNew.runChart,4)}>
-									<h3>新品上架数</h3>
-									<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0} 元</b></div>
-									<div><label>前天环比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.productNew.yesRadio)}
-										</span>
-									</div>
-									<div><label>上周同比</label>
-										<span className={styles.exponentTop}>
-											{this.formatTrendPercentage(this.props.productNew.weekRadio)}
-										</span>
-									</div>
-								</li>
-							</ul>
-							<div>
-								<div ref='saleroomChart' style={{ width: '100%', height: 300 }}></div>
-							</div>
-						</div>
-						<div className={styles.saleroomScore}>
-							<h3><b>88</b>分</h3>
-							<p>优秀，超越58%的伙伴</p>
-							<div className={styles.scoreContent}>
-								<ul>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
-									<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
+						<div className={styles.clear}>
+							<div className={styles.saleroomContent}>
+								<ul className={styles.clear}>
+									<li className={this.state.item1?styles.borderBottomNone:null} 
+										onClick={this.onSaleroomItem.bind(this,this.props.salesAmount.runChart,1)}>
+										<h3>销售额</h3>
+										<div>
+											<label>当天</label>
+											<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} 元</b>
+										</div>
+										<div>
+											<label>前天环比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.salesAmount.yesRadio)}
+											</span>
+										</div>
+										<div>
+											<label>上周同比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.salesAmount.weekRadio)}
+											</span>
+										</div>
+									</li>
+									<li className={this.state.item2?styles.borderBottomNone:null}
+										onClick={this.onSaleroomItem.bind(this,this.props.salesSum.runChart,2)}>
+										<h3>销量</h3>
+										<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0} 元</b></div>
+										<div><label>前天环比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.salesSum.yesRadio)}
+											</span>
+										</div>
+										<div><label>上周同比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.salesSum.weekRadio)}
+											</span>
+										</div>
+									</li>
+									<li className={this.state.item3?styles.borderBottomNone:null}
+										onClick={this.onSaleroomItem.bind(this,this.props.changeRate.runChart,3)}>
+										<h3>转化率</h3>
+										<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} 元</b></div>
+										<div><label>前天环比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.changeRate.yesRadio)}
+											</span>
+										</div>
+										<div><label>上周同比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.changeRate.weekRadio)}
+											</span>
+										</div>
+									</li>
+									<li className={this.state.item4?styles.borderBottomNone:null}
+										onClick={this.onSaleroomItem.bind(this,this.props.productNew.runChart,4)}>
+										<h3>新品上架数</h3>
+										<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0} 元</b></div>
+										<div><label>前天环比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.productNew.yesRadio)}
+											</span>
+										</div>
+										<div><label>上周同比</label>
+											<span className={styles.exponentTop}>
+												{this.formatTrendPercentage(this.props.productNew.weekRadio)}
+											</span>
+										</div>
+									</li>
 								</ul>
+								<div>
+									<div ref='saleroomChart' style={{ width: '100%', height: 300 }}></div>
+								</div>
+							</div>
+							<div className={styles.saleroomScore}>
+								<h3><b>88</b>分</h3>
+								<p>优秀，超越58%的伙伴</p>
+								<div className={styles.scoreContent}>
+									<ul>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错不错不错不错不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
+										<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+					:
+					<div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+				}
+				
 
 			</div>
 		)

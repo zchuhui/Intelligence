@@ -24,53 +24,64 @@ class Correlation extends React.Component {
                         <Spin tip="加载中..." style={{ marginTop: 20 }} />
                     </div>
                     :
-					<div className={styles.correlationWrap}>
-						<ul>
-							<li className={styles.clear}>
-								<div className={styles.itemLeft}><h3>——— &nbsp;&nbsp; banggood 的商品 &nbsp;&nbsp; ———</h3></div>
-								<div className={styles.itemCenter}></div>
-								<div className={styles.itemRight}><h3>——— &nbsp;&nbsp; 竞品 &nbsp;&nbsp; ———</h3></div>
-							</li>
+					<div>
+						{
+							this.props.goodsComparisonList? 
+							<div className={styles.correlationWrap}>
+								<ul>
+									<li className={styles.clear}>
+										<div className={styles.itemLeft}><h3>——— &nbsp;&nbsp; banggood 的商品 &nbsp;&nbsp; ———</h3></div>
+										<div className={styles.itemCenter}></div>
+										<div className={styles.itemRight}><h3>——— &nbsp;&nbsp; 竞品 &nbsp;&nbsp; ———</h3></div>
+									</li>
 
-							{
-								this.props.goodsComparisonList.map?
-								this.props.goodsComparisonList.map((item,index) => 
-									<li className={styles.clear} key={item.pid}>
-										{/* BG商品 */}
-										<div className={styles.itemLeft}>
-											<div className={`${styles.itemPanel} ${styles.fl}`}>
-												<div className={styles.imgWrap}><img src={item.img_url} /></div>
-												<div className={styles.itemContent}>
-													<div className={styles.itemTitle}>{item.pname}</div>
-													<div className={styles.itemDetail}>
-														<span>US$ {item.price}</span>
-														<b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+									{
+										this.props.goodsComparisonList.map?
+										this.props.goodsComparisonList.map((item,index) => 
+											<li className={styles.clear} key={item.pid}>
+												{/* BG商品 */}
+												<div className={styles.itemLeft}>
+													<div className={`${styles.itemPanel} ${styles.fl}`}>
+														<div className={styles.imgWrap}><img src={item.img_url} /></div>
+														<div className={styles.itemContent}>
+															<div className={styles.itemTitle}>{item.pname}</div>
+															<div className={styles.itemDetail}>
+																<span>US$ {item.price}</span>
+																<b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+															</div>
+														</div>
+													</div> 
+													<div ref={`bgChart${(index+1)}`} className={styles.fr} style={{width:'35%',height:120,border:'1px solid #eee'}}></div>
+												</div>
+
+												<div className={styles.itemCenter}>
+													<b> VS </b>
+												</div>
+
+												{/* 竞品 */}
+												<div className={styles.itemRight}>
+													<div className={styles.echart} ref={`competeChart${(index+1)}`} style={{width:'70%',height:120,border:'1px solid #eee'}}></div>
+													<div className={styles.relateInfo}> 
+														{
+															this.formatRelateInfo(item.relate_info).goodsNameArray.map?
+															this.formatRelateInfo(item.relate_info).goodsNameArray.map((item2,idx2) =>
+															<p style={{color:this.formatRelateInfo(item.relate_info).goodsColorArray[idx2]}} key={`${item2}${idx2}`}>
+																{item2}  US  {this.formatRelateInfo(item.relate_info).goodsInfoArray[idx2].price}
+															</p>)
+															:null
+														} 
 													</div>
 												</div>
-											</div> 
-											<div ref={`bgChart${(index+1)}`} className={styles.fr} style={{width:'35%',height:120,border:'1px solid #eee'}}></div>
-										</div>
-
-										<div className={styles.itemCenter}>
-											<b> VS </b>
-										</div>
-
-										{/* 竞品 */}
-										<div className={styles.itemRight}>
-											<div ref={`competeChart${(index+1)}`} style={{width:'70%',height:120,border:'1px solid #eee'}}></div>
-											<div>
-												{/* {
-													this.formatRelateInfo().goodsNameArray.map((item,index) => 
-													<p>item</p>
-													)
-												} */}
-											</div>
-										</div>
-									</li>
-								)
-								:null
-							}
-						</ul>
+											</li>
+										)
+										:null
+									}
+								</ul>
+							</div>
+							:
+							<div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+						}
+						
 					</div>
 				}
                 
@@ -79,19 +90,17 @@ class Correlation extends React.Component {
     }
 
     
-    componentDidMount(){
-		
-	}
+    componentDidMount(){}
 	
 	componentDidUpdate(){
 
-		if(this.props.goodsComparisonList.length > 0){
+		if(this.props.goodsComparisonList){
 			// 载入BG Echart图表
 			this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
 			this.loadBGChart(this.refs.bgChart2,this.props.goodsComparisonList[1].run_chart);
 			this.loadBGChart(this.refs.bgChart3,this.props.goodsComparisonList[2].run_chart);
 
-			console.log('update',this.formatRelateInfo(this.props.goodsComparisonList[0].relate_info));
+			
 			// 载入竞品 Echart图表
 			this.loadLineChart(
 					this.refs.competeChart1,
@@ -208,6 +217,14 @@ class Correlation extends React.Component {
 					name: data.goodsNameArray[index],
 					type: 'line',
 					stack: '总量',
+					itemStyle : {  
+						normal : {  
+							color:data.goodsColorArray[index],  // 节点的颜色
+							lineStyle:{                         // 线的颜色
+								color:data.goodsColorArray[index],  
+							}  
+						}  
+					},  
 					data:item.priceSet,
 				};
 
@@ -225,9 +242,9 @@ class Correlation extends React.Component {
 				tooltip: {
 					trigger: 'axis'
 				},
-				legend: {
+				/* legend: {
 					data: data.goodsNameArray
-				},
+				}, */
 				toolbox: {
 					feature: {
 					}
@@ -322,6 +339,7 @@ class Correlation extends React.Component {
 
 		let goodsNameArray = [];
 		let goodsInfoArray = [];
+		let goodsColorArray = ['#e5004f','#43a047','#43a6f8','#e359ef'];
 
 		if(relateInfo){
 			for(let idx in relateInfo){
@@ -329,12 +347,15 @@ class Correlation extends React.Component {
 				goodsInfoArray.push(relateInfo[idx]);
 			}
 		}
-		console.log(goodsNameArray,goodsInfoArray);
+		//console.log(goodsNameArray,goodsInfoArray);
 		return {
 			goodsNameArray:goodsNameArray,
 			goodsInfoArray:goodsInfoArray,
+			goodsColorArray:goodsColorArray
 		}
 	}
+
+
 
 }
 

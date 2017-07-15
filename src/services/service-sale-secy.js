@@ -10,7 +10,7 @@ import { Url } from '../config/config.url';
  * @param {*日期参数} args 
  */
 export function getSalesSecretaryInfo(args) {
-	console.log(args);
+
     const apiArgs = `com=ajax&t=getSalesSecretaryInfo&time=${args.time}`;
 
     let currentUrl = `${Url}?${apiArgs}`;
