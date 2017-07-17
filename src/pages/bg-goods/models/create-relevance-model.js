@@ -48,7 +48,19 @@ export default {
         goodsBySite: {},
 
         // 相似的商品表
-        similarGoodsList: defaultSimilarGoodsList,
+        similarGoodsList:defaultSimilarGoodsList,
+
+        /* similarGoodsListChildren: {
+            gearbest:null,
+            dx:null,
+            lightinthebox:null,
+            tomtop:null,
+        }, */
+
+        gearbestSimilarGoods:null,
+        dxSimilarGoods:null,
+        
+
         // 选中的关联商品
         relevanceGoodsList: [],
         // 设置状态是否成功
@@ -57,8 +69,15 @@ export default {
     reducers: {
 
         // 保存相似的商品表
-        saveSimilarGoodsList(state, { payload }) {
-            return { ...state, similarGoodsList: payload };
+        saveSimilarGoodsList(state, { payload:{data,title} }) {
+            switch(title){
+                case 'gearbest':
+                    return { ...state, gearbestSimilarGoods:data};
+                    break;
+                case 'dx':
+                    return { ...state, dxSimilarGoods:data};
+                    break;
+            }
         },
         // 步骤一的保存获取的单个商品
         saveRelevanceGoods(state, { payload }) {
@@ -109,29 +128,30 @@ export default {
                 yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                 message.error(ERRORMESSAGE);
             }
-        },
+        }, 
 
         // 步骤二，获取相似产品表
         * fetchSimilarGoodsList({ payload }, { select, call, put }) {
             console.log('similar payload',payload);
-            //try {
+            try {
                 
                 const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
 
                 // 注意！！！
                 // 目前是虚拟数据
                 // const data = similarGoodsList;
-                console.log('similar',data); 
+                
 
                 // 保存数据
-                /* if (data.code == CODE200) {
-                    yield put({ type: 'saveSimilarGoodsList', payload: data });
+                if (data.code == CODE200) {
+                    console.log('similar',data); 
+                    yield put({ type: 'saveSimilarGoodsList', payload:{data:data.data,title:payload.title} });
                 } else {
                     message.warning(data.msg)
-                } */
-            /* } catch (e) {
-                message.error('error',ERRORMESSAGE);
-            } */
+                } 
+             } catch (e) {
+               // message.error('error',ERRORMESSAGE);
+            } 
         },
 
         // 步骤二，手动搜索单个商品
@@ -199,6 +219,7 @@ export default {
 
                 if (pathname == 'create') {
                     // 载入相识商品
+                    dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[0]}});
                     dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[1]}});
                 }
             })

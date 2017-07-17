@@ -118,19 +118,20 @@ class CreateRelevance extends React.Component {
                         			
                         		<div className={styles.panel}>	
 
+                                    {/* 选中的BG商品 */}
     	                    		<div className={styles.skuToGoods}>
     	                    			<div className={styles.skuImg}>
                                             {
                                                 this.props.goods.data?
                                                 <img src={ this.props.goods.data.img_url } />
-                                                :<span></span>
+                                                :null
                                             }
                                         </div>
-    	                    			<p style={{ color:'#7f8fa4',lineHeight:3}}>BG</p>
+    	                    			<p>BG</p>
                                         {
                                             this.props.goods.data?
                                             <p>SKU: {this.props.goods.data.sku}</p>
-                                            :<p></p>
+                                            :null
                                         }
     	                    			 
     	                    		</div>
@@ -138,7 +139,7 @@ class CreateRelevance extends React.Component {
     	                    		{/*相似的商品 start*/}
     	                    		<div style={{ width:800, height:350, display:'inline-block'}}>
     	                    			<Tabs defaultActiveKey='0' onChange={this.getSite.bind(this)}>
-    									    {
+    									   {/*  {
                                                 this.state.similarGoodsList?
                                                 this.state.similarGoodsList.map((item,index)=> 
                                                     <TabPane tab={item.tname} key={index}>
@@ -166,9 +167,55 @@ class CreateRelevance extends React.Component {
                                                     </TabPane>
                                                 )
                                                 :<span>.</span>
-                                            }
+                                            } */}
+                                            <TabPane tab='gearbest' key='0'>
+                                                <ul className={styles.similarGoods}>
+                                                    {
+                                                        this.props.gearbestSimilarGoods?
+                                                        this.props.gearbestSimilarGoods.map((item2,index2) => 
+                                                        <li>
+                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+                                                                <div className={styles.imgWrap}>
+                                                                    <img src={item2.img_url} />
+                                                                </div>
+                                                                <p>SKU: {item2.sku}</p>
+                                                            </div>
+                                                        </li>)
+                                                        :null
+                                                    }
+                                                   
+                                                </ul> 
+                                            </TabPane>
+                                            <TabPane tab='dx' key='1'>
+                                                {
+                                                    //this.getItemList(this.props.dxSimilarGoods)
+                                                }
+                                                {/* <ul className={styles.similarGoods}>
+                                                    {
+                                                        this.props.dxSimilarGoods?
+                                                        this.props.dxSimilarGoods.map((item2,index2) => 
+                                                        <li>
+                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+                                                                <div className={styles.imgWrap}>
+                                                                    <img src={item2.img_url} />
+                                                                </div>
+                                                                <p>SKU: {item2.sku}</p>
+                                                            </div>
+                                                        </li>)
+                                                        :null
+                                                    }
+                                                </ul>  */}
+                                            </TabPane>
+                                            <TabPane tab='lightinthebox' key='2'>
+                                                
+                                            </TabPane>
+                                            <TabPane tab='tomtop' key='3'>
+                                                
+                                            </TabPane>
     									</Tabs>
-
+                                                        
                                         {/*手动输入商品*/}
     									<div style={{ marginLeft:25,marginTop:20 }}>
     										<Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
@@ -535,7 +582,6 @@ class CreateRelevance extends React.Component {
         }
     }
 
-
     // 取消相似商品列表的选中状态
     cancelGoodsSelectStyle(){
 
@@ -595,6 +641,44 @@ class CreateRelevance extends React.Component {
     }
 
 
+    getItemList(data){
+        if(data){
+            return (
+                <ul className={styles.similarGoods}>
+                    {
+                        data.map((item,index)=>(
+                            ((index+1)/5)%1===0 ? 
+                            <div style={{border:'1px solid red'}}>
+                                {
+                                    data.map((item2,index2) => (
+                                        ((index2+1)/5)<(index+1)===true?
+                                        <li>
+                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+                                                <div className={styles.imgWrap}>
+                                                    <img src={item2.img_url} />
+                                                </div>
+                                                <p>SKU: {item2.sku}</p>
+                                            </div>
+                                        </li>
+                                        :null
+                                    ))
+                                }
+                            </div>
+                            :null
+                        ))
+                    }
+                </ul>
+            )
+        }
+        else{
+            return (<div>null</div>)
+        }
+    }
+
+
+
+
     // 第一次实例化时，再render渲染后调用
     componentDidMount() {
         
@@ -633,12 +717,15 @@ function mapStateToProps(state) {
     const { 
         goods,                    // 步骤选择的商品
         similarGoodsList,         // 相似的商品列表
+        similarGoodsListChildren,         // 相似的商品列表
         createRelevanceLoading,   // 创建关联中...
         setRevanceStatus,         // 创建关联状态
-        goodsBySite               // 手动添加的相似商品
+        goodsBySite,               // 手动添加的相似商品
+        gearbestSimilarGoods,
+        dxSimilarGoods,
     } = state.CreateRelevanceModel;
 
-    //console.log('similarGoodsList',similarGoodsList);
+    console.log('CreateRelevanceModel',state.CreateRelevanceModel);
         
 
     return {
@@ -646,7 +733,9 @@ function mapStateToProps(state) {
         goodsBySite: goodsBySite,
         similarGoodsList: similarGoodsList,
         createRelevanceLoading: createRelevanceLoading,
-        setRevanceStatus: setRevanceStatus
+        setRevanceStatus: setRevanceStatus,
+        gearbestSimilarGoods: gearbestSimilarGoods,
+        dxSimilarGoods: dxSimilarGoods,
     }
 }
 
