@@ -35,6 +35,7 @@ class CreateRelevance extends React.Component {
             // 所有相似的产品
             similarGoodsList:[],
             siteKey:0,
+            marginLeftVal:0,   
 
             // 选中的产品
             relevanceGoodsList:[],
@@ -139,7 +140,8 @@ class CreateRelevance extends React.Component {
     	                    		{/*相似的商品 start*/}
     	                    		<div style={{ width:800, height:350, display:'inline-block'}}>
     	                    			<Tabs defaultActiveKey='0' onChange={this.getSite.bind(this)}>
-    									   {/*  {
+    									   {
+                                               /*  {
                                                 this.state.similarGoodsList?
                                                 this.state.similarGoodsList.map((item,index)=> 
                                                     <TabPane tab={item.tname} key={index}>
@@ -167,9 +169,13 @@ class CreateRelevance extends React.Component {
                                                     </TabPane>
                                                 )
                                                 :<span>.</span>
-                                            } */}
+                                            } */
+                                            }
                                             <TabPane tab='gearbest' key='0'>
-                                                <ul className={styles.similarGoods}>
+                                                {
+                                                    this.getItemList(this.props.gearbestSimilarGoods)
+                                                }
+                                                {/* <ul className={styles.similarGoods}>
                                                     {
                                                         this.props.gearbestSimilarGoods?
                                                         this.props.gearbestSimilarGoods.map((item2,index2) => 
@@ -185,12 +191,13 @@ class CreateRelevance extends React.Component {
                                                         :null
                                                     }
                                                    
-                                                </ul> 
+                                                </ul>  */}
                                             </TabPane>
                                             <TabPane tab='dx' key='1'>
                                                 {
-                                                    //this.getItemList(this.props.dxSimilarGoods)
+                                                    this.getItemList(this.props.dxSimilarGoods)
                                                 }
+
                                                 {/* <ul className={styles.similarGoods}>
                                                     {
                                                         this.props.dxSimilarGoods?
@@ -511,7 +518,7 @@ class CreateRelevance extends React.Component {
         let parentArray = this.state.similarGoodsList;
         // 该站点的标示
         let parentKey = this.state.siteKey; 
-
+        
         // 修改子表，呈现选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
 
@@ -644,31 +651,34 @@ class CreateRelevance extends React.Component {
     getItemList(data){
         if(data){
             return (
-                <ul className={styles.similarGoods}>
+                <div className={styles.similarGoodsWrap}>
                     {
-                        data.map((item,index)=>(
-                            ((index+1)/5)%1===0 ? 
-                            <div style={{border:'1px solid red'}}>
-                                {
-                                    data.map((item2,index2) => (
-                                        ((index2+1)/5)<(index+1)===true?
-                                        <li>
-                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                                <div className={styles.imgWrap}>
-                                                    <img src={item2.img_url} />
-                                                </div>
-                                                <p>SKU: {item2.sku}</p>
-                                            </div>
-                                        </li>
-                                        :null
-                                    ))
-                                }
-                            </div>
-                            :null
-                        ))
+                        // 但相似商品多于5件时，才有左右切换
+                        data.length > 5 ?
+                        <div>
+                            <Icon type="left" className={styles.arrowLeft} onClick={this.onMoveLeft.bind(this,data.length)}/>
+                            <Icon type="right" className={styles.arrowRight} onClick={this.onMoveRight.bind(this,data.length)} />
+                        </div>
+                        :null
                     }
-                </ul>
+                    <div className={styles.similarGoods}>
+                        <ul ref='listWrapId' style={{width:data.length*(130+20),marginLeft:this.state.marginLeftVal }}>
+                            {
+                                data.map((item2,index2) => (
+                                    <li>
+                                        <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                            id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+                                            <div className={styles.imgWrap}>
+                                                <img src={item2.img_url} />
+                                            </div>
+                                            <p>SKU: {item2.sku}</p>
+                                        </div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                </div>
             )
         }
         else{
@@ -676,7 +686,36 @@ class CreateRelevance extends React.Component {
         }
     }
 
+    onMoveLeft(length){
+        const itemVal = 750;
+        const currentVal = this.state.marginLeftVal;
 
+        if(currentVal < 0){
+            this.setState({
+                marginLeftVal:(currentVal + itemVal),
+            })
+        }
+        else{
+            console.log(">=0");
+        }
+    }
+
+    onMoveRight(length){
+        const itemVal = 750;   
+        const maxVal = -(750 * Math.ceil(length/5));
+        const currentVal = this.state.marginLeftVal;
+
+        if(currentVal > (maxVal+itemVal)){ 
+            
+            this.setState({
+                marginLeftVal:(currentVal - itemVal),
+            });
+            console.log(currentVal,maxVal);
+        }
+        else{
+            console.log("right");
+        }
+    }
 
 
     // 第一次实例化时，再render渲染后调用
@@ -725,7 +764,14 @@ function mapStateToProps(state) {
         dxSimilarGoods,
     } = state.CreateRelevanceModel;
 
-    console.log('CreateRelevanceModel',state.CreateRelevanceModel);
+    
+
+    if(dxSimilarGoods){
+        dxSimilarGoods.map((item,index)=>{
+            item.select = false;
+        })
+    }
+    console.log('dxSimilarGoods',dxSimilarGoods);
         
 
     return {
