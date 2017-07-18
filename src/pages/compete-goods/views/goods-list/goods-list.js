@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'dva/router';
 import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import { PAGE_SIZE } from '../../../../constants/constant';
@@ -52,15 +53,19 @@ class GoodsList extends React.Component {
                             !record.isChildren?
                             <div>
                                 {record.sku}
-                                <p style={{ marginTop:5}}>
+                                <div style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接
-                                       /* record.relate_sku==0?
-                                        <Link  to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                       record.relate_sku==0?
+                                        <p><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</p>
                                         :
-                                        <Link  to={"/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link>
-                                    */}
-                                </p>
+                                        <p><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</p>
+                                       
+                                       /*  <Link  to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                        :
+                                        <Link  to={"/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link> */
+                                    }
+                                </div>
                             </div>
                             :null
                         }
@@ -86,7 +91,7 @@ class GoodsList extends React.Component {
                 ),
             }, */
             {
-                title: "站点",
+                title: "站点", 
                 dataIndex: "site",
             }, {
                 title: "标题",
@@ -124,7 +129,7 @@ class GoodsList extends React.Component {
                     <span>
                     {
                         record.cateName?
-                        record.cateName.split('>').map((item,index) => <p>{item}</p>)
+                        record.cateName.split('>').map((item,index) => <p key={index}>{item}</p>)
                         :
                         record.cateName
                     }
@@ -171,7 +176,7 @@ class GoodsList extends React.Component {
 							loading={ this.props.loading } 
 							columns={tableColumns}
 							pagination={false} 
-                            rowKey = {record => record.sku}
+                            rowKey = {record => record.sku } 
                             onChange={this.handleTableChange}
 							>
 							

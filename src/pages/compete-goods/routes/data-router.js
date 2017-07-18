@@ -89,7 +89,7 @@ function mapStateToProps(state) {
     
     const menus = state.Menus;
     const { data, searchArgs, loading } = state.CompeteGoods;
-
+    
     return {
         menus,
         data,

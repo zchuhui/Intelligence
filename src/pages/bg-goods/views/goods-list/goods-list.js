@@ -92,7 +92,8 @@ class GoodsList extends React.Component {
                         {
                             !record.isChildren?
                             <div>
-                                {record.sku}
+                                <p>{record.sku}</p>
+                                <p>{record.pid}</p>
                                 <p style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接
@@ -168,7 +169,7 @@ class GoodsList extends React.Component {
                     <span>
                     {
                         record.cateName?
-                        record.cateName.split('>').map((item,index) => <p>{item}</p>)
+                        record.cateName.split('>').map((item,index) => <p key={index}>{item}</p>)
                         :
                         record.cateName
                     }
