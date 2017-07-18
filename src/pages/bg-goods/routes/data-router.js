@@ -30,7 +30,18 @@ class BgRouter extends React.Component {
         this.props.dispatch({
             type: 'RelevanceBGModel/pagination',
             payload: {
-                page: current
+                page: current,
+            }
+        });
+    }
+
+    // 表格排序
+    // sort: 排序条件
+    changeTableSort(sort) {
+        this.props.dispatch({
+            type: 'RelevanceBGModel/pagination',
+            payload: {
+                sort: sort,
             }
         });
     }
@@ -78,6 +89,8 @@ class BgRouter extends React.Component {
                     data={this.props.data} 
                     loading={this.props.loading} 
                     changePagination={current => this.changePagination(current)} 
+                    changeTableSort={sort => this.changeTableSort(sort)} 
+                    
 
                     goodsEchartData={this.props.goodsEchartData} 
                     goodsEchartDataLoading={this.props.goodsEchartDataLoading} 

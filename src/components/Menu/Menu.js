@@ -14,7 +14,7 @@ const menu = (
 			<a href="/bg">BG关联报表</a>
 		</Menu.Item>
         <Menu.Item key="2">
-			<a href="/secy">销售秘书</a>
+			<a href="/sale-secy">销售秘书</a>
 		</Menu.Item>
 	</Menu>
 );

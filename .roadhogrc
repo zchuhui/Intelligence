@@ -24,9 +24,9 @@
       "target": "http://localhost:8000/",
       "pathRewrite": { "^/bg" : "/bg.html" }
     },
-    "/secy": {
+    "/sale-secy": {
       "target": "http://localhost:8000/",
-      "pathRewrite": { "^/secy" : "/sale-secy.html" }
+      "pathRewrite": { "^/sale-secy" : "/sale-secy.html" }
     }
   },
   "extraBabelPlugins": [

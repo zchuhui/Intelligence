@@ -55,6 +55,6 @@ export default async function request(url, options) {
 	if (response.headers.get('x-total-count')) {
 		ret.headers['x-total-count'] = response.headers.get('x-total-count');
 	}
-	//console.log('ret',ret);
+	
 	return ret;
 }

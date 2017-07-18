@@ -25,8 +25,8 @@ export function fetch({ page }) {
  * @return {[type]}      [请求数据的集合]
  */
 export function search(args) {
-    
-    const argument = args.searchArgs;
+
+    const argument = args.searchArguments;
     
     let argumentStr = `com=ajax&t=getBgProductList&`;
 
@@ -38,7 +38,7 @@ export function search(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-
+    console.log('url',url);
     return request(url);
 }
 

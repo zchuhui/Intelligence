@@ -24,6 +24,7 @@ class GoodsList extends React.Component {
         this.props.handleSearchArgsToDate(dateQuantum);
     }
 
+
     render() {
 
     	// 主表Columns
@@ -45,7 +46,6 @@ class GoodsList extends React.Component {
             }, {
                 title: "编码",
                 dataIndex: "sku",
-                key: "sku",
                 render:(text,record) => (
                     <div >
                         {
@@ -88,46 +88,37 @@ class GoodsList extends React.Component {
             {
                 title: "站点",
                 dataIndex: "site",
-                key: "site",
             }, {
                 title: "标题",
                 dataIndex: "pname",
-                key: "pname",
                 className: styles.columnTitle
             }, {
                 title: "价格",
                 dataIndex: "price",
-                key: "price",
-                sorter: (a, b) => a.price - b.price,
+                sorter:true,
             }, {
                 title: "销量",
                 dataIndex: "sales",
-                key: "sales",
-                sorter: (a, b) => a.sales - b.sales,
+                sorter:true,
             }, {
                 title: "评分",
                 dataIndex: "score",
-                key: "score",
-                sorter: (a, b) => a.score - b.score,
+                sorter:true,
             }, {
                 title: "评论数",
                 dataIndex: "reviews",
-                key: "reviews",
-                sorter: (a, b) => a.reviews - b.reviews,
+                sorter:true,
             }, {
                 title: "关注数",
                 dataIndex: "favorites",
-                key: "favorites",
-                sorter: (a, b) => a.favorites - b.favorites,
+                sorter:true,
             }, {
                 title: "提问数",
                 dataIndex: "questions",
-                key: "questions",
-                sorter: (a, b) => a.questions - b.questions,
+                sorter:true,
             }, {
                 title: "分类",
                 dataIndex: "cateName",
-                key: "cateName",
                 className: styles.columnCate,
                 render:(text,record) => (
                     <span>
@@ -181,6 +172,7 @@ class GoodsList extends React.Component {
 							columns={tableColumns}
 							pagination={false} 
                             rowKey = {record => record.sku}
+                            onChange={this.handleTableChange}
 							>
 							
 						  </Table>
@@ -204,6 +196,15 @@ class GoodsList extends React.Component {
         	</div>
 
         )
+    }
+
+    // 获取表格的排序、筛选信息，并进行排序
+    handleTableChange = (pagination, filters, sorter) =>{
+        if(sorter.order == 'ascend'){
+            this.props.handleTableChange(`${sorter.field}-asc`);
+        }else if(sorter.order == 'descend'){
+            this.props.handleTableChange(`${sorter.field}-desc`);
+        }
     }
 
 }

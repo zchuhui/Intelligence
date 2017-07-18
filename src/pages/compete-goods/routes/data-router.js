@@ -33,6 +33,17 @@ class CompeteRouter extends React.Component {
         });
     }
 
+    // 商品列表排序
+    // current: 当前页数
+    handleTableChange(sort) {
+        this.props.dispatch({
+            type: 'CompeteGoods/paginationQuery',
+            payload: {
+                sort: sort,
+            }
+        });
+    }
+
     // 抓取时间段(未完成)
     // args: 时间段
     handleSearchArgsToDate(args) {
@@ -64,6 +75,7 @@ class CompeteRouter extends React.Component {
                     data={this.props.data}
                     loading={this.props.loading} 
                     handlePagination={current => this.handlePagination(current) } 
+                    handleTableChange={sort => this.handleTableChange(sort) } 
                     handleSearchArgsToDate={args => this.handleSearchArgsToDate(args)}
                 /> 
             </MainLayout>

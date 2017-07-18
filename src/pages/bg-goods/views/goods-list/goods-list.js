@@ -9,10 +9,9 @@ import { Link } from 'dva/router';
 import styles from './goods-list.less';
 import moment from 'moment';
 import echarts from 'echarts';
-import { 
-    Table, Pagination, Icon, Menu, Dropdown, 
-    Button, message, Modal, DatePicker, Checkbox, 
-    Select, Radio, Spin, Row, Col
+import {
+    Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker,
+    Checkbox, Select, Radio, Spin, Row, Col
 } from 'antd';
 
 
@@ -138,8 +137,7 @@ class GoodsList extends React.Component {
             }, {
                 title: "价格",
                 dataIndex: "price",
-                key: "price",
-                sorter: (a, b) => a.price - b.price,
+                sorter: true
             }, {
                 title: "销量",
                 dataIndex: "sales",
@@ -148,23 +146,19 @@ class GoodsList extends React.Component {
             }, {
                 title: "评分",
                 dataIndex: "score",
-                key: "score",
-                sorter: (a, b) => a.score - b.score,
+                sorter: true
             }, {
                 title: "评论数",
                 dataIndex: "reviews",
-                key: "reviews",
-                sorter: (a, b) => a.reviews - b.reviews,
+                sorter: true
             }, {
                 title: "关注数",
                 dataIndex: "favorites",
-                key: "favorites",
-                sorter: (a, b) => a.favorites - b.favorites,
+                sorter: true
             }, {
                 title: "提问数",
                 dataIndex: "questions",
-                key: "questions",
-                sorter: (a, b) => a.questions - b.questions,
+                 sorter: true
             }, {
                 title: "类目树",
                 dataIndex: "cateName",
@@ -204,6 +198,7 @@ class GoodsList extends React.Component {
 						pagination={false} 
 						columns={tableColumns}
                         rowKey={record => record.sku }
+                        onChange={this.handleTableChange}
 						>
 						
 					  </Table>
@@ -344,7 +339,7 @@ class GoodsList extends React.Component {
         if (this.props.goodsEchartDataLoading) {
             this.loadEchart();
         }
-
+        
         // 对比商品趋势图载入
         if (this.props.goodContrastDataLoading) {
 
@@ -361,6 +356,15 @@ class GoodsList extends React.Component {
       return new Promise((resolve, reject) => {
         setTimeout(resolve, ms, 'done');
       });
+    }
+
+    // 获取表格的排序、筛选信息，并进行排序
+    handleTableChange = (pagination, filters, sorter) =>{
+        if(sorter.order == 'ascend'){
+            this.props.changeTableSort(`${sorter.field}-asc`);
+        }else if(sorter.order == 'descend'){
+            this.props.changeTableSort(`${sorter.field}-desc`);
+        }
     }
 
 

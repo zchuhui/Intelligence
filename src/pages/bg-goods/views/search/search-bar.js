@@ -132,9 +132,9 @@ class Searcher extends React.Component {
                         </div>
                         <div className={ styles.searchRight }>
                             <Button type="primary" 
-                                style={{ width: 210,marginBottom: 10 }} 
+                                style={{ width: 150,marginBottom: 10 }} 
                                 onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
-
+                                
                             {/*<div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[

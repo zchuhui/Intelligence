@@ -5,8 +5,8 @@
  */
 
 import * as competeServices from '../../../services/service-compete-goods';
-import { CODE200 } from '../../../constants/constant';
-
+import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
+import { message } from 'antd';
 
 export default {
     namespace: 'CompeteGoods',
@@ -35,6 +35,7 @@ export default {
             startTime: '',
             endTime: '',
             sku: '',
+            sort: '',
             page: 1
         }
     },
@@ -57,9 +58,9 @@ export default {
         // 获取数据
         * query({ payload }, { select, call, put }) {
 
+            yield put({ type: 'showLoading', payload: { loading: true } });
+
             try{
-                // 请求数据时，显示loading状态
-                yield put({ type: 'showLoading', payload: { loading: true } });
 
                 // 开始请求数据
                 const { data } = yield call(competeServices.fetch, payload);
@@ -67,24 +68,27 @@ export default {
                 // 保存数据
                 if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
-                } 
+                }
+                else{
+                    message.warning(ERRORMESSAGE);
+                }
             }
             catch(e){
-                yield put({ type: 'showLoading', payload: { loading: false } });
-                console.log(e.message);
+                 message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'showLoading', payload: { loading: false } });
 
         },
 
         // 搜索
         * search({ payload }, { select, call, put }) {
 
+            yield put({ type: 'showLoading', payload: { loading: true } });
+
             try{
                 // 更新参数到state,并取回来当搜索参数
                 yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
-
-                // 请求数据时，显示loading状态
-                yield put({ type: 'showLoading', payload: { loading: true } });
 
                 // 获取搜索条件
                 const searchArgs = yield select(state => state.CompeteGoods.searchArgs);
@@ -95,25 +99,37 @@ export default {
                 // 保存数据
                 if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
-                } 
+                }
+                else{
+                    message.warning(ERRORMESSAGE);
+                }
 
             }catch(e){
-                yield put({ type: 'showLoading', payload: { loading: false } });
-                console.log(e.message);
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'showLoading', payload: { loading: false } });
 
         },
 
         // 分页
         * paginationQuery({ payload }, { select, call, put }) {
 
+            yield put({ type: 'showLoading', payload: { loading: true } });
+
             try{
-                // 请求数据时，显示loading状态
-                yield put({ type: 'showLoading', payload: { loading: true } });
 
                 // 获取搜索条件
                 let searchArgs = yield select(state => state.CompeteGoods.searchArgs);
-                searchArgs.page = payload.page;
+
+                // 分页参数
+                if (payload.page) {
+                    searchArgs.page = payload.page;
+                }
+                // 排序参数
+                if (payload.sort) {
+                    searchArgs.sort = payload.sort;
+                }
 
                 // 开始请求数据
                 const { data } = yield call(competeServices.search, { searchArgs: searchArgs });
@@ -122,10 +138,15 @@ export default {
                 if (data.code == CODE200) {
                     yield put({ type: 'save', payload: data });
                 }
+                else{
+                    message.warning(ERRORMESSAGE);
+                }
             }catch(e){
-                yield put({ type: 'showLoading', payload: { loading: false } });
-                console.log(e.message)
+                 message.warning(ERRORMESSAGE);
             }
+            
+            yield put({ type: 'showLoading', payload: { loading: false } });
+
         }
     },
     subscriptions: {

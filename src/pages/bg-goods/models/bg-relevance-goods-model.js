@@ -40,6 +40,7 @@ export default {
             startTime: firstDay,
             endTime: endDay,
             sku: '',
+            sort: '',
             page: 1
         },
 
@@ -65,7 +66,7 @@ export default {
         },
         // 更新搜索参数
         updateSearchArgs(state, { payload }) {
-            return { ...state, searchArgs: payload.searchArgs };
+            return { ...state, searchArguments: payload.searchArguments };
         },
 
         // 更新主商品趋势图
@@ -176,10 +177,11 @@ export default {
     effects: {
         // 获取BG列表数据
         * fetch({ payload }, { select, call, put }) {
-            try {
-                // 请求数据时，显示loading状态
-                yield put({ type: 'toggleLoading', payload: { loading: true } });
 
+            yield put({ type: 'toggleLoading', payload: { loading: true } });
+
+            try {
+                
                 // 开始请求数据
                 const { data } = yield call(BgService.fetch, payload);
 
@@ -191,27 +193,28 @@ export default {
                     message.warning(data.msg)
                 }
             } catch (e) {
-                yield put({ type: 'toggleLoading', payload: { loading: false } });
-                message.error(ERRORMESSAGE);
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'toggleLoading', payload: { loading: false } });
+
         },
 
         // BG表搜索
         * search({ payload }, { select, call, put }) {
+
+            yield put({ type: 'toggleLoading', payload: { loading: true } });
+
             try {
                 // 更新参数到state
-                yield put({ type: 'updateSearchArgs', payload: { searchArgs: payload.searchArgs } });
-
-
-                // 请求数据时，显示loading状态
-                yield put({ type: 'toggleLoading', payload: { loading: true } });
+                yield put({ type: 'updateSearchArgs', payload: { searchArguments: payload.searchArgs } });
 
                 // 从state中获取搜索参数
-                const searchArgs = yield select(state => state.RelevanceBGModel.searchArgs);
+                const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
                 searchArgs.page = payload.page;
 
                 // 开始请求数据
-                const { data } = yield call(BgService.search, { searchArgs: searchArgs });
+                const { data } = yield call(BgService.search, { searchArguments: searchArgs });
 
                 // 保存数据
                 if (data.code == CODE200) {
@@ -220,25 +223,34 @@ export default {
                 else {
                     message.warning(data.msg);
                 }
-
             } catch (e) {
-                yield put({ type: 'toggleLoading', payload: { loading: false } });
-                message.error(ERRORMESSAGE);
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'toggleLoading', payload: { loading: false } });
         },
 
-        // BG表分页，根据页数获取数据
+        // BG表分页与排序功能
         * pagination({ payload }, { select, call, put }) {
+
+            yield put({ type: 'toggleLoading', payload: { loading: true } });
+
             try {
-                // 请求数据时，显示loading状态
-                yield put({ type: 'toggleLoading', payload: { loading: true } });
 
                 // 从state中获取搜索参数
-                const searchArgs = yield select(state => state.RelevanceBGModel.searchArgs);
-                searchArgs.page = payload.page;
+                const searchArguments = yield select(state => state.RelevanceBGModel.searchArguments);
+
+                // 分页参数
+                if (payload.page) {
+                    searchArguments.page = payload.page;
+                }
+                // 排序参数
+                if (payload.sort) {
+                    searchArguments.sort = payload.sort;
+                }
 
                 // 开始请求数据
-                const { data } = yield call(BgService.search, { searchArgs: searchArgs });
+                const { data } = yield call(BgService.search, { searchArguments: searchArguments });
 
                 // 保存数据
                 if (data.code == CODE200) {
@@ -248,29 +260,36 @@ export default {
                     message.warning(data.msg);
                 }
             } catch (e) {
-                yield put({ type: 'toggleLoading', payload: { loading: false } });
-                message.error(ERRORMESSAGE);
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'toggleLoading', payload: { loading: false } });
+
         },
 
         // 获取主商品的趋势图数据
         * fetchGoodsEchartByPidAndTime({ payload }, { select, call, put }) {
+
+            yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: false } });
+
             try {
-                yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: false } });
 
                 const { data } = yield call(BgService.fetchGoodsEchartByPidAndTime, payload);
 
                 if (data.code == CODE200) {
                     yield put({ type: 'updateGoodsEchartData', payload: { data: data, startTime: payload.startTime, endTime: payload.endTime, } });
                     yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
-                }else {
-                    message.warning(data.msg);
                 }
+                /* else {
+                    message.warning(data.msg);
+                } */
             } catch (e) {
                 // 请求失败
-                yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
-                message.error(ERRORMESSAGE);
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
+
         },
 
         // 获取商品对比数据
@@ -283,14 +302,16 @@ export default {
                 if (data.code == CODE200) {
                     yield put({ type: 'updateGoodContrastData', payload: { data: data.data } });
 
-                    yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
-                }else {
-                    message.warning(data.msg);
                 }
+                /* else {
+                    message.warning(data.msg);
+                }  */
             } catch (e) {
-                yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
-                message.error(ERRORMESSAGE);
+                // yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
+                message.warning(ERRORMESSAGE);
             }
+
+            yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
         }
     },
 

@@ -71,6 +71,7 @@ export default {
                     // 存储用户名、密码
                     LocalStorage.set('username', payload.loginInfo.username, dayCount);
                     LocalStorage.set('password', payload.loginInfo.password, dayCount);
+                    console.log('save token',data.data.token);
                     LocalStorage.set('token', data.data.token, dayCount);
                     LocalStorage.set('loginStatus', 1, dayCount);
 
