@@ -17,7 +17,8 @@ class GoodsRank extends React.Component {
                     你的商品排名
                 </div>
                 {
-                    this.props.myProductRank.salesRank?
+                    this.props.myProductRank?
+                    //this.props.myProductRank.salesRank?
                     <div className={styles.goodsRankWrap}>
                         <ul className={styles.clear}>
                             <li>

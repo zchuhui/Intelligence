@@ -14,7 +14,9 @@ const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const dateFormat = "YYYY-MM-DD";
 
-
+// 默认抓取时间为当月 
+let firstDay = moment().startOf('month').format('YYYY-MM-DD');
+let endDay = moment().endOf('month').format('YYYY-MM-DD');
 
 class SearchBar extends Component {
     constructor(props, context) {
@@ -29,9 +31,11 @@ class SearchBar extends Component {
                 cid: '',
                 bid: '',
                 status: '',
-                sku: '',
+                sku: '', 
                 price1: '',
                 price2: '',
+                startTime:firstDay,
+                endTime:endDay,
                 page: 1,
             },
             argsShow: {
@@ -42,6 +46,8 @@ class SearchBar extends Component {
                 sku: '',
                 price1: '',
                 price2: '',
+                startTime:'',
+                endTime:'',
             }
         }
     }
@@ -122,7 +128,27 @@ class SearchBar extends Component {
                             
                         </div>
                         <div className={ styles.searchRight }>
-                            <Button type="primary" style={{ width: 150 }} onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
+                            <Button type="primary" 
+                                style={{ width: 210,marginBottom: 10 }} 
+                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
+                            
+                            <div className={ styles.pickerDate }  >
+                                <RangePicker 
+                                    defaultValue={[
+                                        moment().startOf('month'), 
+                                        moment().endOf('month')
+                                    ]} 
+                                    ranges={{ 
+                                        '今天': [moment(), moment()],
+                                        '本周': [moment(), moment().endOf('week')], 
+                                        '本月': [moment(), moment().endOf('month')] 
+                                    }} 
+                                    format="YYYY-MM-DD" 
+                                    style={{ width:210 }}
+                                    onChange={ this.getTime }
+                                    allowClear={false}
+                                />
+                            </div>
                         </div>
                     </div>
                     {/*搜索栏 end*/}
@@ -316,7 +342,17 @@ class SearchBar extends Component {
         this.props.handleSearchArgs(this.state.args); 
     }
     
+    // 根据时间搜索
+    getTime = (date, dateString) => {
 
+        if(dateString[0]){
+            this.state.args.startTime = dateString[0];
+            this.state.args.endTime = dateString[1];
+
+            console.log(this.state.args);
+            this.props.handleSearchArgs(this.state.args);
+        }
+    }
 }
 
 

@@ -96,11 +96,14 @@ class Category extends React.Component {
 
     componentDidUpdate(){
 
-        // 载入两个图表
-        this.loadChart(
-            this.formatDataToEchartPieData(this.props.cateSet),
-            this.formatDataToEchartData(this.props.myCateSalesFromPrice)
-        );
+        if(this.props.cateSet){
+            // 载入两个图表
+            this.loadChart(
+                this.formatDataToEchartPieData(this.props.cateSet),
+                this.formatDataToEchartData(this.props.myCateSalesFromPrice)
+            );
+        }
+        
     }
 
     // 载入echart图表

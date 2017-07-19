@@ -143,7 +143,6 @@ function mapStateToProps(state) {
         });
     }
 
-    //console.log('menus',menus);
     
     return {
         // 搜索模块

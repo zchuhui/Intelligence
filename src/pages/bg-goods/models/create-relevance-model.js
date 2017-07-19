@@ -48,19 +48,11 @@ export default {
         goodsBySite: {},
 
         // 相似的商品表
-        similarGoodsList:defaultSimilarGoodsList,
-
-        /* similarGoodsListChildren: {
-            gearbest:null,
-            dx:null,
-            lightinthebox:null,
-            tomtop:null,
-        }, */
+        similarGoodsList:null,
 
         gearbestSimilarGoods:null,
         dxSimilarGoods:null,
         
-
         // 选中的关联商品
         relevanceGoodsList: [],
         // 设置状态是否成功
@@ -69,15 +61,24 @@ export default {
     reducers: {
 
         // 保存相似的商品表
-        saveSimilarGoodsList(state, { payload:{data,title} }) {
-            switch(title){
-                case 'gearbest':
-                    return { ...state, gearbestSimilarGoods:data};
-                    break;
-                case 'dx':
-                    return { ...state, dxSimilarGoods:data};
-                    break;
+        saveSimilarGoodsList(state, { payload:{data} }) {
+
+            let array = []; 
+            let index = 0;
+            for(let label in data){
+                let obj = {};
+                obj.tname = label;
+                obj.tkey = index;
+                obj.children = data[label];
+
+                array.push(obj);
+                index ++;
             }
+            console.log('array:',array);
+            
+            return { ...state, similarGoodsList:array};
+
+
         },
         // 步骤一的保存获取的单个商品
         saveRelevanceGoods(state, { payload }) {
@@ -115,10 +116,12 @@ export default {
                 if (data.code == CODE200) {
                     yield put({ type: 'saveRelevanceGoods', payload: data });
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-
-                    // 请求相似数据
-                    //yield put({ type: 'fetchSimilarGoodsList'});
                     
+                    console.log('goods:',data);
+                    // 请求相似数据
+                    yield put({ type: 'fetchSimilarGoodsList',payload:{title:data.data.pname}});
+                    // 请求已关联的竞品
+                    yield put({ type: 'featchRevanceGoods',payload});
                 } else {
                     message.warning(data.msg)
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
@@ -132,7 +135,7 @@ export default {
 
         // 步骤二，获取相似产品表
         * fetchSimilarGoodsList({ payload }, { select, call, put }) {
-            console.log('similar payload',payload);
+            console.log('tit',payload);
             try {
                 
                 const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
@@ -140,12 +143,12 @@ export default {
                 // 注意！！！
                 // 目前是虚拟数据
                 // const data = similarGoodsList;
-                
 
                 // 保存数据
                 if (data.code == CODE200) {
-                    console.log('similar',data); 
-                    yield put({ type: 'saveSimilarGoodsList', payload:{data:data.data,title:payload.title} });
+                    console.log('similar data',data); 
+                    yield put({ type: 'saveSimilarGoodsList', payload:{data:data.data,} });
+                    
                 } else {
                     message.warning(data.msg)
                 } 
@@ -208,7 +211,32 @@ export default {
 
                 message.error(ERRORMESSAGE);
             }
-        }
+        },
+
+        // 步骤二，获取已关联的竞品信息
+        * featchRevanceGoods({ payload }, { select, call, put }) {
+
+            // 请求数据时，显示loading状态
+            //yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: true } });
+
+            try {
+                const { data } = yield call(BgService.fetchRevanceBySku, payload);
+
+                // 保存数据
+                if (data.code == CODE200) {
+                    //yield put({ type: 'saveRelevanceGoods', payload: data });
+                    
+                    console.log('revance goods:',data);
+                    
+                } 
+
+            } catch (e) {
+                /* yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
+                message.error(ERRORMESSAGE); */
+            }
+        }, 
+
+
     },
     subscriptions: {
         setup({ dispatch, history }) {
@@ -219,8 +247,8 @@ export default {
 
                 if (pathname == 'create') {
                     // 载入相识商品
-                    dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[0]}});
-                    dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[1]}});
+                    //dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[0]}});
+                    //dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[1]}});
                 }
             })
         },

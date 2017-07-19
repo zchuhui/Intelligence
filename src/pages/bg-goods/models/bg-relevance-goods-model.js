@@ -212,7 +212,7 @@ export default {
                 // 从state中获取搜索参数
                 const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
                 searchArgs.page = payload.page;
-
+                console.log('searchArgs',searchArgs);
                 // 开始请求数据
                 const { data } = yield call(BgService.search, { searchArguments: searchArgs });
 

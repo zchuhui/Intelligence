@@ -138,7 +138,7 @@ class GoodsList extends React.Component {
             },
         ]
 
-        return (  
+        return (   
 
             <div>
                 <div className={ styles.main } > 

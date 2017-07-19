@@ -132,10 +132,10 @@ class Searcher extends React.Component {
                         </div>
                         <div className={ styles.searchRight }>
                             <Button type="primary" 
-                                style={{ width: 150,marginBottom: 10 }} 
+                                style={{ width: 210,marginBottom: 10 }} 
                                 onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
                                 
-                            {/*<div className={ styles.pickerDate }  >
+                            <div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[
                                         moment().startOf('month'), 
@@ -151,7 +151,7 @@ class Searcher extends React.Component {
                                     onChange={ this.getTime }
                                     allowClear={false}
                                 />
-                            </div>*/}
+                            </div>
                             
                         </div>
                     </div>
@@ -361,15 +361,16 @@ class Searcher extends React.Component {
     }
 
     // 根据时间搜索
-    /*getTime = (date, dateString) => {
+    getTime = (date, dateString) => {
 
         if(dateString[0]){
             this.state.args.startTime = dateString[0];
             this.state.args.endTime = dateString[1];
 
+            console.log(this.state.args);
             this.props.handleSearchArgs(this.state.args);
         }
-    }*/
+    }
 
 }
 

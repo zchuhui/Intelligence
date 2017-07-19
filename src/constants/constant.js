@@ -4,7 +4,7 @@
  *  Author:zhuangchuhui
  */
 
-export const PAGE_SIZE = 20;  //列表每页多少条数据
+export const PAGE_SIZE = 10;  //列表每页多少条数据
 
 export const CODE200 = 200;   // 状态码，请求成功
 

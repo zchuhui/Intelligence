@@ -128,3 +128,19 @@ export function fetchGoodsContrastData(pid){
     
     return request(url);    
 }
+
+
+/**
+ * 获取该商品已关联的竞品表
+ * @param  {[type]} args [site,sku]
+ * @return {[type]}      [data]
+ */
+export function fetchRevanceBySku(args) {
+
+    let argumentStr = `com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
+
+    let url = `${Url}?${argumentStr}`;
+
+    return request(url);
+
+}

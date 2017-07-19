@@ -118,130 +118,58 @@ class CreateRelevance extends React.Component {
                         	<div style={{ display:this.state.step2 }}> 
                         			
                         		<div className={styles.panel}>	
-
-                                    {/* 选中的BG商品 */}
-    	                    		<div className={styles.skuToGoods}>
-    	                    			<div className={styles.skuImg}>
-                                            {
-                                                this.props.goods.data?
-                                                <img src={ this.props.goods.data.img_url } />
-                                                :null
-                                            }
-                                        </div>
-    	                    			<p>BG</p>
-                                        {
-                                            this.props.goods.data?
-                                            <p>SKU: {this.props.goods.data.sku}</p>
-                                            :null
-                                        }
-    	                    			 
-    	                    		</div>
-
+                                    {
+                                        /* 选中的BG商品 */
+                                        this.props.goods.data ?
+                                            <div className={styles.skuToGoods}>
+                                                <div className={styles.skuImg}>
+                                                    <img src={this.props.goods.data.img_url} />
+                                                </div>
+                                                <p>BG</p>
+                                                <p>SKU: {this.props.goods.data.sku}</p>
+                                            </div>
+                                            : null
+                                    }
+                                    
     	                    		{/*相似的商品 start*/}
     	                    		<div style={{ width:800, height:350, display:'inline-block'}}>
-    	                    			<Tabs defaultActiveKey='0' onChange={this.getSite.bind(this)}>
-    									   {
-                                               /*  {
-                                                this.state.similarGoodsList?
-                                                this.state.similarGoodsList.map((item,index)=> 
-                                                    <TabPane tab={item.tname} key={index}>
+                                        {
+                                            this.props.similarGoodsList ?
+                                                <div>
+                                                    <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)}>
                                                         {
-                                                            item.children?
-                                                            <ul className={styles.similarGoods}>
-                                                                {
-                                                                    item.children.map((item2,index2)=> 
-                                                                        <li>
-
-                                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                                                                <div className={styles.imgWrap}>
-                                                                                    <img src={item2.img_url} />
-                                                                                </div>
-                                                                                <p>SKU: {item2.sku}</p>
-                                                                            </div>
-                                                                        </li>
-                                                                    )
-                                                                }
-                                                                
-                                                            </ul> 
-                                                            :<p>该站点没有相似的商品，可以选择手动输入</p>
+                                                            this.props.similarGoodsList.map((item, index) =>
+                                                                <TabPane tab={item.tname} key={`tabpane-${item.tkey}`}>
+                                                                    {
+                                                                        this.getItemList(item.children)
+                                                                    }
+                                                                </TabPane>
+                                                            )
                                                         }
-                                                    </TabPane>
-                                                )
-                                                :<span>.</span>
-                                            } */
-                                            }
-                                            <TabPane tab='gearbest' key='0'>
-                                                {
-                                                    this.getItemList(this.props.gearbestSimilarGoods)
-                                                }
-                                                {/* <ul className={styles.similarGoods}>
-                                                    {
-                                                        this.props.gearbestSimilarGoods?
-                                                        this.props.gearbestSimilarGoods.map((item2,index2) => 
-                                                        <li>
-                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                                                <div className={styles.imgWrap}>
-                                                                    <img src={item2.img_url} />
-                                                                </div>
-                                                                <p>SKU: {item2.sku}</p>
-                                                            </div>
-                                                        </li>)
-                                                        :null
-                                                    }
-                                                   
-                                                </ul>  */}
-                                            </TabPane>
-                                            <TabPane tab='dx' key='1'>
-                                                {
-                                                    this.getItemList(this.props.dxSimilarGoods)
-                                                }
-
-                                                {/* <ul className={styles.similarGoods}>
-                                                    {
-                                                        this.props.dxSimilarGoods?
-                                                        this.props.dxSimilarGoods.map((item2,index2) => 
-                                                        <li>
-                                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                                                <div className={styles.imgWrap}>
-                                                                    <img src={item2.img_url} />
-                                                                </div>
-                                                                <p>SKU: {item2.sku}</p>
-                                                            </div>
-                                                        </li>)
-                                                        :null
-                                                    }
-                                                </ul>  */}
-                                            </TabPane>
-                                            <TabPane tab='lightinthebox' key='2'>
-                                                
-                                            </TabPane>
-                                            <TabPane tab='tomtop' key='3'>
-                                                
-                                            </TabPane>
-    									</Tabs>
+                                                    </Tabs>
+                                                    {/*手动输入商品*/}
+                                                    <div style={{ marginLeft:25,marginTop:20 }}>
+                                                        <Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
+                                                        <Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                                                        {
+                                                            this.props.goodsBySite.code==200?
+                                                            <Button style={{ marginLeft:5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
+                                                            : null
+                                                            
+                                                        }
                                                         
-                                        {/*手动输入商品*/}
-    									<div style={{ marginLeft:25,marginTop:20 }}>
-    										<Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
-                                            <Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
-                        					{
-                                                this.props.goodsBySite.code==200?
-                                                <Button style={{ marginLeft:5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
-                                                : null
-                                                
-                                            }
-                                            
-                                            <span style={{ marginLeft:10,color:'red' }}>
-                                                {
-                                                    this.props.goodsBySite.code==200?
-                                                    <span>{this.props.goodsBySite.msg}</span>
-                                                    :<span>{this.props.goodsBySite.msg}</span>
-                                                }
-                                            </span>
-    									</div>
+                                                        <span style={{ marginLeft:10,color:'red' }}>
+                                                            {
+                                                                this.props.goodsBySite.code==200?
+                                                                <span>{this.props.goodsBySite.msg}</span>
+                                                                :<span>{this.props.goodsBySite.msg}</span>
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                :null
+                                        }
+    	                    			
 
     	                    		</div>
     								{/*相似的商品 end*/}
@@ -402,15 +330,18 @@ class CreateRelevance extends React.Component {
 
     // 选择站点，切换相似商品栏
     getSite(key){
-
+        
+        key = key.split('-')[1];
+        console.log(key);
         // 选择站点
-    	let site = this.state.similarGoodsList[key].tname;
+    	let site = this.props.similarGoodsList[key].tname;
 
         // 存储到state中
     	this.setState({
     		currentSite:site,
             siteKey:key,
-    	});
+            marginLeftVal:0,  // 清除移动
+        });
 
 
         // 清除搜索的商品
@@ -420,7 +351,7 @@ class CreateRelevance extends React.Component {
         });
         
         // 清空文本框
-        this.refs.inputSku2.refs.input.value = '';
+        this.refs.inputSku2.refs.input.value = '';  
 
     }
 
@@ -448,19 +379,27 @@ class CreateRelevance extends React.Component {
         })
     }
 
-    // 设置相似商品，并跳转到步骤三
+    // 设置关联，并跳转到步骤三
     toStepThree() {
 
         // 已经关联的商品
-        const relevanceArray = this.state.relevanceGoodsList;
+        const relevanceArray = [];
+
+        // 清除数组中为undefined的元素
+        this.state.relevanceGoodsList.map((item,index)=>{
+            if(item!==undefined){
+                relevanceArray.push(item);
+            }
+        });
+        
 
         // 确认已选商品
-        if (relevanceArray.length > 0 && relevanceArray[0]) {
+        if (relevanceArray.length > 0) {
 
             let args = {};
 
+            // 转换参数格式
             relevanceArray.map((item,index) => {
-
                 if (item.site && item.sku) {
                     switch(item.site){
                         case 'gearbest':
@@ -486,8 +425,6 @@ class CreateRelevance extends React.Component {
                 }
             });
 
-            console.log('args',args);
-
             // 请求：设置关联产品
             this.props.dispatch({
                 type: 'CreateRelevanceModel/setRelevanceGoods',
@@ -505,6 +442,17 @@ class CreateRelevance extends React.Component {
                 progress2: true,
                 progress3: true
             });
+
+            // 清除步骤一搜索的商品
+            this.props.dispatch({
+                type: 'CreateRelevanceModel/saveRelevanceGoods',
+                payload: {}
+            });
+            // 清除步骤二手动搜索的商品
+            this.props.dispatch({
+                type: 'CreateRelevanceModel/saveRelevanceGoodsBySite',
+                payload: {}
+            });
         }
         else{
             message.warning("没有关联任何商品"); 
@@ -513,12 +461,13 @@ class CreateRelevance extends React.Component {
 
     // 选择相似产品
     selectSimilarGoods(index,item) {
-
+        console.log(index,item);
         // 所有站点相似商品
-        let parentArray = this.state.similarGoodsList;
+        //let parentArray = this.state.similarGoodsList;
+        let parentArray = this.props.similarGoodsList;
         // 该站点的标示
         let parentKey = this.state.siteKey; 
-        
+        console.log(parentKey,parentArray);
         // 修改子表，呈现选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
 
@@ -554,6 +503,7 @@ class CreateRelevance extends React.Component {
             });
         }
 
+        console.log('已选商品',this.state.relevanceGoodsList);
     }
 
     // 选择手动输入的商品
@@ -647,7 +597,7 @@ class CreateRelevance extends React.Component {
 
     }
 
-
+    // 获取数据，载入相似商品列表
     getItemList(data){
         if(data){
             return (
@@ -662,21 +612,28 @@ class CreateRelevance extends React.Component {
                         :null
                     }
                     <div className={styles.similarGoods}>
-                        <ul ref='listWrapId' style={{width:data.length*(130+20),marginLeft:this.state.marginLeftVal }}>
-                            {
-                                data.map((item2,index2) => (
-                                    <li>
-                                        <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                            id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                            <div className={styles.imgWrap}>
-                                                <img src={item2.img_url} />
+                        {
+
+                        data.length > 0?
+                            <ul ref='listWrapId' style={{width:data.length*(130+20),marginLeft:this.state.marginLeftVal }}>
+                                {
+                                    data.map((item2,index2) => (
+                                        <li key={`li-${index2}`}>
+                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
+                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
+                                                <div className={styles.imgWrap}>
+                                                    <img src={item2.img_url} />
+                                                </div>
+                                                <p>SKU: {item2.sku}</p>
                                             </div>
-                                            <p>SKU: {item2.sku}</p>
-                                        </div>
-                                    </li>
-                                ))
-                            }
-                        </ul>
+                                        </li>
+                                    ))
+                                    
+                                }
+                            </ul>
+                            :
+                            <p>该站点木有相似商品，辛苦一点手动输入吧~~</p>
+                        }
                     </div>
                 </div>
             )
@@ -686,6 +643,7 @@ class CreateRelevance extends React.Component {
         }
     }
 
+    // 相似商品表左边切换
     onMoveLeft(length){
         const itemVal = 750;
         const currentVal = this.state.marginLeftVal;
@@ -695,11 +653,9 @@ class CreateRelevance extends React.Component {
                 marginLeftVal:(currentVal + itemVal),
             })
         }
-        else{
-            console.log(">=0");
-        }
     }
 
+    // 相似商品表右边切换
     onMoveRight(length){
         const itemVal = 750;   
         const maxVal = -(750 * Math.ceil(length/5));
@@ -710,10 +666,6 @@ class CreateRelevance extends React.Component {
             this.setState({
                 marginLeftVal:(currentVal - itemVal),
             });
-            console.log(currentVal,maxVal);
-        }
-        else{
-            console.log("right");
         }
     }
 
@@ -721,7 +673,7 @@ class CreateRelevance extends React.Component {
     // 第一次实例化时，再render渲染后调用
     componentDidMount() {
         
-        // 如果是点击sku进来的，跳到步骤二
+        // 如果是点击列表的sku进来的，跳到步骤二
         if (this.props.params.sku) {
             this.setState({
                 title:'编辑关系',
@@ -733,12 +685,18 @@ class CreateRelevance extends React.Component {
 
             // 根据sku获取商品信息
             this.getGoodsBySku(this.props.params.sku);
+        }else{
+            //this.props.goods = null; 
+            console.log('default goods',this.props.goods);
         }
 
-        // 获取相识商品数据
-        this.setState({
-            similarGoodsList:this.props.similarGoodsList,
-        })
+        
+        this.timeout(3000).then((value) => {
+            // 获取相识商品数据
+            this.setState({
+                similarGoodsList:this.props.similarGoodsList,
+            });
+        });
 
     }
 
@@ -747,42 +705,21 @@ class CreateRelevance extends React.Component {
 
     }
 
-
+    // 异步定时器
+    timeout = (ms) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, ms, 'done');
+        });
+    }
 }
 
 
 function mapStateToProps(state) {
     
-    const { 
-        goods,                    // 步骤选择的商品
-        similarGoodsList,         // 相似的商品列表
-        similarGoodsListChildren,         // 相似的商品列表
-        createRelevanceLoading,   // 创建关联中...
-        setRevanceStatus,         // 创建关联状态
-        goodsBySite,               // 手动添加的相似商品
-        gearbestSimilarGoods,
-        dxSimilarGoods,
-    } = state.CreateRelevanceModel;
+    const { similarGoodsList } = state.CreateRelevanceModel;
+    console.log('similarGoodsList',similarGoodsList); 
 
-    
-
-    if(dxSimilarGoods){
-        dxSimilarGoods.map((item,index)=>{
-            item.select = false;
-        })
-    }
-    console.log('dxSimilarGoods',dxSimilarGoods);
-        
-
-    return {
-        goods: goods,
-        goodsBySite: goodsBySite,
-        similarGoodsList: similarGoodsList,
-        createRelevanceLoading: createRelevanceLoading,
-        setRevanceStatus: setRevanceStatus,
-        gearbestSimilarGoods: gearbestSimilarGoods,
-        dxSimilarGoods: dxSimilarGoods,
-    }
+    return {...state.CreateRelevanceModel};
 }
 
 

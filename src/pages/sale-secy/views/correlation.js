@@ -26,7 +26,7 @@ class Correlation extends React.Component {
                     :
 					<div>
 						{
-							this.props.goodsComparisonList? 
+							this.props.goodsComparisonList && this.props.goodsComparisonList.length>0? 
 							<div className={styles.correlationWrap}>
 								<ul>
 									<li className={styles.clear}>
@@ -94,7 +94,7 @@ class Correlation extends React.Component {
 	
 	componentDidUpdate(){
 
-		if(this.props.goodsComparisonList){
+		if(this.props.goodsComparisonList && this.props.goodsComparisonList.length > 0){
 			// 载入BG Echart图表
 			this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
 			this.loadBGChart(this.refs.bgChart2,this.props.goodsComparisonList[1].run_chart);
