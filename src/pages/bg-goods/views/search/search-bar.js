@@ -14,9 +14,9 @@ const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const Option = Select.Option;
 
-// 默认抓取时间为当月 
-let firstDay = moment().startOf('month').format('YYYY-MM-DD');
-let endDay = moment().endOf('month').format('YYYY-MM-DD');
+// 默认抓取时间为一个月内
+let firstDay = moment().format('YYYY-MM-DD');
+let endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
 
 
 class Searcher extends React.Component {
@@ -138,8 +138,8 @@ class Searcher extends React.Component {
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[
-                                        moment().startOf('month'), 
-                                        moment().endOf('month')
+                                        moment(new Date()).subtract("days",30),
+                                        moment(),
                                     ]} 
                                     ranges={{ 
                                         '今天': [moment(), moment()],
@@ -163,6 +163,10 @@ class Searcher extends React.Component {
         )
     }
 
+    componentDidMount(){
+        // 先搜索一次，为返回的菜单准备
+        this.props.handleSearchArgs(this.state.args);
+    }
 
     /**
      * 搜索
@@ -240,6 +244,7 @@ class Searcher extends React.Component {
                     str?
                     str.map((item,index) => 
                         <span 
+                            key ={`label-${index}`}
                             className={ styles.tag } 
                             onClick={this.closeTag.bind(this,item)}
                             >
@@ -367,7 +372,7 @@ class Searcher extends React.Component {
             this.state.args.startTime = dateString[0];
             this.state.args.endTime = dateString[1];
 
-            console.log(this.state.args);
+            //console.log(this.state.args);
             this.props.handleSearchArgs(this.state.args);
         }
     }

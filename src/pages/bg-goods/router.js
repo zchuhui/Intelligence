@@ -7,7 +7,9 @@ import CreateRelevance from './views/create-relevance/create-relevance';
 function RouterConfig({ history }) {
     return (
         <Router history={history}>
-      		<Route path="/" component={ DataRouter } />
+      		<Route path="/" component={ DataRouter }>
+			  	<Route path="/bg/:id" component={ DataRouter } />
+			</Route>
       		<Route path="/create" component={ CreateRelevance }>
       			<Route path="/create/:sku" component={ CreateRelevance } />
       		</Route>

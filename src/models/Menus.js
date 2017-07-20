@@ -66,7 +66,7 @@ export default {
         * getCates({ payload }, { select, call, put }) {
 
             try {
-                // 获取分类数据
+                // 获取分类数据菜单
                 const { data } = yield call(menusService.getMenuCate);
 
                 // 存储数据
@@ -78,7 +78,7 @@ export default {
             }
         },
 
-        // 获取Bangood下的分类
+        // 获取Bangood下的分类菜单
         * getBanggoodCates({ payload }, { select, call, put }) {
 
             try {
@@ -94,7 +94,7 @@ export default {
             }
         },
 
-        // 获取品牌表
+        // 获取品牌菜单
         * getBrands({ payload }, { select, call, put }) {
             try {
                 // 开始请求数据
@@ -110,13 +110,29 @@ export default {
             }
         },
 
+        // 获取Banggood的品牌菜单
+        * getBanggoodBrands({ payload }, { select, call, put }) {
+            try {
+                // 开始请求数据
+                const { data } = yield call(menusService.getMenuBrandByBanggood);
+
+                // 存储数据
+                if (data.code == CODE200) {
+                    yield put({ type: 'saveBrand', payload: data });
+                } 
+                
+            } catch (e) {
+                console.log(e.message)
+            }
+        },
+
     },
     subscriptions: {
         setup({ dispatch, history }) {
             
-            dispatch({ type: 'getCates' });
+            /* dispatch({ type: 'getCates' });
             dispatch({ type: 'getBanggoodCates' });
-            dispatch({ type: 'getBrands' });
+            dispatch({ type: 'getBrands' }); */
 
         },
     },

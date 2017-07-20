@@ -33,3 +33,11 @@ export function getMenuBrand() {
   	return request(currentUrl);
 }
 
+// 获取Banggood的品牌菜单
+export function getMenuBrandByBanggood() { 
+	 
+	let currentUrl = `${Url}?com=ajax&t=getBrandList&site=banggood`;
+	
+  	return request(currentUrl);
+}
+

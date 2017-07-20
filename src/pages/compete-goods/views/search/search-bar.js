@@ -12,11 +12,12 @@ import styles from './search-bar.less';
 const { MonthPicker, RangePicker } = DatePicker;
 const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
+const Option = Select.Option;
 const dateFormat = "YYYY-MM-DD";
 
-// 默认抓取时间为当月 
-let firstDay = moment().startOf('month').format('YYYY-MM-DD');
-let endDay = moment().endOf('month').format('YYYY-MM-DD');
+// 默认抓取时间为一个月内
+const firstDay = moment().format('YYYY-MM-DD');
+const endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
 
 class SearchBar extends Component {
     constructor(props, context) {
@@ -99,10 +100,14 @@ class SearchBar extends Component {
                                 placeholder="品牌"
                                 optionFilterProp="children" 
                                 onSelect={ this.handleBrandMenu } 
-                                >
+                                labelInValue
+                                > 
 
                                 {
-                                    this.props.menus.brand.map((i,index) => <Option key={i.bid}>{i.bname}</Option>)
+                                    this.props.menus.brand?
+                                        this.props.menus.brand.map((i,index) => <Option key={index} value={i.bid}>{i.bname}</Option>)
+                                        :null
+                                    //this.props.menus.brand.map((i,index) => <Option key={i.bid}>{i.bname}</Option>)
                                 }
                             </Select>
 
@@ -135,8 +140,8 @@ class SearchBar extends Component {
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[
-                                        moment().startOf('month'), 
-                                        moment().endOf('month')
+                                        moment(new Date()).subtract("days",30),
+                                        moment(),
                                     ]} 
                                     ranges={{ 
                                         '今天': [moment(), moment()],
@@ -213,7 +218,8 @@ class SearchBar extends Component {
     // 选择品牌
     handleBrandMenu = (value,select) => {
         this.state.args.bid = value;
-        this.state.argsShow.bid = select.props.children;
+        this.state.argsShow.bid = select.props.children; 
+        
     }
 
     // 选择是否关联产品
@@ -249,6 +255,7 @@ class SearchBar extends Component {
                     str?
                     str.map((item,index) => 
                         <span 
+                            key ={`label-${index}`}
                             className={ styles.tag } 
                             onClick={this.closeTag.bind(this,item)}
                             >

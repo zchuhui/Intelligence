@@ -154,7 +154,11 @@ export default {
             return history.listen(({ pathname, query }) => {
                 // 监听url，但ulr为‘/’时，执行query
                 if (pathname === '/') {
+                    
                     dispatch({ type: 'query', payload: { page: 1 } });
+                    // 菜单
+                    dispatch({ type: 'Menus/getCates'}); 
+                    dispatch({ type: 'Menus/getBrands'});
                 }
             })
         },

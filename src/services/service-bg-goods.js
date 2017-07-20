@@ -137,8 +137,8 @@ export function fetchGoodsContrastData(pid){
  */
 export function fetchRevanceBySku(args) {
 
-    let argumentStr = `com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
-
+    let argumentStr = `com=ajax&t=getBgToOtherRelationInfo&site=${args.site}&sku=${args.sku}`;
+    
     let url = `${Url}?${argumentStr}`;
 
     return request(url);

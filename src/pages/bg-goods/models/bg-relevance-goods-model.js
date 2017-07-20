@@ -10,8 +10,8 @@ import moment from 'moment';
 import { message } from 'antd';
 
 // 默认抓取时间为当月
-const firstDay = moment().startOf('month').format('YYYY-MM-DD');
-const endDay = moment().endOf('month').format('YYYY-MM-DD');
+const firstDay = moment().format('YYYY-MM-DD');
+const endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
 
 export default {
     namespace: 'RelevanceBGModel',
@@ -165,7 +165,6 @@ export default {
         },
         // 清空商品对比数据
         clearGoodContrastData(state, { payload }) {
-            console.log('clear')
             return { ...state, goodContrastData: [] };
         },
         // 更新商品对比数据载入状态
@@ -212,7 +211,7 @@ export default {
                 // 从state中获取搜索参数
                 const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
                 searchArgs.page = payload.page;
-                console.log('searchArgs',searchArgs);
+
                 // 开始请求数据
                 const { data } = yield call(BgService.search, { searchArguments: searchArgs });
 
@@ -313,11 +312,16 @@ export default {
 
             yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
         }
+        
     },
 
     subscriptions: {
         setup({ dispatch, history }) {
+            // 初始化首页
             dispatch({ type: 'fetch', payload: { page: 1 } });
+            // 菜单
+            dispatch({ type: 'Menus/getBanggoodCates'}); 
+            dispatch({ type: 'Menus/getBanggoodBrands'});
         },
     }
 }
@@ -358,7 +362,6 @@ Date.prototype.format = function () {
     s += day; // 获取日。  
     return (s); // 返回日期。  
 };
-
 
 
 /**

@@ -24,10 +24,10 @@ class LoginRouter extends React.Component {
     render() {
         return (
             <div>
-                <Header 
+                {/* <Header 
                     status={this.props.status} 
                     userInfo={this.props.userInfo} 
-                />
+                /> */}
                 <LoginPage 
                     getLoginInfo={info => this.getLoginInfo(info)} 
                     msg={this.props.msg}

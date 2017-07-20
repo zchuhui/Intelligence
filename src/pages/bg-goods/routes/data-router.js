@@ -124,6 +124,7 @@ function mapStateToProps(state) {
         goodContrastDataLoading,  // 商品对比数据加载状态
     } = state.RelevanceBGModel;
     
+    //console.log('goodContrastData',goodContrastData);
 
     if (data && data.list) {
         // 遍历列表数据，转换成组件可用的数据

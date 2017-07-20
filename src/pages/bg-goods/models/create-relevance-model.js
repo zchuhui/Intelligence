@@ -46,7 +46,7 @@ export default {
         goods: {},
         // 步骤二单个商品
         goodsBySite: {},
-
+        
         // 相似的商品表
         similarGoodsList:null,
 
@@ -54,7 +54,7 @@ export default {
         dxSimilarGoods:null,
         
         // 选中的关联商品
-        relevanceGoodsList: [],
+        relevanceGoodsList: null,
         // 设置状态是否成功
         setRevanceStatus: false,
     },
@@ -74,7 +74,6 @@ export default {
                 array.push(obj);
                 index ++;
             }
-            console.log('array:',array);
             
             return { ...state, similarGoodsList:array};
 
@@ -90,7 +89,7 @@ export default {
         },
         // 保存已关联的商品
         saveRelevanceGoodsList(state, { payload }) {
-            return { ...state, relevanceGoodsList: payload };
+            return { ...state, relevanceGoodsList: payload.data };
         },
         // 切换创建模块的loading状态
         toggleCreateRelevanceLoading(state, { payload }) {
@@ -117,7 +116,6 @@ export default {
                     yield put({ type: 'saveRelevanceGoods', payload: data });
                     yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
                     
-                    console.log('goods:',data);
                     // 请求相似数据
                     yield put({ type: 'fetchSimilarGoodsList',payload:{title:data.data.pname}});
                     // 请求已关联的竞品
@@ -135,7 +133,7 @@ export default {
 
         // 步骤二，获取相似产品表
         * fetchSimilarGoodsList({ payload }, { select, call, put }) {
-            console.log('tit',payload);
+
             try {
                 
                 const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
@@ -146,7 +144,7 @@ export default {
 
                 // 保存数据
                 if (data.code == CODE200) {
-                    console.log('similar data',data); 
+                    
                     yield put({ type: 'saveSimilarGoodsList', payload:{data:data.data,} });
                     
                 } else {
@@ -192,7 +190,7 @@ export default {
             yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: true } });
 
             try {
-
+                
                 const { data } = yield call(BgService.setRelevanceGoods, payload);
 
                 // 保存数据
@@ -224,10 +222,7 @@ export default {
 
                 // 保存数据
                 if (data.code == CODE200) {
-                    //yield put({ type: 'saveRelevanceGoods', payload: data });
-                    
-                    console.log('revance goods:',data);
-                    
+                    yield put({ type: 'saveRelevanceGoodsList', payload: data });
                 } 
 
             } catch (e) {
@@ -243,13 +238,10 @@ export default {
             return history.listen(({ pathname, query }) => {
 
                 // 只识别url的create,不识别后面的参数
-                pathname = pathname.split('/')[1];
+                /* pathname = pathname.split('/')[1];
 
                 if (pathname == 'create') {
-                    // 载入相识商品
-                    //dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[0]}});
-                    //dispatch({ type: 'fetchSimilarGoodsList',payload:{title:similarGoodsListTitle[1]}});
-                }
+                } */
             })
         },
     },

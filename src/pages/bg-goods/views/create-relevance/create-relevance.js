@@ -20,9 +20,9 @@ class CreateRelevance extends React.Component {
         super(props);
 
         this.state = {
-            title:'创建关系',
+            title: '创建关系',
 
-        	// 步骤模块
+            // 步骤模块
             step1: '',
             step2: 'none',
             step3: 'none',
@@ -33,12 +33,12 @@ class CreateRelevance extends React.Component {
             progress3: false,
 
             // 所有相似的产品
-            similarGoodsList:[],
-            siteKey:0,
-            marginLeftVal:0,   
+            similarGoodsList: [],
+            siteKey: 0,
+            marginLeftVal: 0,
 
             // 选中的产品
-            relevanceGoodsList:[],
+            relevanceGoodsList: [],
 
         }
     }
@@ -47,77 +47,77 @@ class CreateRelevance extends React.Component {
         return (
             <MainLayout headerMenuText="BG关联报表">
                 <Spin spinning={this.props.createRelevanceLoading}>
-    				<div className={styles.relevanceWrap}>
+                    <div className={styles.relevanceWrap}>
 
-    					<div className={ styles.title }>
-                            <span>{ this.state.title }</span>
+                        <div className={styles.title}>
+                            <span>{this.state.title}</span>
                         </div>
 
                         {/*进度条 start*/}
-                        <div className={ styles.progressWrap}>
-                        	<div className={styles.progressBg}>
-                        		<ul>
-                        			<li className={ this.state.progress1?styles.current:null }>
-                        				<div className={styles.circleBg}>
-                        					<div className={styles.circleText }>1</div>
-                        				</div>
-                        				<p className={styles.text}>第1步 <br/> 填写要关联的BG-SKU </p>
-                        			</li>
-                        			<li className={ this.state.progress2?styles.current:null }>
-                        				<div className={styles.circleBg}>
-                        					<div className={styles.circleText }>2</div>
-                        				</div>
-                        				<p className={styles.text}>第2步 <br/> 选择关联的外点-SKU </p>
-                        			</li>
-                        			<li className={ this.state.progress3?styles.current:null }>
-                        				<div className={styles.circleBg}>
-                        					<div className={styles.circleText }><Icon type="check" /></div>
-                        				</div>
-                        				<p className={styles.text}>第3步 <br/> 确认完成关联 </p>
-                        			</li>
-                        		</ul>
-                        	</div>
+                        <div className={styles.progressWrap}>
+                            <div className={styles.progressBg}>
+                                <ul>
+                                    <li className={this.state.progress1 ? styles.current : null}>
+                                        <div className={styles.circleBg}>
+                                            <div className={styles.circleText}>1</div>
+                                        </div>
+                                        <p className={styles.text}>第1步 <br /> 填写要关联的BG-SKU </p>
+                                    </li>
+                                    <li className={this.state.progress2 ? styles.current : null}>
+                                        <div className={styles.circleBg}>
+                                            <div className={styles.circleText}>2</div>
+                                        </div>
+                                        <p className={styles.text}>第2步 <br /> 选择关联的外点-SKU </p>
+                                    </li>
+                                    <li className={this.state.progress3 ? styles.current : null}>
+                                        <div className={styles.circleBg}>
+                                            <div className={styles.circleText}><Icon type="check" /></div>
+                                        </div>
+                                        <p className={styles.text}>第3步 <br /> 确认完成关联 </p>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         {/*进度条 end*/}
- 
+
                         {/*content start*/}
                         <div className={styles.content}>
 
-                        	{/*步骤一*/}
-                        	<div style={{ display:this.state.step1 }}>
-                        		<div className={styles.stepOneWrap}>
-                        			<div className={styles.imgWrap}>
+                            {/*步骤一*/}
+                            <div style={{ display: this.state.step1 }}>
+                                <div className={styles.stepOneWrap}>
+                                    <div className={styles.imgWrap}>
                                         {
-                                            this.props.goods.data?
-                                            <img src={ this.props.goods.data.img_url } />
-                                            :<span></span>
+                                            this.props.goods.data ?
+                                                <img src={this.props.goods.data.img_url} />
+                                                : <span></span>
                                         }
-                        			</div>
-                        			<div className={styles.inputWrap}>
-                        				<p>输入BG-SKU，<br/>根据SKU获取其主图并显示</p>
-                        				<Input style={{ width:150 }}  placeholder="输入SKU" ref="inputSku"/>
-                        				<Button style={{ marginLeft:5 }} onClick={this.getGoodsBySku.bind(this,null)}>获取</Button>
-                                        <div style={{ height:50}}>
+                                    </div>
+                                    <div className={styles.inputWrap}>
+                                        <p>输入BG-SKU，<br />根据SKU获取其主图并显示</p>
+                                        <Input style={{ width: 150 }} placeholder="输入SKU" ref="inputSku" />
+                                        <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySku.bind(this, null)}>获取</Button>
+                                        <div style={{ height: 50 }}>
                                             {
-                                                this.props.goods.msg?
-                                                <p style={{color:'red'}}>{this.props.goods.msg}</p>
-                                                :<p></p>
+                                                this.props.goods.msg ?
+                                                    <p style={{ color: 'red' }}>{this.props.goods.msg}</p>
+                                                    : <p></p>
                                             }
                                         </div>
-                        			</div>
+                                    </div>
 
-                        		</div>
-                                
-                        		<div style={{ textAlign:'center', height:100}}>
-    					    		<Button type="primary" style={{ width:100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
-    					    	</div>
-                        	</div>
+                                </div>
 
-                        	
-                        	{/*步骤二*/}
-                        	<div style={{ display:this.state.step2 }}> 
-                        			
-                        		<div className={styles.panel}>	
+                                <div style={{ textAlign: 'center', height: 100 }}>
+                                    <Button type="primary" style={{ width: 100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
+                                </div>
+                            </div>
+
+
+                            {/*步骤二*/}
+                            <div style={{ display: this.state.step2 }}>
+
+                                <div className={styles.panel}>
                                     {
                                         /* 选中的BG商品 */
                                         this.props.goods.data ?
@@ -130,9 +130,9 @@ class CreateRelevance extends React.Component {
                                             </div>
                                             : null
                                     }
-                                    
-    	                    		{/*相似的商品 start*/}
-    	                    		<div style={{ width:800, height:350, display:'inline-block'}}>
+
+                                    {/*相似的商品 start*/}
+                                    <div style={{ width: 800, height: 350, display: 'inline-block' }}>
                                         {
                                             this.props.similarGoodsList ?
                                                 <div>
@@ -148,104 +148,41 @@ class CreateRelevance extends React.Component {
                                                         }
                                                     </Tabs>
                                                     {/*手动输入商品*/}
-                                                    <div style={{ marginLeft:25,marginTop:20 }}>
-                                                        <Input style={{ width:150 }}  placeholder="手动添加SKU" ref="inputSku2"/>
-                                                        <Button style={{ marginLeft:5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                                                    <div style={{ marginLeft: 25, marginTop: 20 }}>
+                                                        <Input style={{ width: 150 }} placeholder="手动添加SKU" ref="inputSku2" />
+                                                        <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
                                                         {
-                                                            this.props.goodsBySite.code==200?
-                                                            <Button style={{ marginLeft:5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
-                                                            : null
-                                                            
+                                                            this.props.goodsBySite.code == 200 ?
+                                                                <Button style={{ marginLeft: 5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
+                                                                : null
+
                                                         }
-                                                        
-                                                        <span style={{ marginLeft:10,color:'red' }}>
+
+                                                        <span style={{ marginLeft: 10, color: 'red' }}>
                                                             {
-                                                                this.props.goodsBySite.code==200?
-                                                                <span>{this.props.goodsBySite.msg}</span>
-                                                                :<span>{this.props.goodsBySite.msg}</span>
+                                                                this.props.goodsBySite.code == 200 ?
+                                                                    <span>{this.props.goodsBySite.msg}</span>
+                                                                    : <span>{this.props.goodsBySite.msg}</span>
                                                             }
                                                         </span>
                                                     </div>
                                                 </div>
-                                                :null
+                                                : null
                                         }
-    	                    			
 
-    	                    		</div>
-    								{/*相似的商品 end*/}
 
-    	                    	</div>
-    	                    	
-    	                    	<div className={styles.panelBottom}>
-    	                    		{/*选中的商品 start*/}
-    	                    		<ul className={styles.similarGoods}>
-    	                    			{
-    	                    				this.state.relevanceGoodsList.map((item,index)=>
-    	                    					<li className={styles.deleteSelectGoods}>
-    								    			<div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this,index,item)}>
-    								    				<div className={styles.imgWrap}><img src={item.img_url} /></div>
-    					                    			<p className={styles.brand}>{item.site}</p>
-    					                    			<p>SKU: {item.sku}</p>
-    								    			</div>
-    								    		</li>
-    	                    				)
-    	                    			}
-    						    		
-    						    	</ul>
-    						    	{/*选中的商品 end*/}
+                                    </div>
+                                    {/*相似的商品 end*/}
 
-    						    	<div style={{ textAlign:'center', height:100, margin:'60px auto'}}>
+                                </div>
+
+                                <div className={styles.panelBottom}>
+                                    {/*选中的商品 start*/}
+                                    <ul className={styles.similarGoods}>
                                         {
-                                            /*如果是编辑关系，则不显示上一步*/
-                                            !this.props.params.sku?
-                                            <Button style={{ marginRight:10,width:100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
-                                            :null
-                                        }
-    						    		
-    						    		<Button type="primary" style={{ width:100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
-    						    	</div>	
-    	                    	</div>
-    	                    	
-                        	</div>
-
-                        	
-                        	{/*步骤三*/}
-                        	<div style={{ display:this.state.step3 }}> 
-                        		<div className={styles.panel}>
-                                    {
-                                        this.props.createRelevanceLoading?
-                                        <div style={{textAlign:'center',}}>
-                                            <span style={{display:'inline-block',height:60, lineHeight:2, marginLeft:10, fontSize:16}}>关联中...</span>
-                                        </div>
-                                        :
-                                        <div>
-                                            {
-                                                this.props.setRevanceStatus?
-                                                <div style={{textAlign:'center',}}>
-                                                    <Icon type="check-circle" style={{fontSize:30, color:'#79bb51',verticalAlign:'top'}}/>
-                                                    <span style={{display:'inline-block',height:60, lineHeight:2, marginLeft:10, fontSize:16}}>已成功关联！</span>
-                                                    <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
-                                                </div>
-                                                :
-                                                <div style={{textAlign:'center',}}>
-                                                    <Icon type="frown" style={{fontSize:30, color:'#999',verticalAlign:'top'}}/>
-                                                    <span style={{display:'inline-block',height:60, lineHeight:2, marginLeft:10, fontSize:16}}>关联失败</span>
-                                                    <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
-                        			
-    	                    	</div>
-    	                    	
-    	                    	<div className={styles.panelBottom}>
-    	                    		{
-                                        this.props.setRevanceStatus?
-                                        <ul className={styles.similarGoods}>
-                                        {
-                                            this.state.relevanceGoodsList.map((item,index)=>
-                                                <li>
-                                                    <div className={styles.goodsShowPanel}>
+                                            this.state.relevanceGoodsList.map((item, index) =>
+                                                <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
+                                                    <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
                                                         <div className={styles.imgWrap}><img src={item.img_url} /></div>
                                                         <p className={styles.brand}>{item.site}</p>
                                                         <p>SKU: {item.sku}</p>
@@ -253,21 +190,84 @@ class CreateRelevance extends React.Component {
                                                 </li>
                                             )
                                         }
+
                                     </ul>
-                                    :<p></p>
+                                    {/*选中的商品 end*/}
+
+                                    <div style={{ textAlign: 'center', height: 100, margin: '60px auto' }}>
+                                        {
+                                            /*如果是编辑关系，则不显示上一步*/
+                                            !this.props.params.sku ?
+                                                <Button style={{ marginRight: 10, width: 100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
+                                                : null
+                                        }
+
+                                        <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            {/*步骤三*/}
+                            <div style={{ display: this.state.step3 }}>
+                                <div className={styles.panel}>
+                                    {
+                                        this.props.createRelevanceLoading ?
+                                            <div style={{ textAlign: 'center', }}>
+                                                <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>关联中...</span>
+                                            </div>
+                                            :
+                                            <div>
+                                                {
+                                                    this.props.setRevanceStatus ?
+                                                        <div style={{ textAlign: 'center', }}>
+                                                            <Icon type="check-circle" style={{ fontSize: 30, color: '#79bb51', verticalAlign: 'top' }} />
+                                                            <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>已成功关联！</span>
+                                                            <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
+                                                        </div>
+                                                        :
+                                                        <div style={{ textAlign: 'center', }}> 
+                                                            <Icon type="frown" style={{ fontSize: 30, color: '#999', verticalAlign: 'top' }} />
+                                                            <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>关联失败</span>
+                                                            <div><Link to='/bg/:id'><Icon type="rollback" />返回BG关联报表</Link> </div>
+                                                        </div>
+                                                }
+                                            </div>
+                                    }
+
+                                </div>
+
+                                <div className={styles.panelBottom}>
+                                    {
+                                        this.props.setRevanceStatus ?
+                                            <ul className={styles.similarGoods}>
+                                                {
+                                                    this.state.relevanceGoodsList.map((item, index) =>
+                                                        <li key={`suc-relevance-${index}`}>
+                                                            <div className={styles.goodsShowPanel}>
+                                                                <div className={styles.imgWrap}><img src={item.img_url} /></div>
+                                                                <p className={styles.brand}>{item.site}</p>
+                                                                <p>SKU: {item.sku}</p>
+                                                            </div>
+                                                        </li>
+                                                    )
+                                                }
+                                            </ul>
+                                            : <p></p>
 
 
                                     }
-                                    
-    	                    	</div>
 
-                        	</div>
-                        	
+                                </div>
+
+                            </div>
+
                         </div>
-                    	{/*content end*/}
-    				</div>
+                        {/*content end*/}
+                    </div>
                 </Spin>
-			</MainLayout>
+            </MainLayout>
         )
     }
 
@@ -280,7 +280,7 @@ class CreateRelevance extends React.Component {
         if (urlSku) {
             sku = urlSku;
         }
-        else{
+        else {
             // 获取Input框的sku值
             sku = this.refs.inputSku.refs.input.value;
         }
@@ -300,18 +300,18 @@ class CreateRelevance extends React.Component {
     }
 
     // 手动输入sku获取单个商品
-    getGoodsBySiteAndSku(){
+    getGoodsBySiteAndSku() {
 
-    	// 获取Input框的sku值
+        // 获取Input框的sku值
         let sku = this.refs.inputSku2.refs.input.value;
 
         let site;
 
         if (this.state.currentSite) {
-        	site = this.state.currentSite
+            site = this.state.currentSite
         }
-        else{
-        	site = this.state.similarGoodsList[0].tname;
+        else {
+            site = this.state.similarGoodsList[0].tname;
         }
 
         if (sku !== '') {
@@ -329,18 +329,18 @@ class CreateRelevance extends React.Component {
     }
 
     // 选择站点，切换相似商品栏
-    getSite(key){
-        
+    getSite(key) {
+
         key = key.split('-')[1];
-        console.log(key);
+        
         // 选择站点
-    	let site = this.props.similarGoodsList[key].tname;
+        let site = this.props.similarGoodsList[key].tname;
 
         // 存储到state中
-    	this.setState({
-    		currentSite:site,
-            siteKey:key,
-            marginLeftVal:0,  // 清除移动
+        this.setState({
+            currentSite: site,
+            siteKey: key,
+            marginLeftVal: 0,  // 清除移动
         });
 
 
@@ -349,9 +349,9 @@ class CreateRelevance extends React.Component {
             type: 'CreateRelevanceModel/saveRelevanceGoodsBySite',
             payload: {}
         });
-        
+
         // 清空文本框
-        this.refs.inputSku2.refs.input.value = '';  
+        this.refs.inputSku2.refs.input.value = '';
 
     }
 
@@ -386,12 +386,11 @@ class CreateRelevance extends React.Component {
         const relevanceArray = [];
 
         // 清除数组中为undefined的元素
-        this.state.relevanceGoodsList.map((item,index)=>{
-            if(item!==undefined){
+        this.state.relevanceGoodsList.map((item, index) => {
+            if (item !== undefined) {
                 relevanceArray.push(item);
             }
         });
-        
 
         // 确认已选商品
         if (relevanceArray.length > 0) {
@@ -399,29 +398,28 @@ class CreateRelevance extends React.Component {
             let args = {};
 
             // 转换参数格式
-            relevanceArray.map((item,index) => {
+            relevanceArray.map((item, index) => {
                 if (item.site && item.sku) {
-                    switch(item.site){
+                    switch (item.site) {
                         case 'gearbest':
-                            args = {gearbest:item.sku};
+                            args['gearbest'] = item.sku;
                             break;
                         case 'dx':
-                            args = {dx:item.sku};
+                            args['dx'] = item.sku;
                             break;
                         case 'aliexpress':
-                            args = {aliexpress:item.sku};
+                            args['aliexpress'] = item.sku;
                             break;
                         case 'lightinthebox':
-                            args = {lightinthebox:item.sku};
+                            args['lightinthebox'] = item.sku;
                             break;
                         case 'amazon':
-                            args = {amazon:item.sku};
+                            args['amazon'] = item.sku;
                             break;
                         case 'tomtop':
-                            args = {tomtop:item.sku};
+                            args['tomtop'] = item.sku;
                             break;
                     }
-                    
                 }
             });
 
@@ -454,31 +452,30 @@ class CreateRelevance extends React.Component {
                 payload: {}
             });
         }
-        else{
-            message.warning("没有关联任何商品"); 
+        else {
+            message.warning("没有关联任何商品");
         }
     }
 
     // 选择相似产品
-    selectSimilarGoods(index,item) {
-        console.log(index,item);
+    selectSimilarGoods(index, item) {
+
         // 所有站点相似商品
-        //let parentArray = this.state.similarGoodsList;
         let parentArray = this.props.similarGoodsList;
         // 该站点的标示
-        let parentKey = this.state.siteKey; 
-        console.log(parentKey,parentArray);
+        let parentKey = this.state.siteKey;
+
         // 修改子表，呈现选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
 
             // 循环遍历
-            parentArray[parentKey].children.map((obj,childIndex)=>{
+            parentArray[parentKey].children.map((obj, childIndex) => {
                 if (childIndex == index) {
                     obj.select = true;
-                    //console.log(obj.select)
+                    
                 }
-                else{
-                     obj.select = false;
+                else {
+                    obj.select = false;
                 }
             });
 
@@ -490,7 +487,7 @@ class CreateRelevance extends React.Component {
 
 
         // 已经选择的商品
-    	const relevanceArray = this.state.relevanceGoodsList;
+        const relevanceArray = this.state.relevanceGoodsList;
 
         // 判断该商品是否已选
         if (!relevanceArray.contains(item)) {
@@ -499,19 +496,19 @@ class CreateRelevance extends React.Component {
             relevanceArray[parentKey] = item;
 
             this.setState({
-                relevanceGoodsList:relevanceArray
+                relevanceGoodsList: relevanceArray
             });
         }
 
-        console.log('已选商品',this.state.relevanceGoodsList);
+        
     }
 
     // 选择手动输入的商品
-    selectGoodsBySite(){
+    selectGoodsBySite() {
 
         // 获取site key
-        let parentKey = this.state.siteKey; 
-        let goodsite= this.props.goodsBySite;
+        let parentKey = this.state.siteKey;
+        let goodsite = this.props.goodsBySite;
 
         // 如果已有数据
         if (goodsite.code == 200) {
@@ -526,10 +523,10 @@ class CreateRelevance extends React.Component {
                 relevanceArray[parentKey] = goodsite.data;
 
                 this.setState({
-                    relevanceGoodsList:relevanceArray
+                    relevanceGoodsList: relevanceArray
                 });
             }
-            else{
+            else {
 
             }
 
@@ -540,19 +537,19 @@ class CreateRelevance extends React.Component {
     }
 
     // 取消相似商品列表的选中状态
-    cancelGoodsSelectStyle(){
+    cancelGoodsSelectStyle() {
 
         // 搜索站点相似商品
         let parentArray = this.state.similarGoodsList;
         // 当前站点的key
-        let parentKey = this.state.siteKey; 
-        
+        let parentKey = this.state.siteKey;
+
         // 修改子表，取消选中状态
         if (parentArray[parentKey] && parentArray[parentKey].children) {
 
-            parentArray[parentKey].children.map((obj,childIndex)=>{
+            parentArray[parentKey].children.map((obj, childIndex) => {
                 if (obj.select == true) {
-                    obj.select=false
+                    obj.select = false
                 }
             });
 
@@ -565,7 +562,7 @@ class CreateRelevance extends React.Component {
     }
 
     // 移除已选的商品
-    cancelRelevanceGoods(index,item){
+    cancelRelevanceGoods(index, item) {
         // 所有站点的相似商品
         let parentArray = this.state.similarGoodsList;
         // 已经选择的商品
@@ -574,15 +571,15 @@ class CreateRelevance extends React.Component {
         if (item) {
 
             // 移除已选商品列表的商品
-            relevanceArray.map((obj,index) => {
+            relevanceArray.map((obj, index) => {
                 if (obj.sku == item.sku) {
                     delete relevanceArray[index];
                 }
             });
 
             // 移除相似商品表的选中状态
-            parentArray.map((obj,index) => {
-                obj.children.map((obj2,index2) => {
+            parentArray.map((obj, index) => {
+                obj.children.map((obj2, index2) => {
                     if (obj2.sku == item.sku) {
                         obj2.select = false;
                     }
@@ -590,7 +587,7 @@ class CreateRelevance extends React.Component {
             });
 
             this.setState({
-                relevanceGoodsList:relevanceArray,
+                relevanceGoodsList: relevanceArray,
                 similarGoodsList: parentArray
             });
         }
@@ -598,128 +595,178 @@ class CreateRelevance extends React.Component {
     }
 
     // 获取数据，载入相似商品列表
-    getItemList(data){
-        if(data){
+    getItemList(data) {
+        if (data) {
             return (
                 <div className={styles.similarGoodsWrap}>
                     {
                         // 但相似商品多于5件时，才有左右切换
                         data.length > 5 ?
-                        <div>
-                            <Icon type="left" className={styles.arrowLeft} onClick={this.onMoveLeft.bind(this,data.length)}/>
-                            <Icon type="right" className={styles.arrowRight} onClick={this.onMoveRight.bind(this,data.length)} />
-                        </div>
-                        :null
+                            <div>
+                                <Icon type="left" className={styles.arrowLeft} onClick={this.onMoveLeft.bind(this, data.length)} />
+                                <Icon type="right" className={styles.arrowRight} onClick={this.onMoveRight.bind(this, data.length)} />
+                            </div>
+                            : null
                     }
                     <div className={styles.similarGoods}>
                         {
 
-                        data.length > 0?
-                            <ul ref='listWrapId' style={{width:data.length*(130+20),marginLeft:this.state.marginLeftVal }}>
-                                {
-                                    data.map((item2,index2) => (
-                                        <li key={`li-${index2}`}>
-                                            <div className={ item2.select?styles.goodsShowPanelCurrent:styles.goodsShowPanel } 
-                                                id={item2.cid} onClick={this.selectSimilarGoods.bind(this,index2,item2)}>
-                                                <div className={styles.imgWrap}>
-                                                    <img src={item2.img_url} />
+                            data.length > 0 ?
+                                <ul ref='listWrapId' style={{ width: data.length * (130 + 20), marginLeft: this.state.marginLeftVal }}>
+                                    {
+                                        data.map((item2, index2) => (
+                                            <li key={`li-${index2}`}>
+                                                <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
+                                                    id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}>
+                                                    <div className={styles.imgWrap}>
+                                                        <img src={item2.img_url} />
+                                                    </div>
+                                                    <p>SKU: {item2.sku}</p>
                                                 </div>
-                                                <p>SKU: {item2.sku}</p>
-                                            </div>
-                                        </li>
-                                    ))
-                                    
-                                }
-                            </ul>
-                            :
-                            <p>该站点木有相似商品，辛苦一点手动输入吧~~</p>
+                                            </li>
+                                        ))
+
+                                    }
+                                </ul>
+                                :
+                                <p>该站点木有相似商品，辛苦一点手动输入吧~~</p>
                         }
                     </div>
                 </div>
             )
         }
-        else{
+        else {
             return (<div>null</div>)
         }
     }
 
     // 相似商品表左边切换
-    onMoveLeft(length){
+    onMoveLeft(length) {
         const itemVal = 750;
         const currentVal = this.state.marginLeftVal;
 
-        if(currentVal < 0){
+        if (currentVal < 0) {
             this.setState({
-                marginLeftVal:(currentVal + itemVal),
+                marginLeftVal: (currentVal + itemVal),
             })
         }
     }
 
     // 相似商品表右边切换
-    onMoveRight(length){
-        const itemVal = 750;   
-        const maxVal = -(750 * Math.ceil(length/5));
+    onMoveRight(length) {
+        const itemVal = 750;
+        const maxVal = -(750 * Math.ceil(length / 5));
         const currentVal = this.state.marginLeftVal;
 
-        if(currentVal > (maxVal+itemVal)){ 
-            
+        if (currentVal > (maxVal + itemVal)) {
+
             this.setState({
-                marginLeftVal:(currentVal - itemVal),
+                marginLeftVal: (currentVal - itemVal),
             });
+        }
+    }
+
+    /**
+     * 异步定时器
+     * @param {时间} ms 
+     */
+    timeout(ms) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, ms, 'done');
+        });
+    }
+
+
+    /**
+     * 把获取的相似商品，取到本地state里面
+     */
+    syncRelevanceGoodsLlist() {
+        let propsRelevanceGoodsList = this.props.relevanceGoodsList;
+        let stateRelevanceGoodsList = this.state.relevanceGoodsList;
+
+        if (propsRelevanceGoodsList) {
+            let index;
+            let obj;
+            for (let item in propsRelevanceGoodsList) {
+                switch (item) {
+                    case 'gearbest':
+                        index = 0;
+                        obj = propsRelevanceGoodsList[item];
+                        break;
+                    case 'lightinthebox':
+                        index = 1;
+                        obj = propsRelevanceGoodsList[item];
+                        break;
+                    case 'dx':
+                        index = 2;
+                        obj = propsRelevanceGoodsList[item];
+                        break;
+                    case 'tomtop':
+                        index = 3;
+                        obj = propsRelevanceGoodsList[item];
+                        break;
+                }
+
+                stateRelevanceGoodsList[index] = obj;
+
+                this.setState({
+                    relevanceGoodsList: stateRelevanceGoodsList,
+                })
+            }
         }
     }
 
 
     // 第一次实例化时，再render渲染后调用
     componentDidMount() {
-        
+
         // 如果是点击列表的sku进来的，跳到步骤二
         if (this.props.params.sku) {
             this.setState({
-                title:'编辑关系',
-                step1:'none',
-                step2:'',
+                title: '编辑关系',
+                step1: 'none',
+                step2: '',
 
                 progress2: true,
             })
 
             // 根据sku获取商品信息
             this.getGoodsBySku(this.props.params.sku);
-        }else{
-            //this.props.goods = null; 
-            console.log('default goods',this.props.goods);
         }
 
-        
-        this.timeout(3000).then((value) => {
+        this.timeout(1000).then((value) => {
             // 获取相识商品数据
             this.setState({
-                similarGoodsList:this.props.similarGoodsList,
+                similarGoodsList: this.props.similarGoodsList,
             });
+
+            this.syncRelevanceGoodsLlist();
+        });
+        
+        // 定时获取数据
+        this.timeout(4000).then((value) => {
+            // 获取相识商品数据
+            this.setState({
+                similarGoodsList: this.props.similarGoodsList,
+            });
+
+            this.syncRelevanceGoodsLlist();
         });
 
     }
 
     // 数据变动时，render渲染后调用
     componentDidUpdate(prevProps, prevState) {
-
     }
 
-    // 异步定时器
-    timeout = (ms) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(resolve, ms, 'done');
-        });
-    }
 }
 
 
 function mapStateToProps(state) {
-    
-    const { similarGoodsList } = state.CreateRelevanceModel;
-    console.log('similarGoodsList',similarGoodsList); 
 
-    return {...state.CreateRelevanceModel};
+    //const { similarGoodsList,relevanceGoodsList } = state.CreateRelevanceModel;
+
+    return { ...state.CreateRelevanceModel };
 }
 
 

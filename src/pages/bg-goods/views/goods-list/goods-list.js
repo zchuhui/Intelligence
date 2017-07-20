@@ -51,7 +51,7 @@ class GoodsList extends React.Component {
             //主商品趋势图
             goodsEchartVisible:false,
             goodsEchartPid:0,
-            goodsEchartRadioValue:1,
+            goodsEchartRadioValue:0,
             defaultStartDate:moment().startOf('week').format('YYYY-MM-DD'),  //本周第一天
             defaultEndDate:moment().endOf('week').format('YYYY-MM-DD'),      //本周最后一天
 
@@ -186,7 +186,7 @@ class GoodsList extends React.Component {
 
 				    {/*<Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>*/}
             		{/*<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>*/}
-            		<Button className={styles.fr} style={{marginRight:10}}><Link to='/create'>创建关系</Link></Button>
+            		<Link to='/create' className={`${styles.fr}`}><Button>创建关系</Button></Link>
                     
             	</div>
             	{ /* 操作栏 end*/ }
@@ -198,7 +198,7 @@ class GoodsList extends React.Component {
 						loading={ this.props.loading } 
 						pagination={false} 
 						columns={tableColumns}
-                        rowKey={record => record.sku }
+                        rowKey={record => `${record.sku}${record.pname}` }
                         onChange={this.handleTableChange}
 						>
 						
@@ -280,8 +280,17 @@ class GoodsList extends React.Component {
                     >
                     <div style={{ }}>
                         <div>
-                            <div style={{display:'inline-block',
-                                height:40,}}>
+                            <div style={{display:'inline-block', height:50, width:'60%',verticalAlign:' top',padding:'0 5%'}}>
+                                <RadioGroup onChange={this.onChangeEchartItem.bind(this)} value={this.state.goodsEchartRadioValue}>
+                                    <Radio value={0} style={{margin:'0 20px 10px 0'}} key='randio1'>价格</Radio>
+                                    <Radio value={1} style={{margin:'0 20px 10px 0'}} key='randio2'>销量</Radio>
+                                    <Radio value={2} style={{margin:'0 20px 10px 0'}} key='randio3'>评分</Radio>
+                                    <Radio value={3} style={{margin:'0 20px 10px 0'}} key='randio4'>评论</Radio>
+                                    <Radio value={4} style={{margin:'0 20px 10px 0'}} key='randio5'>问答</Radio>
+                                    <Radio value={5} style={{margin:'0 20px 10px 0'}} key='randio6'>关注</Radio>
+                                </RadioGroup>
+                            </div>
+                            <div style={{display:'inline-block', height:50, width:'40%'}}>
                                 <RangePicker onChange={ this.getGoodsEcharData }
                                     value={[
                                         moment(this.state.defaultStartDate),
@@ -292,11 +301,11 @@ class GoodsList extends React.Component {
                                     ref='echartTime'
                                     disabledDate = {this.disabledDate}
                                 />
-                                <span>
+                                <div style={{marginTop:5}}>
                                     <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,6)}>最近7天</span>
                                     <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,14)}>最近15天</span>
                                     <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,29)}>最近30天</span>
-                                </span>
+                                </div>
                             </div>
                         </div>
                         <div style={{width:768,height:550,position:'relative'}}>
@@ -333,12 +342,13 @@ class GoodsList extends React.Component {
         )
     }
 
+
     // 数据变动，渲染完成后，执行
     componentDidUpdate(prevProps, prevState) {
 
         // 主商品趋势图载入
         if (this.props.goodsEchartDataLoading) {
-            this.loadEchart();
+            this.loadEchart(this.props.goodsEchartData.seriesData[this.state.goodsEchartRadioValue]);
         }
         
         // 对比商品趋势图载入
@@ -349,7 +359,6 @@ class GoodsList extends React.Component {
             });
         }
     }
-
 
 
     // 异步定时器
@@ -416,7 +425,7 @@ class GoodsList extends React.Component {
                                     </ul>
                                 </Col>
                                 {/*BG 商品*/}
-                                <Col span={10}>
+                                <Col span={this.props.goodContrastData.relateInfo.length==1?10:6}>
                                         <ul className={styles.tableCol}>
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
@@ -438,6 +447,7 @@ class GoodsList extends React.Component {
                                 {/*关联的商品*/}
                                 {
                                     this.props.goodContrastData.relateInfo.map((item,index) => {
+                                        // echart ID 配置
                                         let sets = [];
                                         if (index == 0) {
                                             sets = ['priceSet1','salesSet1','reviewSet1']
@@ -446,30 +456,36 @@ class GoodsList extends React.Component {
                                             sets = ['priceSet2','salesSet2','reviewSet2']
                                         }
 
-                                        return(
-                                            <ul className={styles.tableCol}>
-                                                <li><img src={item.img_url}/></li>
-                                                <li>{item.site}</li>
-                                                <li>{item.cateName}</li>
-                                                <li>{item.attrName}</li>
-                                                <li>{item.price}</li>
-                                                <li>{item.thirtyPrice}</li>
-                                                <li>{item.sales}</li>
-                                                <li>{item.thirtySales}</li>
-                                                <li>{item.favorites}</li>
-                                                <li>{item.reviews}</li>
+                                        // 最多显示两件
+                                        if(index < 2){
+                                            return(
+                                                <Col span={this.props.goodContrastData.relateInfo.length==1?10:7}>
+                                                    <ul className={styles.tableCol}>
+                                                        <li><img src={item.img_url}/></li>
+                                                        <li>{item.site}</li>
+                                                        <li>{item.cateName}</li>
+                                                        <li>{item.attrName}</li>
+                                                        <li>{item.price}</li>
+                                                        <li>{item.thirtyPrice}</li>
+                                                        <li>{item.sales}</li>
+                                                        <li>{item.thirtySales}</li>
+                                                        <li>{item.favorites}</li>
+                                                        <li>{item.reviews}</li>
 
-                                                <li className={ styles.chartWrap}>
-                                                    <div ref={ sets[0] } style={{width:200,height:100,margin:'0 auto'}}></div>
-                                                </li>
-                                                <li className={ styles.chartWrap}>
-                                                     <div ref={sets[1]} style={{width:200,height:100,margin:'0 auto'}}></div>
-                                                </li>
-                                                <li className={ styles.chartWrap}>
-                                                     <div ref={sets[2]} style={{width:200,height:100,margin:'0 auto'}}></div>
-                                                </li>
-                                            </ul>
-                                        )
+                                                        <li className={ styles.chartWrap}>
+                                                            <div ref={ sets[0] } style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                        </li>
+                                                        <li className={ styles.chartWrap}>
+                                                            <div ref={sets[1]} style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                        </li>
+                                                        <li className={ styles.chartWrap}>
+                                                            <div ref={sets[2]} style={{width:200,height:100,margin:'0 auto'}}></div>
+                                                        </li>
+                                                    </ul>
+                                                </Col>
+                                            )
+                                        }
+
                                     })  
                                 }
                             </Row>
@@ -640,7 +656,6 @@ class GoodsList extends React.Component {
         }
     }
 
-
     // 显示主体商品趋势图
     showGoodsEchartModal = (pid) => {
 
@@ -669,7 +684,8 @@ class GoodsList extends React.Component {
     }
 
     // 载入Echart图
-    loadEchart = () => {
+    loadEchart = (data) => {
+
         if (this.refs.echartId) {
             // 基于准备好的dom，初始化echarts实例
             let myChart = echarts.init(this.refs.echartId);
@@ -682,9 +698,9 @@ class GoodsList extends React.Component {
                 tooltip: {
                     trigger: 'axis'
                 },
-                legend: {
+                /* legend: {
                     data:this.props.goodsEchartData.legendData
-                },
+                }, */
                 grid: {
                     left: '3%',
                     right: '4%',
@@ -703,7 +719,18 @@ class GoodsList extends React.Component {
                 yAxis: {
                     type: 'value'
                 },
-                series: this.props.goodsEchartData.seriesData,
+                series:[{
+                    name:data.name,
+                    type:data.type,
+                    itemStyle: {
+                        normal: {
+                            color: '#acdaff',
+                            show: true,
+                        },
+                    },
+                    areaStyle: { normal: {} },  
+                    data:data.data
+                }],
             });
         }   
     }
@@ -720,7 +747,18 @@ class GoodsList extends React.Component {
         // 请求数据
         this.props.getGoodsEcharData(args);
         
-        this.loadEchart(); 
+        this.loadEchart(this.props.goodsEchartData.seriesData[this.state.goodsEchartRadioValue]); 
+    }
+
+    // 主图切换选项 
+    onChangeEchartItem = (e) => {
+        let val = e.target.value;
+
+        this.setState({
+            goodsEchartRadioValue: val,
+        });
+
+        this.loadEchart(this.props.goodsEchartData.seriesData[val])
     }
 
 
@@ -748,7 +786,7 @@ class GoodsList extends React.Component {
         // 请求数据
         this.props.getGoodsEcharData(args);
         
-        this.loadEchart(); 
+        this.loadEchart(this.props.goodsEchartData.seriesData[this.state.goodsEchartRadioValue]); 
 
     }
 
