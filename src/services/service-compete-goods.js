@@ -10,7 +10,6 @@ export function fetch({page}) {
 
 	let url = `${Url}?${apiArgs}`;
 
-	console.log(url);
   	return request(url);
 }
 
@@ -31,7 +30,6 @@ export function search(args) {
 	
 	let url = `${Url}?${argumentStr}`;
 	
-	console.log(url);
   	return request(url);
 }
 

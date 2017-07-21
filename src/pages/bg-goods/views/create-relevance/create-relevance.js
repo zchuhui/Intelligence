@@ -109,6 +109,7 @@ class CreateRelevance extends React.Component {
                                 </div>
 
                                 <div style={{ textAlign: 'center', height: 100 }}>
+                                    <Link to="/" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
                                     <Button type="primary" style={{ width: 100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
                                 </div>
                             </div>
@@ -116,11 +117,11 @@ class CreateRelevance extends React.Component {
 
                             {/*步骤二*/}
                             <div style={{ display: this.state.step2 }}>
-
-                                <div className={styles.panel}>
-                                    {
-                                        /* 选中的BG商品 */
-                                        this.props.goods.data ?
+                                {
+                                    /* 选中的BG商品 */
+                                    this.props.goods.data ?
+                                    <div>
+                                        <div className={styles.panel}>
                                             <div className={styles.skuToGoods}>
                                                 <div className={styles.skuImg}>
                                                     <img src={this.props.goods.data.img_url} />
@@ -128,83 +129,85 @@ class CreateRelevance extends React.Component {
                                                 <p>BG</p>
                                                 <p>SKU: {this.props.goods.data.sku}</p>
                                             </div>
-                                            : null
-                                    }
 
-                                    {/*相似的商品 start*/}
-                                    <div style={{ width: 800, height: 350, display: 'inline-block' }}>
-                                        {
-                                            this.props.similarGoodsList ?
-                                                <div>
-                                                    <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)}>
-                                                        {
-                                                            this.props.similarGoodsList.map((item, index) =>
-                                                                <TabPane tab={item.tname} key={`tabpane-${item.tkey}`}>
+                                            {/*相似的商品 start*/}
+                                            <div style={{ width: 800, height: 350, display: 'inline-block' }}>
+                                                {
+                                                    this.props.similarGoodsList ?
+                                                        <div>
+                                                            <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)}>
+                                                                {
+                                                                    this.props.similarGoodsList.map((item, index) =>
+                                                                        <TabPane tab={item.tname} key={`tabpane-${item.tkey}`}>
+                                                                            {
+                                                                                this.getItemList(item.children)
+                                                                            }
+                                                                        </TabPane>
+                                                                    )
+                                                                }
+                                                            </Tabs>
+                                                            {/*手动输入商品*/}
+                                                            <div style={{ marginLeft: 25, marginTop: 20 }}>
+                                                                <Input style={{ width: 150 }} placeholder="手动添加SKU" ref="inputSku2" />
+                                                                <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                                                                {
+                                                                    this.props.goodsBySite.code == 200 ?
+                                                                        <Button style={{ marginLeft: 5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
+                                                                        : null
+
+                                                                }
+
+                                                                <span style={{ marginLeft: 10, color: 'red' }}>
                                                                     {
-                                                                        this.getItemList(item.children)
+                                                                        this.props.goodsBySite.code == 200 ?
+                                                                            <span>{this.props.goodsBySite.msg}</span>
+                                                                            : <span>{this.props.goodsBySite.msg}</span>
                                                                     }
-                                                                </TabPane>
-                                                            )
-                                                        }
-                                                    </Tabs>
-                                                    {/*手动输入商品*/}
-                                                    <div style={{ marginLeft: 25, marginTop: 20 }}>
-                                                        <Input style={{ width: 150 }} placeholder="手动添加SKU" ref="inputSku2" />
-                                                        <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
-                                                        {
-                                                            this.props.goodsBySite.code == 200 ?
-                                                                <Button style={{ marginLeft: 5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
-                                                                : null
-
-                                                        }
-
-                                                        <span style={{ marginLeft: 10, color: 'red' }}>
-                                                            {
-                                                                this.props.goodsBySite.code == 200 ?
-                                                                    <span>{this.props.goodsBySite.msg}</span>
-                                                                    : <span>{this.props.goodsBySite.msg}</span>
-                                                            }
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                : null
-                                        }
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        : null
+                                                }
 
 
+                                            </div>
+                                            {/*相似的商品 end*/}
+
+                                        </div>
+
+                                        <div className={styles.panelBottom}>
+                                            {/*选中的商品 start*/}
+                                            <ul className={styles.similarGoods}>
+                                                {
+                                                    this.state.relevanceGoodsList.map((item, index) =>
+                                                        <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
+                                                            <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
+                                                                <div className={styles.imgWrap}><img src={item.img_url} /></div>
+                                                                <p className={styles.brand}>{item.site}</p>
+                                                                <p>SKU: {item.sku}</p>
+                                                            </div>
+                                                        </li>
+                                                    )
+                                                }
+
+                                            </ul>
+                                            {/*选中的商品 end*/}
+
+                                            <div style={{ textAlign: 'center', height: 100, margin: '60px auto' }}>
+                                                {
+                                                    /*如果是编辑关系，则不显示上一步*/
+                                                    !this.props.params.sku ?
+                                                        <Button style={{ marginRight: 10, width: 100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
+                                                        : 
+                                                        <Link to="/" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
+                                                }
+
+                                                <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {/*相似的商品 end*/}
-
-                                </div>
-
-                                <div className={styles.panelBottom}>
-                                    {/*选中的商品 start*/}
-                                    <ul className={styles.similarGoods}>
-                                        {
-                                            this.state.relevanceGoodsList.map((item, index) =>
-                                                <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
-                                                    <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
-                                                        <div className={styles.imgWrap}><img src={item.img_url} /></div>
-                                                        <p className={styles.brand}>{item.site}</p>
-                                                        <p>SKU: {item.sku}</p>
-                                                    </div>
-                                                </li>
-                                            )
-                                        }
-
-                                    </ul>
-                                    {/*选中的商品 end*/}
-
-                                    <div style={{ textAlign: 'center', height: 100, margin: '60px auto' }}>
-                                        {
-                                            /*如果是编辑关系，则不显示上一步*/
-                                            !this.props.params.sku ?
-                                                <Button style={{ marginRight: 10, width: 100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
-                                                : null
-                                        }
-
-                                        <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
-                                    </div>
-                                </div>
+                                    :null
+                                }
 
                             </div>
 
@@ -629,7 +632,7 @@ class CreateRelevance extends React.Component {
                                     }
                                 </ul>
                                 :
-                                <p>该站点木有相似商品，辛苦一点手动输入吧~~</p>
+                                <p>我已经找遍大江南北，也没有找到相似的商品，要么你手动添加试试吧！</p>
                         }
                     </div>
                 </div>
@@ -715,9 +718,37 @@ class CreateRelevance extends React.Component {
             }
         }
     }
+    
+    /**
+     * 清空数据
+     */
+    clearAllData(){
+
+        this.props.dispatch({
+            type: 'CreateRelevanceModel/saveRelevanceGoods',
+            payload: {},
+        });
+
+        this.props.dispatch({
+            type: 'CreateRelevanceModel/saveSimilarGoodsList',
+            payload: {},
+        });
+
+        this.props.dispatch({
+            type: 'CreateRelevanceModel/saveRelevanceGoodsList',
+            payload: {},
+        });
+
+    }
 
 
-    // 第一次实例化时，再render渲染后调用
+
+
+
+    componentWillMount(){
+        this.clearAllData();
+    }
+
     componentDidMount() {
 
         // 如果是点击列表的sku进来的，跳到步骤二
@@ -755,17 +786,14 @@ class CreateRelevance extends React.Component {
 
     }
 
-    // 数据变动时，render渲染后调用
-    componentDidUpdate(prevProps, prevState) {
-    }
 
 }
 
 
 function mapStateToProps(state) {
 
-    //const { similarGoodsList,relevanceGoodsList } = state.CreateRelevanceModel;
-
+    const { similarGoodsList,relevanceGoodsList } = state.CreateRelevanceModel;
+    //console.log('create',relevanceGoodsList);
     return { ...state.CreateRelevanceModel };
 }
 

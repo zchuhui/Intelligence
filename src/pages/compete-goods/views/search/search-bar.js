@@ -16,8 +16,8 @@ const Option = Select.Option;
 const dateFormat = "YYYY-MM-DD";
 
 // 默认抓取时间为一个月内
-const firstDay = moment().format('YYYY-MM-DD');
-const endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
+const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
+const lastDay  = moment().format('YYYY-MM-DD');
 
 class SearchBar extends Component {
     constructor(props, context) {
@@ -36,7 +36,7 @@ class SearchBar extends Component {
                 price1: '',
                 price2: '',
                 startTime:firstDay,
-                endTime:endDay,
+                endTime:lastDay,
                 page: 1,
             },
             argsShow: {
@@ -58,6 +58,7 @@ class SearchBar extends Component {
         // 关联状态菜单
         const relatedMenu = (
             <Menu onClick={ this.handleRelatedMenu }>
+                <Menu.Item key="0"><span>全部</span></Menu.Item>
                 <Menu.Item key="1"><span>已关联</span></Menu.Item>
                 <Menu.Item key="2"><span>未关联</span></Menu.Item>
             </Menu>
@@ -77,9 +78,9 @@ class SearchBar extends Component {
                     }
                 </div>
                 <div className={ styles.main }>
-                    <div className={ styles.title }>
+                    {/* <div className={ styles.title }>
                         <span>筛选分类</span>
-                    </div>
+                    </div> */}
 
                     {/*搜索栏 start*/}
                     <div className={ styles.searchContent}>
@@ -90,7 +91,7 @@ class SearchBar extends Component {
                                 onChange={ this.handleCateMenu } 
                                 placeholder="站点-分类" 
                                 changeOnSelect 
-                                allowClear={false}
+                                allowClear 
                                 style={{ marginRight:10, width:300, marginBottom:10}}
                             />
                             
@@ -100,7 +101,8 @@ class SearchBar extends Component {
                                 placeholder="品牌"
                                 optionFilterProp="children" 
                                 onSelect={ this.handleBrandMenu } 
-                                labelInValue
+                                labelInValue 
+                                allowClear 
                                 > 
 
                                 {
@@ -131,16 +133,10 @@ class SearchBar extends Component {
 
                             <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
                             
-                        </div>
-                        <div className={ styles.searchRight }>
-                            <Button type="primary" 
-                                style={{ width: 210,marginBottom: 10 }} 
-                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
-                            
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[
-                                        moment(new Date()).subtract("days",30),
+                                        moment(new Date()).subtract(30,"days"),
                                         moment(),
                                     ]} 
                                     ranges={{ 
@@ -154,6 +150,14 @@ class SearchBar extends Component {
                                     allowClear={false}
                                 />
                             </div>
+                            
+                        </div>
+                        <div className={ styles.searchRight }>
+                            <Button type="primary" 
+                                style={{ width: 150,marginBottom: 10 }} 
+                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
+                            
+                            
                         </div>
                     </div>
                     {/*搜索栏 end*/}
@@ -207,19 +211,29 @@ class SearchBar extends Component {
             this.state.argsShow.site = value[0];
             this.state.argsShow.cid = '';
         }
+        
         if (len > 1) {
             this.state.args.site = value[0];
             this.state.args.cid = value[len - 1];
             this.state.argsShow.cid = selectedOptions[len-1].label;
+        }
+
+        if(len<1){
+            this.state.args.cid ='';
+            this.state.argsShow.cid ='';
         }
         
     }
 
     // 选择品牌
     handleBrandMenu = (value,select) => {
-        this.state.args.bid = value;
-        this.state.argsShow.bid = select.props.children; 
-        
+        if(value){
+            this.state.args.bid = value;
+            this.state.argsShow.bid = select.props.children; 
+        }else{
+            this.state.args.bid = '';
+            this.state.argsShow.bid = ''; 
+        }
     }
 
     // 选择是否关联产品

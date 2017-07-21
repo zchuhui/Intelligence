@@ -1,9 +1,6 @@
 import fetch from 'dva/fetch';
 import LocalStorage from './localStorage';
 
-/*function parseJSON(response) {
-  return response.json();
-}*/
 
 function checkStatus(response) {
 

@@ -38,7 +38,7 @@ export function search(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-    console.log('url',url);
+    
     return request(url);
 }
 

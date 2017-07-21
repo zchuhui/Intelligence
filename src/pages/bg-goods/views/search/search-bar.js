@@ -14,9 +14,10 @@ const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const Option = Select.Option;
 
+
 // 默认抓取时间为一个月内
-let firstDay = moment().format('YYYY-MM-DD');
-let endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
+const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
+const endDay  = moment().format('YYYY-MM-DD');
 
 
 class Searcher extends React.Component {
@@ -67,9 +68,9 @@ class Searcher extends React.Component {
                     
                 </div>
                 <div className={ styles.main }>
-                    <div className={ styles.title }>
+                    {/* <div className={ styles.title }>
                         <span>筛选分类</span>
-                    </div>
+                    </div> */}
 
                     {/*搜索栏 start*/}
                     <div className={ styles.searchContent}>
@@ -93,7 +94,8 @@ class Searcher extends React.Component {
                                 placeholder="品牌"
                                 optionFilterProp="children"
                                 onChange={ this.getBrand } 
-                                labelInValue 
+                                labelInValue  
+                                allowClear  
                                 >
 
                                 {
@@ -108,6 +110,7 @@ class Searcher extends React.Component {
                                 placeholder="关注状态" 
                                 onChange={ this.getStatus }
                                 >
+                                <Option key="0">全部</Option>
                                 <Option key="1">已关联</Option>
                                 <Option key="2">未关联</Option>
                             </Select>
@@ -129,16 +132,10 @@ class Searcher extends React.Component {
 
                             <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
                             
-                        </div>
-                        <div className={ styles.searchRight }>
-                            <Button type="primary" 
-                                style={{ width: 210,marginBottom: 10 }} 
-                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
-                                
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
                                     defaultValue={[
-                                        moment(new Date()).subtract("days",30),
+                                        moment(new Date()).subtract(30,"days"),
                                         moment(),
                                     ]} 
                                     ranges={{ 
@@ -152,8 +149,14 @@ class Searcher extends React.Component {
                                     allowClear={false}
                                 />
                             </div>
-                            
                         </div>
+                        <div className={ styles.searchRight }>
+                            <Button type="primary" 
+                                style={{ width: 150,marginBottom: 10 }} 
+                                onClick={ this.handlerSearchClick.bind(this) }>搜索</Button>
+                                
+                        </div>
+                        
                     </div>
                     {/*搜索栏 end*/}
 
@@ -212,6 +215,11 @@ class Searcher extends React.Component {
             //this.state.args.site = value[0];
             this.state.args.cid = value[len - 1];
             this.state.argsShow.cid = selectedOptions[len - 1].label;
+        }
+
+        if(len<1){
+            this.state.args.cid ='';
+            this.state.argsShow.cid ='';
         }
 
     }
@@ -301,11 +309,13 @@ class Searcher extends React.Component {
     getStatus = (value) => {
 
         this.state.args.status = value;
-
+        
         if (value == 1) {
             this.state.argsShow.status = "已关联";
-        } else {
+        } else if(value == 2){
             this.state.argsShow.status = "未关联";
+        }else{
+            this.state.argsShow.status = "全部";
         }
     }
 
@@ -313,8 +323,14 @@ class Searcher extends React.Component {
      * 获取品牌
      */
     getBrand = (value) => {
-        this.state.args.bid = value.key;
-        this.state.argsShow.bid = value.label;
+        if(value){
+            this.state.args.bid = value.key;
+            this.state.argsShow.bid = value.label;
+        }
+        else{
+            this.state.args.bid = '';
+            this.state.argsShow.bid = '';
+        }
     }
 
     /**

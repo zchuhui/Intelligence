@@ -124,14 +124,15 @@ function mapStateToProps(state) {
         goodContrastDataLoading,  // 商品对比数据加载状态
     } = state.RelevanceBGModel;
     
-    //console.log('goodContrastData',goodContrastData);
+   
 
     if (data && data.list) {
-        // 遍历列表数据，转换成组件可用的数据
+        
+        // 遍历列表数据，转换成子表可用的数据格式
         data.list.map((item, index) => {
             
             // 添加key，不然会报错
-            item['key'] = `td_${index}`; 
+            item['key_id'] = Math.random();
 
             if (item.relate_info) {
                 let array = Object.keys(item.relate_info).map((el) => {
@@ -139,11 +140,16 @@ function mapStateToProps(state) {
                     item.relate_info[el]['isChildren'] = 1;
                     return item.relate_info[el];
                 });
+
+                // 添加key，不然会报错
+                array.map((item2,index2) => {
+                     item2['key_id'] = Math.random();
+                })
+
                 item['children'] = array;
             }
         });
     }
-
     
     return {
         // 搜索模块

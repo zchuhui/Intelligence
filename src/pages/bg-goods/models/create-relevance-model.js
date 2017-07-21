@@ -7,35 +7,6 @@ import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
 import { message } from 'antd';
 
 
-const similarGoodsListTitle=['gearbest','dx','lightinthebox','tomtop']
-
-// 接口还没提供，虚拟数据
-const defaultSimilarGoodsList = [
-    {
-        tname: 'gearbest',
-        tkey: 0,
-        children: [
-        ]
-    },
-    {
-        tname: 'dx',
-        tkey: 1,
-        children: []
-    }, {
-        tname: 'lightinthebox',
-        tkey: 2,
-        children: []
-    },
-    {
-        tname: 'tomtop',
-        tkey: 3,
-        children: []
-    },
-
-];
-
-
-
 export default {
     namespace: 'CreateRelevanceModel',
 
@@ -49,9 +20,6 @@ export default {
         
         // 相似的商品表
         similarGoodsList:null,
-
-        gearbestSimilarGoods:null,
-        dxSimilarGoods:null,
         
         // 选中的关联商品
         relevanceGoodsList: null,
@@ -231,12 +199,11 @@ export default {
             }
         }, 
 
-
+        
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname, query }) => {
-
                 // 只识别url的create,不识别后面的参数
                 /* pathname = pathname.split('/')[1];
 

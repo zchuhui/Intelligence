@@ -37,8 +37,8 @@ export default {
     namespace: 'Menus',
 
     state: {
-        cate: defautCate,   // 所有分类
-        brand: defautBrand, // 品牌
+        cate: defautCate,                   // 所有分类
+        brand: defautBrand,                 // 品牌
         banggoodCate: defautBanggoodCate,   // banggood站点分类
     },
     reducers: {
@@ -58,7 +58,16 @@ export default {
 
         // 存储品牌表
         saveBrand(state, { payload: { data: data } }) {
-            return {...state, brand: data };
+            // 判断是数组还是对象，对象的话转为数组
+            let array = [];
+            if(data instanceof Array){
+                array = data;
+            }else{
+                for(let i in data){
+                    array.push(data[i]);
+                }
+            }
+            return {...state, brand: array };
         },
     },
     effects: {
@@ -106,7 +115,7 @@ export default {
                 } 
                 
             } catch (e) {
-                console.log(e.message)
+                //console.log(e.message)
             }
         },
 
@@ -122,7 +131,7 @@ export default {
                 } 
                 
             } catch (e) {
-                console.log(e.message)
+                //console.log(e.message)
             }
         },
 
@@ -144,6 +153,7 @@ export default {
  * 并添加value、label值，用于植入插件的参数
  */
 const cateToMenu = (cate) => {
+    
     var arr = [];
 
     const mapCateToString = (item) => {

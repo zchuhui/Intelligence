@@ -9,9 +9,10 @@ import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
 import moment from 'moment';
 import { message } from 'antd';
 
-// 默认抓取时间为当月
-const firstDay = moment().format('YYYY-MM-DD');
-const endDay  = moment(new Date()).subtract("days",30).format("YYYY-MM-DD");
+// 默认一个月时间
+const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
+const lastDay  = moment().format('YYYY-MM-DD');
+
 
 export default {
     namespace: 'RelevanceBGModel',
@@ -38,7 +39,7 @@ export default {
             price1: '',
             price2: '',
             startTime: firstDay,
-            endTime: endDay,
+            endTime: lastDay,
             sku: '',
             sort: '',
             page: 1
@@ -318,7 +319,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             // 初始化首页
-            dispatch({ type: 'fetch', payload: { page: 1 } });
+            //dispatch({ type: 'fetch', payload: { page: 1 } });
             // 菜单
             dispatch({ type: 'Menus/getBanggoodCates'}); 
             dispatch({ type: 'Menus/getBanggoodBrands'});

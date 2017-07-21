@@ -42,7 +42,6 @@ export default {
     reducers: {
         // 把数据存储到state
         save(state, { payload: { data: data } }) {
-            console.log(data.list);
             return {...state, data, loading: false };
         },
         // 更新搜索参数

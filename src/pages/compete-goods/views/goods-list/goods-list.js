@@ -122,9 +122,10 @@ class GoodsList extends React.Component {
                 dataIndex: "questions",
                 sorter:true,
             }, {
-                title: "分类",
+                title: "类目树",
                 dataIndex: "cateName",
                 className: styles.columnCate,
+                width:250,
                 render:(text,record) => (
                     <span>
                     {
@@ -141,10 +142,10 @@ class GoodsList extends React.Component {
         return (   
 
             <div>
-                <div className={ styles.main } > 
+                <div className={ styles.main } style={{}}> 
                 	
 	            	{ /* 操作栏 */ }
-	            	<div className={ styles.clear } style={{ paddingBottom:20 }}>
+	            	<div className={ styles.clear } style={{ paddingBottom:20,marginTop:50}}>
 	            		
 	            		{/*<RangePicker
 					      ranges={{ 今天: [moment(), moment()],本周: [moment(), moment().endOf('week')], '本月': [moment(), moment().endOf('month')] }}

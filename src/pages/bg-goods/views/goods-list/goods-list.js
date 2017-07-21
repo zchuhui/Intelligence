@@ -22,9 +22,8 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 
 // 本月时间
-const startTime = moment().startOf('month').format('YYYY-MM-DD');
-const endTime = moment().endOf('month').format('YYYY-MM-DD');
-
+const startTime = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
+const endTime  = moment().format('YYYY-MM-DD');
 
 // 自定义竞品选项
 const plainOptions = ['环球', '速卖通', '兰亭集势', 'DX', '亚马逊', 'Tom Top'];
@@ -77,7 +76,8 @@ class GoodsList extends React.Component {
                         {   // 子表不显示该项
                             !record.isChildren?
                             <img src={ record.img_url} className={ styles.img } />
-                            :<span> <Icon type="arrow-right" style={{ color:'#e9e9e9',fontSize:'30px' }}/></span>
+                            :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                            </div>
                         }
                        
                    </span>
@@ -104,7 +104,9 @@ class GoodsList extends React.Component {
                                     }
                                 </p>
                             </div>
-                            :null
+                            :
+                            <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                            </div> 
                         }
                         
                    </div>
@@ -121,7 +123,9 @@ class GoodsList extends React.Component {
                                   操作 <Icon type="down" />
                                 </Button>
                           </Dropdown>
-                          :null
+                          :
+                          <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                          </div>
                         }
                        
                    </span>
@@ -138,7 +142,10 @@ class GoodsList extends React.Component {
             }, {
                 title: "价格",
                 dataIndex: "price",
-                sorter: true
+                sorter: true,
+                render:(text,record)=>(
+                    <p>$ {record.price}</p>
+                )
             }, {
                 title: "销量",
                 dataIndex: "sales",
@@ -165,15 +172,16 @@ class GoodsList extends React.Component {
                 dataIndex: "cateName",
                 key: "cateName",
                 className: styles.columnCate,
+                width:250,
                 render:(text,record) => (
-                    <span>
+                    <div className={styles.cateName}>
                     {
                         record.cateName?
                         record.cateName.split('>').map((item,index) => <p key={index}>{item}</p>)
                         :
                         record.cateName
                     }
-                    </span>
+                    </div>
                 )
             },
         ]
@@ -198,7 +206,7 @@ class GoodsList extends React.Component {
 						loading={ this.props.loading } 
 						pagination={false} 
 						columns={tableColumns}
-                        rowKey={record => `${record.sku}${record.pname}` }
+                        rowKey={record => `${record.key_id}` }
                         onChange={this.handleTableChange}
 						>
 						
@@ -278,7 +286,7 @@ class GoodsList extends React.Component {
                     footer={null}
                     width={800}
                     >
-                    <div style={{ }}>
+                    <div>
                         <div>
                             <div style={{display:'inline-block', height:50, width:'60%',verticalAlign:' top',padding:'0 5%'}}>
                                 <RadioGroup onChange={this.onChangeEchartItem.bind(this)} value={this.state.goodsEchartRadioValue}>
@@ -331,7 +339,7 @@ class GoodsList extends React.Component {
                     visible={this.state.goodsContrastVisible}
                     onCancel={this.hideGoodsContrastTable}
                     footer={null}
-                    width={900}
+                    width={'70%'}
                     >
                     {
                         this.goodsContrastTable()
@@ -398,7 +406,7 @@ class GoodsList extends React.Component {
             <div className={styles.contrastTableWrap}>
                 {    
                     this.props.goodContrastDataLoading == false?
-                    <div style={{width:900,height:500,textAlign:'center',background:'rgba(255,255,255,0.5)'}}>
+                    <div style={{width:'100%',height:500,textAlign:'center',background:'rgba(255,255,255,0.5)'}}>
                         <Spin tip="Loading..." style={{ marginTop:250 }}/>
                     </div>
                     :
@@ -425,7 +433,7 @@ class GoodsList extends React.Component {
                                     </ul>
                                 </Col>
                                 {/*BG 商品*/}
-                                <Col span={this.props.goodContrastData.relateInfo.length==1?10:6}>
+                                <Col span={Math.floor(20/(this.props.goodContrastData.relateInfo.length+1))}>
                                         <ul className={styles.tableCol}>
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
@@ -449,17 +457,32 @@ class GoodsList extends React.Component {
                                     this.props.goodContrastData.relateInfo.map((item,index) => {
                                         // echart ID 配置
                                         let sets = [];
-                                        if (index == 0) {
+                                        switch(index){
+                                            case 0:
+                                                sets = ['priceSet1','salesSet1','reviewSet1'];
+                                                break;
+                                            case 1:
+                                                sets = ['priceSet2','salesSet2','reviewSet2'];
+                                                break;
+                                            case 2:
+                                                sets = ['priceSet3','salesSet3','reviewSet3'];
+                                                break;
+                                            case 3:
+                                                sets = ['priceSet4','salesSet4','reviewSet4'];
+                                                break;
+                                            
+                                        }
+                                        {/* if (index == 0) {
                                             sets = ['priceSet1','salesSet1','reviewSet1']
                                         }
                                         else if (index == 1) {
                                             sets = ['priceSet2','salesSet2','reviewSet2']
-                                        }
+                                        } */}
 
                                         // 最多显示两件
-                                        if(index < 2){
+                                        //if(index < 2){
                                             return(
-                                                <Col span={this.props.goodContrastData.relateInfo.length==1?10:7}>
+                                                <Col span={Math.floor(20/(this.props.goodContrastData.relateInfo.length+1))}>
                                                     <ul className={styles.tableCol}>
                                                         <li><img src={item.img_url}/></li>
                                                         <li>{item.site}</li>
@@ -484,7 +507,7 @@ class GoodsList extends React.Component {
                                                     </ul>
                                                 </Col>
                                             )
-                                        }
+                                        //}
 
                                     })  
                                 }
@@ -551,6 +574,16 @@ class GoodsList extends React.Component {
                     this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet);
                     this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet);
                     this.loadGoodContrastEchart(this.refs.reviewSet2,this.props.goodContrastData.info.reviewSet);
+                }
+                if (index == 2) {
+                    this.loadGoodContrastEchart(this.refs.priceSet3,this.props.goodContrastData.info.priceSet);
+                    this.loadGoodContrastEchart(this.refs.salesSet3,this.props.goodContrastData.info.salesSet);
+                    this.loadGoodContrastEchart(this.refs.reviewSet3,this.props.goodContrastData.info.reviewSet);
+                }
+                if (index == 3) {
+                    this.loadGoodContrastEchart(this.refs.priceSet4,this.props.goodContrastData.info.priceSet);
+                    this.loadGoodContrastEchart(this.refs.salesSet4,this.props.goodContrastData.info.salesSet);
+                    this.loadGoodContrastEchart(this.refs.reviewSet4,this.props.goodContrastData.info.reviewSet);
                 }
             })
         }
