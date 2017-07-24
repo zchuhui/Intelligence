@@ -10,8 +10,10 @@ class CompeteRouter extends React.Component {
         super(props, context);
     }
 
-    // 搜索
-    // args: 搜索参数
+    /**
+     * 搜索
+     * @param {*搜索参数} args 
+     */
     handleSearchArgs(args) {
         this.props.dispatch({
             type: 'CompeteGoods/search',
@@ -22,8 +24,10 @@ class CompeteRouter extends React.Component {
 
     }
     
-    // 分页操作
-    // current: 当前页数
+    /**
+     * 分页操作
+     * @param {*当前页码} current 
+     */
     handlePagination(current) {
         this.props.dispatch({
             type: 'CompeteGoods/paginationQuery',
@@ -33,8 +37,10 @@ class CompeteRouter extends React.Component {
         });
     }
 
-    // 商品列表排序
-    // current: 当前页数
+    /**
+     * 商品列表排序
+     * @param {排序参数} sort 
+     */
     handleTableChange(sort) {
         this.props.dispatch({
             type: 'CompeteGoods/paginationQuery',
@@ -44,8 +50,11 @@ class CompeteRouter extends React.Component {
         });
     }
 
-    // 抓取时间段(未完成)
-    // args: 时间段
+
+    /**
+     * 抓取时间段(未完成)
+     * @param {*时间段} args 
+     */
     handleSearchArgsToDate(args) {
         this.props.dispatch({
             type: 'CompeteGoods/search',
