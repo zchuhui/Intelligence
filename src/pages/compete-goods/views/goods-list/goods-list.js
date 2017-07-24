@@ -52,11 +52,12 @@ class GoodsList extends React.Component {
                         {
                             !record.isChildren?
                             <div>
-                                {record.sku}
+                                <p>{record.sku}</p>
+                                {/* <p>{record.poa}</p> */}
                                 <div style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接
-                                       record.relate_sku==0?
+                                       record.relate_sku==0? 
                                         <p><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</p>
                                         :
                                         <p><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</p>
@@ -127,14 +128,14 @@ class GoodsList extends React.Component {
                 className: styles.columnCate,
                 width:250,
                 render:(text,record) => (
-                    <span>
+                    <div className={styles.cateName}>
                     {
                         record.cateName?
                         record.cateName.split('>').map((item,index) => <p key={index}>{item}</p>)
                         :
                         record.cateName
                     }
-                    </span>
+                    </div>
                 )
             },
         ]

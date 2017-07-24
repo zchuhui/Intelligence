@@ -1,6 +1,6 @@
 import fetch from 'dva/fetch';
 import LocalStorage from './localStorage';
-
+import { message } from 'antd';
 
 function checkStatus(response) {
 
@@ -27,7 +27,7 @@ function checkStatus(response) {
  */
 export default async function request(url, options) {
 
-	// 加上 token
+	// 在请求的url加上 token,用于登录验证
 	const token = LocalStorage.get('token');
 	if(token){
 		url = `${url}&token=${token}`;
@@ -35,14 +35,11 @@ export default async function request(url, options) {
 
 	// 请求数据
 	const response = await fetch(url, options);
-
 	// 检查请求是否成功
 	checkStatus(response);
 	
 	// 转为json格式
-	//const data = await response;
 	const data = await response.json();
-	//console.log('json',data); 
 	const ret = {
 		data,
 		headers: {
@@ -52,6 +49,36 @@ export default async function request(url, options) {
 	if (response.headers.get('x-total-count')) {
 		ret.headers['x-total-count'] = response.headers.get('x-total-count');
 	}
+
+
+	// 返回数据验证
+	const code = ret.data.code;
+
+    // 如果请求成功，则返回数据，失败则统一处理
+	if(code == 200){
+		return ret;
+	}
+	else{
+		switch(code){
+			case 401:
+				// 未登录状态
+				window.location.href = "/login";
+				break;
+			case 400:
+				// 请求失败状态
+				message.warning('请求失败，请重试');
+				break;
+			case 501:
+				// 请求失败状态
+				message.warning('网络繁忙，请重试');
+				break;
+			default:
+				// 请求失败状态
+				message.warning('未知错误');
+				break;
+		}
+	}
 	
-	return ret;
+	//console.log('ret',ret);
+	
 }

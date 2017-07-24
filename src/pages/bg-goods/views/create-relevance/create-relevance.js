@@ -131,11 +131,11 @@ class CreateRelevance extends React.Component {
                                             </div>
 
                                             {/*相似的商品 start*/}
-                                            <div style={{ width: 800, height: 350, display: 'inline-block' }}>
+                                            <div style={{ width: 800, height: 400, display: 'inline-block' }}>
                                                 {
                                                     this.props.similarGoodsList ?
                                                         <div>
-                                                            <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)}>
+                                                            <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)} style={{height:312}}>
                                                                 {
                                                                     this.props.similarGoodsList.map((item, index) =>
                                                                         <TabPane tab={item.tname} key={`tabpane-${item.tkey}`}>
@@ -176,6 +176,7 @@ class CreateRelevance extends React.Component {
                                         </div>
 
                                         <div className={styles.panelBottom}>
+                                            <div className={styles.title}>关联产品</div>
                                             {/*选中的商品 start*/}
                                             <ul className={styles.similarGoods}>
                                                 {
@@ -529,9 +530,6 @@ class CreateRelevance extends React.Component {
                     relevanceGoodsList: relevanceArray
                 });
             }
-            else {
-
-            }
 
             // 取消其他已经选中的
             this.cancelGoodsSelectStyle();
@@ -741,14 +739,12 @@ class CreateRelevance extends React.Component {
 
     }
 
-
-
-
-
+    // render 前
     componentWillMount(){
         this.clearAllData();
     }
 
+    // render 后
     componentDidMount() {
 
         // 如果是点击列表的sku进来的，跳到步骤二

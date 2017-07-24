@@ -120,6 +120,7 @@ export default {
         // 更新商品对比数据
         updateGoodContrastData(state, { payload }) {
 
+            // 转化数据格式
             let data = payload.data,
                 info = payload.data.info,
                 relateInfo = payload.data.relateInfo,
@@ -181,17 +182,12 @@ export default {
             yield put({ type: 'toggleLoading', payload: { loading: true } });
 
             try {
-                
-                // 开始请求数据
-                const { data } = yield call(BgService.fetch, payload);
 
-                // 保存数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'save', payload: data });
-                }
-                else {
-                    message.warning(data.msg)
-                }
+                // 请求数据
+                const { data } = yield call(BgService.fetch, payload);
+                // 存储数据
+                yield put({ type: 'save', payload: data });
+
             } catch (e) {
                 message.warning(ERRORMESSAGE);
             }
@@ -213,16 +209,12 @@ export default {
                 const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
                 searchArgs.page = payload.page;
 
-                // 开始请求数据
+                // 请求数据
                 const { data } = yield call(BgService.search, { searchArguments: searchArgs });
 
-                // 保存数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'save', payload: data });
-                }
-                else {
-                    message.warning(data.msg);
-                }
+                // 存储数据
+                yield put({ type: 'save', payload: data });
+                
             } catch (e) {
                 message.warning(ERRORMESSAGE);
             }
@@ -244,21 +236,18 @@ export default {
                 if (payload.page) {
                     searchArguments.page = payload.page;
                 }
+                
                 // 排序参数
                 if (payload.sort) {
                     searchArguments.sort = payload.sort;
                 }
 
-                // 开始请求数据
+                // 请求数据
                 const { data } = yield call(BgService.search, { searchArguments: searchArguments });
+                // 存储数据
+                yield put({ type: 'save', payload: data });
 
-                // 保存数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'save', payload: data });
-                }
-                else {
-                    message.warning(data.msg);
-                }
+                
             } catch (e) {
                 message.warning(ERRORMESSAGE);
             }
@@ -275,16 +264,10 @@ export default {
             try {
 
                 const { data } = yield call(BgService.fetchGoodsEchartByPidAndTime, payload);
-
-                if (data.code == CODE200) {
-                    yield put({ type: 'updateGoodsEchartData', payload: { data: data, startTime: payload.startTime, endTime: payload.endTime, } });
-                    yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
-                }
-                /* else {
-                    message.warning(data.msg);
-                } */
+                yield put({ type: 'updateGoodsEchartData', payload: { data: data, startTime: payload.startTime, endTime: payload.endTime, } });
+                yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
+                
             } catch (e) {
-                // 请求失败
                 message.warning(ERRORMESSAGE);
             }
 
@@ -294,20 +277,16 @@ export default {
 
         // 获取商品对比数据
         * fetchGoodsContrastDataByPid({ payload }, { select, call, put }) {
+            
+            yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: false } });
+
             try {
-                yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: false } });
-
+                // 请求数据
                 const { data } = yield call(BgService.fetchGoodsContrastData, payload.pid);
+                // 存储数据
+                yield put({ type: 'updateGoodContrastData', payload: data });
 
-                if (data.code == CODE200) {
-                    yield put({ type: 'updateGoodContrastData', payload: { data: data.data } });
-
-                }
-                /* else {
-                    message.warning(data.msg);
-                }  */
             } catch (e) {
-                // yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
                 message.warning(ERRORMESSAGE);
             }
 

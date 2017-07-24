@@ -259,5 +259,26 @@
             visibility: visible;
             clear: both
         }
+
+        .panelBottom{
+            .title {
+                border:0;
+                box-shadow:none;
+            }
+            .title:after {
+                position: absolute;
+                top: 15px;
+                left: 0;
+                display: block;
+                content: ' ';
+                width: 2px;
+                height: 20px;
+                background: #3197eb;
+            }
+
+            ul.similarGoods{
+                margin:0;
+            }
+        }
     }
 }

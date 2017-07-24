@@ -75,7 +75,6 @@ export default {
 
 				if(data.code == CODE200){
 					yield put({ type:'saveSaleSecyInfo', payload:data.data});
-
 					
 					// 继续加载排行榜数据
 					yield put({ type: 'getRankAndCatetory',payload});

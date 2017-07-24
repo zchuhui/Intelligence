@@ -93,7 +93,7 @@ class GoodsList extends React.Component {
                             !record.isChildren?
                             <div>
                                 <p>{record.sku}</p>
-                                <p>{record.pid}</p>
+                                <p>{record.url_id}</p>
                                 <p style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接

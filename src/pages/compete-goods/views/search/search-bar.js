@@ -325,18 +325,23 @@ class SearchBar extends Component {
             case 'sku':
                 this.state.args.sku = '';
                 this.state.argsShow.sku = '';
+                document.getElementById('sku').value = '';
                 break;
             case 'price1':
                 this.state.args.price1 = '';
                 this.state.argsShow.price1 = '';
                 this.state.args.price2 = '';
                 this.state.argsShow.price2 = '';
+                document.getElementById('price1').value = '';
+                document.getElementById('price2').value = '';
                 break;
             case 'price2':
                 this.state.args.price1 = '';
                 this.state.argsShow.price1 = '';
                 this.state.args.price2 = '';
                 this.state.argsShow.price2 = '';
+                document.getElementById('price1').value = '';
+                document.getElementById('price2').value = '';
                 break;
             case 'site':
                 this.state.args.site = '';

@@ -9,17 +9,17 @@ import LocalStorage from '../utils/localStorage';
 import { CODE200, ERRORMESSAGE } from '../constants/constant';
 import { message } from 'antd';
 
-// 天数，设定为保存一周
-const dayCount = 60 * 24 * 7;
+
+const dayCount = 60 * 24;        // localStorage的保存天数，默认设定为一天
 
 export default {
     namespace: 'User',
 
     state: {
         loginStatus: 0, // 登录状态，是否登录成功
-        loginMsg: '', // 登录提示信息
-        userInfo: {}, // 登录成功获取的用户信息
-        loading: 0, // 登录中的加载状态
+        loginMsg: '',   // 登录提示信息
+        userInfo: {},   // 登录成功获取的用户信息
+        loading: 0,     // 登录中的加载状态
     },
     reducers: {
         // 存储登录成功后的信息到state
@@ -71,13 +71,11 @@ export default {
                     // 存储用户名、密码
                     LocalStorage.set('username', payload.loginInfo.username, dayCount);
                     LocalStorage.set('password', payload.loginInfo.password, dayCount);
-                    console.log('save token',data.data.token);
                     LocalStorage.set('token', data.data.token, dayCount);
                     LocalStorage.set('loginStatus', 1, dayCount);
 
                     // 转到BG页
                     window.location.href = "/bg";
-                    //console.log('已登录');
 
                 } else {
                     // 传入失败信息，用于页面展示
@@ -95,27 +93,25 @@ export default {
 
         },
 
-        // 后台自动登录
+        // 如果本地已存储，则自动登录
         * autoLogin({ payload }, { select, call, put }) {
-
-            //console.log('自动登录中...', payload.loginInfo)
 
             // 存储数据
             yield put({ type: 'updateStatusAndUsername', payload: { username: payload.loginInfo.username, loginStatus: 1 } });
 
 
-            /*// 开始请求数据
-            const data = yield call(usersService.login, payload.loginInfo);
-            // 存储数据
-            if (data) {
-                console.log("登录成功！", data)
+            // 重新存储登录信息，延长为一天
+            let username = LocalStorage.get('username');
+            let password = LocalStorage.get('password');
+            let token = LocalStorage.get('token');
+            let loginStatus = LocalStorage.get('loginStatus');
+            
+            // 存储用户名、密码
+            LocalStorage.set('username', username, dayCount);
+            LocalStorage.set('password', password, dayCount);
+            LocalStorage.set('token', token, dayCount);
+            LocalStorage.set('loginStatus', 1, dayCount);
 
-                // 存储数据
-                yield put({ type: 'save', payload: data });
-
-            } else {
-                console.log("login err");
-            }*/
         },
 
         // 退出登录
@@ -141,11 +137,11 @@ export default {
     },
     subscriptions: {
         setup({ dispatch, history }) {
-
+            
             // 获取本地存储的登录名与密码
             let username = LocalStorage.get('username');
             let password = LocalStorage.get('password');
-
+            
             // 判断是否存在，存在则自动获取登录信息，不在请求
             if (username && password) {
 
