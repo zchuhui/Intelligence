@@ -133,6 +133,7 @@ class ReferenceIndex extends React.Component {
 					title: {
 					},
 					tooltip : {
+						trigger: 'axis',
 					},
 					legend: {
 					},
@@ -141,6 +142,7 @@ class ReferenceIndex extends React.Component {
 						}
 					},
 					grid: {
+						top: '1%',
 						left: '3%',
 						right: '4%',
 						bottom: '3%',

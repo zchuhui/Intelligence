@@ -23,7 +23,7 @@ export default {
 		favorites: {},           // 收藏量
 		visitor: {},             // 访客量
 		pageView: {},            // 浏览量
-		myProductRank:{},        // 商品排行
+		myProductRank:null,        // 商品排行
 
 		cateLoading:false,       // 类目加载
 		productInCate:{},        // 第一个类目 商品排行
@@ -72,18 +72,14 @@ export default {
 
 			try {
 				const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
+				yield put({ type:'saveSaleSecyInfo', payload:data.data});
+				
 
-				if(data.code == CODE200){
-					yield put({ type:'saveSaleSecyInfo', payload:data.data});
-					
-					// 继续加载排行榜数据
-					yield put({ type: 'getRankAndCatetory',payload});
-
-				}else{
-					message.warning(data.msg);
-				}
+				// 继续加载排行榜数据
+				yield put({ type: 'getRankAndCatetory',payload});
+				
 			} catch (error) {
-				message.warning(error.message);
+				message.warning(ERRORMESSAGE);
 			}
 
 			yield put({type:'updateLoading', payload:{loading:false}})
@@ -91,23 +87,25 @@ export default {
 
 		// 获取排行榜与类目数据
 		* getRankAndCatetory({payload},{select,call,put}){
+			
 			yield put({type:'updateCateLoading', payload:{loading:true}})
+
 			try {
 				
 				const { data } = yield call(SaleSecyService.getSalesSecretaryCateInfo,payload);
+				
+				yield put({ type:'saveSaleSecyInfo', payload:data.data});
 
-				if(data.code == CODE200){
-					yield put({ type:'saveSaleSecyInfo', payload:data.data});
-
-
+				// 如果参数里没有cid，说明是全部数据切换的，所以也载入对比数据
+				if(!payload.cid){
 					// 继续加载商品对比信息
 					yield put({ type: 'getSalesSecretaryComparison',payload});
-				}else{
-					message.warning(data.msg);
 				}
+				
 			} catch (error) {
-				message.warning(error.message);
+				message.warning(ERRORMESSAGE);
 			}
+
 			yield put({type:'updateCateLoading', payload:{loading:false}})
 		},
 
@@ -119,15 +117,10 @@ export default {
 			try {
 				
 				const { data } = yield call(SaleSecyService.getSalesSecretaryComparison,payload);
-				console.log('comparison',data);
-
-				if(data.code == CODE200){
-					yield put({ type:'saveGoodsComparisonList', payload:data});
-				}else{
-					message.warning(data.msg);
-				}
+				yield put({ type:'saveGoodsComparisonList', payload:data});
+				
 			} catch (error) {
-				message.warning(error.message);
+				message.warning(ERRORMESSAGE);
 			}
 
 			yield put({type:'updateComparisonLoading', payload:{loading:false}})

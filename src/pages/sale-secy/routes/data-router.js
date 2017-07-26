@@ -9,8 +9,13 @@ import GoodsRank from '../views/goods-rank';
 import Category from '../views/category';
 import Correlation from '../views/correlation';
 import { Spin } from 'antd';
+import moment from 'moment';
 
 class DataRouter extends React.Component {
+	
+	state = {
+		date:moment().format('YYYY-MM-DD'),
+	}
 
 	render() {
 		return (
@@ -18,6 +23,7 @@ class DataRouter extends React.Component {
 				<div className={styles.title}>
 					<span>销售秘书</span>
 				</div>
+				
 				<div className={styles.main}>
 					{
 						// 判断加载状况
@@ -36,6 +42,7 @@ class DataRouter extends React.Component {
 									productNew={this.props.productNew}
 
 									getsaleSecyInfoToDate={time => this.getsaleSecyInfoToDate(time)}
+									getDate={date => this.getDate(date)}
 								/>
 								{/* 参考指标 */}
 								<ReferenceIndex
@@ -55,6 +62,8 @@ class DataRouter extends React.Component {
 									myProductInCate={this.props.myProductInCate}
 									productInCate={this.props.productInCate}
 									myCateSalesFromPrice={this.props.myCateSalesFromPrice}
+
+									getCategoryByCid={cid => this.getCategoryByCid(cid)}
 								/>
 								{/* 对比关系 */}
 								<Correlation
@@ -69,7 +78,20 @@ class DataRouter extends React.Component {
 		)
 	}
 
-	// 根据时间获取数据
+	/**
+	 * 获取子组件的日期值
+	 * @param {*} date 
+	 */
+	getDate(date){
+		this.setState({
+			date:date,
+		});
+	}
+
+	/**
+	 * 切换时间更新数据
+	 * @param {*} time 
+	 */
 	getsaleSecyInfoToDate(time) {
 		this.props.dispatch({
 			type: 'SaleSecyModel/getSaleSecyInfo',
@@ -79,11 +101,24 @@ class DataRouter extends React.Component {
 		})
 	}
 
+	/**
+	 * 获取类目信息
+	 * @param {*} cid 
+	 */
+	getCategoryByCid(cid) {
+		this.props.dispatch({
+			type: 'SaleSecyModel/getRankAndCatetory',
+			payload: {
+				time:this.state.date,
+				cid:cid,
+			}
+		});
+	}
+
 
 }
 
 function mapStateToProps(state) {
-	console.log('salemodel:', state.SaleSecyModel);
 	return { ...state.SaleSecyModel };
 }
 

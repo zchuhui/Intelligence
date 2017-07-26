@@ -37,7 +37,7 @@ class GoodsRank extends React.Component {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins} 件</b>
                                                 </div>
                                             </div>
                                         </div> 
@@ -61,7 +61,7 @@ class GoodsRank extends React.Component {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 元</b>
                                                 </div>
                                             </div>
                                         </div> 
@@ -85,7 +85,7 @@ class GoodsRank extends React.Component {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.rate} %</b>
                                                 </div>
                                             </div>
                                         </div> 

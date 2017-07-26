@@ -24,10 +24,13 @@ export function getSalesSecretaryInfo(args) {
  */
 export function getSalesSecretaryCateInfo(args) {
 	
-    const apiArgs = `com=ajax&t=getSalesSecretaryCateInfo&time=${args.time}`;
+    let apiArgs = `com=ajax&t=getSalesSecretaryCateInfo&time=${args.time}`;
+    if(args.cid){
+        apiArgs = `com=ajax&t=getSalesSecretaryCateInfo&time=${args.time}&cid=${args.cid}`;
+    }
 
     let currentUrl = `${Url}?${apiArgs}`;
-
+    
     return request(currentUrl);
 }
 

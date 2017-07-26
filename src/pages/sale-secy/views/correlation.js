@@ -133,6 +133,7 @@ class Correlation extends React.Component {
 				title: {
 				},
 				tooltip: {
+					trigger: 'axis',
 				},
 				legend: {
 				},

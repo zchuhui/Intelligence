@@ -6,11 +6,20 @@
 
 import React from 'react';
 import styles from './sale-secy.less';
-import { Icon,Spin } from 'antd';
+import { Icon, Spin, Radio, Select } from 'antd';
 import echarts from 'echarts';
+
+const Option = Select.Option;
 
 
 class Category extends React.Component {
+    constructor() {
+        super();
+        
+        this.state = {
+            selectVal:null
+        }
+	}
 
     render() {
         return (
@@ -20,8 +29,8 @@ class Category extends React.Component {
                 </div>
                 {
                     this.props.loading?
-                    <div className={styles.loadWrap}>
-                        <Spin tip="加载中..." style={{ marginTop: 20 }} />
+                    <div className={styles.loadWrap} style={{minHeight:593}}>
+                        <Spin tip="加载中..." style={{ marginTop: '15%'}} />
                     </div>
                     :
                     <div className={styles.categoryWrap}>
@@ -29,8 +38,23 @@ class Category extends React.Component {
                             this.props.myProductInCate.map?
                             <ul className={styles.clear}>
                                 <li>
-                                    <div ref='catePieChart' style={{width:'100%',height:310}}></div>
-                                    <div ref='catePillarChart' style={{width:'100%',height:310}}></div>
+                                    {
+                                         this.props.cateSet.length > 0?
+                                         <div>
+                                             &nbsp; &nbsp; 类目切换：
+                                             <Select defaultValue={ this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid } onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
+                                                {
+                                                    this.props.cateSet.map((item,index)=>
+                                                        <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
+                                                    )
+                                                }
+                                            </Select>
+                                         </div>
+                                        :null
+                                    }
+                                    
+                                    <div ref='catePieChart' style={{width:'100%',height:280,}}></div>
+                                    <div ref='catePillarChart' style={{width:'100%',height:285}}></div>
                                 </li>
                                 <li>
                                     <h3>你的商品排行</h3>
@@ -91,13 +115,12 @@ class Category extends React.Component {
 
     
     componentDidMount(){
-        //this.loadChart(this.formatDataToEchartData(this.props.cateSet));
     }
 
     componentDidUpdate(){
 
+        // 载入两个Echart图表
         if(this.props.cateSet){
-            // 载入两个图表
             this.loadChart(
                 this.formatDataToEchartPieData(this.props.cateSet),
                 this.formatDataToEchartData(this.props.myCateSalesFromPrice)
@@ -106,10 +129,27 @@ class Category extends React.Component {
         
     }
 
-    // 载入echart图表
+    /**
+     * 切换类目，根据类目获取数据
+     * @param {*} cid 
+     */
+    onChangeCategory(cid){
+        this.setState({
+            selectVal:cid
+        });
+
+        this.props.getCategoryByCid(cid);
+    }
+
+    /**
+     * 载入echart图表
+     * @param {Array} cateSet [饼形图数据]
+     * @param {Array} prices  [圆柱图数据]
+     */
 	loadChart(cateSet,prices){
 
-        if(cateSet && prices){
+        if(cateSet){
+
             let catePieChartId = this.refs.catePieChart;
             let catePillarChartId = this.refs.catePillarChart;
 
@@ -117,7 +157,7 @@ class Category extends React.Component {
 
                 // 初始化Echart
                 let catePieChart = echarts.init(catePieChartId);  
-                let catePillarChart = echarts.init(catePillarChartId);  
+                let catePillarChart = echarts.init(catePillarChartId); 
 
                 // 绘制饼形图
                 catePieChart.setOption({
@@ -128,18 +168,18 @@ class Category extends React.Component {
                             containLabel: false,
                         },
                         color:['#baebe1','#f8a942','#42a6f8','#ffe990','#ff7082'],
-                        legend: {
+                        /* legend: {
                             orient: 'vertical',
                             right: '5%',
                             top:'10%',
                             data: cateSet.labelArray
-                        },
+                        }, */
                         series : [
                             {
                                 name: '访问来源',
                                 type: 'pie',
-                                radius : '60%',
-                                center: ['30%', '50%'],
+                                radius : '70%',
+                                center: ['50%', '50%'],
                                 data:cateSet.valueArray
                             }
                         ]
@@ -148,6 +188,9 @@ class Category extends React.Component {
                 // 绘制柱状图
                 catePillarChart.setOption({
                         color:'#acdaff',
+                        tooltip: {
+                            trigger: 'axis',
+                        },
                         grid: {
                             left: '3%',
                             right: '4%',
@@ -157,8 +200,14 @@ class Category extends React.Component {
                         xAxis : [
                             {
                                 type : 'category',
-                                show : false,
+                                boundaryGap: false,
                                 data : prices.labelArray,
+                                axisLabel: {
+                                    show: true,
+                                    textStyle: {
+                                        color: '#666'   // x轴字体颜色
+                                    }
+                                },
                                 axisLine: {
                                     lineStyle:{
                                         color:'#acdaff'    // x轴颜色
@@ -198,13 +247,15 @@ class Category extends React.Component {
                             }
                         ]
                 });
+                
             }
         }
-        
-	
     }
     
-    // 把数据转成EChart饼图数据
+    /**
+     * 把数据转成EChart饼图数据
+     * @param {*} runChart 
+     */
 	formatDataToEchartPieData(runChart) {
 		let obj = {
 			labelArray:[],
@@ -234,29 +285,35 @@ class Category extends React.Component {
 		return obj;
     }
     
-    // 把数据转成EChart数据
-	formatDataToEchartData(runChart) {
+    /**
+     * 把数据转成EChart数据
+     * @param {*} runChart 
+     */
+    formatDataToEchartData(runChart) {
+        let obj = {
+            labelArray: [0],
+            valueArray: [0]
+        }
 
-		let obj = {
-			labelArray:[],
-			valueArray:[]
-		}
+        if (runChart) {
+            let arr1 = [];
+            let arr2 = [];
+            for (let i in runChart) {
+                arr1.push(i);
+                arr2.push(runChart[i]);
+            }
 
-		if(runChart){
-			let arr1 = [];
-			let arr2 = [];
-			for(let i in runChart){
-				arr1.push(i);
-				arr2.push(runChart[i]);
-			}
+            obj.labelArray = arr1;
+            obj.valueArray = arr2;
+        }
+        return obj;
 
-			obj.labelArray = arr1;
-			obj.valueArray = arr2;
-		}
-		return obj;
     }
     
-    // 格式化热度的显示格式
+    /**
+     * 格式化热度的显示格式
+     * @param {*} no 
+     */
     formatTrendNumber(no){
         //if(no){
             if(no == 'hot'){
@@ -272,6 +329,15 @@ class Category extends React.Component {
                 return (<span className={styles.exponentZero}>{no}</span>)
             }
         //}
+    }
+
+    /**
+     * 异步定时器
+     */
+    timeout = (ms) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, ms, 'done');
+        });
     }
 
 }

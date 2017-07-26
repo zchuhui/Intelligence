@@ -16,7 +16,7 @@ class Saleroom extends React.Component {
 		super();
 
 		this.state = {
-			date: moment(),  // 日期
+			date: moment().format('YYYY-MM-DD'),  // 日期
 			runChart:null,   // 图表数据
 
 			item1:1,         // 模块1
@@ -24,11 +24,12 @@ class Saleroom extends React.Component {
 			item3:0,         // 模块3
 			item4:0,		 // 模块4
 		}
+
 	}
 
 	render() {
 		return (
-			<div className={styles.panel}>
+			<div className={styles.panel} ref='saleroomId'>
 				{
 					this.props.salesAmount.salesAmount?
 					<div className={styles.saleroomWrap}>
@@ -76,7 +77,7 @@ class Saleroom extends React.Component {
 									<li className={this.state.item2?styles.borderBottomNone:null}
 										onClick={this.onSaleroomItem.bind(this,this.props.salesSum.runChart,2)}>
 										<h3>销量</h3>
-										<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0} 元</b></div>
+										<div><label>当天</label><b>{this.props.salesSum.salesSum ? this.props.salesSum.salesSum : 0} 件</b></div>
 										<div><label>前天环比</label>
 											<span className={styles.exponentTop}>
 												{this.formatTrendPercentage(this.props.salesSum.yesRadio)}
@@ -91,7 +92,7 @@ class Saleroom extends React.Component {
 									<li className={this.state.item3?styles.borderBottomNone:null}
 										onClick={this.onSaleroomItem.bind(this,this.props.changeRate.runChart,3)}>
 										<h3>转化率</h3>
-										<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} 元</b></div>
+										<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} %</b></div>
 										<div><label>前天环比</label>
 											<span className={styles.exponentTop}>
 												{this.formatTrendPercentage(this.props.changeRate.yesRadio)}
@@ -106,7 +107,7 @@ class Saleroom extends React.Component {
 									<li className={this.state.item4?styles.borderBottomNone:null}
 										onClick={this.onSaleroomItem.bind(this,this.props.productNew.runChart,4)}>
 										<h3>新品上架数</h3>
-										<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0} 元</b></div>
+										<div><label>当天</label><b>{this.props.productNew.productNew ? this.props.productNew.productNew : 0} 件</b></div>
 										<div><label>前天环比</label>
 											<span className={styles.exponentTop}>
 												{this.formatTrendPercentage(this.props.productNew.yesRadio)}
@@ -123,7 +124,7 @@ class Saleroom extends React.Component {
 									<div ref='saleroomChart' style={{ width: '100%', height: 300 }}></div>
 								</div>
 							</div>
-							<div className={styles.saleroomScore}>
+							{/* <div className={styles.saleroomScore}>
 								<h3><b>88</b>分</h3>
 								<p>优秀，超越58%的伙伴</p>
 								<div className={styles.scoreContent}>
@@ -139,7 +140,7 @@ class Saleroom extends React.Component {
 										<li>【推荐建议】这个商品环球卖的不错，要不尝试一下？</li>
 									</ul>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					</div>
 					:
@@ -193,6 +194,7 @@ class Saleroom extends React.Component {
 				title: {
 				},
 				tooltip: {
+					trigger: 'axis',
 				},
 				legend: {
 				},
@@ -354,17 +356,23 @@ class Saleroom extends React.Component {
 			
 			// 请求数据
 			this.props.getsaleSecyInfoToDate(provDay); 
+			this.props.getDate(provDay); 
 		}
 		else {
 			//下一天
 			let nextDay = moment(currentDate).add(1, "days").format("YYYY-MM-DD");
-
+			
 			// 更新到state
-			this.setState({date: nextDay});
+			this.setState({
+				date: nextDay
+			});
+
 			// 请求数据
 			this.props.getsaleSecyInfoToDate(nextDay); 
-
+			this.props.getDate(nextDay); 
 		}
+		/* console.log(this.state.date);
+		console.log(this.state.date1); */
 	}
 
 	// 选择日期
@@ -373,8 +381,13 @@ class Saleroom extends React.Component {
 
 		// 请求数据
 		this.props.getsaleSecyInfoToDate(dateString); 
+		this.props.getDate(dateString); 
 	}
 
+	/**
+	 * 日历控件限制时间范围的函数
+	 * @param {Date} current 
+	 */
 	disabledDate(current) {
 		// Can not select days before today and today
 		return current && current.valueOf() > Date.now();  

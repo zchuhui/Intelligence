@@ -10,6 +10,10 @@ if (document.domain === 'betabia.banggood.com') {
 	// 测试环境
 	url = 'https://betabia.banggood.com/index.php';
 }
+else if(document.domain === 'bia.banggood.com'){
+	// 正式环境
+	url = 'https://bia.banggood.com/index.php';
+}
 else{
 	// 本地
 	url = '/api';
