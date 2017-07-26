@@ -371,8 +371,6 @@ class Saleroom extends React.Component {
 			this.props.getsaleSecyInfoToDate(nextDay); 
 			this.props.getDate(nextDay); 
 		}
-		/* console.log(this.state.date);
-		console.log(this.state.date1); */
 	}
 
 	// 选择日期

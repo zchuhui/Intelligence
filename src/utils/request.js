@@ -82,3 +82,41 @@ export default async function request(url, options) {
 	//console.log('ret',ret);
 	
 }
+
+
+/**
+ * 异步请求url，获取数据
+ * 原始版本，不对返回数据进行处理
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [options] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
+ */
+export async function originRequest(url, options) {
+
+	// 在请求的url加上 token,用于登录验证
+	const token = LocalStorage.get('token');
+	if(token){
+		url = `${url}&token=${token}`;
+	}
+
+	// 请求数据
+	const response = await fetch(url, options);
+	// 检查请求是否成功
+	checkStatus(response);
+	
+	// 转为json格式
+	const data = await response.json();
+	const ret = {
+		data,
+		headers: {
+		},
+	};
+
+	if (response.headers.get('x-total-count')) {
+		ret.headers['x-total-count'] = response.headers.get('x-total-count');
+	}
+
+    return ret;
+	
+}

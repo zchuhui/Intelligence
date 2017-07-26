@@ -348,7 +348,7 @@ class Correlation extends React.Component {
 				goodsInfoArray.push(relateInfo[idx]);
 			}
 		}
-		//console.log(goodsNameArray,goodsInfoArray);
+		
 		return {
 			goodsNameArray:goodsNameArray,
 			goodsInfoArray:goodsInfoArray,
