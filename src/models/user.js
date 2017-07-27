@@ -5,7 +5,7 @@
  */
 
 import * as usersService from '../services/users';
-import LocalStorage from '../utils/localStorage';
+import LocalStorage from '../utils/local-storage';
 import { CODE200, ERRORMESSAGE } from '../constants/constant';
 import { message } from 'antd';
 

@@ -16,7 +16,6 @@ class Saleroom extends React.Component {
 		super();
 
 		this.state = {
-			date: moment().format('YYYY-MM-DD'),  // 日期
 			runChart:null,   // 图表数据
 
 			item1:1,         // 模块1
@@ -33,15 +32,10 @@ class Saleroom extends React.Component {
 				{
 					this.props.salesAmount.salesAmount?
 					<div className={styles.saleroomWrap}>
-						<div className={styles.dateWrap}>
-							<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
-							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
-							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
-						</div>
 
 						<div className={styles.head}>
 							<span>你拥有 
-								<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件  
+								<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件 &nbsp; &nbsp; &nbsp; &nbsp;
 							</span>
 							<span>环比增长 
 								<span className={styles.exponentTop}>
@@ -156,12 +150,6 @@ class Saleroom extends React.Component {
 	componentDidMount() { 
 
 		// 载入图表数据
-		this.timeout(5000).then((value) => {
-			this.setState({
-				runChart:this.props.salesAmount.runChart
-			}); 
-		});
-		
 		this.timeout(2000).then((value) => {
 			this.setState({
 				runChart:this.props.salesAmount.runChart
@@ -175,14 +163,22 @@ class Saleroom extends React.Component {
 		this.loadChart(this.getEchartData(this.state.runChart));
 	}
 
-	// 异步定时器
-    timeout = (ms) => {
+
+	
+	/**
+	 * 异步定时器
+	 * @param {number} ms 
+	 */
+    timeout(ms){
       return new Promise((resolve, reject) => {
         setTimeout(resolve, ms, 'done');
       });
     }
 
-	// 载入echart图表
+	/**
+	 * 载入echart图表
+	 * @param {array} data 
+	 */
 	loadChart(data) {
 		
 		if (this.refs.saleroomChart) {
@@ -274,7 +270,10 @@ class Saleroom extends React.Component {
 
 	}
 
-	// 获取runChart数据
+	/**
+	 * 把数据转成EChart数据
+	 * @param {*} runChart 
+	 */
 	getEchartData(runChart) {
 
 		let obj = {
@@ -298,7 +297,11 @@ class Saleroom extends React.Component {
 		return obj;
 	}
 
-	// 点击切换模块：包括下边框、Echart数据
+	/**
+	 * 点击切换模块：包括下边框、Echart数据
+	 * @param {object} runChart 
+	 * @param {number} index 
+	 */
 	onSaleroomItem(runChart,index){
 		
 		switch(index){
@@ -340,59 +343,11 @@ class Saleroom extends React.Component {
 				break;
 		}
 	}
-
-	// 上一天、下一天
-	onPrevOrNextDay(dayId) {
-
-		// 获取当前日期
-		let currentDate = this.state.date;
-
-		if (dayId == 0) {
-			//上一天
-			let provDay = moment(currentDate).subtract("days", 1).format("YYYY-MM-DD");
-
-			// 更新到state
-			this.setState({date: provDay});
-			
-			// 请求数据
-			this.props.getsaleSecyInfoToDate(provDay); 
-			this.props.getDate(provDay); 
-		}
-		else {
-			//下一天
-			let nextDay = moment(currentDate).add(1, "days").format("YYYY-MM-DD");
-			
-			// 更新到state
-			this.setState({
-				date: nextDay
-			});
-
-			// 请求数据
-			this.props.getsaleSecyInfoToDate(nextDay); 
-			this.props.getDate(nextDay); 
-		}
-	}
-
-	// 选择日期
-	onChangeDate(date, dateString){
-		this.setState({date:dateString});
-
-		// 请求数据
-		this.props.getsaleSecyInfoToDate(dateString); 
-		this.props.getDate(dateString); 
-	}
-
+	
 	/**
-	 * 日历控件限制时间范围的函数
-	 * @param {Date} current 
+	 * 格式化热度的显示格式
+	 * @param {string} no 
 	 */
-	disabledDate(current) {
-		// Can not select days before today and today
-		return current && current.valueOf() > Date.now();  
-	}
-
-
-	// 格式化热度的显示格式
 	formatTrendPercentage(no) {
 		if (no) {
 			no = no.split('%')[0];

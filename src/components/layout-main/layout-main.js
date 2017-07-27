@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './layout-main.less';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
-import localStorage from '../../utils/localStorage';
+import localStorage from '../../utils/local-storage';
 
 /*布局组件*/
 class MainLayout extends React.Component {

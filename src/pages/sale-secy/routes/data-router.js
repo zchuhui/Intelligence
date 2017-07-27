@@ -8,23 +8,27 @@ import ReferenceIndex from '../views/reference-index';
 import GoodsRank from '../views/goods-rank';
 import Category from '../views/category';
 import Correlation from '../views/correlation';
-import { Spin } from 'antd';
+import { Spin, DatePicker, Button, message } from 'antd';
 import moment from 'moment';
+
 
 class DataRouter extends React.Component {
 	
 	state = {
-		date:moment().format('YYYY-MM-DD'),
+		date:moment().format('YYYY-MM-DD'),   // 默认日期
 	}
 
 	render() {
 		return (
 			<MainLayout headerMenuText="销售秘书">
+
 				<div className={styles.title}>
 					<span>销售秘书</span>
 				</div>
 				
+				{/* 各个模块 */}
 				<div className={styles.main}>
+					
 					{
 						// 判断加载状况
 						this.props.loading ?
@@ -33,6 +37,12 @@ class DataRouter extends React.Component {
 							</div>
 							: 
 							<div>
+								{/* 日期切换 */}
+								<div className={styles.dateWrap}>
+									<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
+									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
+									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
+								</div>
 								{/* 销售信息 */}
 								<Saleroom 
 									productTotal={this.props.productTotal}
@@ -42,7 +52,7 @@ class DataRouter extends React.Component {
 									productNew={this.props.productNew}
 
 									getsaleSecyInfoToDate={time => this.getsaleSecyInfoToDate(time)}
-									getDate={date => this.getDate(date)}
+									//getDate={date => this.getDate(date)}
 								/>
 								{/* 参考指标 */}
 								<ReferenceIndex
@@ -78,19 +88,10 @@ class DataRouter extends React.Component {
 		)
 	}
 
-	/**
-	 * 获取子组件的日期值
-	 * @param {*} date 
-	 */
-	getDate(date){
-		this.setState({
-			date:date,
-		});
-	}
 
 	/**
 	 * 切换时间更新数据
-	 * @param {*} time 
+	 * @param {Date} time 
 	 */
 	getsaleSecyInfoToDate(time) {
 		this.props.dispatch({
@@ -103,7 +104,7 @@ class DataRouter extends React.Component {
 
 	/**
 	 * 获取类目信息
-	 * @param {*} cid 
+	 * @param {string} cid 
 	 */
 	getCategoryByCid(cid) {
 		this.props.dispatch({
@@ -116,7 +117,70 @@ class DataRouter extends React.Component {
 	}
 
 
+
+	/**
+	 * 上一天、下一天
+	 * @param {number} dayId 
+	 */
+	onPrevOrNextDay(dayId) {
+
+		// 获取当前日期
+		let currentDate = this.state.date;
+
+		if (dayId == 0) {
+			//上一天
+			let provDay = moment(currentDate).subtract("days", 1).format("YYYY-MM-DD");
+
+			// 更新到state
+			this.setState({date: provDay});
+			
+			// 请求数据
+			this.getsaleSecyInfoToDate(provDay); 
+		}
+		else {
+			if(currentDate == moment().format('YYYY-MM-DD')){
+				message.warning("今天已经是最后一天啦");
+			}
+			else{
+				//下一天
+				let nextDay = moment(currentDate).add(1, "days").format("YYYY-MM-DD");
+				
+				// 更新到state
+				this.setState({
+					date: nextDay
+				});
+
+				// 请求数据
+				this.getsaleSecyInfoToDate(nextDay); 
+			}
+			
+		}
+	}
+
+	/**
+	 * 选择日期
+	 * @param {Date} date 
+	 * @param {Date} dateString 
+	 */
+	onChangeDate(date, dateString){
+		this.setState({date:dateString});
+
+		// 请求数据
+		this.getsaleSecyInfoToDate(dateString); 
+	}
+
+	/**
+	 * 日历控件限制时间范围的函数
+	 * @param {Date} current 
+	 */
+	disabledDate(current) {
+		// Can not select days before today and today
+		return current && current.valueOf() > Date.now();  
+	}
+
 }
+
+
 
 function mapStateToProps(state) {
 	return { ...state.SaleSecyModel };

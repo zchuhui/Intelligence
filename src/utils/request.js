@@ -1,5 +1,5 @@
 import fetch from 'dva/fetch';
-import LocalStorage from './localStorage';
+import LocalStorage from './local-storage';
 import { message } from 'antd';
 
 function checkStatus(response) {
