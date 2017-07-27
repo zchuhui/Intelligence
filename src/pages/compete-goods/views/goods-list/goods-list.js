@@ -91,7 +91,7 @@ class GoodsList extends React.Component {
                    </span>
                 ),
             }, */
-            {
+            { 
                 title: "站点", 
                 dataIndex: "site",
             }, {
@@ -102,6 +102,9 @@ class GoodsList extends React.Component {
                 title: "价格",
                 dataIndex: "price",
                 sorter:true,
+                render:(text,record)=>(
+                    <p>$ {record.price}</p>
+                )
             }, {
                 title: "销量",
                 dataIndex: "sales",

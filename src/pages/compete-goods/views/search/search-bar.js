@@ -100,7 +100,7 @@ class SearchBar extends Component {
                                 style={{ width: 200, marginRight:10, verticalAlign:'top'}}
                                 placeholder="品牌"
                                 optionFilterProp="children" 
-                                onSelect={ this.handleBrandMenu } 
+                                onSelect={ this.handleBrandMenu.bind(this) } 
                                 labelInValue 
                                 allowClear 
                                 > 
@@ -226,10 +226,10 @@ class SearchBar extends Component {
     }
 
     // 选择品牌
-    handleBrandMenu = (value,select) => {
+    handleBrandMenu = (value) => {
         if(value){
-            this.state.args.bid = value;
-            this.state.argsShow.bid = select.props.children; 
+            this.state.args.bid = value.key; 
+            this.state.argsShow.bid = value.label; 
         }else{
             this.state.args.bid = '';
             this.state.argsShow.bid = ''; 
