@@ -53,7 +53,7 @@ class Saleroom extends React.Component {
 										<h3>销售额</h3>
 										<div>
 											<label>当天</label>
-											<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} 元</b>
+											<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} $</b>
 										</div>
 										<div>
 											<label>前天环比</label>
@@ -255,12 +255,12 @@ class Saleroom extends React.Component {
 								show: true,
 							},
 						},
-						label: {
+						/* label: {
 							normal: {
 								show: true,
 								position: 'top'
 							}
-						},
+						}, */
 						areaStyle: { normal: {} },
 						data: data.valueArray
 					}
@@ -286,7 +286,8 @@ class Saleroom extends React.Component {
 			let arr2 = [];
 			for(let i in runChart){
 				if(i !== 'dateArray' && i !== 'valueArray'){
-					arr1.push(i);
+					let dateLabel = `${i.split('.')[0]}月${i.split('.')[1]}日`;
+					arr1.push(dateLabel);
 					arr2.push(runChart[i]);
 				}
 			}

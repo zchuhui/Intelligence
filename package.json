@@ -12,6 +12,7 @@
   "dependencies": {
     "antd": "^2.10.4",
     "babel-runtime": "^6.9.2",
+    "clipboard": "^1.7.1",
     "dva": "^1.2.1",
     "dva-loading": "^0.2.1",
     "echarts": "^3.6.2",

@@ -61,7 +61,7 @@ class GoodsRank extends React.Component {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 元</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} $</b>
                                                 </div>
                                             </div>
                                         </div> 

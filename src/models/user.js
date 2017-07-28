@@ -137,6 +137,19 @@ export default {
     },
     subscriptions: {
         setup({ dispatch, history }) {
+
+            // 如果不是在开发环境
+            // 则判断是http、https，如果是http，则跳转到https
+            if(document.domain !== 'localhost'){
+
+                var isHttps = 'https:' == document.location.protocol ? true: false;
+                if(!isHttps){
+                    // 获取Url地址，并转向https
+                    let url = window.location.href.split('://')[1];
+                    location.href = `https://${url}`;
+                }
+            }
+            
             
             // 获取本地存储的登录名与密码
             let username = LocalStorage.get('username');

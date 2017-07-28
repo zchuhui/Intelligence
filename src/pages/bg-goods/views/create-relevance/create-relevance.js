@@ -10,6 +10,7 @@ import styles from './create-relevance.less';
 import MainLayout from '../../../../components/layout-main/layout-main';
 import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
 import defaultImage from './default.png';
+import Clipboard  from 'clipboard'; 
 
 const TabPane = Tabs.TabPane;
 
@@ -127,7 +128,7 @@ class CreateRelevance extends React.Component {
                                                     <img src={this.props.goods.data.img_url} />
                                                 </div>
                                                 <p>BG</p>
-                                                <p>SKU: {this.props.goods.data.sku}</p>
+                                                {/* <p>SKU: {this.props.goods.data.sku}</p> */}
                                             </div>
 
                                             {/*相似的商品 start*/}
@@ -185,8 +186,9 @@ class CreateRelevance extends React.Component {
                                                             <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
                                                                 <div className={styles.imgWrap}><img src={item.img_url} /></div>
                                                                 <p className={styles.brand}>{item.site}</p>
-                                                                <p>SKU: {item.sku}</p>
+                                                                {/* <p>SKU: {item.}</p> */}
                                                             </div>
+                                                            <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
                                                         </li>
                                                     )
                                                 }
@@ -248,19 +250,19 @@ class CreateRelevance extends React.Component {
                                             <ul className={styles.similarGoods}>
                                                 {
                                                     this.state.relevanceGoodsList.map((item, index) =>
+                                                    <div>
                                                         <li key={`suc-relevance-${index}`}>
                                                             <div className={styles.goodsShowPanel}>
                                                                 <div className={styles.imgWrap}><img src={item.img_url} /></div>
                                                                 <p className={styles.brand}>{item.site}</p>
-                                                                <p>SKU: {item.sku}</p>
                                                             </div>
                                                         </li>
+                                                        <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
+                                                    </div>
                                                     )
                                                 }
                                             </ul>
-                                            : <p></p>
-
-
+                                            :null
                                     }
 
                                 </div>
@@ -622,8 +624,9 @@ class CreateRelevance extends React.Component {
                                                     <div className={styles.imgWrap}>
                                                         <img src={item2.img_url} />
                                                     </div>
-                                                    <p>SKU: {item2.sku}</p>
+                                                    {/*  <p>SKU: {item2.sku}</p> */}
                                                 </div>
+                                                <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
                                             </li>
                                         ))
 
@@ -739,9 +742,21 @@ class CreateRelevance extends React.Component {
 
     }
 
+    /**
+     * 复制产品url的提醒
+     * @param {string} url 
+     */
+    onCopyUrl(url){
+        message.warning("复制成功！");
+    }
+
+
+
     // render 前
     componentWillMount(){
         this.clearAllData();
+
+        const clipboard  = new Clipboard('.copyUrl');
     }
 
     // render 后

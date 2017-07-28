@@ -299,7 +299,8 @@ class Category extends React.Component {
             let arr1 = [];
             let arr2 = [];
             for (let i in runChart) {
-                arr1.push(i);
+                let dateLabel = `${i.split('.')[0]}月${i.split('.')[1]}日`;
+				arr1.push(dateLabel);
                 arr2.push(runChart[i]);
             }
 
