@@ -46,7 +46,7 @@ class Correlation extends React.Component {
 														<div className={styles.itemContent}>
 															<div className={styles.itemTitle}>{item.pname}</div>
 															<div className={styles.itemDetail}>
-																<span>US$ {item.price}</span>
+																<span>$ {item.price}</span>
 																<b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins}件</b>
 															</div>
 														</div>
@@ -61,15 +61,16 @@ class Correlation extends React.Component {
 												{/* 竞品 */}
 												<div className={styles.itemRight}>
 													<div className={styles.echart} ref={`competeChart${(index+1)}`} style={{width:'70%',height:120,border:'1px solid #eee'}}></div>
+													
 													<div className={styles.relateInfo}> 
-														{
+														 {
 															this.formatRelateInfo(item.relate_info).goodsNameArray.map?
 															this.formatRelateInfo(item.relate_info).goodsNameArray.map((item2,idx2) =>
 															<p style={{color:this.formatRelateInfo(item.relate_info).goodsColorArray[idx2]}} key={`${item2}${idx2}`}>
-																{item2}  US  {this.formatRelateInfo(item.relate_info).goodsInfoArray[idx2].price}
+																{item2}  $  {this.formatRelateInfo(item.relate_info).goodsInfoArray[idx2].price}
 															</p>)
 															:null
-														} 
+														}  
 													</div>
 												</div>
 											</li>
@@ -95,25 +96,43 @@ class Correlation extends React.Component {
 	componentDidUpdate(){
 
 		if(this.props.goodsComparisonList && this.props.goodsComparisonList.length > 0){
-			// 载入BG Echart图表
-			this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
-			this.loadBGChart(this.refs.bgChart2,this.props.goodsComparisonList[1].run_chart);
-			this.loadBGChart(this.refs.bgChart3,this.props.goodsComparisonList[2].run_chart);
-
+			let length = this.props.goodsComparisonList.length;
 			
-			// 载入竞品 Echart图表
-			this.loadLineChart(
-					this.refs.competeChart1,
-					this.formatRelateInfo(this.props.goodsComparisonList[0].relate_info)
-			);
-			this.loadLineChart(
-				this.refs.competeChart2,
-				this.formatRelateInfo(this.props.goodsComparisonList[1].relate_info)
-			);
-			this.loadLineChart(
-				this.refs.competeChart3,
-				this.formatRelateInfo(this.props.goodsComparisonList[2].relate_info)
-			);
+			if(length == 1){
+				// 载入BG Echart图表
+				this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
+				
+				// 载入竞品 Echart图表
+				this.loadLineChart(this.refs.competeChart1,
+						this.formatRelateInfo(this.props.goodsComparisonList[0].relate_info));
+			}
+			else if(length ==2){
+				// 载入BG Echart图表
+				this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
+				this.loadBGChart(this.refs.bgChart2,this.props.goodsComparisonList[1].run_chart);
+
+				// 载入竞品 Echart图表
+				this.loadLineChart(this.refs.competeChart1,
+						this.formatRelateInfo(this.props.goodsComparisonList[0].relate_info));
+				this.loadLineChart(this.refs.competeChart2,
+					this.formatRelateInfo(this.props.goodsComparisonList[1].relate_info));
+			}
+			else if(length == 3){
+				// 载入BG Echart图表
+				this.loadBGChart(this.refs.bgChart1,this.props.goodsComparisonList[0].run_chart);
+				this.loadBGChart(this.refs.bgChart2,this.props.goodsComparisonList[1].run_chart);
+				this.loadBGChart(this.refs.bgChart3,this.props.goodsComparisonList[2].run_chart);
+
+				// 载入竞品 Echart图表
+				this.loadLineChart(this.refs.competeChart1,
+						this.formatRelateInfo(this.props.goodsComparisonList[0].relate_info));
+				this.loadLineChart(this.refs.competeChart2,
+					this.formatRelateInfo(this.props.goodsComparisonList[1].relate_info));
+				this.loadLineChart(this.refs.competeChart3,
+					this.formatRelateInfo(this.props.goodsComparisonList[2].relate_info)); 
+			}
+			
+			
 		}
 		
 	}
@@ -142,6 +161,7 @@ class Correlation extends React.Component {
 					}
 				},
 				grid: {
+					top: '3%',
 					left: '3%',
 					right: '4%',
 					bottom: '3%',
@@ -151,7 +171,7 @@ class Correlation extends React.Component {
 					{
 						type: 'category',
 						boundaryGap: false,
-						data: data.labelArray,
+						data: data.dateArray,
 						show: false,
 						axisLabel: {
 							show: false,
@@ -204,35 +224,35 @@ class Correlation extends React.Component {
 	loadLineChart(chartId,data) {
 		
 		if (chartId) {
-
 			// 遍历获取每个竞品的图表信息
 			var goodsInfo = [];
 			data.goodsInfoArray.map((item,index) => {
 				goodsInfo.push(this.formatDataToEchartData(item.run_chart));
 			});
-
+			
+			console.log('goodsInfo',goodsInfo);
 			// 遍历获取每个图表信息中的价格参数
 			var seriesData = [];
 			goodsInfo.map((item,index) => {
 				let obj = {
 					name: data.goodsNameArray[index],
-					type: 'line',
+					type: 'line', 
 					stack: '总量',
-					itemStyle : {  
-						normal : {  
-							color:data.goodsColorArray[index],  // 节点的颜色
-							lineStyle:{                         // 线的颜色
+					/* itemStyle : {  
+						 normal : {  
+							color:data.goodsColorArray[index],  	// 节点的颜色
+							lineStyle:{                         	// 线的颜色
 								color:data.goodsColorArray[index],  
 							}  
-						}  
-					},  
+						}   
+					}, */
+					/* areaStyle: {normal: {}}, */
 					data:item.priceSet,
 				};
-
+				
 				seriesData.push(obj);
 			});
-
-
+			console.log('seriesData',seriesData);
 			// 初始化Echart
 			let myChart = echarts.init(chartId);
 
@@ -251,8 +271,9 @@ class Correlation extends React.Component {
 					}
 				},
 				grid: {
-					left: '3%',
-					right: '4%',
+					top: '3%',
+					 left: '3%',
+					right: '4%', 
 					bottom: '3%',
 					containLabel: false,
 				},
@@ -260,14 +281,14 @@ class Correlation extends React.Component {
 					{
 						type: 'category',
 						boundaryGap: false,
-						data: ['6.20', '6.21', '6.22', '6.23', '6.24', '6.25'],
+						data: goodsInfo[0].dateArray,  //日期
 						show: false,
 						axisLabel: {
 							show: false,
 						},
 						axisLine: {
 							lineStyle: {
-								color: '#acdaff'    // x轴颜色
+								color: '#acdaff'       // x轴颜色
 							}
 						}
 					}
@@ -281,7 +302,7 @@ class Correlation extends React.Component {
 							show: false
 						},
 						axisLabel: {
-							show: false,
+							show: true,
 						},
 						axisLine: {
 							lineStyle: {
@@ -300,22 +321,27 @@ class Correlation extends React.Component {
 	formatDataToEchartData(runChart) {
 		
 		let obj = {
-			labelArray:[],
+			dateArray:[],
 			priceSet:[],
-			reviewSet:[],
-			salesSet:[]
+			/* reviewSet:[],
+			salesSet:[] */
 		}
 
 		if(runChart){
 			for(let idx1 in runChart){
-				let arr1 = [];
-				let arr2 = [];
-				for(let idx2 in runChart[idx1]){
-					arr1.push(idx2);
-					arr2.push(runChart[idx1][idx2]);
-				}
+				if(idx1 == 'priceSet'){
+					let arr1 = [];
+					let arr2 = [];
 
-				switch(idx1){
+					for(let idx2 in runChart[idx1]){
+						arr1.push(idx2);
+						arr2.push(runChart[idx1][idx2]);
+					}
+
+					obj.dateArray = arr1;
+					obj.priceSet = arr2;
+				}
+				/* switch(idx1){
 					case 'priceSet':
 						obj.priceSet = arr2;
 						break;
@@ -325,8 +351,8 @@ class Correlation extends React.Component {
 					case 'salesSet':
 						obj.salesSet = arr2;
 						break;
-				}
-				obj.labelArray = arr1;
+				} */
+				
 			}
 
 			

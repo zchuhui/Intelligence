@@ -31,7 +31,7 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>US$ {item.price}</span>
+                                                    <span>$ {item.price}</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -55,7 +55,7 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>US$ {item.price}</span>
+                                                    <span>$ {item.price}</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -79,7 +79,7 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>US$ {item.price}</span>
+                                                    <span>$ {item.price}</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)

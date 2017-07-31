@@ -77,14 +77,16 @@ export default {
 
             try {
 
-                const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+                const {data} = yield call(BgService.fetchGoodsDetailBySku, payload);
                 yield put({ type: 'saveRelevanceGoods', payload: data });
-                yield put({ type: 'toggleCreateRelevanceLoading', payload: { loading: false } });
-                
-                // 获取相似商品数据表
-                yield put({ type: 'fetchSimilarGoodsList',payload:{title:data.data.pname}});
-                // 请求已关联的商品
-                yield put({ type: 'featchRevanceGoods',payload});
+
+                if(data.code == CODE200){
+                    
+                    // 获取相似商品数据表
+                    yield put({ type: 'fetchSimilarGoodsList',payload:{title:data.data.pname}});
+                    // 请求已关联的商品
+                    yield put({ type: 'featchRevanceGoods',payload});
+                }
                 
             } catch (e) {
                 message.warning(ERRORMESSAGE);
@@ -145,11 +147,7 @@ export default {
 
             try {
                 const { data } = yield call(BgService.fetchRevanceBySku, payload);
-
-                // 保存数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'saveRelevanceGoodsList', payload: data });
-                } 
+                yield put({ type: 'saveRelevanceGoodsList', payload: data });
 
             } catch (e) {
             }

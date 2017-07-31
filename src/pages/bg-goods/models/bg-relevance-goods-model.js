@@ -198,7 +198,7 @@ export default {
 
         // BG表搜索
         * search({ payload }, { select, call, put }) {
-
+            
             yield put({ type: 'toggleLoading', payload: { loading: true } });
 
             try {

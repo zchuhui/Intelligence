@@ -65,7 +65,7 @@ class Category extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>US$ {item.price}</span>
+                                                    <span>$ {item.price}</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -88,7 +88,7 @@ class Category extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>US$ {item.price}</span>
+                                                    <span>$ {item.price}</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -298,8 +298,9 @@ class Category extends React.Component {
         if (runChart) {
             let arr1 = [];
             let arr2 = [];
+            
             for (let i in runChart) {
-                let dateLabel = `${i.split('.')[0]}月${i.split('.')[1]}日`;
+                let dateLabel = i;
 				arr1.push(dateLabel);
                 arr2.push(runChart[i]);
             }

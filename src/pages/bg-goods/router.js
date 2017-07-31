@@ -10,9 +10,10 @@ function RouterConfig({ history }) {
       		<Route path="/bg" component={ DataRouter }>
 			  	<Route path="/bg/:id" component={ DataRouter } />
 			</Route>
+			
       		<Route path="/create" component={ CreateRelevance }>
       			<Route path="/create/:sku" component={ CreateRelevance } />
-      		</Route>
+      		</Route> 
    		</Router>
     );
 }

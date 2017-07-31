@@ -15,7 +15,7 @@ import moment from 'moment';
 class DataRouter extends React.Component {
 	
 	state = {
-		date:moment().format('YYYY-MM-DD'),   // 默认日期
+		date:moment(moment().format('YYYY-MM-DD')).subtract(1,"days").format("YYYY-MM-DD")  // 默认为前一天
 	}
 
 	render() {
@@ -39,7 +39,7 @@ class DataRouter extends React.Component {
 							<div>
 								{/* 日期切换 */}
 								<div className={styles.dateWrap}>
-									<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} />
+									<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} allowClear='false'/>
 									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
 									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
 								</div>
@@ -183,6 +183,8 @@ class DataRouter extends React.Component {
 
 
 function mapStateToProps(state) {
+	const {goodsComparisonList} = state.SaleSecyModel;
+	console.log(goodsComparisonList);
 	return { ...state.SaleSecyModel };
 }
 

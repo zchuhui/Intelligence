@@ -5,7 +5,7 @@
 import * as SaleSecyService from '../../../services/service-sale-secy';
 import { CODE200, ERRORMESSAGE } from '../../../constants/constant';
 import { message } from 'antd';
-import Moment from 'moment';
+import moment from 'moment';
 
 
 export default {
@@ -130,7 +130,7 @@ export default {
 
 	subscriptions:{
 		setup({ dispatch, history }) {
-			dispatch({ type: 'getSaleSecyInfo',payload:{time:Moment().format('YYYY-MM-DD')}});
+			dispatch({ type: 'getSaleSecyInfo',payload:{time:moment(moment().format('YYYY-MM-DD')).subtract(1,"days").format("YYYY-MM-DD")}});
         },
 	}
 

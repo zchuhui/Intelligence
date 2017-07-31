@@ -102,7 +102,7 @@ class CreateRelevance extends React.Component {
                                             {
                                                 this.props.goods.msg ?
                                                     <p style={{ color: 'red' }}>{this.props.goods.msg}</p>
-                                                    : <p></p>
+                                                    : null
                                             }
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@ class CreateRelevance extends React.Component {
                                 </div>
 
                                 <div style={{ textAlign: 'center', height: 100 }}>
-                                    <Link to="/" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
+                                    <Link to="/bg" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
                                     <Button type="primary" style={{ width: 100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@ class CreateRelevance extends React.Component {
                                                     !this.props.params.sku ?
                                                         <Button style={{ marginRight: 10, width: 100 }} onClick={this.toStepOne.bind(this)}>上一步</Button>
                                                         : 
-                                                        <Link to="/" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
+                                                        <Link to="/bg" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
                                                 }
 
                                                 <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>开始关联</Button>
@@ -230,7 +230,7 @@ class CreateRelevance extends React.Component {
                                                         <div style={{ textAlign: 'center', }}>
                                                             <Icon type="check-circle" style={{ fontSize: 30, color: '#79bb51', verticalAlign: 'top' }} />
                                                             <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>已成功关联！</span>
-                                                            <div><Link to="/"><Icon type="rollback" />  返回BG关联报表</Link> </div>
+                                                            <div><Link to="/bg"><Icon type="rollback" />  返回BG关联报表</Link> </div>
                                                         </div>
                                                         :
                                                         <div style={{ textAlign: 'center', }}> 
@@ -245,20 +245,21 @@ class CreateRelevance extends React.Component {
                                 </div>
 
                                 <div className={styles.panelBottom}>
+                                    <div className={styles.title}>已关联产品</div>
                                     {
                                         this.props.setRevanceStatus ?
                                             <ul className={styles.similarGoods}>
                                                 {
                                                     this.state.relevanceGoodsList.map((item, index) =>
-                                                    <div>
                                                         <li key={`suc-relevance-${index}`}>
                                                             <div className={styles.goodsShowPanel}>
                                                                 <div className={styles.imgWrap}><img src={item.img_url} /></div>
                                                                 <p className={styles.brand}>{item.site}</p>
                                                             </div>
+                                                            <div>
+                                                                <Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button>
+                                                            </div>
                                                         </li>
-                                                        <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
-                                                    </div>
                                                     )
                                                 }
                                             </ul>
@@ -687,6 +688,7 @@ class CreateRelevance extends React.Component {
     syncRelevanceGoodsLlist() {
         let propsRelevanceGoodsList = this.props.relevanceGoodsList;
         let stateRelevanceGoodsList = this.state.relevanceGoodsList;
+        console.log('relevan:',propsRelevanceGoodsList,stateRelevanceGoodsList);
 
         if (propsRelevanceGoodsList) {
             let index;
@@ -797,14 +799,17 @@ class CreateRelevance extends React.Component {
 
     }
 
+    componentDidUpdate(){
+    }
+
 
 }
 
 
 function mapStateToProps(state) {
-
-    const { similarGoodsList,relevanceGoodsList } = state.CreateRelevanceModel;
-    //console.log('create',relevanceGoodsList);
+    /* 
+    const {goods } = state.CreateRelevanceModel;
+    console.log('goods',goods); */
     return { ...state.CreateRelevanceModel };
 }
 

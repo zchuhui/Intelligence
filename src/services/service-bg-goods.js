@@ -1,6 +1,7 @@
-import request from '../utils/request';
+import request  from '../utils/request';
+import { originRequest }  from '../utils/request';
 import { Url } from '../config/config.url';
-import moment from 'moment';
+import moment from 'moment'; 
 
 // 获取BG报表数据
 // page: 页数
@@ -38,7 +39,7 @@ export function search(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-    
+    console.log(url);
     return request(url);
 }
 
@@ -54,8 +55,9 @@ export function fetchGoodsDetailBySku(args) {
 
     let url = `${Url}?${argumentStr}`;
 
-    return request(url);
-
+    // 这里需要返回的验证数据，用originRequest
+    return originRequest(url);
+    
 }
 
 
