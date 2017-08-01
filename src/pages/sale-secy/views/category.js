@@ -200,7 +200,6 @@ class Category extends React.Component {
                         xAxis : [
                             {
                                 type : 'category',
-                                boundaryGap: false,
                                 data : prices.labelArray,
                                 axisLabel: {
                                     show: true,
@@ -229,7 +228,7 @@ class Category extends React.Component {
                             {
                                 name:'',
                                 type:'bar',
-                                stack: '',
+                                barWidth: '40%',
                                 itemStyle:{
                                     normal:{
                                         color:'#acdaff',

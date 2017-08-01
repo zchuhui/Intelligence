@@ -133,6 +133,11 @@ export default {
 
                 const { data } = yield call(BgService.setRelevanceGoods, payload);
                 yield put({ type: 'toggleSetRevanceStatus', payload: { status: true } });
+                
+                // 关联成功后，自动返回BG列表
+                setTimeout(function(){
+                    window.history.back(-1)
+                },2000);
 
             } catch (e) {
                 yield put({ type: 'toggleSetRevanceStatus', payload: { status: false } });

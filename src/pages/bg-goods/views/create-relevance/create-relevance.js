@@ -82,7 +82,7 @@ class CreateRelevance extends React.Component {
                         {/*进度条 end*/}
 
                         {/*content start*/}
-                        <div className={styles.content}>
+                        <div id="content" className={styles.content}>
 
                             {/*步骤一*/}
                             <div style={{ display: this.state.step1 }}>
@@ -128,7 +128,6 @@ class CreateRelevance extends React.Component {
                                                     <img src={this.props.goods.data.img_url} />
                                                 </div>
                                                 <p>BG</p>
-                                                {/* <p>SKU: {this.props.goods.data.sku}</p> */}
                                             </div>
 
                                             {/*相似的商品 start*/}
@@ -186,7 +185,7 @@ class CreateRelevance extends React.Component {
                                                             <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
                                                                 <div className={styles.imgWrap}><img src={item.img_url} /></div>
                                                                 <p className={styles.brand}>{item.site}</p>
-                                                                {/* <p>SKU: {item.}</p> */}
+                                                                <div className={styles.deleteItemShow}></div>
                                                             </div>
                                                             <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
                                                         </li>
@@ -231,12 +230,13 @@ class CreateRelevance extends React.Component {
                                                             <Icon type="check-circle" style={{ fontSize: 30, color: '#79bb51', verticalAlign: 'top' }} />
                                                             <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>已成功关联！</span>
                                                             <div><Link to="/bg"><Icon type="rollback" />  返回BG关联报表</Link> </div>
+                                                            
                                                         </div>
                                                         :
                                                         <div style={{ textAlign: 'center', }}> 
                                                             <Icon type="frown" style={{ fontSize: 30, color: '#999', verticalAlign: 'top' }} />
                                                             <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>关联失败</span>
-                                                            <div><Link to='/bg/:id'><Icon type="rollback" />返回BG关联报表</Link> </div>
+                                                            <div><Link to='/bg'><Icon type="rollback" />返回BG关联报表</Link> </div>
                                                         </div>
                                                 }
                                             </div>
@@ -598,7 +598,10 @@ class CreateRelevance extends React.Component {
 
     }
 
-    // 获取数据，载入相似商品列表
+    /**
+     * 获取相似商品数据，并载入
+     * @param {object} data 
+     */
     getItemList(data) {
         if (data) {
             return (
@@ -619,13 +622,14 @@ class CreateRelevance extends React.Component {
                                 <ul ref='listWrapId' style={{ width: data.length * (130 + 20), marginLeft: this.state.marginLeftVal }}>
                                     {
                                         data.map((item2, index2) => (
-                                            <li key={`li-${index2}`}>
+                                            <li key={`li-${index2}`} >
                                                 <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
-                                                    id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}>
-                                                    <div className={styles.imgWrap}>
+                                                     id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
+                                                     
+                                                     >
+                                                    <div className={styles.imgWrap} onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
                                                         <img src={item2.img_url} />
                                                     </div>
-                                                    {/*  <p>SKU: {item2.sku}</p> */}
                                                 </div>
                                                 <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
                                             </li>
@@ -644,6 +648,54 @@ class CreateRelevance extends React.Component {
             return (<div>null</div>)
         }
     }
+
+    /**
+     * 显示相似商品的详情
+     * @param {object} detail 
+     */
+    showGoodsDetail(detail){
+
+        let div = document.createElement('div'),
+            img = document.createElement('img'),
+            p   = document.createElement('p');
+
+        div.setAttribute('id','detailShow');
+        p.innerHTML = `【商品名称】：${detail.products_name_en}`;
+        img.setAttribute('src',detail.img_url);
+        
+        div.appendChild(img);
+        div.appendChild(p);
+
+        div.style.position   = 'fixed';
+        div.style.right      = '50px';
+        div.style.bottom     = '50px';
+        div.style.width      = '400px';
+        div.style.height     = '450px';
+        div.style.background = '#fff';
+        div.style.overflow   = 'hidden';
+        div.style.boxShadow  = '0 5px 15px #999';
+        div.style.padding    = '10px';
+        div.style.borderRadius = '5px';
+
+        p.style.overflow     = 'hidden';
+        p.style.whiteSpace   = 'nowrap';
+        p.style.textOverflow = 'ellipsis';
+        p.style.lineHeight   = '30px';
+
+        img.style.width      = '100%';
+        img.style.height     = 'auto';
+
+        document.querySelector('#content').appendChild(div);
+
+    }
+
+    /**
+     * 隐藏相似商品的详情
+     */
+    hideGoodsDetail(){
+        document.querySelector('#detailShow').remove();
+    }
+
 
     // 相似商品表左边切换
     onMoveLeft(length) {
@@ -688,7 +740,7 @@ class CreateRelevance extends React.Component {
     syncRelevanceGoodsLlist() {
         let propsRelevanceGoodsList = this.props.relevanceGoodsList;
         let stateRelevanceGoodsList = this.state.relevanceGoodsList;
-        console.log('relevan:',propsRelevanceGoodsList,stateRelevanceGoodsList);
+        //console.log('relevan:',propsRelevanceGoodsList,stateRelevanceGoodsList);
 
         if (propsRelevanceGoodsList) {
             let index;
@@ -797,9 +849,6 @@ class CreateRelevance extends React.Component {
             this.syncRelevanceGoodsLlist();
         });
 
-    }
-
-    componentDidUpdate(){
     }
 
 

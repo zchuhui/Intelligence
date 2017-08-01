@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { Link } from 'dva/router';
 import styles from './sale-secy.less';
 import { Icon, Spin } from 'antd';
 import echarts from 'echarts';
@@ -80,7 +81,7 @@ class Correlation extends React.Component {
 								</ul>
 							</div>
 							:
-							<div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+							<div className={styles.dataNullWrap}><a href='/bg'>您还未关联商品，请前往关联 >> </a></div>
 						}
 						
 					</div>

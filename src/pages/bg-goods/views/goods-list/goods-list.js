@@ -716,12 +716,35 @@ class GoodsList extends React.Component {
         })
     }
 
-    // 载入Echart图
+    // 载入主体商品Echart图
     loadEchart = (data) => {
-
+        
         if (this.refs.echartId) {
             // 基于准备好的dom，初始化echarts实例
             let myChart = echarts.init(this.refs.echartId);
+
+            let yName;
+            switch(data.name){
+                case '价格':
+                    yName = '$';
+                    break;
+                case '销量':
+                    yName = '件';
+                    break;
+                case '评分':
+                    yName = '';
+                    break;
+                case '评论':
+                    yName = '条';
+                    break;
+                case '问答':
+                    yName = '条';
+                    break;
+                case '关注':
+                    yName = '个';
+                    break;
+                
+            }
 
             // 绘制图表
             myChart.setOption({
@@ -750,7 +773,8 @@ class GoodsList extends React.Component {
                     data: this.props.goodsEchartData.xAxisData,
                 },
                 yAxis: {
-                    type: 'value'
+                    type: 'value',
+                    name:yName
                 },
                 series:[{
                     name:data.name,
