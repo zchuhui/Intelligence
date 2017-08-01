@@ -237,15 +237,14 @@ class Correlation extends React.Component {
 				let obj = {
 					name: data.goodsNameArray[index],
 					type: 'line', 
-					stack: '总量',
-					/* itemStyle : {  
+					itemStyle : {  
 						 normal : {  
 							color:data.goodsColorArray[index],  	// 节点的颜色
 							lineStyle:{                         	// 线的颜色
 								color:data.goodsColorArray[index],  
 							}  
 						}   
-					}, */
+					},
 					/* areaStyle: {normal: {}}, */
 					data:item.priceSet,
 				};

@@ -129,7 +129,7 @@ class DataRouter extends React.Component {
 
 		if (dayId == 0) {
 			//上一天
-			let provDay = moment(currentDate).subtract("days", 1).format("YYYY-MM-DD");
+			let provDay = moment(currentDate).subtract(1,"days").format("YYYY-MM-DD");
 
 			// 更新到state
 			this.setState({date: provDay});

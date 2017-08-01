@@ -12,7 +12,7 @@
   "autoprefixer": null,
   "proxy": {
     "/api": {
-      "target": "https://betabia.banggood.com/index.php",
+      "target": "http://betabia.banggood.com/index.php",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     },
