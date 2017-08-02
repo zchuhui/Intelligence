@@ -10,7 +10,7 @@ import { CODE200, ERRORMESSAGE } from '../constants/constant';
 import { message } from 'antd';
 
 
-const dayCount = 60 * 24;        // localStorage的保存天数，默认设定为一天
+const saveTime = 60 * 24;        // localStorage的保存天数，默认设定为一天，单位为分钟
 
 export default {
     namespace: 'User',
@@ -48,6 +48,7 @@ export default {
             }
             return { ...state, loginStatus: payload.loginStatus, userInfo: info };
         },
+
         // 报错时存储信息
         saveError(state, { payload }) {
             return { ...state, loginMsg: payload.msg, loading: 0, loginStatus: 0 };
@@ -69,10 +70,10 @@ export default {
                     yield put({ type: 'save', payload: data });
 
                     // 存储用户名、密码
-                    LocalStorage.set('username', payload.loginInfo.username, dayCount);
-                    LocalStorage.set('password', payload.loginInfo.password, dayCount);
-                    LocalStorage.set('token', data.data.token, dayCount);
-                    LocalStorage.set('loginStatus', 1, dayCount);
+                    LocalStorage.set('username', payload.loginInfo.username, saveTime);
+                    LocalStorage.set('password', payload.loginInfo.password, saveTime);
+                    LocalStorage.set('token', data.data.token, saveTime);
+                    LocalStorage.set('loginStatus', 1, saveTime);
 
                     // 转到BG页
                     window.location.href = "/bg";
@@ -80,11 +81,11 @@ export default {
                 } else {
                     // 传入失败信息，用于页面展示
                     yield put({ type: 'save', payload: data });
-                    message.warning(data.msg)
+                    //message.warning(data.msg)
                 }
             }
             catch (e) {
-                message.error(ERRORMESSAGE);
+                message.warning(ERRORMESSAGE);
                 
                 // 传入失败信息，用于页面展示
                 yield put({ type: 'saveError', payload:{msg:e.message} });
@@ -96,21 +97,20 @@ export default {
         // 如果本地已存储，则自动登录
         * autoLogin({ payload }, { select, call, put }) {
 
-            // 存储数据
-            yield put({ type: 'updateStatusAndUsername', payload: { username: payload.loginInfo.username, loginStatus: 1 } });
-
-
             // 重新存储登录信息，延长为一天
-            let username = LocalStorage.get('username');
+            /* let username = LocalStorage.get('username');
             let password = LocalStorage.get('password');
             let token = LocalStorage.get('token');
-            let loginStatus = LocalStorage.get('loginStatus');
             
             // 存储用户名、密码
-            LocalStorage.set('username', username, dayCount);
-            LocalStorage.set('password', password, dayCount);
-            LocalStorage.set('token', token, dayCount);
-            LocalStorage.set('loginStatus', 1, dayCount);
+            LocalStorage.set('username', username, saveTime);
+            LocalStorage.set('password', password, saveTime);
+            LocalStorage.set('token', token, saveTime);
+            LocalStorage.set('loginStatus', 1, saveTime); */
+
+
+            // 存储数据
+            yield put({ type: 'updateStatusAndUsername', payload: { username: payload.loginInfo.username, loginStatus: 1 } });
 
         },
 
@@ -138,32 +138,46 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
 
-            // 如果不是在开发环境
-            // 则判断是http、https，如果是http，则跳转到https
-            if(document.domain !== 'localhost'){
 
-                var isHttps = 'https:' == document.location.protocol ? true: false;
-                if(!isHttps){
+            // 判断是http、https，如果是http，则跳转到https
+            // 开发环境除外
+            if (document.domain !== 'localhost') {
+                var isHttps = 'https:' == document.location.protocol ? true : false;
+                if (!isHttps) {
                     // 获取Url地址，并转向https
                     let url = window.location.href.split('://')[1];
                     location.href = `https://${url}`;
                 }
             }
-            
-            
+
+
             // 获取本地存储的登录名与密码
-            let username = LocalStorage.get('username');
-            let password = LocalStorage.get('password');
-            
-            // 判断是否存在，存在则自动获取登录信息，不在请求
-            if (username && password) {
+            let username = LocalStorage.get('username'),         // 用户名
+                password = LocalStorage.get('password'),         // 密码
+                loginStatus = LocalStorage.get('loginStatus'),   // 登录状态
+                pathname = window.location.pathname;             // url
 
-                const loginInfo = {
-                    username: username,
-                    password: password
+
+            // 判断是否登录，没登录则马上跳到登录页
+            if (loginStatus == 0) {
+                if (pathname !== '/login') {
+                    window.location.href = "/login";
                 }
-
-                dispatch({ type: 'autoLogin', payload: { loginInfo: loginInfo } });
+            }
+            else {
+                // 如果已登录，则不停留在login页面
+                if (pathname == '/login') {
+                    window.location.href = "/bg";
+                }
+                else{
+                    // 如果已经登录，则自动获取登录信息
+                    const loginInfo = {
+                        username: username,
+                        password: password
+                    }
+                    
+                    dispatch({ type: 'autoLogin', payload: { loginInfo: loginInfo } });
+                }
             }
         },
 

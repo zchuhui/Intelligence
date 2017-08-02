@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './layout-main.less';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
-import localStorage from '../../utils/local-storage';
+import LocalStorage from '../../utils/local-storage';
 
 /*布局组件*/
 class MainLayout extends React.Component {
@@ -39,18 +39,6 @@ class MainLayout extends React.Component {
           </div>
         );
     }
-
-    componentDidMount() {
-
-        // 获取登录信息,如果为登录，则转到登录页面
-        let loginStatus = localStorage.get('loginStatus');
-        if (!loginStatus) {
-            window.location.href = "/login"; 
-        }
-
-    }
-
-
 }
 
 export default MainLayout;

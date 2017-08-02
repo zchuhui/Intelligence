@@ -49,10 +49,10 @@ class LoginPage extends React.Component {
 				        </FormItem>
 				        <FormItem>
 				          <Button type="primary" 
+				          	loading={this.props.loading}
 				          	htmlType="submit" 
 				          	className="login-form-button"  
 				          	style={{ width:300 }} 
-				          	loading={this.props.loading}
 				          	>
 				            登  录 
 				          </Button>

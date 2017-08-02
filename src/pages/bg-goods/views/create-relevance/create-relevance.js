@@ -302,6 +302,7 @@ class CreateRelevance extends React.Component {
                 }
             })
         } else {
+            message.destroy();
             message.warning("请输入商品的SKU!");
         }
     }
@@ -331,6 +332,7 @@ class CreateRelevance extends React.Component {
                 }
             });
         } else {
+            message.destroy();
             message.warning("请输入商品的SKU!");
         }
     }
@@ -372,6 +374,7 @@ class CreateRelevance extends React.Component {
                 progress2: true,
             })
         } else {
+            message.destroy();
             message.warning("请先输入一个商品");
         }
     }
@@ -460,6 +463,7 @@ class CreateRelevance extends React.Component {
             });
         }
         else {
+            message.destroy();
             message.warning("没有关联任何商品");
         }
     }
@@ -801,6 +805,7 @@ class CreateRelevance extends React.Component {
      * @param {string} url 
      */
     onCopyUrl(url){
+        message.destroy();
         message.warning("复制成功！");
     }
 
