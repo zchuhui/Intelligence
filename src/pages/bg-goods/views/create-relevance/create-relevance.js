@@ -148,7 +148,7 @@ class CreateRelevance extends React.Component {
                                                             </Tabs>
                                                             {/*手动输入商品*/}
                                                             <div style={{ marginLeft: 25, marginTop: 20 }}>
-                                                                <Input style={{ width: 150 }} placeholder="手动添加SKU" ref="inputSku2" />
+                                                                <Input style={{ width: 150 }} placeholder="手动添加SKU或POA" ref="inputSku2" />
                                                                 <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
                                                                 {
                                                                     this.props.goodsBySite.code == 200 ?
@@ -184,9 +184,9 @@ class CreateRelevance extends React.Component {
                                                         <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
                                                             <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
                                                                 <div className={styles.imgWrap}><img src={item.img_url} /></div>
-                                                                <p className={styles.brand}>{item.site}</p>
                                                                 <div className={styles.deleteItemShow}></div>
                                                             </div>
+                                                            <div><p className={styles.brand}>{item.site}</p></div>
                                                             <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
                                                         </li>
                                                     )
@@ -773,7 +773,8 @@ class CreateRelevance extends React.Component {
 
                 this.setState({
                     relevanceGoodsList: stateRelevanceGoodsList,
-                })
+                });
+                console.log('stateRelevanceGoodsList',stateRelevanceGoodsList);
             }
         }
     }
@@ -861,9 +862,9 @@ class CreateRelevance extends React.Component {
 
 
 function mapStateToProps(state) {
-    /* 
-    const {goods } = state.CreateRelevanceModel;
-    console.log('goods',goods); */
+    
+    const {relevanceGoodsList } = state.CreateRelevanceModel;
+    console.log('relevanceGoodsList',relevanceGoodsList); 
     return { ...state.CreateRelevanceModel };
 }
 

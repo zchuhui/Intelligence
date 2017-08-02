@@ -726,7 +726,7 @@ class GoodsList extends React.Component {
             let yName;
             switch(data.name){
                 case '价格':
-                    yName = '$';
+                    yName = '美元';
                     break;
                 case '销量':
                     yName = '件';
@@ -752,7 +752,10 @@ class GoodsList extends React.Component {
                     text: ''
                 },
                 tooltip: {
-                    trigger: 'axis'
+                    trigger: 'axis',
+                    formatter:function(params,ticket,callback){
+                        return '<div><p>'+params[0].name +"</p><p>"+ params[0].value+' '+yName+'</p></div>';
+                    }
                 },
                 /* legend: {
                     data:this.props.goodsEchartData.legendData
@@ -774,7 +777,6 @@ class GoodsList extends React.Component {
                 },
                 yAxis: {
                     type: 'value',
-                    name:yName
                 },
                 series:[{
                     name:data.name,

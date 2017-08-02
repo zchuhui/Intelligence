@@ -130,8 +130,8 @@ class Searcher extends React.Component {
                                     placeholder="价格区间" 
                                 />
                             </InputGroup>
-
-                            <Input id="sku" style={{ width: 140, verticalAlign:'top'}} placeholder="sku" />
+                                
+                            <Input id="sku" style={{ width: 180, verticalAlign:'top'}} placeholder="sku / poa" />
                             
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
