@@ -55,13 +55,13 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>$ {item.price}</span>
+                                                    <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} $</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 美元</b>
                                                 </div>
                                             </div>
                                         </div> 
@@ -79,13 +79,13 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>$ {item.price}</span>
+                                                    <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.rate} %</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{parseFloat(item.rate).toFixed(2)} %</b>
                                                 </div>
                                             </div>
                                         </div> 

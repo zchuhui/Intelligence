@@ -22,6 +22,7 @@ class Saleroom extends React.Component {
 			item2:0,         // 模块2
 			item3:0,         // 模块3
 			item4:0,		 // 模块4
+			itemName:'销售额'
 		}
 
 	}
@@ -53,7 +54,7 @@ class Saleroom extends React.Component {
 										<h3>销售额</h3>
 										<div>
 											<label>当天</label>
-											<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} $</b>
+											<b>{this.props.salesAmount.salesAmount ? this.props.salesAmount.salesAmount : 0} 美元</b>
 										</div>
 										<div>
 											<label>前天环比</label>
@@ -86,7 +87,7 @@ class Saleroom extends React.Component {
 									<li className={this.state.item3?styles.borderBottomNone:null}
 										onClick={this.onSaleroomItem.bind(this,this.props.changeRate.runChart,3)}>
 										<h3>转化率</h3>
-										<div><label>当天</label><b>{this.props.changeRate.changeRate ? this.props.changeRate.changeRate : 0} %</b></div>
+										<div><label>当天</label><b>{this.props.changeRate.changeRate ? parseFloat(this.props.changeRate.changeRate).toFixed(2) : 0} %</b></div>
 										<div><label>前天环比</label>
 											<span className={styles.exponentTop}>
 												{this.formatTrendPercentage(this.props.changeRate.yesRadio)}
@@ -180,7 +181,9 @@ class Saleroom extends React.Component {
 	 * @param {array} data 
 	 */
 	loadChart(data) {
-		
+
+		let itemName = this.state.itemName;  // 获取显示名称
+
 		if (this.refs.saleroomChart) {
 			// 初始化Echart
 			let myChart = echarts.init(this.refs.saleroomChart);
@@ -191,6 +194,19 @@ class Saleroom extends React.Component {
 				},
 				tooltip: {
 					trigger: 'axis',
+					/* axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#6a7985'
+						}
+					}, */
+					formatter: function (params,ticket,callback) { 
+						if(itemName == "转化率"){
+							return '<div><p>'+params[0].name+'</p><p>'+itemName+": "+(parseFloat(params[0].value)).toFixed(2)+'%</p></div>'
+						}else{
+							return '<div><p>'+params[0].name+'</p><p>'+itemName+": "+parseFloat(params[0].value).toFixed(2)+'</p></div>'
+						}
+					}
 				},
 				legend: {
 				},
@@ -313,6 +329,7 @@ class Saleroom extends React.Component {
 					item3:0,
 					item4:0,
 					runChart:runChart,
+					itemName:'销售额',
 				});
 				break;
 			case 2:
@@ -322,6 +339,7 @@ class Saleroom extends React.Component {
 					item3:0,
 					item4:0,
 					runChart:runChart,
+					itemName:'销量',
 				});
 				break;
 			case 3:
@@ -331,6 +349,7 @@ class Saleroom extends React.Component {
 					item3:1,
 					item4:0,
 					runChart:runChart,
+					itemName:'转化率',
 				});
 				break;
 			case 4:
@@ -340,6 +359,7 @@ class Saleroom extends React.Component {
 					item3:0,
 					item4:1,
 					runChart:runChart,
+					itemName:'上架数',
 				});
 				break;
 		}

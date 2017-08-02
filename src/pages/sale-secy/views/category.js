@@ -25,7 +25,21 @@ class Category extends React.Component {
         return (
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
-                    你的类目情况
+                    <span className={styles.fl}>你的类目情况</span>
+
+                    {
+                        this.props.cateSet.length > 0?
+                        <div className={styles.fr}>
+                            <Select defaultValue={ this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid } onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
+                            {
+                                this.props.cateSet.map((item,index)=>
+                                    <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
+                                )
+                            }
+                        </Select>
+                        </div>
+                        :null
+                    }
                 </div>
                 {
                     this.props.loading?
@@ -38,23 +52,8 @@ class Category extends React.Component {
                             this.props.myProductInCate.map?
                             <ul className={styles.clear}>
                                 <li>
-                                    {
-                                         this.props.cateSet.length > 0?
-                                         <div>
-                                             &nbsp; &nbsp; 类目切换：
-                                             <Select defaultValue={ this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid } onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
-                                                {
-                                                    this.props.cateSet.map((item,index)=>
-                                                        <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
-                                                    )
-                                                }
-                                            </Select>
-                                         </div>
-                                        :null
-                                    }
-                                    
-                                    <div ref='catePieChart' style={{width:'100%',height:280,}}></div>
-                                    <div ref='catePillarChart' style={{width:'100%',height:285}}></div>
+                                    <div ref='catePieChart' style={{width:'100%',height:600,}}></div>
+                                    {/*<div ref='catePillarChart' style={{width:'100%',height:285}}></div>*/}
                                 </li>
                                 <li>
                                     <h3>你的商品排行</h3>
@@ -65,7 +64,7 @@ class Category extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>$ {item.price}</span>
+                                                    <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -88,7 +87,7 @@ class Category extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>$ {item.price}</span>
+                                                    <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
                                                             this.formatTrendNumber(item.no)
@@ -151,16 +150,20 @@ class Category extends React.Component {
         if(cateSet){
 
             let catePieChartId = this.refs.catePieChart;
-            let catePillarChartId = this.refs.catePillarChart;
+            //let catePillarChartId = this.refs.catePillarChart;
 
-            if(catePieChartId && catePillarChartId){
+            if(catePieChartId){
 
                 // 初始化Echart
                 let catePieChart = echarts.init(catePieChartId);  
-                let catePillarChart = echarts.init(catePillarChartId); 
+                //let catePillarChart = echarts.init(catePillarChartId); 
 
                 // 绘制饼形图
                 catePieChart.setOption({
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
                         grid: {
                             left: '3%',
                             right: '4%',
@@ -176,9 +179,9 @@ class Category extends React.Component {
                         }, */
                         series : [
                             {
-                                name: '访问来源',
+                                name: '类目比例',
                                 type: 'pie',
-                                radius : '70%',
+                                radius : '50%',
                                 center: ['50%', '50%'],
                                 data:cateSet.valueArray
                             }
@@ -186,10 +189,13 @@ class Category extends React.Component {
                 });
 
                 // 绘制柱状图
-                catePillarChart.setOption({
+                /* catePillarChart.setOption({
                         color:'#acdaff',
                         tooltip: {
                             trigger: 'axis',
+                            formatter: function (params,ticket,callback) { 
+                                return '<div>'+params[0].value+'</div>'
+                            }
                         },
                         grid: {
                             left: '3%',
@@ -245,7 +251,7 @@ class Category extends React.Component {
                                 data:prices.valueArray,
                             }
                         ]
-                });
+                }); */
                 
             }
         }

@@ -39,7 +39,13 @@ class DataRouter extends React.Component {
 							<div>
 								{/* 日期切换 */}
 								<div className={styles.dateWrap}>
-									<DatePicker value={moment(this.state.date)} onChange={ this.onChangeDate.bind(this) } disabledDate={this.disabledDate.bind(this)} allowClear='false'/>
+									<DatePicker 
+										value={moment(this.state.date)} 
+										onChange={ this.onChangeDate.bind(this) } 
+										disabledDate={this.disabledDate.bind(this)} 
+										allowClear={false}
+										showToday={false}
+										/>
 									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
 									<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
 								</div>
@@ -163,10 +169,11 @@ class DataRouter extends React.Component {
 	 * @param {Date} dateString 
 	 */
 	onChangeDate(date, dateString){
-		this.setState({date:dateString});
-
-		// 请求数据
-		this.getsaleSecyInfoToDate(dateString); 
+		if(dateString){
+			this.setState({date:dateString});
+			// 请求数据
+			this.getsaleSecyInfoToDate(dateString); 
+		}
 	}
 
 	/**

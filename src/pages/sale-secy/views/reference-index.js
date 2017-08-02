@@ -102,24 +102,24 @@ class ReferenceIndex extends React.Component {
 
     componentDidMount(){
 		
-		this.loadChart(this.refs.refChart1,this.props.basket.runChart);
+		/* this.loadChart(this.refs.refChart1,this.props.basket.runChart);
         this.loadChart(this.refs.refChart2,this.props.basket.runChart);
         this.loadChart(this.refs.refChart3,this.props.basket.runChart);
-		this.loadChart(this.refs.refChart4,this.props.basket.runChart);
+		this.loadChart(this.refs.refChart4,this.props.basket.runChart); */
 
     }
 
 	componentDidUpdate(){
 		
-		this.loadChart(this.refs.refChart1,this.props.basket.runChart);
-        this.loadChart(this.refs.refChart2,this.props.basket.runChart);
-        this.loadChart(this.refs.refChart3,this.props.basket.runChart);
-		this.loadChart(this.refs.refChart4,this.props.basket.runChart);
+		this.loadChart(this.refs.refChart1,this.props.basket.runChart,'加购量');
+        this.loadChart(this.refs.refChart2,this.props.basket.runChart,'收藏量');
+        this.loadChart(this.refs.refChart3,this.props.basket.runChart,'访客量');
+		this.loadChart(this.refs.refChart4,this.props.basket.runChart,'浏览量');
 
 	}
 
 	// 载入echart图表
-	loadChart(chartId,data){
+	loadChart(chartId,data,itemName){
 
 		data = this.formatDataToEchartData(data);
 		
@@ -134,6 +134,9 @@ class ReferenceIndex extends React.Component {
 					},
 					tooltip : {
 						trigger: 'axis',
+						formatter: function (params,ticket,callback) { 
+							return '<div><p>'+params[0].name+'</p><p>'+itemName+': '+(parseFloat(params[0].value)).toFixed(0)+'</p></div>'
+						}
 					},
 					legend: {
 					},
@@ -142,7 +145,7 @@ class ReferenceIndex extends React.Component {
 						}
 					},
 					grid: {
-						top: '5%',
+						top: '5%', 
 						left: '3%',
 						right: '4%',
 						bottom: '3%',
@@ -193,12 +196,12 @@ class ReferenceIndex extends React.Component {
 									show:true,
 								},
 							},
-							label: {
+							/* label: {
 								normal: {
 									show: true,
 									position: 'top'
 								}
-							},
+							}, */
 							areaStyle: {normal: {}},
 							data:data.valueArray
 						}
