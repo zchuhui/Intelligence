@@ -98,7 +98,7 @@ export default {
         * autoLogin({ payload }, { select, call, put }) {
 
             // 重新存储登录信息，延长为一天
-            /* let username = LocalStorage.get('username');
+            let username = LocalStorage.get('username');
             let password = LocalStorage.get('password');
             let token = LocalStorage.get('token');
             
@@ -106,8 +106,7 @@ export default {
             LocalStorage.set('username', username, saveTime);
             LocalStorage.set('password', password, saveTime);
             LocalStorage.set('token', token, saveTime);
-            LocalStorage.set('loginStatus', 1, saveTime); */
-
+            LocalStorage.set('loginStatus', 1, saveTime); 
 
             // 存储数据
             yield put({ type: 'updateStatusAndUsername', payload: { username: payload.loginInfo.username, loginStatus: 1 } });
@@ -138,7 +137,6 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
 
-
             // 判断是http、https，如果是http，则跳转到https
             // 开发环境除外
             if (document.domain !== 'localhost') {
@@ -157,17 +155,12 @@ export default {
                 loginStatus = LocalStorage.get('loginStatus'),   // 登录状态
                 pathname = window.location.pathname;             // url
 
-
-            // 判断是否登录，没登录则马上跳到登录页
-            if (loginStatus == 0) {
-                if (pathname !== '/login') {
-                    window.location.href = "/login";
-                }
-            }
-            else {
+            
+            // 判断是否登录，已登录则显示用户信息
+            if (username && password) {
                 // 如果已登录，则不停留在login页面
                 if (pathname == '/login') {
-                    window.location.href = "/bg";
+                    //window.location.href = "/bg";
                 }
                 else{
                     // 如果已经登录，则自动获取登录信息
@@ -177,6 +170,12 @@ export default {
                     }
                     
                     dispatch({ type: 'autoLogin', payload: { loginInfo: loginInfo } });
+                }
+            }
+            else {
+                // 没登录则马上跳到登录页
+                if (pathname !== '/login') {
+                    window.location.href = "/login";
                 }
             }
         },

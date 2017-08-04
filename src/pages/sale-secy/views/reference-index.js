@@ -112,9 +112,9 @@ class ReferenceIndex extends React.Component {
 	componentDidUpdate(){
 		
 		this.loadChart(this.refs.refChart1,this.props.basket.runChart,'加购量');
-        this.loadChart(this.refs.refChart2,this.props.basket.runChart,'收藏量');
-        this.loadChart(this.refs.refChart3,this.props.basket.runChart,'访客量');
-		this.loadChart(this.refs.refChart4,this.props.basket.runChart,'浏览量');
+        this.loadChart(this.refs.refChart2,this.props.favorites.runChart,'收藏量');
+        this.loadChart(this.refs.refChart3,this.props.visitor.runChart,'访客量');
+		this.loadChart(this.refs.refChart4,this.props.pageView.runChart,'浏览量');
 
 	}
 

@@ -80,7 +80,7 @@ class DataRouter extends React.Component {
 									myCateSalesFromPrice={this.props.myCateSalesFromPrice}
 
 									getCategoryByCid={cid => this.getCategoryByCid(cid)}
-								/>
+								/> 
 								{/* 对比关系 */}
 								<Correlation
 									loading={this.props.comparisonLoading}
@@ -190,8 +190,8 @@ class DataRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-	const {goodsComparisonList} = state.SaleSecyModel;
-	console.log(goodsComparisonList);
+	//const {goodsComparisonList} = state.SaleSecyModel;
+	//console.log(goodsComparisonList);
 	return { ...state.SaleSecyModel };
 }
 

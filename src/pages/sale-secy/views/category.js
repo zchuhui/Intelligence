@@ -17,7 +17,8 @@ class Category extends React.Component {
         super();
         
         this.state = {
-            selectVal:null
+            selectLabel:null,  // 类目名称
+            selectVal:null     // 类目值
         }
 	}
 
@@ -30,7 +31,7 @@ class Category extends React.Component {
                     {
                         this.props.cateSet.length > 0?
                         <div className={styles.fr}>
-                            <Select defaultValue={ this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid } onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
+                            <Select labelInValue defaultValue={{key: this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid}} onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
                             {
                                 this.props.cateSet.map((item,index)=>
                                     <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
@@ -56,10 +57,10 @@ class Category extends React.Component {
                                     {/*<div ref='catePillarChart' style={{width:'100%',height:285}}></div>*/}
                                 </li>
                                 <li>
-                                    <h3>你的商品排行</h3>
+                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 你的商品排行</h3>
                                     {
                                         this.props.myProductInCate.map((item,index)=>
-                                        <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.itemPanel} key={`shop-${item.pid}`}>
                                             <div className={styles.imgWrap}><img src={item.img_url}/></div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
@@ -79,10 +80,10 @@ class Category extends React.Component {
                                     
                                 </li>
                                 <li>
-                                    <h3>商品排行</h3>
+                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 商品排行</h3>
                                     {
                                         this.props.productInCate.map((item,index)=>
-                                        <div className={styles.itemPanel}  key={item.pid}>
+                                        <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
                                             <div className={styles.imgWrap}><img src={item.img_url}/></div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
@@ -117,7 +118,6 @@ class Category extends React.Component {
     }
 
     componentDidUpdate(){
-
         // 载入两个Echart图表
         if(this.props.cateSet){
             this.loadChart(
@@ -130,11 +130,15 @@ class Category extends React.Component {
 
     /**
      * 切换类目，根据类目获取数据
-     * @param {*} cid 
+     * @param {object} _this 
      */
-    onChangeCategory(cid){
+    onChangeCategory(_this){
+        let cid = _this.key,
+          label = _this.label;
+
         this.setState({
-            selectVal:cid
+            selectVal:cid,
+            selectLabel:label,
         });
 
         this.props.getCategoryByCid(cid);

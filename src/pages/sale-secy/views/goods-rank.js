@@ -26,7 +26,7 @@ class GoodsRank extends React.Component {
                                 {
                                     this.props.myProductRank.salesRank?
                                     this.props.myProductRank.salesRank.map((item,index) => 
-                                        <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.itemPanel} key={`sales-${index}`}>
                                             <div className={styles.imgWrap}><img src={item.img_url}/></div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
@@ -50,7 +50,7 @@ class GoodsRank extends React.Component {
                                 {
                                     this.props.myProductRank.payAmountRank?
                                     this.props.myProductRank.payAmountRank.map((item,index) => 
-                                        <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.itemPanel} key={`saler-${index}`}>
                                             <div className={styles.imgWrap}><img src={item.img_url}/></div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
@@ -74,7 +74,7 @@ class GoodsRank extends React.Component {
                                 {
                                     this.props.myProductRank.changeRateRank?
                                     this.props.myProductRank.changeRateRank.map((item,index) => 
-                                        <div className={styles.itemPanel} key={item.pid}>
+                                        <div className={styles.itemPanel} key={`zhl-${index}`}>
                                             <div className={styles.imgWrap}><img src={item.img_url}/></div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>

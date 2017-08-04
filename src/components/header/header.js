@@ -61,10 +61,10 @@ class Header extends React.Component {
                         <div className={ styles.msgItem }>
                             {   
                                 /*判断是否已经登录*/
-                                this.props.user.loginStatus?
+                                this.props.loginStatus?
                                 <Dropdown overlay={this.setups}>
                                     <span className={ styles.pointer } >
-                                        <span>{this.props.user.userInfo.admin_name}</span>
+                                        <span>{this.props.userInfo.admin_name}</span>
                                     </span>
                                 </Dropdown>
                                 :
@@ -82,12 +82,7 @@ class Header extends React.Component {
 
 
 function mapStateToProps(state) {
-    // 登录信息
-    const user = state.User;
-
-    return {
-        user: user
-    };
+    return {...state.User};
 }
 
 export default connect(mapStateToProps)(Header);
