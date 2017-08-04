@@ -229,7 +229,7 @@ class CreateRelevance extends React.Component {
                                                         <div style={{ textAlign: 'center', }}>
                                                             <Icon type="check-circle" style={{ fontSize: 30, color: '#79bb51', verticalAlign: 'top' }} />
                                                             <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>已成功关联！</span>
-                                                            <div><Link to="/bg"><Icon type="rollback" />  返回BG关联报表</Link> </div>
+                                                            <div><Link to="/bg"><Icon type="rollback" />返回BG关联报表</Link> </div>
                                                             
                                                         </div>
                                                         :
@@ -704,6 +704,7 @@ class CreateRelevance extends React.Component {
 
         img.style.width      = '100%';
         img.style.height     = 'auto';
+        img.style.maxHeight  = '370px';
 
         document.querySelector('#content').appendChild(div);
 

@@ -98,9 +98,9 @@ class GoodsList extends React.Component {
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接
                                         record.relate_sku==0?
-                                        <Link  to={"/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
+                                        <Link  to={"/bg/create/"+record.sku}><Icon type="exclamation-circle-o" style={{ color:'red',fontSize:14 }}/> &nbsp;未关联</Link>
                                         :
-                                        <Link  to={"/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link>
+                                        <Link  to={"/bg/create/"+record.sku}><Icon type="check-circle-o" style={{ color:'#79bb51',fontSize:14 }}/>&nbsp;已关联</Link>
                                     }
                                 </p>
                             </div>
@@ -194,7 +194,7 @@ class GoodsList extends React.Component {
 
 				    {/*<Button className={styles.fr} onClick={ this.showCustomRowModal }>自定义列</Button>*/}
             		{/*<Button className={styles.fr} onClick={ this.showCustomGoodsModal } style={{marginRight:10}}>自定竞品</Button>*/}
-            		<Link to='/create' className={`${styles.fr}`}><Button>创建关系</Button></Link>
+            		<Link to='/bg/create' className={`${styles.fr}`}><Button>创建关系</Button></Link>
                     
             	</div>
             	{ /* 操作栏 end*/ }
@@ -515,7 +515,7 @@ class GoodsList extends React.Component {
                             :
                             <div style={{textAlign:'center',paddingTop:250}}>
                                 <p>你要对比的商品还在天涯海角，试试把TA寻回呗。</p>
-                                <Link  to={"/create/"+this.state.goodsContrastSku}>点击试试</Link>
+                                <Link  to={"/bg/create/"+this.state.goodsContrastSku}>点击试试</Link>
                             </div>
                         }
                     </div>

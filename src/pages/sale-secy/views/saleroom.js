@@ -203,8 +203,11 @@ class Saleroom extends React.Component {
 					formatter: function (params,ticket,callback) { 
 						if(itemName == "转化率"){
 							return '<div><p>'+params[0].name+'</p><p>'+itemName+": "+(parseFloat(params[0].value)).toFixed(2)+'%</p></div>'
-						}else{
+						}else if(itemName == "销售额"){
 							return '<div><p>'+params[0].name+'</p><p>'+itemName+": "+parseFloat(params[0].value).toFixed(2)+'</p></div>'
+						}
+						else{
+							return '<div><p>'+params[0].name+'</p><p>'+itemName+": "+parseFloat(params[0].value).toFixed(0)+'</p></div>'
 						}
 					}
 				},

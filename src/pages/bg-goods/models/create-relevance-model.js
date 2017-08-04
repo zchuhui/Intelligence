@@ -136,7 +136,7 @@ export default {
                 
                 // 关联成功后，自动返回BG列表
                 setTimeout(function(){
-                    window.history.back(-1)
+                    window.location.href = "/bg";
                 },2000);
 
             } catch (e) {

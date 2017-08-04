@@ -31,10 +31,10 @@ class GoodsRank extends React.Component {
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
-                                                    <span>$ {item.price}</span>
+                                                    <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
-                                                            this.formatTrendNumber(item.no)
+                                                            //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
                                                     <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins} 件</b>
@@ -46,7 +46,7 @@ class GoodsRank extends React.Component {
                                 }
                             </li>
                             <li>
-                                <h3>销量额排行榜</h3>
+                                <h3>销售额排行榜</h3>
                                 {
                                     this.props.myProductRank.payAmountRank?
                                     this.props.myProductRank.payAmountRank.map((item,index) => 
@@ -58,7 +58,7 @@ class GoodsRank extends React.Component {
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
-                                                            this.formatTrendNumber(item.no)
+                                                            //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
                                                     <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 美元</b>
@@ -82,7 +82,7 @@ class GoodsRank extends React.Component {
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
-                                                            this.formatTrendNumber(item.no)
+                                                            //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
                                                     <b className={`${styles.fr} ${styles.exponentOrange}`}>{parseFloat(item.rate).toFixed(2)} %</b>
