@@ -76,7 +76,7 @@ class GoodsList extends React.Component {
                         {   // 子表不显示该项
                             !record.isChildren?
                             <img src={ record.img_url} className={ styles.img } />
-                            :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                            :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                             </div>
                         }
                        
@@ -105,7 +105,7 @@ class GoodsList extends React.Component {
                                 </p>
                             </div>
                             :
-                            <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                            <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                             </div> 
                         }
                         
@@ -124,7 +124,7 @@ class GoodsList extends React.Component {
                                 </Button>
                           </Dropdown>
                           :
-                          <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'4px solid #fff'}}> 
+                          <div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                           </div>
                         }
                        
@@ -351,6 +351,7 @@ class GoodsList extends React.Component {
     }
 
 
+    
     // 数据变动，渲染完成后，执行
     componentDidUpdate(prevProps, prevState) {
 
@@ -438,7 +439,7 @@ class GoodsList extends React.Component {
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
                                             <li>{this.props.goodContrastData.info.cateName}</li>
-                                            <li>{this.props.goodContrastData.info.attrName}</li>
+                                            <li title={this.props.goodContrastData.info.attrName}>{this.props.goodContrastData.info.attrName}</li>
                                             <li>{this.props.goodContrastData.info.price}</li>
                                             <li>{this.props.goodContrastData.info.thirtyPrice}</li>
                                             <li>{this.props.goodContrastData.info.sales}</li>
@@ -472,22 +473,14 @@ class GoodsList extends React.Component {
                                                 break;
                                             
                                         }
-                                        {/* if (index == 0) {
-                                            sets = ['priceSet1','salesSet1','reviewSet1']
-                                        }
-                                        else if (index == 1) {
-                                            sets = ['priceSet2','salesSet2','reviewSet2']
-                                        } */}
 
-                                        // 最多显示两件
-                                        //if(index < 2){
                                             return(
                                                 <Col span={Math.floor(20/(this.props.goodContrastData.relateInfo.length+1))}>
                                                     <ul className={styles.tableCol}>
                                                         <li><img src={item.img_url}/></li>
                                                         <li>{item.site}</li>
                                                         <li>{item.cateName}</li>
-                                                        <li>{item.attrName}</li>
+                                                        <li title={item.attrName}>{item.attrName}</li>
                                                         <li>{item.price}</li>
                                                         <li>{item.thirtyPrice}</li>
                                                         <li>{item.sales}</li>
@@ -507,7 +500,6 @@ class GoodsList extends React.Component {
                                                     </ul>
                                                 </Col>
                                             )
-                                        //}
 
                                     })  
                                 }

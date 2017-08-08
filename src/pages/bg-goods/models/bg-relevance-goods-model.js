@@ -16,10 +16,11 @@ const lastDay  = moment().format('YYYY-MM-DD');
 
 export default {
     namespace: 'RelevanceBGModel',
-
+    
     state: {
         // 加载状态
         loading: false,
+
         // 列表参数
         data: {
             page: {
@@ -30,6 +31,7 @@ export default {
             },
             list: [],
         },
+
         // 搜索参数
         searchArguments: {
             site: '',
@@ -208,7 +210,7 @@ export default {
                 // 从state中获取搜索参数
                 const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
                 searchArgs.page = payload.page;
-
+                
                 // 请求数据
                 const { data } = yield call(BgService.search, { searchArguments: searchArgs });
 

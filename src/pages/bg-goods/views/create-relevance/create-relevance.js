@@ -111,6 +111,7 @@ class CreateRelevance extends React.Component {
 
                                 <div style={{ textAlign: 'center', height: 100 }}>
                                     <Link to="/bg" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
+                                    {/* <Button style={{ width: 100 }} onClick={this.jumpBGList.bind(this,'/bg')}>返回</Button> */}
                                     <Button type="primary" style={{ width: 100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
                                 </div>
                             </div>
@@ -277,6 +278,7 @@ class CreateRelevance extends React.Component {
             </MainLayout>
         )
     }
+
 
     // 根据sku获取单个商品
     getGoodsBySku(urlSku) {

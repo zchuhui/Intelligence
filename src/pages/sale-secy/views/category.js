@@ -166,7 +166,7 @@ class Category extends React.Component {
                 catePieChart.setOption({
                         tooltip : {
                             trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            formatter: "拥有{c}件商品 ({d}%)"
                         },
                         grid: {
                             left: '3%',
@@ -183,7 +183,7 @@ class Category extends React.Component {
                         }, */
                         series : [
                             {
-                                name: '类目比例',
+                                name: '',
                                 type: 'pie',
                                 radius : '50%',
                                 center: ['50%', '50%'],

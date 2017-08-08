@@ -5,21 +5,22 @@
  */
 
 import * as menusService from '../services/menus';
-import {CODE200} from '../constants/constant';
+import { CODE200 } from '../constants/constant';
+
 
 // 默认分类
 const defautCate = [
-{
-    value: 'banggood',
-    label: 'banggood'
-}]
+    {
+        value: 'banggood',
+        label: 'banggood'
+    }]
 
 // 默认banggood分类
 const defautBanggoodCate = [
-{
-    value: 'Electronics',
-    label: 'Electronics'
-}]
+    {
+        value: 'Electronics',
+        label: 'Electronics'
+    }]
 
 // 默认品牌
 const defautBrand = [{
@@ -46,28 +47,28 @@ export default {
         saveCate(state, { payload: { data: data } }) {
             // 把获取数据转为组件可用的数据格式
             data = cateToMenu(data);
-            return {...state, cate: data };
+            return { ...state, cate: data };
         },
 
         // 存储Banggood分类表
         saveBanggoodCate(state, { payload: { data: data } }) {
             // 把获取数据转为组件可用的数据格式
             data = cateToMenu(data);
-            return {...state, banggoodCate: data };
+            return { ...state, banggoodCate: data };
         },
 
         // 存储品牌表
         saveBrand(state, { payload: { data: data } }) {
             // 判断是数组还是对象，对象的话转为数组
             let array = [];
-            if(data instanceof Array){
+            if (data instanceof Array) {
                 array = data;
-            }else{
-                for(let i in data){
+            } else {
+                for (let i in data) {
                     array.push(data[i]);
                 }
             }
-            return {...state, brand: array };
+            return { ...state, brand: array };
         },
     },
     effects: {
@@ -83,7 +84,7 @@ export default {
                     yield put({ type: 'saveCate', payload: data });
                 }
             } catch (e) {
-                console.log(e.message)
+                //console.log(e.message)
             }
         },
 
@@ -99,7 +100,7 @@ export default {
                     yield put({ type: 'saveBanggoodCate', payload: data });
                 }
             } catch (e) {
-                console.log(e.message)
+                //console.log(e.message)
             }
         },
 
@@ -112,8 +113,8 @@ export default {
                 // 存储数据
                 if (data.code == CODE200) {
                     yield put({ type: 'saveBrand', payload: data });
-                } 
-                
+                }
+
             } catch (e) {
                 //console.log(e.message)
             }
@@ -128,8 +129,8 @@ export default {
                 // 存储数据
                 if (data.code == CODE200) {
                     yield put({ type: 'saveBrand', payload: data });
-                } 
-                
+                }
+
             } catch (e) {
                 //console.log(e.message)
             }
@@ -138,14 +139,13 @@ export default {
     },
     subscriptions: {
         setup({ dispatch, history }) {
-            
             /* dispatch({ type: 'getCates' });
             dispatch({ type: 'getBanggoodCates' });
             dispatch({ type: 'getBrands' }); */
-
         },
     },
 };
+
 
 
 /**
@@ -153,7 +153,7 @@ export default {
  * 并添加value、label值，用于植入插件的参数
  */
 const cateToMenu = (cate) => {
-    
+
     var arr = [];
 
     const mapCateToString = (item) => {
@@ -187,15 +187,14 @@ const cateToMenu = (cate) => {
 }
 
 
-
 /**
  * 数组操作：判断元素是否在素组里面
  * @param  {[type]} val [元素1]
  * @return {[type]}     [description]
  */
-Array.prototype.contains = function(val){
+Array.prototype.contains = function (val) {
     var len = this.length;
-    while(len--){
+    while (len--) {
         if (this[len] === val) {
             return true;
         }

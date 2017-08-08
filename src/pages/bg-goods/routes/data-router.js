@@ -6,14 +6,13 @@ import GoodsList from '../views/goods-list/goods-list';
 
 
 class BgRouter extends React.Component {
-
     constructor(props, context) {
         super(props, context);
     }
 
     /**
      * 搜索
-     * @param  args [搜索参数]
+     * @param {object} args   // 搜索参数
      */
     handleSearchArgs(args) {
         this.props.dispatch({
@@ -24,8 +23,10 @@ class BgRouter extends React.Component {
         });
     }
 
-    // 分页操作
-    // current: 当前页数
+    /**
+     * 分页
+     * @param {int} current     // 页码
+     */
     changePagination(current) {
         this.props.dispatch({
             type: 'RelevanceBGModel/pagination',
@@ -35,8 +36,10 @@ class BgRouter extends React.Component {
         });
     }
 
-    // 表格排序
-    // sort: 排序条件
+    /**
+     * 表格排序
+     * @param {string} sort       // 排序条件
+     */
     changeTableSort(sort) {
         this.props.dispatch({
             type: 'RelevanceBGModel/pagination',
@@ -46,7 +49,10 @@ class BgRouter extends React.Component {
         });
     }
 
-    // 根据商品的pid与时间获取趋势图数据
+    /**
+     * 根据商品的 pid 与时间获取趋势图数据
+     * @param {object} args 
+     */
     getGoodsEcharData(args){
         this.props.dispatch({
             type:'RelevanceBGModel/fetchGoodsEchartByPidAndTime',
@@ -58,7 +64,10 @@ class BgRouter extends React.Component {
         })
     }
 
-    // 根据商品的pid获取对比数据
+    /**
+     * 根据商品的 pid 获取对比数据
+     * @param {int} pid 
+     */
     getGoodsContrastDataByPid(pid){
         this.props.dispatch({
             type:'RelevanceBGModel/fetchGoodsContrastDataByPid',
@@ -68,7 +77,10 @@ class BgRouter extends React.Component {
         })
     }
 
-    // 清空对比数据
+    /**
+     * 清空对比数据
+     * @param {object} args 
+     */
     clearGoodsContrastData(args){
         this.props.dispatch({
             type:'RelevanceBGModel/clearGoodContrastData',
@@ -81,9 +93,8 @@ class BgRouter extends React.Component {
         return (
             <MainLayout headerMenuText="BG关联报表">
                 <SearchBar 
-                    menus={this.props.menus}
+                    menus={this.props.Menus}
                     handleSearchArgs={args => this.handleSearchArgs(args)}
-                    
                 />
                 <GoodsList 
                     data={this.props.data} 
@@ -109,26 +120,15 @@ class BgRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-    // 菜单
-    const menus = state.Menus;
+    //菜单
+    const Menus = state.Menus;
 
     // BG表数据
-    const { 
-        data,                     // BG 表数据
-        searchArgs,               // 搜索参数
-        searchArguments,
-        loading,                  // BG 表加载状态
-        goodsEchartData,          // 主商品趋势图
-        goodsEchartDataLoading,   // 主商品趋势图加载状态
-        goodContrastData,         // 商品对比数据
-        goodContrastDataLoading,  // 商品对比数据加载状态
-    } = state.RelevanceBGModel;
+    const {  data } = state.RelevanceBGModel;
     
-   
-
+    // 数据格式转换：遍历列表数据，转成子表可用的数据格式
     if (data && data.list) {
         
-        // 遍历列表数据，转换成子表可用的数据格式
         data.list.map((item, index) => {
             
             // 添加key，不然会报错
@@ -151,23 +151,10 @@ function mapStateToProps(state) {
         });
     }
     
+
     return {
-        // 搜索模块
-        menus,     
-        searchArgs,
-        searchArguments,
-
-        // 列表模块
-        data,
-        loading,
-
-        // 趋势图模块
-        goodsEchartData,
-        goodsEchartDataLoading,
-
-        // 商品对比数据
-        goodContrastData,
-        goodContrastDataLoading
+        Menus, 
+        ...state.RelevanceBGModel
     };
 }
 
