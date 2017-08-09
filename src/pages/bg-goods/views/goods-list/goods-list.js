@@ -438,7 +438,7 @@ class GoodsList extends React.Component {
                                         <ul className={styles.tableCol}>
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
-                                            <li>{this.props.goodContrastData.info.cateName}</li>
+                                            <li title={this.props.goodContrastData.info.cateName}>{this.props.goodContrastData.info.cateName}</li>
                                             <li title={this.props.goodContrastData.info.attrName}>{this.props.goodContrastData.info.attrName}</li>
                                             <li>{this.props.goodContrastData.info.price}</li>
                                             <li>{this.props.goodContrastData.info.thirtyPrice}</li>
@@ -479,7 +479,7 @@ class GoodsList extends React.Component {
                                                     <ul className={styles.tableCol}>
                                                         <li><img src={item.img_url}/></li>
                                                         <li>{item.site}</li>
-                                                        <li>{item.cateName}</li>
+                                                        <li title={item.cateName}>{item.cateName}</li>
                                                         <li title={item.attrName}>{item.attrName}</li>
                                                         <li>{item.price}</li>
                                                         <li>{item.thirtyPrice}</li>
