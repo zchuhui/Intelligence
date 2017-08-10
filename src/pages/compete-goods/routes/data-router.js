@@ -69,7 +69,8 @@ class CompeteRouter extends React.Component {
         return (
             <MainLayout 
                 searchArguments={this.props.search}
-                headerMenuText="竞品报表"
+                headerMenuText="竞品报表" 
+                userPermission={this.props.menus.userPermission}
                 >
 
                 {/*搜索模块*/}
@@ -95,16 +96,10 @@ class CompeteRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-    
     const menus = state.Menus;
-    const { data, searchArgs, loading } = state.CompeteGoods;
     
     return {
-        menus,
-        data,
-        searchArgs,
-        loading,
-
+        menus,...state.CompeteGoods
     };
 }
 

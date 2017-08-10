@@ -35,115 +35,103 @@ const defautBrand = [{
 
 
 export default {
-    namespace: 'Menus',
+  namespace: "Menus",
 
-    state: {
-        cate: defautCate,                   // 所有分类
-        brand: defautBrand,                 // 品牌
-        banggoodCate: defautBanggoodCate,   // banggood站点分类
+  state: {
+    cate: defautCate, // 所有分类
+    brand: defautBrand, // 品牌
+    banggoodCate: defautBanggoodCate, // banggood站点分类
+
+    userPermission: null // 用户权限，用于判断是否显示菜单
+  },
+  reducers: {
+    // 存储分类表
+    saveCate(state, { payload: { data: data } }) {
+      // 把获取数据转为组件可用的数据格式
+      data = cateToMenu(data);
+      return { ...state, cate: data };
     },
-    reducers: {
-        // 存储分类表
-        saveCate(state, { payload: { data: data } }) {
-            // 把获取数据转为组件可用的数据格式
-            data = cateToMenu(data);
-            return { ...state, cate: data };
-        },
 
-        // 存储Banggood分类表
-        saveBanggoodCate(state, { payload: { data: data } }) {
-            // 把获取数据转为组件可用的数据格式
-            data = cateToMenu(data);
-            return { ...state, banggoodCate: data };
-        },
-
-        // 存储品牌表
-        saveBrand(state, { payload: { data: data } }) {
-            // 判断是数组还是对象，对象的话转为数组
-            let array = [];
-            if (data instanceof Array) {
-                array = data;
-            } else {
-                for (let i in data) {
-                    array.push(data[i]);
-                }
-            }
-            return { ...state, brand: array };
-        },
+    // 存储Banggood分类表
+    saveBanggoodCate(state, { payload: { data: data } }) {
+      // 把获取数据转为组件可用的数据格式
+      data = cateToMenu(data);
+      return { ...state, banggoodCate: data };
     },
-    effects: {
-        // 获取分类
-        * getCates({ payload }, { select, call, put }) {
 
-            try {
-                // 获取分类数据菜单
-                const { data } = yield call(menusService.getMenuCate);
-
-                // 存储数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'saveCate', payload: data });
-                }
-            } catch (e) {
-                //console.log(e.message)
-            }
-        },
-
-        // 获取Bangood下的分类菜单
-        * getBanggoodCates({ payload }, { select, call, put }) {
-
-            try {
-                // 获取分类数据
-                const { data, code } = yield call(menusService.getMenuCateByBanggood);
-
-                // 存储数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'saveBanggoodCate', payload: data });
-                }
-            } catch (e) {
-                //console.log(e.message)
-            }
-        },
-
-        // 获取品牌菜单
-        * getBrands({ payload }, { select, call, put }) {
-            try {
-                // 开始请求数据
-                const { data } = yield call(menusService.getMenuBrand);
-
-                // 存储数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'saveBrand', payload: data });
-                }
-
-            } catch (e) {
-                //console.log(e.message)
-            }
-        },
-
-        // 获取Banggood的品牌菜单
-        * getBanggoodBrands({ payload }, { select, call, put }) {
-            try {
-                // 开始请求数据
-                const { data } = yield call(menusService.getMenuBrandByBanggood);
-
-                // 存储数据
-                if (data.code == CODE200) {
-                    yield put({ type: 'saveBrand', payload: data });
-                }
-
-            } catch (e) {
-                //console.log(e.message)
-            }
-        },
-
+    // 存储品牌表
+    saveBrand(state, { payload: { data: data } }) {
+      // 判断是数组还是对象，对象的话转为数组
+      let array = [];
+      if (data instanceof Array) {
+        array = data;
+      } else {
+        for (let i in data) {
+          array.push(data[i]);
+        }
+      }
+      return { ...state, brand: array };
     },
-    subscriptions: {
-        setup({ dispatch, history }) {
-            /* dispatch({ type: 'getCates' });
+
+    // 存储用户验证信息
+    saveUserPermission(state, { payload }) {
+      return { ...state, userPermission: payload.userInfo };
+    }
+  },
+  effects: {
+    // 获取分类
+    *getCates({ payload }, { select, call, put }) {
+      // 获取分类数据菜单
+      const { data } = yield call(menusService.getMenuCate);
+
+      // 存储数据
+      if (data.code == CODE200) {
+        yield put({ type: "saveCate", payload: data });
+        yield put({ type: "saveUserPermission", payload: data });
+      }
+    },
+
+    // 获取Bangood下的分类菜单
+    *getBanggoodCates({ payload }, { select, call, put }) {
+      // 获取分类数据
+      const { data, code } = yield call(menusService.getMenuCateByBanggood);
+
+      // 存储数据
+      if (data.code == CODE200) {
+        yield put({ type: "saveBanggoodCate", payload: data });
+        yield put({ type: "saveUserPermission", payload: data });
+      }
+    },
+
+    // 获取品牌菜单
+    *getBrands({ payload }, { select, call, put }) {
+      // 开始请求数据
+      const { data } = yield call(menusService.getMenuBrand);
+
+      // 存储数据
+      if (data.code == CODE200) {
+        yield put({ type: "saveBrand", payload: data });
+      }
+    },
+
+    // 获取Banggood的品牌菜单
+    *getBanggoodBrands({ payload }, { select, call, put }) {
+        // 开始请求数据
+        const { data } = yield call(menusService.getMenuBrandByBanggood);
+
+        // 存储数据
+        if (data.code == CODE200) {
+          yield put({ type: "saveBrand", payload: data });
+        }
+    }
+  },
+  subscriptions: {
+    setup({ dispatch, history }) {
+      /* dispatch({ type: 'getCates' });
             dispatch({ type: 'getBanggoodCates' });
             dispatch({ type: 'getBrands' }); */
-        },
-    },
+    }
+  }
 };
 
 

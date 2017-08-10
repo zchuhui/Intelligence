@@ -47,7 +47,10 @@ class Header extends React.Component {
                 <div className={ styles.content }>
                     <img className={ styles.logo } src={ Logo } title="情报员系统" />
                     {/*菜单组件*/}
-                    <Menus headerMenuText={this.props.headerMenuText} />
+                    <Menus 
+                        headerMenuText={this.props.headerMenuText} 
+                        userPermission={this.props.userPermission}
+                    />
 
                     <div className={styles.msgWrap }>
                         {/*<div className={ styles.msgItem }>

@@ -20,7 +20,10 @@ class DataRouter extends React.Component {
 
 	render() {
 		return (
-			<MainLayout headerMenuText="销售秘书">
+			<MainLayout 
+				headerMenuText="销售秘书"
+				userPermission={this.props.userPermission}
+			>
 
 				<div className={styles.title}>
 					<span>销售秘书</span>
@@ -190,8 +193,6 @@ class DataRouter extends React.Component {
 
 
 function mapStateToProps(state) {
-	//const {goodsComparisonList} = state.SaleSecyModel;
-	//console.log(goodsComparisonList);
 	return { ...state.SaleSecyModel };
 }
 

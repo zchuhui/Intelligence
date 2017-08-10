@@ -18,6 +18,7 @@ class MainLayout extends React.Component {
                 <Header 
                     location={ this.props.location } 
                     headerMenuText={this.props.headerMenuText}
+                    userPermission={this.props.userPermission}
                     />
                 <div className={styles.contentWrap}>
                   <div className={styles.mainWrap}>

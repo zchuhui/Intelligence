@@ -32,7 +32,9 @@ export default {
 		myCateSalesFromPrice:{}, // 第一个类目 商品排行 		
 		
 		comparisonLoading:false, // 商品对比加载
-		goodsComparisonList:null   // 商品对比信息
+		goodsComparisonList:null,   // 商品对比信息
+
+		userPermission: null // 用户权限，用于判断是否显示菜单
 	},
 
 	reducers:{
@@ -60,7 +62,11 @@ export default {
 		updateComparisonLoading(state,{ payload }){
 			return {...state, comparisonLoading: payload.loading}
 		},
-		
+
+		// 存储用户验证信息
+		saveUserPermission(state, { payload }) {
+			return { ...state, userPermission: payload.userInfo };
+		}
 	},
 
 	effects:{
@@ -70,17 +76,15 @@ export default {
 			
 			yield put({type:'updateLoading', payload:{loading:true}})
 
-			try {
-				const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
-				yield put({ type:'saveSaleSecyInfo', payload:data.data});
-				
+			
+			const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
+			yield put({ type:'saveSaleSecyInfo', payload:data.data});
+			yield put({ type: "saveUserPermission", payload: data });
 
-				// 继续加载排行榜数据
-				yield put({ type: 'getRankAndCatetory',payload});
+			// 继续加载排行榜数据
+			yield put({ type: 'getRankAndCatetory',payload});
 				
-			} catch (error) {
-				//message.warning(ERRORMESSAGE);
-			}
+			
 
 			yield put({type:'updateLoading', payload:{loading:false}})
 		},

@@ -91,9 +91,12 @@ class BgRouter extends React.Component {
 
     render() {
         return (
-            <MainLayout headerMenuText="BG关联报表">
+            <MainLayout 
+                headerMenuText="BG关联报表"
+                userPermission={this.props.menus.userPermission}
+                >
                 <SearchBar 
-                    menus={this.props.Menus}
+                    menus={this.props.menus}
                     handleSearchArgs={args => this.handleSearchArgs(args)}
                 />
                 <GoodsList 
@@ -121,7 +124,7 @@ class BgRouter extends React.Component {
 
 function mapStateToProps(state) {
     //菜单
-    const Menus = state.Menus;
+    const menus = state.Menus;
 
     // BG表数据
     const {  data } = state.RelevanceBGModel;
@@ -151,9 +154,9 @@ function mapStateToProps(state) {
         });
     }
     
-
+    
     return {
-        Menus, 
+        menus, 
         ...state.RelevanceBGModel
     };
 }
