@@ -191,7 +191,7 @@ export default {
                 yield put({ type: 'save', payload: data });
 
             } catch (e) {
-                message.warning(ERRORMESSAGE);
+                //message.warning(ERRORMESSAGE);
             }
 
             yield put({ type: 'toggleLoading', payload: { loading: false } });
@@ -218,7 +218,7 @@ export default {
                 yield put({ type: 'save', payload: data });
                 
             } catch (e) {
-                message.warning(ERRORMESSAGE);
+                //message.warning(ERRORMESSAGE);
             }
 
             yield put({ type: 'toggleLoading', payload: { loading: false } });
@@ -251,7 +251,7 @@ export default {
 
                 
             } catch (e) {
-                message.warning(ERRORMESSAGE);
+                //message.warning(ERRORMESSAGE);
             }
 
             yield put({ type: 'toggleLoading', payload: { loading: false } });
@@ -270,7 +270,7 @@ export default {
                 yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
                 
             } catch (e) {
-                message.warning(ERRORMESSAGE);
+                //message.warning(ERRORMESSAGE);
             }
 
             yield put({ type: 'updateGoodsEchartDataLoading', payload: { goodsEchartDataLoading: true } });
@@ -289,7 +289,7 @@ export default {
                 yield put({ type: 'updateGoodContrastData', payload: data });
 
             } catch (e) {
-                message.warning(ERRORMESSAGE);
+                //message.warning(ERRORMESSAGE);
             }
 
             yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });

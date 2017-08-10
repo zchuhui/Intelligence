@@ -79,7 +79,7 @@ export default {
 				yield put({ type: 'getRankAndCatetory',payload});
 				
 			} catch (error) {
-				message.warning(ERRORMESSAGE);
+				//message.warning(ERRORMESSAGE);
 			}
 
 			yield put({type:'updateLoading', payload:{loading:false}})
@@ -103,7 +103,7 @@ export default {
 				}
 				
 			} catch (error) {
-				message.warning(ERRORMESSAGE);
+				//message.warning(ERRORMESSAGE);
 			}
 
 			yield put({type:'updateCateLoading', payload:{loading:false}})
@@ -120,7 +120,7 @@ export default {
 				yield put({ type:'saveGoodsComparisonList', payload:data});
 				
 			} catch (error) {
-				message.warning(ERRORMESSAGE);
+				//message.warning(ERRORMESSAGE);
 			}
 
 			yield put({type:'updateComparisonLoading', payload:{loading:false}})

@@ -85,6 +85,7 @@ export default {
                 }
             }
             catch (e) {
+                message.destroy();
                 message.warning(ERRORMESSAGE);
                 
                 // 传入失败信息，用于页面展示
@@ -153,13 +154,15 @@ export default {
             let username = LocalStorage.get('username'),         // 用户名
                 password = LocalStorage.get('password'),         // 密码
                 loginStatus = LocalStorage.get('loginStatus'),   // 登录状态
+                token = LocalStorage.get('token'),   // 登录状态
                 pathname = window.location.pathname;             // url
 
-            
+
             // 判断是否登录，已登录则显示用户信息
             if (username && password) {
+                //console.log('have login info');
                 // 如果已登录，则不停留在login页面
-                if (pathname == '/login') {
+                if (pathname == '/login') { 
                     //window.location.href = "/bg";
                 }
                 else{
@@ -173,6 +176,7 @@ export default {
                 }
             }
             else {
+                //console.log("no login info");
                 // 没登录则马上跳到登录页
                 if (pathname !== '/login') {
                     window.location.href = "/login";

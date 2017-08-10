@@ -68,7 +68,7 @@ class Category extends React.Component {
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
-                                                            this.formatTrendNumber(item.no)
+                                                            //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
                                                     <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
@@ -91,7 +91,7 @@ class Category extends React.Component {
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
                                                         {
-                                                            this.formatTrendNumber(item.no)
+                                                            //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
                                                     <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
@@ -166,7 +166,7 @@ class Category extends React.Component {
                 catePieChart.setOption({
                         tooltip : {
                             trigger: 'item',
-                            formatter: "拥有{c}件商品 ({d}%)"
+                            formatter: "占比：{d}%"
                         },
                         grid: {
                             left: '3%',

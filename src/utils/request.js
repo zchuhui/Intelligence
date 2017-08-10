@@ -53,6 +53,8 @@ export default async function request(url, options) {
 
 	// 返回数据验证
 	const code = ret.data.code;
+	const msg = ret.data.msg;
+	//console.log(ret.data); 
 
     // 如果请求成功，则返回数据，失败则统一处理
 	if(code == 200){
@@ -66,21 +68,23 @@ export default async function request(url, options) {
 				break;
 			case 400:
 				// 请求失败状态
-				message.warning('请求失败，请重试');
+				//message.warning('请求失败，请重试');
+				message.destroy();
+				message.warning(msg);
 				break;
 			case 501:
 				// 请求失败状态
+				message.destroy();
 				message.warning('网络繁忙，请重试');
 				break;
 			default:
 				// 请求失败状态
+				message.destroy();
 				message.warning('未知错误');
 				break;
 		}
 	}
-	
-	//console.log('ret',ret);
-	
+
 }
 
 
