@@ -1,6 +1,9 @@
 import React from 'react';
 import styles from './footer.less';
 
+/**
+ * 底部模块
+ */
 class Footer extends React.Component {
 	render() {
 		return(
@@ -10,5 +13,6 @@ class Footer extends React.Component {
 		)
 	}
 }
+
 
 export default Footer;
