@@ -1,16 +1,9 @@
 import dva from 'dva';
-import { browserHistory,hashHistory  } from 'dva/router';
 import createLoading from 'dva-loading'; //加载
 import { message } from 'antd';
 
 // 1. Initialize
-const app = dva({
-    history: browserHistory,
-    //history: hashHistory,
-    onError(e) {
-        message.error(e.message, 3);
-    },
-});
+const app = dva();
 
 // 2. Plugins
 app.use(createLoading());
