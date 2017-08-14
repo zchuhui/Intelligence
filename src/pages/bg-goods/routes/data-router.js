@@ -3,11 +3,44 @@ import { connect } from 'dva';
 import MainLayout from '../../../components/layout-main/layout-main';
 import SearchBar from '../views/search/search-bar';
 import GoodsList from '../views/goods-list/goods-list';
-
+import styles from '../views/goods-list/goods-list.less';
 
 class BgRouter extends React.Component {
     constructor(props, context) {
         super(props, context);
+    }
+
+    render() {
+        return (
+            <MainLayout 
+                headerMenuText="BG关联报表"
+                userPermission={this.props.menus.userPermission}
+                >
+                <div className={styles.mainWrap}>
+                    <SearchBar 
+                        menus={this.props.menus}
+                        handleSearchArgs={args => this.handleSearchArgs(args)}
+                    />
+                    <GoodsList 
+                        data={this.props.data} 
+                        loading={this.props.loading} 
+                        changePagination={current => this.changePagination(current)} 
+                        changeTableSort={sort => this.changeTableSort(sort)} 
+                        
+
+                        goodsEchartData={this.props.goodsEchartData} 
+                        goodsEchartDataLoading={this.props.goodsEchartDataLoading} 
+                        getGoodsEcharData={args => this.getGoodsEcharData(args)} 
+
+                        getGoodsContrastDataByPid={pid => this.getGoodsContrastDataByPid(pid)} 
+                        clearGoodsContrastData={args => this.clearGoodsContrastData(args)}
+                        goodContrastData={this.props.goodContrastData}
+                        goodContrastDataLoading={this.props.goodContrastDataLoading} 
+
+                    />
+                </div>
+            </MainLayout>
+        )
     }
 
     /**
@@ -89,36 +122,7 @@ class BgRouter extends React.Component {
     }
 
 
-    render() {
-        return (
-            <MainLayout 
-                headerMenuText="BG关联报表"
-                userPermission={this.props.menus.userPermission}
-                >
-                <SearchBar 
-                    menus={this.props.menus}
-                    handleSearchArgs={args => this.handleSearchArgs(args)}
-                />
-                <GoodsList 
-                    data={this.props.data} 
-                    loading={this.props.loading} 
-                    changePagination={current => this.changePagination(current)} 
-                    changeTableSort={sort => this.changeTableSort(sort)} 
-                    
-
-                    goodsEchartData={this.props.goodsEchartData} 
-                    goodsEchartDataLoading={this.props.goodsEchartDataLoading} 
-                    getGoodsEcharData={args => this.getGoodsEcharData(args)} 
-
-                    getGoodsContrastDataByPid={pid => this.getGoodsContrastDataByPid(pid)} 
-                    clearGoodsContrastData={args => this.clearGoodsContrastData(args)}
-                    goodContrastData={this.props.goodContrastData}
-                    goodContrastDataLoading={this.props.goodContrastDataLoading} 
-
-                />
-            </MainLayout>
-        )
-    }
+    
 }
 
 

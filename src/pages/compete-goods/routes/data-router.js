@@ -3,11 +3,41 @@ import { connect } from 'dva';
 import MainLayout from '../../../components/layout-main/layout-main';
 import CompeteList from '../views/goods-list/goods-list';
 import SearchBar from '../views/search/search-bar';
+import styles from '../views/goods-list/goods-list.less';
 
 class CompeteRouter extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+    }
+
+    render() {
+        return (
+            <MainLayout 
+                searchArguments={this.props.search}
+                headerMenuText="竞品报表" 
+                userPermission={this.props.menus.userPermission}
+                >
+                <div className={styles.mainWrap}>
+                    {/*搜索模块*/}
+                    <SearchBar 
+                        menus={this.props.menus} 
+                        searchArgs={this.props.searchArgs}  
+                        handleSearchArgs={args => this.handleSearchArgs(args)}
+                    />
+                
+                    {/*列表模块*/}
+                    <CompeteList 
+                        data={this.props.data}
+                        loading={this.props.loading} 
+                        handlePagination={current => this.handlePagination(current) } 
+                        handleTableChange={sort => this.handleTableChange(sort) } 
+                        handleSearchArgsToDate={args => this.handleSearchArgsToDate(args)}
+                    />
+                </div>
+
+            </MainLayout>
+        )
     }
 
     /**
@@ -64,33 +94,6 @@ class CompeteRouter extends React.Component {
         });
     }
 
-
-    render() {
-        return (
-            <MainLayout 
-                searchArguments={this.props.search}
-                headerMenuText="竞品报表" 
-                userPermission={this.props.menus.userPermission}
-                >
-
-                {/*搜索模块*/}
-                <SearchBar 
-                    menus={this.props.menus} 
-                    searchArgs={this.props.searchArgs}  
-                    handleSearchArgs={args => this.handleSearchArgs(args)}
-                />
-
-                {/*列表模块*/}
-                <CompeteList 
-                    data={this.props.data}
-                    loading={this.props.loading} 
-                    handlePagination={current => this.handlePagination(current) } 
-                    handleTableChange={sort => this.handleTableChange(sort) } 
-                    handleSearchArgsToDate={args => this.handleSearchArgsToDate(args)}
-                /> 
-            </MainLayout>
-        )
-    }
     
 }
 
@@ -102,6 +105,5 @@ function mapStateToProps(state) {
         menus,...state.CompeteGoods
     };
 }
-
 
 export default connect(mapStateToProps)(CompeteRouter);

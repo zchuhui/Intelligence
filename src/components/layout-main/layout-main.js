@@ -21,9 +21,9 @@ class MainLayout extends React.Component {
         />
         {/*内容区*/}
         <div className={styles.contentWrap}>
-          <div className={styles.mainWrap}>
+          {/* <div className={styles.mainWrap}> */}
             {this.props.children}
-          </div>
+          {/* </div> */}
         </div>
 
         {/*底部组件*/}

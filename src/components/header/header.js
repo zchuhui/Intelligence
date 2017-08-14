@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Menu, Dropdown, Icon } from 'antd';
 import styles from './header.less';
 import Logo from './logo.png';
-import Menus from '../../components/menu/menu';
 
 
 /**
