@@ -11,8 +11,9 @@ class MenuBar extends React.Component{
         return(
             <div className={styles.menuBar}>
                 <ul>
-                    <li className={styles.current}><Link to='/'>首页</Link></li>
-                    <li>商品</li>
+                    {/* <li className={styles.current}><Link to='/'>首页</Link></li> */}
+                    <li><Link to='/'>首页</Link></li>
+                    <li><Link to='/goods'>商品</Link></li>
                     <li>分类</li>
                     <li>品牌</li>
                 </ul>

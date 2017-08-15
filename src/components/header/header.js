@@ -21,9 +21,9 @@ class Header extends React.Component {
 				<Menu.Item key="0">
 					<a href="/">竞品报表</a> 
 				</Menu.Item>
-				<Menu.Item key="1">
+				{/* <Menu.Item key="1">
 					<a href="/bg">BG关联报表</a>
-				</Menu.Item>
+				</Menu.Item> */}
 				{
 					// 如果有权限，则显示销售秘书
 					this.props.userPermission?
@@ -93,7 +93,6 @@ class Header extends React.Component {
      * 退出登录
      */
     logout() {
-        console.log('logout')
         this.props.dispatch({
             type: 'User/logout',
         });
@@ -104,10 +103,10 @@ class Header extends React.Component {
      */
     setups = (
         <Menu>
-        <Menu.Item key="0">
-            <a href="javascript:;" onClick={this.logout.bind(this)}>退出</a>
-        </Menu.Item>
-      </Menu>
+            <Menu.Item key="0">
+                <a href="javascript:;" onClick={this.logout.bind(this)}>退出</a>
+            </Menu.Item>
+        </Menu>
     )
     
     // 用户消息
@@ -124,4 +123,5 @@ class Header extends React.Component {
 function mapStateToProps(state) {
     return {...state.User};
 }
+
 export default connect(mapStateToProps)(Header);

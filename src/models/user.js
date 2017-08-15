@@ -76,7 +76,7 @@ export default {
                     LocalStorage.set('loginStatus', 1, saveTime);
 
                     // 转到BG页
-                    window.location.href = "/bg";
+                    window.location.href = "/";
 
                 } else {
                     // 传入失败信息，用于页面展示
