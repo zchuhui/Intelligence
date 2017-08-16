@@ -1,5 +1,5 @@
 /**
- * BG关联表model
+ * BG关联表 Model
  * Date:2017-06-25
  * Author:zhuangchuhui
  */
@@ -179,7 +179,7 @@ export default {
 
     effects: {
         // 获取BG列表数据
-        * fetch({ payload }, { select, call, put }) {
+        * fetch({ dispatch,payload }, { select, call, put }) {
 
             yield put({ type: 'toggleLoading', payload: { loading: true } });
 
@@ -301,9 +301,6 @@ export default {
         setup({ dispatch, history }) {
             // 初始化首页
             //dispatch({ type: 'fetch', payload: { page: 1 } });
-            // 菜单
-            dispatch({ type: 'Menus/getBanggoodCates'}); 
-            dispatch({ type: 'Menus/getBanggoodBrands'});
         },
     }
 }

@@ -16,15 +16,15 @@ class GoodsListDataRouter extends React.Component {
             <MainLayout 
                 headerMenuText="销售秘书"
             >
-                {/* 导航 */}
-                <MenuBar />
+                {/* 菜单，选中该页 */}
+                <MenuBar value={1}/>
                 
                 <div className={styles.mainWrap}>
                     <SearchBar 
                         menus={this.props.menus}
                         handleSearchArgs={args => this.handleSearchArgs(args)}
                     />
-                    { <GoodsList 
+                    <GoodsList 
                         data={this.props.data} 
                         loading={this.props.loading} 
                         changePagination={current => this.changePagination(current)} 
@@ -40,7 +40,7 @@ class GoodsListDataRouter extends React.Component {
                         goodContrastData={this.props.goodContrastData}
                         goodContrastDataLoading={this.props.goodContrastDataLoading} 
 
-                    />}
+                    />
                 </div>
 
             </MainLayout>
@@ -125,7 +125,12 @@ class GoodsListDataRouter extends React.Component {
         })
     }
 
-
+    
+    componentDidMount(){
+        // 载入两个菜单数据
+        this.props.dispatch({ type: 'Menus/getBanggoodCates'});
+        this.props.dispatch({ type: 'Menus/getBanggoodBrands'});
+    }
     
 }
 

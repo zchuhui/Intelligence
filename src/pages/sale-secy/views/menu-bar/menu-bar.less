@@ -19,9 +19,14 @@
 			height: 50px;
 			text-align: center;
 			font-size:14px;
-			cursor: pointer;
+
+			a{
+				display: block;
+				width:70px;
+				height: 50px;
+				color:#666;
+			}
 		}
-		
 		li.current:after{
 			content: ' ';
 			position: absolute;
@@ -31,6 +36,9 @@
 			height: 2px;
 			background: #3197eb;
 		}
+		
+		li.current a{color:#3197eb;}
+
 	}
 	
 }

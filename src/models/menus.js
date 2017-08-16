@@ -1,65 +1,70 @@
 /**
- * 通用菜单集合
+ * 菜单集合
  * Date:2017/6/20
  * Author:zhuangchuhui
  */
 
-import * as menusService from '../services/menus';
-import { CODE200 } from '../constants/constant';
+import * as menusService from "../services/menus";
+import { CODE200 } from "../constants/constant";
 
 
-// 默认分类
+// 默认分类数据
 const defautCate = [
-    {
-        value: 'banggood',
-        label: 'banggood'
-    }]
-
-// 默认banggood分类
-const defautBanggoodCate = [
-    {
-        value: 'Electronics',
-        label: 'Electronics'
-    }]
+  {
+    value: "banggood",
+    label: "加载中..."
+  }
+];
 
 // 默认品牌
-const defautBrand = [{
-    bid: "2",
-    bname: "HeLICMAX",
-    site: "gearbest"
-}, {
-    bid: "3",
-    bname: "GTeng",
-    site: "gearbest"
-}]
+const defautBrand = [
+  {
+    bid: "0",
+    bname: "加载中...",
+    site: "加载中..."
+  }
+];
 
 
 export default {
   namespace: "Menus",
 
   state: {
-    cate: defautCate, // 所有分类
+    cate: defautCate, // 竞品分类
     brand: defautBrand, // 品牌
-    banggoodCate: defautBanggoodCate, // banggood站点分类
+    banggoodCate: defautCate, // bg 分类
 
     userPermission: null // 用户权限，用于判断是否显示菜单
   },
+
   reducers: {
-    // 存储分类表
+    /**
+	 * 存储分类数据
+	 * @param {*} state 
+	 * @param {*} param1 
+	 */
     saveCate(state, { payload: { data: data } }) {
       // 把获取数据转为组件可用的数据格式
       data = cateToMenu(data);
       return { ...state, cate: data };
     },
 
-    // 存储Banggood分类表
+    /**
+	 * 存储 Banggood 分类数据
+	 * @param {*} state 
+	 * @param {*} param1 
+	 */
     saveBanggoodCate(state, { payload: { data: data } }) {
       // 把获取数据转为组件可用的数据格式
       data = cateToMenu(data);
       return { ...state, banggoodCate: data };
     },
 
-    // 存储品牌表
+    /**
+	 * 存储品牌数据
+	 * @param {*} state 
+	 * @param {*} param1 
+	 */
     saveBrand(state, { payload: { data: data } }) {
       // 判断是数组还是对象，对象的话转为数组
       let array = [];
@@ -73,66 +78,81 @@ export default {
       return { ...state, brand: array };
     },
 
-    // 存储用户验证信息
+    /**
+	 * 存储用户验证信息
+	 * @param {*} state 
+	 * @param {*} param1 
+	 */
     saveUserPermission(state, { payload }) {
       return { ...state, userPermission: payload.userInfo };
     }
   },
+
   effects: {
-    // 获取分类
+    /**
+     * 获取竞品分类数据
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     *getCates({ payload }, { select, call, put }) {
-      // 获取分类数据菜单
       const { data } = yield call(menusService.getMenuCate);
 
-      // 存储数据
       if (data.code == CODE200) {
         yield put({ type: "saveCate", payload: data });
         yield put({ type: "saveUserPermission", payload: data });
       }
     },
 
-    // 获取Bangood下的分类菜单
+    /**
+     * 获取 Bangood 分类数据
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     *getBanggoodCates({ payload }, { select, call, put }) {
-      // 获取分类数据
       const { data, code } = yield call(menusService.getMenuCateByBanggood);
 
-      // 存储数据
       if (data.code == CODE200) {
         yield put({ type: "saveBanggoodCate", payload: data });
         yield put({ type: "saveUserPermission", payload: data });
       }
     },
 
-    // 获取品牌菜单
+    /**
+	 * 获取品牌数据
+	 * @param {*} param0 
+	 * @param {*} param1 
+	 */
     *getBrands({ payload }, { select, call, put }) {
-      // 开始请求数据
+
       const { data } = yield call(menusService.getMenuBrand);
 
-      // 存储数据
       if (data.code == CODE200) {
         yield put({ type: "saveBrand", payload: data });
       }
     },
 
-    // 获取Banggood的品牌菜单
+    /**
+	 * 获取 Banggood 品牌数据
+	 * @param {*} param0 
+	 * @param {*} param1 
+	 */
     *getBanggoodBrands({ payload }, { select, call, put }) {
-        // 开始请求数据
-        const { data } = yield call(menusService.getMenuBrandByBanggood);
+      // 开始请求数据
+      const { data } = yield call(menusService.getMenuBrandByBanggood);
 
-        // 存储数据
-        if (data.code == CODE200) {
-          yield put({ type: "saveBrand", payload: data });
-        }
+      // 存储数据
+      if (data.code == CODE200) {
+        yield put({ type: "saveBrand", payload: data });
+      }
     }
   },
+
   subscriptions: {
-    setup({ dispatch, history }) {
-      /* dispatch({ type: 'getCates' });
-            dispatch({ type: 'getBanggoodCates' });
-            dispatch({ type: 'getBrands' }); */
-    }
   }
 };
+
+
+
 
 
 
@@ -140,39 +160,35 @@ export default {
  * 用递归遍历所有参数，
  * 并添加value、label值，用于植入插件的参数
  */
-const cateToMenu = (cate) => {
+const cateToMenu = cate => {
+  var arr = [];
 
-    var arr = [];
+  const mapCateToString = item => {
+    item.map((i, index) => {
+      i.value = i.cid;
+      i.label = i.cname;
 
-    const mapCateToString = (item) => {
-        item.map((i, index) => {
+      if (i.children) {
+        mapCateToString(i.children);
+      }
+    });
+  };
 
-            i.value = i.cid;
-            i.label = i.cname;
+  for (let i in cate) {
+    mapCateToString(cate[i]);
 
-            if (i.children) {
-                mapCateToString(i.children);
-            }
-        })
+    var obj = {
+      value: i,
+      label: i,
+      children: cate[i]
     };
-
-    for (let i in cate) {
-
-        mapCateToString(cate[i]);
-
-        var obj = {
-            value: i,
-            label: i,
-            children: cate[i],
-        }
-        if (i !== "") {
-            arr.push(obj);
-        }
-
+    if (i !== "") {
+      arr.push(obj);
     }
+  }
 
-    return arr;
-}
+  return arr;
+};
 
 
 /**
@@ -180,12 +196,12 @@ const cateToMenu = (cate) => {
  * @param  {[type]} val [元素1]
  * @return {[type]}     [description]
  */
-Array.prototype.contains = function (val) {
-    var len = this.length;
-    while (len--) {
-        if (this[len] === val) {
-            return true;
-        }
+Array.prototype.contains = function(val) {
+  var len = this.length;
+  while (len--) {
+    if (this[len] === val) {
+      return true;
     }
-    return false;
-}
+  }
+  return false;
+};

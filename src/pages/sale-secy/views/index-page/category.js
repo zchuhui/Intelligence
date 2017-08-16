@@ -10,7 +10,7 @@ import { Icon, Spin, Radio, Select } from 'antd';
 import echarts from 'echarts';
 
 const Option = Select.Option;
-
+let setChartClickCount = 0; 
 
 class Category extends React.Component {
     constructor() {
@@ -27,59 +27,67 @@ class Category extends React.Component {
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
                     <span className={styles.fl}>你的类目情况</span>
-
-                    {
+                    {/* {
                         this.props.cateSet.length > 0?
                         <div className={styles.fr}>
                             <Select labelInValue defaultValue={{key: this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid}} onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
-                            {
-                                this.props.cateSet.map((item,index)=>
-                                    <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
-                                )
-                            }
-                        </Select>
+                                {
+                                    this.props.cateSet.map((item,index)=>
+                                        <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
+                                    )
+                                }
+                            </Select>
                         </div>
                         :null
-                    }
+                    } */}
                 </div>
-                {
-                    this.props.loading?
-                    <div className={styles.loadWrap} style={{minHeight:593}}>
-                        <Spin tip="加载中..." style={{ marginTop: '15%'}} />
-                    </div>
-                    :
-                    <div className={styles.categoryWrap}>
-                        {
-                            this.props.myProductInCate.map?
-                            <ul className={styles.clear}>
-                                <li>
-                                    <div ref='catePieChart' style={{width:'100%',height:600,}}></div>
-                                    {/*<div ref='catePillarChart' style={{width:'100%',height:285}}></div>*/}
-                                </li>
-                                <li>
-                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 你的商品排行</h3>
-                                    {
-                                        this.props.myProductInCate.map((item,index)=>
-                                        <div className={styles.itemPanel} key={`shop-${item.pid}`}>
-                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
-                                            <div className={styles.itemContent}>
-                                                <div className={styles.itemTitle}>{item.pname}</div>
-                                                <div className={styles.itemDetail}>
-                                                    <span>{item.price} 美元</span>
-                                                    <span className={styles.fr}>
-                                                        {
-                                                            //this.formatTrendNumber(item.no)
-                                                        }
-                                                    </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                
+                <div className={styles.categoryWrap}>
+                    {
+                        this.props.myProductInCate.map?
+                        <ul className={styles.clear}>
+                            <li>
+                                <div ref='catePieChart' style={{width:'100%',height:600,}}></div>
+                            </li>
+                            <li>
+                                {
+                                    this.props.loading?
+                                    <div className={styles.loadWrap} style={{minHeight:593}}>
+                                        <Spin tip="加载中..." style={{ marginTop: '15%'}} />
+                                    </div>
+                                    :
+                                    <div>
+                                        <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 你的商品排行</h3>
+                                        {
+                                            this.props.myProductInCate.map((item,index)=>
+                                            <div className={styles.itemPanel} key={`shop-${item.pid}`}>
+                                                <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                                <div className={styles.itemContent}>
+                                                    <div className={styles.itemTitle}>{item.pname}</div>
+                                                    <div className={styles.itemDetail}>
+                                                        <span>{item.price} 美元</span>
+                                                        <span className={styles.fr}>
+                                                            {
+                                                                //this.formatTrendNumber(item.no)
+                                                            }
+                                                        </span>
+                                                        <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.ins}件</b>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div> 
-                                        )
-                                    }
-                                    
-                                </li>
-                                <li>
+                                            </div> 
+                                            )
+                                        }
+                                    </div>
+                                }
+                            </li>
+                            <li>
+                            {
+                                this.props.loading?
+                                <div className={styles.loadWrap} style={{minHeight:593}}>
+                                    <Spin tip="加载中..." style={{ marginTop: '15%'}} />
+                                </div>
+                                :
+                                <div>
                                     <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 商品排行</h3>
                                     {
                                         this.props.productInCate.map((item,index)=>
@@ -100,14 +108,14 @@ class Category extends React.Component {
                                         </div> 
                                         )
                                     }
-                                </li>
-                            </ul>
-                            :
-                            <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
-                        }
-
-                    </div>
-                }
+                                </div>
+                            }
+                            </li>
+                        </ul>
+                        :
+                        <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
+                    }
+                </div>
                 
             </div>
         )
@@ -115,6 +123,7 @@ class Category extends React.Component {
 
     
     componentDidMount(){
+        
     }
 
     componentDidUpdate(){
@@ -125,7 +134,6 @@ class Category extends React.Component {
                 this.formatDataToEchartData(this.props.myCateSalesFromPrice)
             );
         }
-        
     }
 
     /**
@@ -144,120 +152,88 @@ class Category extends React.Component {
         this.props.getCategoryByCid(cid);
     }
 
+
     /**
      * 载入echart图表
      * @param {Array} cateSet [饼形图数据]
      * @param {Array} prices  [圆柱图数据]
      */
 	loadChart(cateSet,prices){
+        const catePieChartId = this.refs.catePieChart;
+        if(cateSet && catePieChartId){
 
-        if(cateSet){
+            // 初始化Echart
+            let catePieChart = echarts.init(catePieChartId);  
 
-            let catePieChartId = this.refs.catePieChart;
-            //let catePillarChartId = this.refs.catePillarChart;
-
-            if(catePieChartId){
-
-                // 初始化Echart
-                let catePieChart = echarts.init(catePieChartId);  
-                //let catePillarChart = echarts.init(catePillarChartId); 
-
-                // 绘制饼形图
-                catePieChart.setOption({
-                        tooltip : {
-                            trigger: 'item',
-                            formatter: "占比：{d}%"
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: false,
-                        },
-                        color:['#baebe1','#f8a942','#42a6f8','#ffe990','#ff7082'],
-                        /* legend: {
-                            orient: 'vertical',
-                            right: '5%',
-                            top:'10%',
-                            data: cateSet.labelArray
-                        }, */
-                        series : [
-                            {
-                                name: '',
-                                type: 'pie',
-                                radius : '50%',
-                                center: ['50%', '50%'],
-                                data:cateSet.valueArray
-                            }
-                        ]
-                });
-
-                // 绘制柱状图
-                /* catePillarChart.setOption({
-                        color:'#acdaff',
-                        tooltip: {
-                            trigger: 'axis',
-                            formatter: function (params,ticket,callback) { 
-                                return '<div>'+params[0].value+'</div>'
-                            }
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true,
-                        },
-                        xAxis : [
-                            {
-                                type : 'category',
-                                data : prices.labelArray,
-                                axisLabel: {
-                                    show: true,
-                                    textStyle: {
-                                        color: '#666'   // x轴字体颜色
-                                    }
-                                },
-                                axisLine: {
-                                    lineStyle:{
-                                        color:'#acdaff'    // x轴颜色
-                                    }
-                                }
-                            }
-                        ],
-                        yAxis : [
-                            {
-                                type : 'value',  
-                                axisLine: {
-                                    lineStyle:{
-                                        color:'#acdaff'    // y轴颜色
-                                    }
-                                }
-                            }
-                        ],
-                        series : [
-                            {
-                                name:'',
-                                type:'bar',
-                                barWidth: '40%',
-                                itemStyle:{
-                                    normal:{
-                                        color:'#acdaff',
-                                        show:false,
-                                    },
-                                },
-                                label: {
-                                    normal: {
-                                        show: true,
-                                        position: 'top'
-                                    }
-                                },
-                                areaStyle: {normal: {}},
-                                data:prices.valueArray,
-                            }
-                        ]
-                }); */
-                
+            let option = {
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "占比：{d}%"
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: false,
+                },
+                color:['#baebe1','#f8a942','#42a6f8','#ffe990','#ff7082'],
+                legend: {
+                    show:false,
+                    orient: 'vertical',
+                    right: '5%',
+                    top:'10%',
+                    data: cateSet.cidArray
+                },
+                series : [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius : '50%',
+                        center: ['50%', '50%'],
+                        data:cateSet.valueArray
+                    }
+                ]
             }
+
+            // 绘制饼形图
+            catePieChart.setOption(option);
+
+            
+            /**
+             * Echart图点击的事件
+             * @param {object} param 
+             * @param {int} i 
+             * @param {int} cid 
+             */
+            let everyClick = (param, i, cid) => {
+                if (param.seriesIndex == 0 && param.dataIndex == i) {
+                    this.props.getCategoryByCid(cid);
+                }
+            }
+                
+            
+            /**
+             * 增加监听事件
+             * @param {object} param 
+             */
+            let eConsole = (param)=>{
+                if (typeof param.seriesIndex != "undefined") {
+                    if (param.type == "click") {
+                        var peiLenght = option.legend.data.length;
+
+                        // 获取总共给分隔的扇形数
+                        for (var i = 0; i < peiLenght; i++) {
+                            everyClick(param, i, option.legend.data[i]);
+                        }
+                    }
+                }
+            }
+
+            // Echart 传入点击事件,只甚至一次
+            if(setChartClickCount == 0){
+                catePieChart.on("click", eConsole);
+                setChartClickCount = 1;
+            } 
         }
     }
     
@@ -267,8 +243,9 @@ class Category extends React.Component {
      */
 	formatDataToEchartPieData(runChart) {
 		let obj = {
+            cidArray:[],
 			labelArray:[],
-			valueArray:[]
+			valueArray:[],
 		}
 
 		if(runChart && runChart.map){
@@ -276,21 +253,26 @@ class Category extends React.Component {
             runChart.map((item,index)=>{
                 let obj2 = {};
                 for(let i in item){
+                    // 存储名称
                     if(i == 'name'){
                         let nameItem = item[i].split('>');
                         let nameVal = nameItem[nameItem.length-1];
                         obj.labelArray.push(nameVal);
                         obj2.name = nameVal;
                     }
+                    // 存储占比值
                     if(i == 'per'){
                         obj2.value = item[i].split('%')[0];
+                    }
+                    // 存储 cid
+                    if(i == 'cid'){
+                        obj.cidArray.push(item[i]);
                     }
                 }
                 obj.valueArray.push(obj2);
             })
             
         }
-
 		return obj;
     }
     

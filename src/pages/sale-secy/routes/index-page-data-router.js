@@ -25,7 +25,8 @@ class DataRouter extends React.Component {
 				headerMenuText="销售秘书"
 				userPermission={this.props.userPermission}
 			>
-				<MenuBar />
+				{/* 菜单，选中该页 */}
+				<MenuBar value={0}/>
 
 				<div className={styles.mainWrap}>
 					{/* <div className={styles.title}>
@@ -64,7 +65,6 @@ class DataRouter extends React.Component {
 										productNew={this.props.productNew}
 
 										getsaleSecyInfoToDate={time => this.getsaleSecyInfoToDate(time)}
-										//getDate={date => this.getDate(date)}
 									/>
 									{/* 参考指标 */}
 									<ReferenceIndex
@@ -200,7 +200,6 @@ class DataRouter extends React.Component {
 	}
 
 }
-
 
 
 function mapStateToProps(state) {

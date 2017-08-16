@@ -75,7 +75,7 @@ class GoodsList extends React.Component {
                     <span>
                         {   // 子表不显示该项
                             !record.isChildren?
-                            <img src={ record.img_url} className={ styles.img } />
+                            <Link to='/detail'><img src={ record.img_url} className={ styles.img } /></Link>
                             :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                             </div>
                         }

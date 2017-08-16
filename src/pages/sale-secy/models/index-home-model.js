@@ -32,9 +32,9 @@ export default {
 		myCateSalesFromPrice:{}, // 第一个类目 商品排行 		
 		
 		comparisonLoading:false, // 商品对比加载
-		goodsComparisonList:null,   // 商品对比信息
+		goodsComparisonList:null,// 商品对比信息
 
-		userPermission: null // 用户权限，用于判断是否显示菜单
+		userPermission: null 	 // 用户权限，用于判断是否显示菜单
 	},
 
 	reducers:{
@@ -76,16 +76,17 @@ export default {
 			
 			yield put({type:'updateLoading', payload:{loading:true}})
 
-			
+			// 请求获取数据
 			const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
-			yield put({ type:'saveSaleSecyInfo', payload:data.data});
-			yield put({ type: "saveUserPermission", payload: data });
 
-			// 继续加载排行榜数据
-			yield put({ type: 'getRankAndCatetory',payload});
+			if(data){
+				yield put({ type:'saveSaleSecyInfo', payload:data.data});
+				yield put({ type: "saveUserPermission", payload: data });
 				
+				// 继续加载排行榜数据
+				yield put({ type: 'getRankAndCatetory',payload});
+			}
 			
-
 			yield put({type:'updateLoading', payload:{loading:false}})
 		},
 
@@ -134,7 +135,6 @@ export default {
 
 	subscriptions:{
 		setup({ dispatch, history }) {
-			//dispatch({ type: 'getSaleSecyInfo',payload:{time:moment(moment().format('YYYY-MM-DD')).subtract(1,"days").format("YYYY-MM-DD")}});
         },
 	}
 
