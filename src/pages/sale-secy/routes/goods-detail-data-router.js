@@ -9,7 +9,7 @@ class GoodsDetailDataRouter extends React.Component {
     render(){
         return (
             <MainLayout headerMenuText="销售秘书">
-                <MenuBar />
+                <MenuBar value={1}/>
                 <h2> 
                     商品详情。。。
                 </h2>

@@ -63,9 +63,9 @@ export default {
 
                 // 开始请求数据
                 const { data } = yield call(usersService.login, payload.loginInfo);
-
+                
                 if (data.code == CODE200) {
-
+                    
                     // 存储数据
                     yield put({ type: 'save', payload: data });
 

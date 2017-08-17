@@ -88,24 +88,30 @@ export function setRelevanceGoods(args) {
 
     let argumentStr = `com=ajax&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
     
-
-    let argus = {
-        content:args.relevanceGoodsList
-    }
-
     let url = `${Url}?${argumentStr}`;
   	
-    return request(url,{
-        method:'POST',
-    });
+    return request(url,{method:'POST'});
+}
+
+/**
+ * 清除已关联的商品
+ * @param  {object} args [sku,list]
+ * @return {object}      [data]
+ */
+export function clearRelevanceGoods(args) {
+
+    let argumentStr = `com=ajax&t=delBgToOtherRelation&sku=${args.sku}`;
+    
+    let url = `${Url}?${argumentStr}`;
   	
+    return request(url,{ method:'POST'});
 }
 
 
 /**
  * 获取主体商品趋势图
- * @param  {[type]} args [pid,startTime,endTime]
- * @return {[type]}      [data]
+ * @param  {object} args [pid,startTime,endTime]
+ * @return {object}      [data]
  */
 export function fetchGoodsEchartByPidAndTime(args) {
 

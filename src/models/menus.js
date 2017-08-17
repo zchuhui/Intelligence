@@ -95,12 +95,14 @@ export default {
      * @param {*} param1 
      */
     *getCates({ payload }, { select, call, put }) {
-      const { data } = yield call(menusService.getMenuCate);
+      try{
+        const { data } = yield call(menusService.getMenuCate);
 
-      if (data.code == CODE200) {
-        yield put({ type: "saveCate", payload: data });
-        yield put({ type: "saveUserPermission", payload: data });
-      }
+        if (data.code == CODE200) {
+          yield put({ type: "saveCate", payload: data });
+          yield put({ type: "saveUserPermission", payload: data });
+        }
+      }catch(e){}
     },
 
     /**
@@ -109,12 +111,15 @@ export default {
      * @param {*} param1 
      */
     *getBanggoodCates({ payload }, { select, call, put }) {
-      const { data, code } = yield call(menusService.getMenuCateByBanggood);
+        try{
+          
+          const { data, code } = yield call(menusService.getMenuCateByBanggood);
 
-      if (data.code == CODE200) {
-        yield put({ type: "saveBanggoodCate", payload: data });
-        yield put({ type: "saveUserPermission", payload: data });
-      }
+          if (data.code == CODE200) {
+              yield put({ type: "saveBanggoodCate", payload: data });
+              yield put({ type: "saveUserPermission", payload: data });
+          }
+        }catch(e){ }
     },
 
     /**
@@ -123,12 +128,13 @@ export default {
 	 * @param {*} param1 
 	 */
     *getBrands({ payload }, { select, call, put }) {
+      try{
+        const { data } = yield call(menusService.getMenuBrand);
 
-      const { data } = yield call(menusService.getMenuBrand);
-
-      if (data.code == CODE200) {
-        yield put({ type: "saveBrand", payload: data });
-      }
+        if (data.code == CODE200) {
+          yield put({ type: "saveBrand", payload: data });
+        }
+      }catch(e){}
     },
 
     /**
@@ -137,13 +143,15 @@ export default {
 	 * @param {*} param1 
 	 */
     *getBanggoodBrands({ payload }, { select, call, put }) {
-      // 开始请求数据
-      const { data } = yield call(menusService.getMenuBrandByBanggood);
-
-      // 存储数据
-      if (data.code == CODE200) {
-        yield put({ type: "saveBrand", payload: data });
-      }
+      try{
+          // 开始请求数据
+          const { data } = yield call(menusService.getMenuBrandByBanggood);
+          
+          // 存储数据
+          if (data.code == CODE200) {
+              yield put({ type: "saveBrand", payload: data });
+          }
+      }catch(e){}
     }
   },
 
