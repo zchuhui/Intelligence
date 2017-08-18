@@ -1,0 +1,133 @@
+@import '../../../../common/styles/base.less';
+
+html,body{
+    height:100%;
+}
+.goodsDetailWrap{
+    background: #fff;
+
+    .goodsAttribute{
+        padding:20px;
+        border-bottom: 10px solid #eef1f6;
+
+        .sku{
+            color:#3197eb;
+            font-size:16px;
+            margin-bottom: 10px;
+        }
+
+        .image{
+            width:150px;
+            height: 100px;
+            overflow: hidden;
+            border:1px solid #eee;
+
+            img{
+                width:100%;
+                height: auto;
+            }
+        }
+
+        .detailBox{
+            margin-left: 170px;
+            padding-top: 5px;
+            
+            .goodsTitle{
+                margin-bottom:10px;
+
+                .tips{
+                    float: left;
+                    display: block;
+                    padding:1px 10px;
+                    background: #3197eb;
+                    color:#fff;
+                    border-radius: 3px;
+                    margin-right: 10px;
+                    margin-top: 2px;
+                }
+                h2{
+                    font-size: 16px;
+                    color:#333;
+                    font-weight: bold;
+                }
+            }
+
+            .attrLeft{
+                width:50%;
+
+                p{
+                    width:260px;
+                    line-height: 30px;
+                }
+            }
+
+            .attrRight{
+                width:50%;
+
+                li{
+                    position: relative;
+                    float: left;
+                    min-width:100px;
+                    padding:0 15px;
+
+                    p{
+                        line-height: 30px;
+                    }
+                }
+                li:after{
+                    content:' ';
+                    position: absolute;
+                    right: 1px;
+                    top:15px;
+                    display: block;
+                    height: 35px;
+                    width:1px;
+                    background: #ddd;
+
+                }
+                li:last-child:after{
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .detailContent{
+        background: #addbff;
+        height: 100%;
+
+        .detailMenu{
+            float: left;
+            width:140px;
+            height: 100%;
+
+            li{
+                width:100%;
+                height: 45px;
+                line-height: 45px;
+                text-align:center;
+                color:#fff;
+                margin:10px 0;
+            }
+            li.current{
+                background:#fff;
+                color:#addbff;
+            }
+        }
+
+        .content{
+            margin-left:140px;
+            min-height: 800px;
+            background: #fff;
+            padding-left:30px;
+            padding-top:20px;
+
+            .lateDate{
+                margin:0 10px;
+                margin-top: 5px;
+                cursor: pointer;
+                color: #108ee9;
+            }
+        }
+    }
+}

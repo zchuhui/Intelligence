@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import MainLayout from '../../../components/layout-main/layout-main';
 import MenuBar from '../views/menu-bar/menu-bar';
+import GoodsDetail from '../views/goods-detail/goods-detail';
 
 
 class GoodsDetailDataRouter extends React.Component {
@@ -10,9 +11,7 @@ class GoodsDetailDataRouter extends React.Component {
         return (
             <MainLayout headerMenuText="销售秘书">
                 <MenuBar value={1}/>
-                <h2> 
-                    商品详情。。。
-                </h2>
+                <GoodsDetail />
             </MainLayout>
         )
     }
