@@ -17,7 +17,7 @@ const Option = Select.Option;
 
 // 默认抓取时间为一个月内
 const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
-const endDay  = moment().format('YYYY-MM-DD');
+const endDay  = moment(new Date()).subtract(1,"days").format("YYYY-MM-DD"); 
 
 
 class Searcher extends React.Component {
@@ -137,7 +137,7 @@ class Searcher extends React.Component {
                                 <RangePicker 
                                     defaultValue={[
                                         moment(new Date()).subtract(30,"days"),
-                                        moment(),
+                                        moment(new Date()).subtract(1,"days"),
                                     ]} 
                                     ranges={{ 
                                         '今天': [moment(), moment()],

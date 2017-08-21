@@ -75,8 +75,8 @@ export default {
                     LocalStorage.set('token', data.data.token, saveTime);
                     LocalStorage.set('loginStatus', 1, saveTime);
 
-                    // 转到BG页
-                    window.location.href = "/";
+                    // 转到详情
+                    window.location.href = "/sale-secy#/goods";
 
                 } else {
                     // 传入失败信息，用于页面展示

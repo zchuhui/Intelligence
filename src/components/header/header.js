@@ -21,17 +21,20 @@ class Header extends React.Component {
 				<Menu.Item key="0">
 					<a href="/">竞品报表</a> 
 				</Menu.Item>
+                <Menu.Item key="2">
+                    <a href="/sale-secy">销售秘书</a>
+                </Menu.Item>
 				{/* <Menu.Item key="1">
 					<a href="/bg">BG关联报表</a>
 				</Menu.Item> */}
-				{
+				{/* {
 					// 如果有权限，则显示销售秘书
 					this.props.userPermission?
 					<Menu.Item key="2">
 						<a href="/sale-secy">销售秘书</a>
 					</Menu.Item>
 					:null
-				}
+				} */}
 				
 			</Menu>
         );

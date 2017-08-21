@@ -39,7 +39,7 @@ export function search(args) {
     }
 
     let url = `${Url}?${argumentStr}`;
-    console.log(url);
+    
     return request(url);
 }
 
@@ -50,11 +50,9 @@ export function search(args) {
  * @return {[type]}      [data]
  */
 export function fetchGoodsDetailBySku(args) {
-
     let argumentStr = `com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
-
     let url = `${Url}?${argumentStr}`;
-
+    console.log('url',url);
     // 这里需要返回的验证数据，用originRequest
     return originRequest(url);
     

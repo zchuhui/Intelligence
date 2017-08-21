@@ -15,7 +15,7 @@ export default {
 		loading:false,           // 初始加载
 		
 		productTotal : {},       // 商品总数
-		salesAmount: {},         // 销售额
+		salesAmount: null,         // 销售额
 		salesSum: {},            // 销量
 		changeRate: {},          // 转化率
 		productNew: {},          // 新品上架数
@@ -74,20 +74,27 @@ export default {
 		// 获取销售数据
 		* getSaleSecyInfo({payload},{select,call,put}){
 			
-			yield put({type:'updateLoading', payload:{loading:true}})
+			try{
 
-			// 请求获取数据
-			const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
-
-			if(data){
-				yield put({ type:'saveSaleSecyInfo', payload:data.data});
-				yield put({ type: "saveUserPermission", payload: data });
-				
-				// 继续加载排行榜数据
-				yield put({ type: 'getRankAndCatetory',payload});
-			}
 			
-			yield put({type:'updateLoading', payload:{loading:false}})
+				yield put({type:'updateLoading', payload:{loading:true}})
+
+				// 请求获取数据
+				const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
+
+				if(data){
+					yield put({ type:'saveSaleSecyInfo', payload:data.data});
+					yield put({ type: "saveUserPermission", payload: data });
+					
+					// 继续加载排行榜数据
+					yield put({ type: 'getRankAndCatetory',payload});
+				}
+				
+				yield put({type:'updateLoading', payload:{loading:false}})
+
+			}catch(e){
+				yield put({type:'updateLoading', payload:{loading:false}})
+			}
 		},
 
 		// 获取排行榜与类目数据

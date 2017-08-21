@@ -31,7 +31,7 @@ class Saleroom extends React.Component {
 		return (
 			<div className={styles.panel} ref='saleroomId'>
 				{
-					this.props.salesAmount?
+					this.props.salesAmount ?
 					<div className={styles.saleroomWrap}>
 
 						<div className={styles.head}>

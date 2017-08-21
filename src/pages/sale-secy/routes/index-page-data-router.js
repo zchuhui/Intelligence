@@ -49,7 +49,7 @@ class DataRouter extends React.Component {
 						</div>
 						
 						{
-							// 判断加载状况
+							// 判断加载状况 
 							this.props.loading ?
 								<div className={styles.loadWrap}>
 									<Spin tip="加载中..." style={{ marginTop: '20%' }} />

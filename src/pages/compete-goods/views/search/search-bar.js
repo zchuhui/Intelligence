@@ -17,7 +17,7 @@ const dateFormat = "YYYY-MM-DD";
 
 // 默认抓取时间为一个月内
 const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
-const lastDay  = moment().format('YYYY-MM-DD');
+const lastDay  = moment(new Date()).subtract(1,"days").format("YYYY-MM-DD");
 
 class SearchBar extends Component {
     constructor(props, context) {
@@ -137,7 +137,7 @@ class SearchBar extends Component {
                                 <RangePicker 
                                     defaultValue={[
                                         moment(new Date()).subtract(30,"days"),
-                                        moment(),
+                                        moment(new Date()).subtract(1,"days"),,
                                     ]} 
                                     ranges={{ 
                                         '今天': [moment(), moment()],

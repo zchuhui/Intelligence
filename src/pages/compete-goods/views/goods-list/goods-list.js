@@ -21,7 +21,7 @@ class GoodsList extends React.Component {
             startTime: dateString[0],
             endTime: dateString[1]
         }
-
+        
         this.props.handleSearchArgsToDate(dateQuantum);
     }
 

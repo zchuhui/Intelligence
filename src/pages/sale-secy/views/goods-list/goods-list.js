@@ -23,7 +23,7 @@ const RadioGroup = Radio.Group;
 
 // 本月时间
 const startTime = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
-const endTime  = moment().format('YYYY-MM-DD');
+const endTime  =moment(new Date()).subtract(1,"days").format("YYYY-MM-DD");
 
 // 自定义竞品选项
 const plainOptions = ['环球', '速卖通', '兰亭集势', 'DX', '亚马逊', 'Tom Top'];
@@ -51,8 +51,8 @@ class GoodsList extends React.Component {
             goodsEchartVisible:false,
             goodsEchartPid:0,
             goodsEchartRadioValue:0,
-            defaultStartDate:moment().startOf('week').format('YYYY-MM-DD'),  //本周第一天
-            defaultEndDate:moment().endOf('week').format('YYYY-MM-DD'),      //本周最后一天
+            defaultStartDate:moment().subtract(30,'days').format('YYYY-MM-DD'),    //一个月前
+            defaultEndDate:moment().subtract(1,'days').format('YYYY-MM-DD'),       //昨天
 
             //对比
             goodsContrastVisible:false,
@@ -749,9 +749,6 @@ class GoodsList extends React.Component {
                         return '<div><p>'+params[0].name +"</p><p>"+ params[0].value+' '+yName+'</p></div>';
                     }
                 },
-                /* legend: {
-                    data:this.props.goodsEchartData.legendData
-                }, */
                 grid: {
                     left: '3%',
                     right: '4%',

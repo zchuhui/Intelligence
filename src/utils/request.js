@@ -1,7 +1,7 @@
 import fetch from 'dva/fetch';
 import LocalStorage from './local-storage';
 import { message } from 'antd';
-
+import qs from 'qs';  
 
 /**
  * 检查状态码
@@ -31,70 +31,65 @@ const checkStatus = (response) => {
  */
 export default async function request(url, options) {
 
-	//try{
+	// 在请求的url加上 token,用于登录验证
+	const token = LocalStorage.get('token');
+	if(token){
+		url = `${url}&token=${token}`;
+	}
 
-		// 在请求的url加上 token,用于登录验证
-		const token = LocalStorage.get('token');
-		if(token){
-			url = `${url}&token=${token}`;
+	// 替换 #
+	url = url.replace("#","%");
+
+	// 请求数据
+	const response = await fetch(url, options);
+	// 检查请求是否成功
+	checkStatus(response);
+	
+	// 转为json格式
+	const data = await response.json();
+	const ret = {
+		data,
+		headers: {
+		},
+	};
+
+	if (response.headers.get('x-total-count')) {
+		ret.headers['x-total-count'] = response.headers.get('x-total-count');
+	}
+
+
+	// 返回数据验证
+	const code = ret.data.code;
+	const msg = ret.data.msg;
+
+	// 如果请求成功，则返回数据，失败则统一处理
+	if(code == 200){
+		return ret;
+	}
+	else{
+		switch(code){
+			case 401:
+				// 未登录状态
+				//window.location.href = "/login";
+				break;
+			case 400:
+				// 请求失败状态
+				//message.warning('请求失败，请重试');
+				message.destroy();
+				message.warning(msg);
+				break;
+			case 501:
+				// 请求失败状态
+				message.destroy();
+				message.warning('网络繁忙，请重试');
+				break;
+			default:
+				// 请求失败状态
+				message.destroy();
+				message.warning('未知错误');
+				break;
 		}
-
-		// 请求数据
-		const response = await fetch(url, options);
-		// 检查请求是否成功
-		checkStatus(response);
-		
-		// 转为json格式
-		const data = await response.json();
-		const ret = {
-			data,
-			headers: {
-			},
-		};
-
-		if (response.headers.get('x-total-count')) {
-			ret.headers['x-total-count'] = response.headers.get('x-total-count');
-		}
-
-
-		// 返回数据验证
-		const code = ret.data.code;
-		const msg = ret.data.msg;
-		//console.log(ret.data); 
-
-		// 如果请求成功，则返回数据，失败则统一处理
-		if(code == 200){
-			return ret;
-		}
-		else{
-			switch(code){
-				case 401:
-					// 未登录状态
-					window.location.href = "/login";
-					break;
-				case 400:
-					// 请求失败状态
-					//message.warning('请求失败，请重试');
-					message.destroy();
-					message.warning(msg);
-					break;
-				case 501:
-					// 请求失败状态
-					message.destroy();
-					message.warning('网络繁忙，请重试');
-					break;
-				default:
-					// 请求失败状态
-					message.destroy();
-					message.warning('未知错误');
-					break;
-			}
-		}
-		
-	/* }catch(e){
-		message.destroy();
-		message.warning("网络异常");
-	} */
+	}
 }
 
 
@@ -115,8 +110,12 @@ export async function originRequest(url, options) {
 			url = `${url}&token=${token}`;
 		}
 
+		// 替换 #
+		url = url.replace("#","%");
+
 		// 请求数据
 		const response = await fetch(url, options);
+		
 		// 检查请求是否成功
 		checkStatus(response);
 		

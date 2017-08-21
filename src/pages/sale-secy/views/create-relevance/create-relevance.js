@@ -10,6 +10,7 @@ import styles from './create-relevance.less';
 import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
 import defaultImage from './default.png';
 import Clipboard  from 'clipboard'; 
+import LazyLoad from 'react-lazyload';
 import MainLayout from '../../../../components/layout-main/layout-main';
 import MenuBar from '../menu-bar/menu-bar';
 
@@ -177,7 +178,6 @@ class CreateRelevance extends React.Component {
                                                             </div>
                                                             : null
                                                     }
-
 
                                                 </div>
                                                 {/*相似的商品 end*/}
@@ -703,7 +703,6 @@ class CreateRelevance extends React.Component {
                                             <li key={`li-${index2}`} >
                                                 <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
                                                      id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
-                                                     
                                                      >
                                                     <div className={styles.imgWrap} onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
                                                         <img src={item2.img_url} />
@@ -820,16 +819,24 @@ class CreateRelevance extends React.Component {
 
 
     /**
-     * 把获取的相似商品，取到本地state里面
+     * 把modle里面的相似、关联商品，取到本地state里面
      */
-    syncRelevanceGoodsLlist() {
+    syncRelevanceGoodsLlist() { 
+
+        // 取相识商品
+        this.setState({
+            similarGoodsList: this.props.similarGoodsList,
+        });
+
+        
+        // 取关联商品
         let propsRelevanceGoodsList = this.props.relevanceGoodsList;
         let stateRelevanceGoodsList = this.state.relevanceGoodsList;
-        //console.log('relevan:',propsRelevanceGoodsList,stateRelevanceGoodsList);
-
         if (propsRelevanceGoodsList) {
+
             let index;
             let obj;
+
             for (let item in propsRelevanceGoodsList) {
                 switch (item) {
                     case 'gearbest':
@@ -855,13 +862,14 @@ class CreateRelevance extends React.Component {
                 this.setState({
                     relevanceGoodsList: stateRelevanceGoodsList,
                 });
-                console.log('stateRelevanceGoodsList',stateRelevanceGoodsList);
+
             }
         }
+
     }
     
     /**
-     * 清空数据
+     * 清空所有数据
      */
     clearAllData(){
 
@@ -880,6 +888,11 @@ class CreateRelevance extends React.Component {
             payload: {},
         });
 
+        this.props.dispatch({
+            type: 'CreateRelevanceModel/saveRelevanceGoodsBySite',
+            payload: {},
+        });
+
     }
 
     /**
@@ -892,12 +905,19 @@ class CreateRelevance extends React.Component {
     }
 
 
-
+    /**
+     * 渲染前
+     */
     componentWillMount(){
+        // 清空数据
         this.clearAllData();
+        // 初始化点击复制组件
         const clipboard  = new Clipboard('.copyUrl');
     }
 
+    /**
+     * 渲染后
+     */
     componentDidMount() {
 
         // 如果是点击列表的sku进来的，跳到步骤二
@@ -914,24 +934,18 @@ class CreateRelevance extends React.Component {
             this.getGoodsBySku(this.props.params.sku);
         }
 
+        // 同步model与本地state的数据
         this.timeout(1000).then((value) => {
-            // 获取相识商品数据
-            this.setState({
-                similarGoodsList: this.props.similarGoodsList,
-            });
-
             this.syncRelevanceGoodsLlist();
+
+            if(this.state.relevanceGoodsList.length <= 0){
+                this.timeout(4000).then((value) => {
+                    this.syncRelevanceGoodsLlist();
+                });
+            }
         });
         
-        // 定时获取数据
-        this.timeout(4000).then((value) => {
-            // 获取相识商品数据
-            this.setState({
-                similarGoodsList: this.props.similarGoodsList,
-            });
-
-            this.syncRelevanceGoodsLlist();
-        });
+        
 
     }
 

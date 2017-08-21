@@ -17,7 +17,11 @@
     "dva-loading": "^0.2.1",
     "echarts": "^3.6.2",
     "react": "^15.4.0",
-    "react-dom": "^15.4.0"
+    "react-dom": "^15.4.0",
+    "react-lazy-image": "^1.1.0",
+    "react-lazy-load": "^3.0.12",
+    "react-lazyload": "^2.2.7",
+    "react-lazyload-image": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

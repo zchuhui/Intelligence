@@ -120,6 +120,7 @@ html,body{
             min-height: 800px;
             background: #fff;
             padding-left:30px;
+            padding-right:30px;
             padding-top:20px;
 
             .lateDate{
@@ -141,6 +142,46 @@ html,body{
                     margin-right:20px;
                 }
             }
+
+            .sectionTable{
+                margin-top:30px;
+                
+                .title{
+                    position: relative;
+                    height: 40px;
+                    margin-top: 30px;
+                    line-height: 30px;
+                    font-size: 16px;
+                    text-indent: 15px;
+                }
+                .title::after{
+                    position: absolute;
+                    top: 8px;
+                    left: 0;
+                    display: block;
+                    content: " ";
+                    width: 4px;
+                    height: 15px;
+                    background: #3197eb;
+                }
+
+                .tableWrap{
+                    table{
+                        th{border-bottom: 1px solid #eee;text-align: center;}
+                        td{
+                            vertical-align: middle;
+                            text-align: center;
+                            padding: 10px;
+                            height: 75px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
         }
     }
+
+
 }
