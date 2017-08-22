@@ -322,106 +322,7 @@ class CreateRelevance extends React.Component {
         }
     }
 
-    /**
-     * 手动输入sku/poa搜索相似商品
-     */
-    getGoodsBySiteAndSku() {
-
-        let site,                                      // 站点
-        sku = this.refs.inputSku2.refs.input.value;    // 文本框输入值
-
-        // 获取站点
-        if (this.state.currentSite) {
-            site = this.state.currentSite
-        }
-        else {
-            site = this.state.similarGoodsList[0].tname;
-        }
-
-        // 开始请求
-        if (sku !== '') {
-            // 根据sku获取商品详情
-            this.props.dispatch({
-                type: 'CreateRelevanceModel/fetchGoodsBySkuAndSite',
-                payload: {
-                    site: site,
-                    sku: sku
-                }
-            });
-
-
-            // 使用定时把请求的数据返回
-            this.timeout(1000).then((value) => {
-                this.selectGoodsBySite();
-            });
-
-            // 有时候请求比较久，追加一个
-            this.timeout(3000).then((value) => {
-                this.selectGoodsBySite();
-            });
-
-        } else {
-            message.destroy();
-            message.warning("请先输入！");
-        }
-    }
-
-    /**
-     * 载入手动输入并获取的商品
-     */
-    selectGoodsBySite() {
-
-        let parentKey = this.state.siteKey,  // key
-        goodsite = this.props.goodsBySite;   // site
-        
-        // 如果已有数据
-        if (goodsite.code == 200) {
-
-            // 加入已选队列中
-            const relevanceArray = this.state.relevanceGoodsList;
-
-            // 判断该商品是否已存在，并选中
-            if (!relevanceArray.contains(goodsite.data)) {
-
-                // 每个子表，只能选中一个，所以引用子表的key赋值
-                relevanceArray[parentKey] = goodsite.data;
-
-                // 设置state
-                this.setState({
-                    relevanceGoodsList: relevanceArray
-                });
-            }
-
-            // 取消其他已经选中的
-            this.cancelGoodsSelectStyle();
-
-        }
-    }
-
-    /**
-     * 取消相似商品表的选中状态 
-     */
-    cancelGoodsSelectStyle() {
-
-        let parentArray = this.state.similarGoodsList,  // 搜索站点相似商品
-        parentKey = this.state.siteKey;                 // 当前站点的key
-
-        // 修改子表，取消选中状态
-        if (parentArray[parentKey] && parentArray[parentKey].children) {
-
-            parentArray[parentKey].children.map((obj, childIndex) => {
-                if (obj.select == true) {
-                    obj.select = false
-                }
-            });
-
-            if (parentArray) {
-                this.setState({
-                    similarGoodsList: parentArray
-                })
-            }
-        }
-    }
+    
 
     /**
      * 选择站点，切换相似商品栏
@@ -621,21 +522,144 @@ class CreateRelevance extends React.Component {
         }
 
 
-        // 已经选择的商品
-        const relevanceArray = this.state.relevanceGoodsList;
+        // 已选择的商品
+        const relevanceArray = this.state.relevanceGoodsList,   
+              site           = item.site;      // 现在选中商品的site                            
 
-        // 判断该商品是否已选
-        if (!relevanceArray.contains(item)) {
+        // 清除重复的商品
+        for(let i in relevanceArray){
+            // 清除空数据
+            if(i == 'undefined'){
+                delete relevanceArray['undefined'];
+            }
+            for(let k in relevanceArray[i]){
+                if(relevanceArray[i][k] == site){
+                    delete relevanceArray[i];
+                    break;
+                }
+            }
+        }
 
-            // 每个子表，只能选中一个，所以引用子表的key赋值
-            relevanceArray[parentKey] = item;
+        // 添加商品
+        relevanceArray[relevanceArray.length] = item;
 
+        // 同步到state
+        this.setState({
+            relevanceGoodsList: relevanceArray
+        });
+
+    }
+
+    /**
+     * 手动输入sku/poa搜索相似商品
+     */
+    getGoodsBySiteAndSku() {
+        
+        let site,                                      // 站点
+        sku = this.refs.inputSku2.refs.input.value;    // 文本框输入值
+
+        // 获取站点
+        if (this.state.currentSite) {
+            site = this.state.currentSite
+        }
+        else {
+            site = this.state.similarGoodsList[0].tname;
+        }
+
+        // 开始请求
+        if (sku !== '') {
+            // 根据sku获取商品详情
+            this.props.dispatch({
+                type: 'CreateRelevanceModel/fetchGoodsBySkuAndSite',
+                payload: {
+                    site: site,
+                    sku: sku
+                }
+            });
+
+
+            // 使用定时把请求的数据返回
+            this.timeout(1000).then((value) => {
+                this.selectGoodsBySite();
+            });
+
+            // 有时候请求比较久，追加一个
+            this.timeout(3000).then((value) => {
+                this.selectGoodsBySite();
+            });
+
+        } else {
+            message.destroy();
+            message.warning("请先输入！");
+        }
+    }
+
+    /**
+     * 载入手动输入并获取的商品
+     */
+    selectGoodsBySite() {
+
+        const parentKey = this.state.siteKey,                  // 获取栏目标识 key
+                goodsite = this.props.goodsBySite,               // 获取选中的商品
+                relevanceArray = this.state.relevanceGoodsList;  // 加入已选队列中
+        
+        // 已有数据
+        if (goodsite.code == 200) {
+            
+            // 获取选中商品的site
+            const site = goodsite.data.site;
+
+            // 清除重复的商品
+            for(let i in relevanceArray){
+                // 清除空数据
+                if(i == 'undefined'){
+                    delete relevanceArray['undefined'];
+                }
+                for(let k in relevanceArray[i]){
+                    if(relevanceArray[i][k] == site){
+                        delete relevanceArray[i];
+                        break;
+                    }
+                }
+            }
+
+            // 添加商品
+            relevanceArray[relevanceArray.length] = goodsite.data;
+
+            // 同步到state
             this.setState({
                 relevanceGoodsList: relevanceArray
             });
-        }
 
-        
+            // 取消其他已经选中的
+            this.cancelGoodsSelectStyle();
+
+        }
+    }
+
+    /**
+     * 取消相似商品表的选中状态 
+     */
+    cancelGoodsSelectStyle() {
+
+        let parentArray = this.state.similarGoodsList,  // 搜索站点相似商品
+        parentKey = this.state.siteKey;                 // 当前站点的key
+
+        // 修改子表，取消选中状态
+        if (parentArray[parentKey] && parentArray[parentKey].children) {
+
+            parentArray[parentKey].children.map((obj, childIndex) => {
+                if (obj.select == true) {
+                    obj.select = false
+                }
+            });
+
+            if (parentArray) {
+                this.setState({
+                    similarGoodsList: parentArray
+                })
+            }
+        }
     }
 
 
