@@ -617,7 +617,7 @@ class GoodsList extends React.Component {
                     　　 } 
                     },
                     series: [{
-                        name: '销量',
+                        name: '',
                         type: 'line',
                         itemStyle : {  
                                 normal : {  

@@ -11,8 +11,8 @@ import moment from 'moment';
 import echarts from 'echarts';
 import {
     Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker,
-    Checkbox, Select, Radio, Spin, Row, Col
-} from 'antd';
+    Checkbox, Select, Radio, Spin, Row, Col } from 'antd';
+import DateTime from '../../../../utils/date-time'; 
 
 
 const { Column, ColumnGroup } = Table;
@@ -20,14 +20,6 @@ const { MonthPicker, RangePicker } = DatePicker;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
-
-// 本月时间
-const startTime = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
-const endTime  =moment(new Date()).subtract(1,"days").format("YYYY-MM-DD");
-
-// 自定义竞品选项
-const plainOptions = ['环球', '速卖通', '兰亭集势', 'DX', '亚马逊', 'Tom Top'];
-const defaultCheckedList = [];
 
 
 
@@ -37,31 +29,20 @@ class GoodsList extends React.Component {
         super(props, context);
 
         this.state = {
-            customRowVisible: false, // 自定列
-
-            // 自定义竞品
-            customGoods: {
-                visible: false,
-                checkedList: defaultCheckedList,
-                indeterminate: true,
-                checkAll: false,
-            },
 
             //主商品趋势图
             goodsEchartVisible:false,
             goodsEchartPid:0,
             goodsEchartRadioValue:0,
-            defaultStartDate:moment().subtract(30,'days').format('YYYY-MM-DD'),    //一个月前
-            defaultEndDate:moment().subtract(1,'days').format('YYYY-MM-DD'),       //昨天
+            defaultStartDate: DateTime.getDateOfDays(30), 
+            defaultEndDate: DateTime.getDateOfDays(1),
 
             //对比
             goodsContrastVisible:false,
             goodsContrastSku:null,
             goodContrastData:[],
-
             
         }
-
     }
 
     render() {
@@ -228,53 +209,6 @@ class GoodsList extends React.Component {
 
 				</div>
 
-
-                {/*自定义列弹框 star*/}
-                {/*<Modal
-                    title="自定义列"
-                    visible={this.state.customRowVisible}  
-                    onCancel={this.hideCustomRowModal} 
-                    okText="确认"
-                    cancelText="取消"
-                    footer={null}
-                    >
-                    <div>
-                        开发中...
-                    </div>
-                </Modal>*/}
-                {/*自定义列弹框 end*/}
-
-
-                {/*自定义竞品弹框 star*/}
-                {/*<Modal
-                    title="自定义竞品"
-                    visible={this.state.customGoods.visible}  
-                    onCancel={this.hideCustomGoodsModal} 
-                    okText="确认"
-                    cancelText="取消"
-                    footer={null}
-                    >
-                    <div>
-                        <div>
-                          <Checkbox
-                            indeterminate={this.state.customGoods.indeterminate}
-                            onChange={this.onCheckAllChange}
-                            checked={this.state.customGoods.checkAll}>
-                            全选
-                          </Checkbox>
-                        </div>
-                        <div style={{ maxWidth:400,margin:'20px 0' }}>
-                            <CheckboxGroup 
-                                options={plainOptions} 
-                                value={this.state.customGoods.checkedList} 
-                                onChange={this.onCustomChange} />
-                        </div>
-                        <div style={{ textAlign:'center'}}><Button type='primary' onClick={this.onCustomOK.bind(this)}>确定</Button></div>
-                    </div>
-                </Modal>*/}
-                {/*自定义竞品弹框 end*/}
-
-
                 {/*主商品趋势图弹框 star*/}
                 <Modal
                     title="主体商品的趋势图"
@@ -284,11 +218,11 @@ class GoodsList extends React.Component {
                     okText="确认"
                     cancelText="取消"
                     footer={null}
-                    width={800}
+                    width={'70%'}
                     >
                     <div>
                         <div>
-                            <div style={{display:'inline-block', height:50, width:'60%',verticalAlign:' top',padding:'0 5%'}}>
+                            <div style={{display:'inline-block', height:50, width:'50%',verticalAlign:' top',padding:'0 5%'}}>
                                 <RadioGroup onChange={this.onChangeEchartItem.bind(this)} value={this.state.goodsEchartRadioValue}>
                                     <Radio value={0} style={{margin:'0 20px 10px 0'}} key='randio1'>价格</Radio>
                                     <Radio value={1} style={{margin:'0 20px 10px 0'}} key='randio2'>销量</Radio>
@@ -309,22 +243,22 @@ class GoodsList extends React.Component {
                                     ref='echartTime'
                                     disabledDate = {this.disabledDate}
                                 />
-                                <div style={{marginTop:5}}>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,6)}>最近7天</span>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,14)}>最近15天</span>
-                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,29)}>最近30天</span>
-                                </div>
+                                <span className={styles.lateDateWrap}>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,15)}>最近15天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
+                                </span>
                             </div>
                         </div>
-                        <div style={{width:768,height:550,position:'relative'}}>
+                        <div style={{width:'100%',height:550,position:'relative'}}>
                             {
                                 this.props.goodsEchartDataLoading==false?
-                                <div style={{width:768,height:550,textAlign:'center',position:'absolute',background:'rgba(255,255,255,0.7)',zIndex:1000}}>
+                                <div style={{width:'100%',height:550,textAlign:'center',position:'absolute',background:'rgba(255,255,255,0.7)',zIndex:1000}}>
                                     <Spin tip="Loading..." style={{ marginTop:250 }}/>
                                 </div>
                                 :null
                             }
-                            <div ref='echartId' style={{width:768,height:500,margin:'0 auto'}}></div>
+                            <div ref='echartId' style={{width:'100%',height:500,margin:'0 auto'}}></div>
                             
                         </div>
                     </div>
@@ -549,40 +483,40 @@ class GoodsList extends React.Component {
 
         // BG 趋势图
         if (this.refs.priceSet) {
-            this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet);
-            this.loadGoodContrastEchart(this.refs.salesSet,this.props.goodContrastData.info.salesSet);
-            this.loadGoodContrastEchart(this.refs.reviewSet,this.props.goodContrastData.info.reviewSet);
+            this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet,'价格');
+            this.loadGoodContrastEchart(this.refs.salesSet,this.props.goodContrastData.info.salesSet,'销量');
+            this.loadGoodContrastEchart(this.refs.reviewSet,this.props.goodContrastData.info.reviewSet,'评论');
         }
 
         // 关联商品Echart图，目前最多只显示两个关联
         if (this.props.goodContrastData.relateInfo) {
             this.props.goodContrastData.relateInfo.map((item,index) => {
                 if (index == 0) {
-                    this.loadGoodContrastEchart(this.refs.priceSet1,this.props.goodContrastData.info.priceSet);
-                    this.loadGoodContrastEchart(this.refs.salesSet1,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.reviewSet1,this.props.goodContrastData.info.reviewSet);
+                    this.loadGoodContrastEchart(this.refs.priceSet1,this.props.goodContrastData.info.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet1,this.props.goodContrastData.info.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet1,this.props.goodContrastData.info.reviewSet,'评论');
                 }
                 if (index == 1) {
-                    this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet);
-                    this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.reviewSet2,this.props.goodContrastData.info.reviewSet);
+                    this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet2,this.props.goodContrastData.info.reviewSet,'评论');
                 }
                 if (index == 2) {
-                    this.loadGoodContrastEchart(this.refs.priceSet3,this.props.goodContrastData.info.priceSet);
-                    this.loadGoodContrastEchart(this.refs.salesSet3,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.reviewSet3,this.props.goodContrastData.info.reviewSet);
+                    this.loadGoodContrastEchart(this.refs.priceSet3,this.props.goodContrastData.info.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet3,this.props.goodContrastData.info.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet3,this.props.goodContrastData.info.reviewSet,'评论');
                 }
                 if (index == 3) {
-                    this.loadGoodContrastEchart(this.refs.priceSet4,this.props.goodContrastData.info.priceSet);
-                    this.loadGoodContrastEchart(this.refs.salesSet4,this.props.goodContrastData.info.salesSet);
-                    this.loadGoodContrastEchart(this.refs.reviewSet4,this.props.goodContrastData.info.reviewSet);
+                    this.loadGoodContrastEchart(this.refs.priceSet4,this.props.goodContrastData.info.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet4,this.props.goodContrastData.info.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet4,this.props.goodContrastData.info.reviewSet,'评论');
                 }
             })
         }
     }
 
     // 载入对比商品数据
-    loadGoodContrastEchart = (id,seriesData) => {
+    loadGoodContrastEchart = (id,seriesData,textName) => {
 
         if (id) {
             // 初始化Echart
@@ -592,7 +526,12 @@ class GoodsList extends React.Component {
 
             // 绘制图表
             myChart.setOption({
-                    tooltip: {},
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter:function(params,ticket,callback){
+                            return '<div><p>' +textName+': '+ params[0].value+'</p></div>';
+                        }
+                    },
                     legend: {
                     },
                     xAxis: {
@@ -617,7 +556,7 @@ class GoodsList extends React.Component {
                     　　 } 
                     },
                     series: [{
-                        name: '销量',
+                        name: textName,
                         type: 'line',
                         itemStyle : {  
                                 normal : {  
@@ -636,39 +575,6 @@ class GoodsList extends React.Component {
         }
     }
 
-
-    // 隐藏自定义列弹框
-    showCustomRowModal = () => {
-        this.setState({
-            customRowVisible: true
-        })
-    }
-
-    // 显示自定义列弹框
-    hideCustomRowModal = () => {
-        this.setState({
-            customRowVisible: false
-        })
-    }
-
-
-    // 显示竞品列弹框
-    showCustomGoodsModal = () => {
-        this.setState({
-            customGoods: {
-                visible: true
-            }
-        })
-    }
-
-    // 隐藏竞品列弹框
-    hideCustomGoodsModal = () => {
-        this.setState({
-            customGoods: {
-                visible: false
-            }
-        })
-    }
 
     // 选择操作:对比 or 趋势图
     onClickSelct = (obj,item) => {
@@ -693,8 +599,8 @@ class GoodsList extends React.Component {
         // 参数
         let args = {
             pid:pid,
-            startTime:startTime,
-            endTime:endTime
+            startTime: DateTime.getDateOfDays(30),
+            endTime:DateTime.getDateOfDays(1)
         }
 
         // 请求数据
@@ -750,6 +656,7 @@ class GoodsList extends React.Component {
                     }
                 },
                 grid: {
+                    top:'3%',
                     left: '3%',
                     right: '4%',
                     bottom: '3%',
@@ -812,17 +719,15 @@ class GoodsList extends React.Component {
 
     // 最近N天
     onLatelyDate = (dayCount) => {
-        // 今天日期
-        let currentDate = moment().format('YYYY-MM-DD');
-        // daycount 前的日期
-        let latelyDate = moment().subtract(dayCount, "days").format("YYYY-MM-DD");
+        
+        const currentDate = DateTime.getDateOfDays(1),         // 今天日期
+               latelyDate = DateTime.getDateOfDays(dayCount);  // daycount 前的日期
 
         // 赋值给文本框
         this.setState({
             defaultStartDate:latelyDate,
             defaultEndDate:currentDate,
         })
-
 
         // 参数
         let args = {
@@ -842,46 +747,6 @@ class GoodsList extends React.Component {
     disabledDate(current) {
       return current && current.valueOf() > Date.now();
     }
-
-
-    // 自定义竞品-单项
-    onCustomChange = (checkedList) => {
-        this.setState({
-            customGoods: {
-                visible: true,
-                checkedList,
-                indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-                checkAll: checkedList.length === plainOptions.length,
-            }
-
-        });
-    }
-
-    // 自定义竞品-全选
-    onCheckAllChange = (e) => {
-        this.setState({
-            customGoods: {
-                visible: true,
-                checkedList: e.target.checked ? plainOptions : [],
-                indeterminate: false,
-                checkAll: e.target.checked,
-            }
-        });
-    }
-
-    // 自定义竞品-确定选项
-    onCustomOK = () => {
-        let list = this.state.customGoods.checkedList;
-        //console.log(list);
-        
-        // 关闭弹窗
-        this.setState({
-            customGoods: {
-                visible: false,
-            }
-        });
-    }
-
 
 }
 

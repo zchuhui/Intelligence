@@ -14,4 +14,4 @@ export const CODE401 = 401;   // 状态码，需要登录
 
 export const ERRORMESSAGE = '网络繁忙，请重试。';
 
-export const DATE_FORMAT = 'YYYY-MMMM-DD';
+export const DATE_FORMAT = 'YYYY-MM-DD';
