@@ -21,6 +21,20 @@ const checkStatus = (response) => {
 	throw error;
 }
 
+/**
+ * 存储用户权限信息
+ * @param {object} data 
+ */
+const saveUserInfoSj = (data) => {
+	if(data.userInfo){
+		if(data.userInfo.sj_info == null){
+			LocalStorage.set('sj_info',false);
+		}else{
+			LocalStorage.set('sj_info',true);
+		}
+	}
+}
+
 
 /**
  * 异步请求url，获取数据
@@ -52,11 +66,12 @@ export default async function request(url, options) {
 		headers: {
 		},
 	};
-
 	if (response.headers.get('x-total-count')) {
 		ret.headers['x-total-count'] = response.headers.get('x-total-count');
 	}
 
+	// 存储用户权限信息
+	saveUserInfoSj(data);
 
 	// 返回数据验证
 	const code = ret.data.code;
@@ -70,7 +85,7 @@ export default async function request(url, options) {
 		switch(code){
 			case 401:
 				// 未登录状态
-				//window.location.href = "/login";
+				window.location.href = "/login";
 				break;
 			case 400:
 				// 请求失败状态
@@ -126,10 +141,12 @@ export async function originRequest(url, options) {
 			headers: {
 			},
 		};
-
 		if (response.headers.get('x-total-count')) {
 			ret.headers['x-total-count'] = response.headers.get('x-total-count');
 		}
+
+		// 存储用户权限信息
+		saveUserInfoSj(data);
 
 		return ret;
 
@@ -138,3 +155,5 @@ export async function originRequest(url, options) {
 		message.warning("网络异常");
 	} 
 }
+
+

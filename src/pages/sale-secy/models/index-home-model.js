@@ -15,7 +15,7 @@ export default {
 		loading:false,           // 初始加载
 		
 		productTotal : {},       // 商品总数
-		salesAmount: null,         // 销售额
+		salesAmount: {},         // 销售额
 		salesSum: {},            // 销量
 		changeRate: {},          // 转化率
 		productNew: {},          // 新品上架数
@@ -33,8 +33,6 @@ export default {
 		
 		comparisonLoading:false, // 商品对比加载
 		goodsComparisonList:null,// 商品对比信息
-
-		userPermission: null 	 // 用户权限，用于判断是否显示菜单
 	},
 
 	reducers:{
@@ -62,11 +60,6 @@ export default {
 		updateComparisonLoading(state,{ payload }){
 			return {...state, comparisonLoading: payload.loading}
 		},
-
-		// 存储用户验证信息
-		saveUserPermission(state, { payload }) {
-			return { ...state, userPermission: payload.userInfo };
-		}
 	},
 
 	effects:{
@@ -84,7 +77,6 @@ export default {
 
 				if(data){
 					yield put({ type:'saveSaleSecyInfo', payload:data.data});
-					yield put({ type: "saveUserPermission", payload: data });
 					
 					// 继续加载排行榜数据
 					yield put({ type: 'getRankAndCatetory',payload});

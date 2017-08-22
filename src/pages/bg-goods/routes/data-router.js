@@ -14,7 +14,6 @@ class BgRouter extends React.Component {
         return (
             <MainLayout 
                 headerMenuText="BG关联报表"
-                userPermission={this.props.menus.userPermission}
                 >
                 <div className={styles.mainWrap}>
                     <SearchBar 

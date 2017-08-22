@@ -33,8 +33,6 @@ export default {
     cate: defautCate, // 竞品分类
     brand: defautBrand, // 品牌
     banggoodCate: defautCate, // bg 分类
-
-    userPermission: null // 用户权限，用于判断是否显示菜单
   },
 
   reducers: {
@@ -77,15 +75,6 @@ export default {
       }
       return { ...state, brand: array };
     },
-
-    /**
-	 * 存储用户验证信息
-	 * @param {*} state 
-	 * @param {*} param1 
-	 */
-    saveUserPermission(state, { payload }) {
-      return { ...state, userPermission: payload.userInfo };
-    }
   },
 
   effects: {
@@ -100,7 +89,6 @@ export default {
 
         if (data.code == CODE200) {
           yield put({ type: "saveCate", payload: data });
-          yield put({ type: "saveUserPermission", payload: data });
         }
       }catch(e){}
     },
@@ -117,7 +105,6 @@ export default {
 
           if (data.code == CODE200) {
               yield put({ type: "saveBanggoodCate", payload: data });
-              yield put({ type: "saveUserPermission", payload: data });
           }
         }catch(e){ }
     },

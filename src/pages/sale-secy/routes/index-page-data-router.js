@@ -23,7 +23,6 @@ class DataRouter extends React.Component {
 		return (
 			<MainLayout 
 				headerMenuText="销售秘书"
-				userPermission={this.props.userPermission}
 			>
 				{/* 菜单，选中该页 */}
 				<MenuBar value={0}/>

@@ -16,7 +16,6 @@ class CompeteRouter extends React.Component {
             <MainLayout 
                 searchArguments={this.props.search}
                 headerMenuText="竞品报表" 
-                userPermission={this.props.menus.userPermission}
                 >
                 <div className={styles.mainWrap}>
                     {/*搜索模块*/}
