@@ -10,7 +10,7 @@ import styles from './create-relevance.less';
 import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
 import defaultImage from './default.png';
 import Clipboard  from 'clipboard'; 
-import LazyLoad from 'react-lazyload';
+import Lazyload from 'react-lazyload';
 import MainLayout from '../../../../components/layout-main/layout-main';
 import MenuBar from '../menu-bar/menu-bar';
 
@@ -729,7 +729,9 @@ class CreateRelevance extends React.Component {
                                                      id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
                                                      >
                                                     <div className={styles.imgWrap} onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
-                                                        <img src={item2.img_url} />
+                                                        <Lazyload throttle={200} height={170}>
+                                                            <img src={item2.img_url} />
+                                                        </Lazyload>
                                                     </div>
                                                 </div>
                                                 <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>

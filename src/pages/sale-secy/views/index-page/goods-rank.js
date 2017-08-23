@@ -7,6 +7,7 @@
 import React from 'react';
 import styles from './sale-secy.less';
 import { Icon } from 'antd';
+import Lazyload from 'react-lazyload';
 
 class GoodsRank extends React.Component {
 
@@ -27,7 +28,9 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.salesRank?
                                     this.props.myProductRank.salesRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`sales-${index}`}>
-                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.imgWrap}>
+                                                <img src={item.img_url}/>
+                                            </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>
@@ -51,7 +54,9 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.payAmountRank?
                                     this.props.myProductRank.payAmountRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`saler-${index}`}>
-                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.imgWrap}>
+                                                <img src={item.img_url}/>
+                                            </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>{item.pname}</div>
                                                 <div className={styles.itemDetail}>

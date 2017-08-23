@@ -9,8 +9,8 @@ import { Link } from 'dva/router';
 import styles from './create-relevance.less';
 import MainLayout from '../../../../components/layout-main/layout-main';
 import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
-import defaultImage from './default.png';
 import Clipboard  from 'clipboard'; 
+import LazyLoad from 'react-lazyload';
 
 const TabPane = Tabs.TabPane;
 
@@ -646,11 +646,11 @@ class CreateRelevance extends React.Component {
                                         data.map((item2, index2) => (
                                             <li key={`li-${index2}`} >
                                                 <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
-                                                     id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
-                                                     
-                                                     >
+                                                     id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}>
                                                     <div className={styles.imgWrap} onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
+                                                    <LazyLoad height={200}>
                                                         <img src={item2.img_url} />
+                                                    </LazyLoad>
                                                     </div>
                                                 </div>
                                                 <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>

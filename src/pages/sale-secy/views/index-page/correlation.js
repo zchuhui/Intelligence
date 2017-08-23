@@ -231,7 +231,7 @@ class Correlation extends React.Component {
 				goodsInfo.push(this.formatDataToEchartData(item.run_chart));
 			});
 			
-			console.log('goodsInfo',goodsInfo);
+			
 			// 遍历获取每个图表信息中的价格参数
 			var seriesData = [];
 			goodsInfo.map((item,index) => {
@@ -252,7 +252,7 @@ class Correlation extends React.Component {
 				
 				seriesData.push(obj);
 			});
-			console.log('seriesData',seriesData);
+
 			// 初始化Echart
 			let myChart = echarts.init(chartId);
 

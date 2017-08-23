@@ -13,14 +13,13 @@ import {
     Table, Pagination, Icon, Menu, Dropdown, Button, message, Modal, DatePicker,
     Checkbox, Select, Radio, Spin, Row, Col } from 'antd';
 import DateTime from '../../../../utils/date-time'; 
-
+import Lazyload from 'react-lazyload';
 
 const { Column, ColumnGroup } = Table;
 const { MonthPicker, RangePicker } = DatePicker;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
-
 
 
 class GoodsList extends React.Component {
@@ -56,7 +55,11 @@ class GoodsList extends React.Component {
                     <span>
                         {   // 子表不显示该项
                             !record.isChildren?
-                            <Link to='/detail'><img src={ record.img_url} className={ styles.img } /></Link>
+                            <Link to='/detail'>
+                                <Lazyload throttle={200} height={80} >
+                                    <img src={ record.img_url} className={ styles.img } />
+                                </Lazyload>
+                            </Link>
                             :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                             </div>
                         }
