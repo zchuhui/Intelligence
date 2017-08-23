@@ -728,10 +728,8 @@ class CreateRelevance extends React.Component {
                                                 <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
                                                      id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
                                                      >
-                                                    <div className={styles.imgWrap} onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
-                                                        <Lazyload throttle={200} height={170}>
-                                                            <img src={item2.img_url} />
-                                                        </Lazyload>
+                                                    <div className={styles.imgWrap} id="imgWrapId" onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
+                                                        <img src={item2.img_url} />
                                                     </div>
                                                 </div>
                                                 <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
