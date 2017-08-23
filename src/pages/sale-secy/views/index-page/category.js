@@ -207,7 +207,16 @@ class Category extends React.Component {
              */
             let everyClick = (param, i, cid) => {
                 if (param.seriesIndex == 0 && param.dataIndex == i) {
+
+                    // 请求数据
                     this.props.getCategoryByCid(cid);
+
+                    // 获取类目信息
+                    const cateName = param.data.name;
+                    this.setState({
+                        selectVal:cid,
+                        selectLabel:cateName,
+                    });
                 }
             }
                 
@@ -229,7 +238,7 @@ class Category extends React.Component {
                 }
             }
 
-            // Echart 传入点击事件,只甚至一次
+            // Echart 传入点击事件 
             if(setChartClickCount == 0){
                 catePieChart.on("click", eConsole);
                 setChartClickCount = 1;
