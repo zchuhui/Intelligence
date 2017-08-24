@@ -1,24 +1,23 @@
-import request  from '../utils/request';
-import { originRequest }  from '../utils/request';
-import { Url } from '../config/config.url';
-import moment from 'moment'; 
+import request from "../utils/request";
+import { originRequest } from "../utils/request";
+import { Url } from "../config/config.url";
+import DataTime from "../utils/date-time.js";
 
-// 获取BG报表数据
-// page: 页数
+
+/**
+ * 获取BG报表数据
+ * @param {*} param0 
+ */
 export function fetch({ page }) {
-    // 默认抓取时间为当月数据
-    let firstDay = moment().startOf('month').format('YYYY-MM-DD')
-    let endDay = moment().endOf('month').format('YYYY-MM-DD')
+  // 默认抓取时间为当月数据
+  const firstDay = DataTime.getDataOfMonth("start");
+  const endDay = DataTime.getDataOfMonth("end");
 
-    //默认参数，并加上页数	
-    const apiArgs = `com=ajax&t=getBgProductList&site=banggood&startTime=${firstDay}&endTime=${endDay}&page=${page}`;
+  //默认参数，并加上页数
+  const url = `${Url}?com=ajax&t=getBgProductList&site=banggood&startTime=${firstDay}&endTime=${endDay}&page=${page}`;
 
-    // 合成Url
-    let currentUrl = `${Url}?${apiArgs}`;
-
-    return request(currentUrl);
+  return request(url);
 }
-
 
 /**
  * 搜索数据
@@ -26,23 +25,23 @@ export function fetch({ page }) {
  * @return {[type]}      [请求数据的集合]
  */
 export function search(args) {
+  // 获取参数
+  let argument = args.searchArguments,
+    url = `${Url}?com=ajax&t=getBgProductList&`; //请求url
 
-    const argument = args.searchArguments;
-    
-    let argumentStr = `com=ajax&t=getBgProductList&`;
-
-    // 把参数转为url格式
-    for (let i in argument) {
-        if (argument[i] !== '' && argument[i] !== undefined && argument[i] !== null) {
-            argumentStr += `&${i}=${argument[i]}`
-        }
+  // 把参数转为url格式，并追加
+  for (let i in argument) {
+    if (
+      argument[i] !== "" &&
+      argument[i] !== undefined &&
+      argument[i] !== null
+    ) {
+      url += `&${i}=${argument[i]}`;
     }
+  }
 
-    let url = `${Url}?${argumentStr}`;
-    
-    return request(url);
+  return request(url);
 }
-
 
 /**
  * 获取单个商品信息
@@ -50,14 +49,11 @@ export function search(args) {
  * @return {[type]}      [data]
  */
 export function fetchGoodsDetailBySku(args) {
-    let argumentStr = `com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
-    let url = `${Url}?${argumentStr}`;
-    console.log('url',url);
-    // 这里需要返回的验证数据，用originRequest
-    return originRequest(url);
-    
-}
+  let url = `${Url}?com=ajax&t=productInfo&site=${args.site}&sku=${args.sku}`;
 
+  // 这里需要返回的验证数据，用originRequest
+  return originRequest(url);
+}
 
 /**
  * 获取相似商品列表
@@ -65,15 +61,10 @@ export function fetchGoodsDetailBySku(args) {
  * @return {[type]}      [data]
  */
 export function fetchSimilarGoodsList(args) {
+  let url = `${Url}?com=ajax&t=getLikeProduct&title=${args.title}`;
 
-    let argumentStr = `com=ajax&t=getLikeProduct&title=${args.title}`;
-
-    let url = `${Url}?${argumentStr}`;
-    
-  	return request(url);
-
+  return request(url);
 }
-
 
 /**
  * 设置关联的商品
@@ -81,14 +72,11 @@ export function fetchSimilarGoodsList(args) {
  * @return {[type]}      [data]
  */
 export function setRelevanceGoods(args) {
+  let content = JSON.stringify(args.relevanceGoodsList);
 
-    let content = JSON.stringify(args.relevanceGoodsList); 
+  let url = `${Url}?com=ajax&t=setBgToOtherRelation&sku=${args.sku}&content=${content}`;
 
-    let argumentStr = `com=ajax&t=setBgToOtherRelation&sku=${args.sku}&content=${ content }`;
-    
-    let url = `${Url}?${argumentStr}`;
-  	
-    return request(url,{method:'POST'});
+  return request(url, { method: "POST" });
 }
 
 /**
@@ -97,14 +85,10 @@ export function setRelevanceGoods(args) {
  * @return {object}      [data]
  */
 export function clearRelevanceGoods(args) {
+  let url = `${Url}?com=ajax&t=delBgToOtherRelation&sku=${args.sku}`;
 
-    let argumentStr = `com=ajax&t=delBgToOtherRelation&sku=${args.sku}`;
-    
-    let url = `${Url}?${argumentStr}`;
-  	
-    return request(url,{ method:'POST'});
+  return request(url, { method: "POST" });
 }
-
 
 /**
  * 获取主体商品趋势图
@@ -112,29 +96,21 @@ export function clearRelevanceGoods(args) {
  * @return {object}      [data]
  */
 export function fetchGoodsEchartByPidAndTime(args) {
+  let url = `${Url}?com=ajax&t=getBgProductRunChart&pid=${args.pid}&startTime=${args.startTime}&endTime=${args.endTime}`;
 
-    let argumentStr = `com=ajax&t=getBgProductRunChart&pid=${args.pid}&startTime=${args.startTime}&endTime=${args.endTime}`;
-
-	let url = `${Url}?${argumentStr}`;
-	
-  	return request(url);	
+  return request(url);
 }
-
 
 /**
  * 获取对比商品数据
  * @param  {[type]} pid [商品pid]
  * @return {[type]}     [data]
  */
-export function fetchGoodsContrastData(pid){
+export function fetchGoodsContrastData(pid) {
+  let url = `${Url}?com=ajax&t=getBgRelateProductComtrastInfo&pid=${pid}`;
 
-    let argumentStr = `com=ajax&t=getBgRelateProductComtrastInfo&pid=${pid}`;
-
-    let url = `${Url}?${argumentStr}`;
-    
-    return request(url);    
+  return request(url);
 }
-
 
 /**
  * 获取该商品已关联的竞品表
@@ -142,11 +118,7 @@ export function fetchGoodsContrastData(pid){
  * @return {[type]}      [data]
  */
 export function fetchRevanceBySku(args) {
+  let url = `${Url}?com=ajax&t=getBgToOtherRelationInfo&site=${args.site}&sku=${args.sku}`;
 
-    let argumentStr = `com=ajax&t=getBgToOtherRelationInfo&site=${args.site}&sku=${args.sku}`;
-    
-    let url = `${Url}?${argumentStr}`;
-
-    return request(url);
-
+  return request(url);
 }

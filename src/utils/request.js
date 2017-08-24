@@ -21,6 +21,7 @@ const checkStatus = (response) => {
 	throw error;
 }
 
+
 /**
  * 存储用户权限信息
  * @param {object} data 
@@ -80,7 +81,7 @@ export default async function request(url, options) {
 	// 如果请求成功，则返回数据，失败则统一处理
 	if(code == 200){
 		return ret;
-	}
+	} 
 	else{
 		switch(code){
 			case 401:

@@ -17,8 +17,8 @@ class Category extends React.Component {
         super();
         
         this.state = {
-            selectLabel:null,  // 类目名称
-            selectVal:null     // 类目值
+            selectLabel:null,  // 选中的类目名称
+            selectVal:null     // 选中的类目值
         }
 	}
 
@@ -27,7 +27,7 @@ class Category extends React.Component {
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
                     <span className={styles.fl}>你的类目情况</span>
-                    {/* {
+                    {
                         this.props.cateSet.length > 0?
                         <div className={styles.fr}>
                             <Select labelInValue defaultValue={{key: this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid}} onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
@@ -39,7 +39,7 @@ class Category extends React.Component {
                             </Select>
                         </div>
                         :null
-                    } */}
+                    }
                 </div>
                 
                 <div className={styles.categoryWrap}>
@@ -116,24 +116,25 @@ class Category extends React.Component {
                         <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
                     }
                 </div>
-                
+
             </div>
         )
     } 
 
     
     componentDidMount(){
+
+        // 延迟3秒加载Echart图表
+        this.timeout(3000).then((value) => {
+            if(this.props.cateSet){
+                this.loadChart(this.formatDataToEchartPieData(this.props.cateSet));
+            }
+        });
         
     }
 
     componentDidUpdate(){
-        // 载入两个Echart图表
-        if(this.props.cateSet){
-            this.loadChart(
-                this.formatDataToEchartPieData(this.props.cateSet),
-                this.formatDataToEchartData(this.props.myCateSalesFromPrice)
-            );
-        }
+        
     }
 
     /**
@@ -159,6 +160,7 @@ class Category extends React.Component {
      * @param {Array} prices  [圆柱图数据]
      */
 	loadChart(cateSet,prices){
+        console.log("load chart");
         const catePieChartId = this.refs.catePieChart;
         if(cateSet && catePieChartId){
 
@@ -241,7 +243,7 @@ class Category extends React.Component {
             // Echart 传入点击事件 
             if(setChartClickCount == 0){
                 catePieChart.on("click", eConsole);
-                setChartClickCount = 1;
+                setChartClickCount = 0;
             } 
         }
     }

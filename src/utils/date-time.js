@@ -11,6 +11,22 @@ export default {
     getDateOfDays: (days) => {
         const date = moment(new Date()).subtract(days,"days").format(DATE_FORMAT);
         return date;
+    },
+
+    /**
+     * 获取当月的起始或结束日期
+     * param: start/end
+     */
+    getDataOfMonth: (startOrEnd) => {
+
+        if(startOrEnd == "start"){
+            // 月初
+            return moment().startOf('month').format(DATE_FORMAT);
+        }else if(startOrEnd == "end"){
+            // 月底
+            return moment().endOf('month').format(DATE_FORMAT);
+        }
+        
     }
 
 }

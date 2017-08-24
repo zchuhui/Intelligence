@@ -2,8 +2,10 @@ import request from '../utils/request';
 import { IS_SERVER } from '../constants/constant';
 import { Url } from '../config/config.url';
 
-// 根据页数获取数据
-// page: 页数
+/**
+ * 根据页数获取数据
+ * @param {object} param0 
+ */
 export function fetch({page}) { 
 	//添加两个默认参数，并加上页数
 	const apiArgs= `com=ajax&t=productList&page=${page}`;
@@ -14,8 +16,10 @@ export function fetch({page}) {
 }
 
 
-// 搜索数据
-// arg: 搜索参数
+/**
+ * 搜索数据
+ * @param {object} args 
+ */
 export function search(args) { 
 	
 	const argument = args.searchArgs;
@@ -32,5 +36,4 @@ export function search(args) {
 	
   	return request(url);
 }
-
 
