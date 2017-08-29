@@ -12,6 +12,7 @@ app.model(require('../../models/user'));
 app.model(require('../../models/menus'));
 app.model(require('./models/index-home-model'));
 app.model(require('./models/goods-list-model'));
+app.model(require('./models/goods-detail-model'));
 app.model(require('./models/create-relevance-model'));
 
 // 4. Router

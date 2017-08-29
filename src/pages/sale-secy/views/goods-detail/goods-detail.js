@@ -51,49 +51,55 @@ class GoodsDetail extends React.Component {
             <div className={`${styles.mainWrap} ${styles.goodsDetailWrap}`}>
                 <div className={styles.goodsAttribute}>
                     <div className={styles.sku}>
-                        <b>SKU: 4578454</b>
+                        <b>SKU: {this.props.sku}</b>
                         <Button className={styles.fr}>返回</Button>
                     </div>
-                    <div className={styles.clear}>
-                        <div className={`${styles.fl} ${styles.image}`}>
-                            <img src="http://lorempixel.com/640/480/food" />
-                        </div>
-                        <div className={`${styles.detailBox}`}>
-                            <div className={styles.goodsTitle}>
-                                <span className={styles.tips}>在售</span> 
-                                <h2>Echahi Love 100 Mini Echahi Love 100 Mini Echahi Love 100 Mini .........................</h2>
+                    {
+                        this.props.goods?
+                        <div className={styles.clear}>
+                            <div className={`${styles.fl} ${styles.image}`}>
+                                <img src={this.props.goods.products_image} />
                             </div>
-                            <div className={styles.clear}>
-                                <div className={`${styles.fl} ${styles.attrLeft}`}>
-                                    <p className={styles.clear}>
-                                        <span className={styles.fl}>品牌：Eachine</span>
-                                        <span className={styles.fr}>上架时间：2015-5-5</span>
-                                    </p>
-                                    <p>分类：Toys > Hong > ....</p>
+                            <div className={`${styles.detailBox}`}>
+                                <div className={styles.goodsTitle}>
+                                    <span className={styles.tips}>{ this.getProductsStatus(this.props.goods.products_status) }</span> 
+                                    <h2>{this.props.goods.products_name}</h2>
                                 </div>
-                                <div className={`${styles.fr} ${styles.attrRight}`}>
-                                    <ul>
-                                        <li>
-                                            <p>当前价格：454</p>
-                                            <p>加购数：1542</p>
-                                        </li>
-                                        <li>
-                                            <p>当前价格：45432323</p>
-                                            <p>加购数：1542</p>
-                                        </li>
-                                        <li>
-                                            <p>当前价格：454</p>
-                                            <p>加购数：1542323232</p>
-                                        </li>
-                                        <li>
-                                            <p>当前价格：454</p>
-                                            <p>加购数：1542</p>
-                                        </li>
-                                    </ul>
+                                <div className={styles.clear}>
+                                    <div className={`${styles.fl} ${styles.attrLeft}`}>
+                                        <p className={styles.clear}>
+                                            <span className={styles.fl}>品牌：{this.props.goods.brand}</span>
+                                            <span className={styles.fr}>上架时间：{this.props.goods.products_date_added}</span>
+                                        </p>
+                                        <p>分类：{this.props.goods.cateName }</p>
+                                    </div>
+                                    <div className={`${styles.fr} ${styles.attrRight}`}>
+                                        <ul>
+                                            <li>
+                                                <p>当前价格：{this.props.goods.finalPrice }</p>
+                                                <p>加购数：{this.props.goods.basket }</p>
+                                            </li>
+                                            <li>
+                                                <p>平均转化率：{this.props.goods.changeRate }</p>
+                                                <p>关注数：{this.props.goods.favorites }</p>
+                                            </li>
+                                            <li>
+                                                <p>毛利率：{this.props.goods.maoriRate }</p>
+                                                <p>评论数：{this.props.goods.reviews }</p>
+                                            </li>
+                                            <li>
+                                                <p>库存：{this.props.goods.stocks }</p>
+                                                <p>提问数：{this.props.goods.questions }</p>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        :
+                        <div> not data </div>
+                    }
+                    
                 </div>
 
                 <div className={styles.detailContent}>
@@ -133,7 +139,6 @@ class GoodsDetail extends React.Component {
                                 <span className={styles.lateDate} >最近7天</span>
                                 <span className={styles.lateDate} >最近15天</span>
                                 <span className={styles.lateDate} >最近30天</span>
-                                <span className={styles.lateDate} >Life Time</span>
                             </div>
                             <div className={styles.clear}>
                                 <div className={styles.echartBox} >
@@ -213,12 +218,34 @@ class GoodsDetail extends React.Component {
         
     }
 
+    /**
+     * 格式化商品出售状态
+     * @param {number} status 
+     */
+    getProductsStatus(status){
+        switch(status){
+            case "0" :
+                return '停售';
+                break;
+            case "1" :
+                return '在售';
+                break;
+            case "2" :
+                return '下架';
+                break;
+            default:
+                return '未知'
+        }
+    }
+
+
     handleChange(value) {
         console.log(`selected ${value}`);
     }
 
-    loadChart() {
-        
+    
+    loadChart(chartData) {
+
         const chartBG = echarts.init(this.refs.chartBG),
               chartCompete = echarts.init(this.refs.chartCompete);
         
@@ -227,6 +254,10 @@ class GoodsDetail extends React.Component {
             },
             tooltip: {
                 trigger: 'axis',
+                formatter:function(params,ticket,callback){
+                    let dataIndex = params[0].dataIndex;
+                    return `<div>${chartData.nameArray[dataIndex]}</div>`;
+                }
             },
             legend: {
             },
@@ -245,7 +276,7 @@ class GoodsDetail extends React.Component {
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data : ['周一','周二','周三','周四','周五','周六','周日'],
+                    data : chartData.dateArray,
                     axisLabel: {
                         show: true,
                         textStyle: {
@@ -289,8 +320,8 @@ class GoodsDetail extends React.Component {
                             show: true,
                         },
                     },
-                    areaStyle: { normal: {} },
-                    data:[120, 132, 101, 134, 90, 230, 210]
+                    areaStyle: { normal: {} }, 
+                    data:chartData.priceArray,
                 }
             ]
         }
@@ -299,8 +330,49 @@ class GoodsDetail extends React.Component {
         chartCompete.setOption(option);
     }
 
+
+    formatChartData(chartData){
+        let dateArray  = [],
+            priceArray = [],
+            nameArray  = [];
+
+        if(chartData.priceSet){
+            for(let i in chartData.priceSet){
+                for(let item in chartData.priceSet[i]){
+                   switch(item){
+                        case 'price':
+                            priceArray.push(chartData.priceSet[i][item]);
+                            break;
+                        case 'name':
+                            nameArray.push(chartData.priceSet[i][item]);
+                            break;
+                        case 'date':
+                            dateArray.push(chartData.priceSet[i][item]);
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        return {
+            dateArray: dateArray,
+            priceArray: priceArray,
+            nameArray: nameArray
+        }
+    }
+
+
     componentDidMount(){
-        this.loadChart();
+        
+    }
+
+
+    componentDidUpdate(){
+        if(this.props.goods.runChart){
+            this.loadChart(this.formatChartData(this.props.goods.runChart));
+        }
     }
 
 }

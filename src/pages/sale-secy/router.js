@@ -18,6 +18,7 @@ function RouterConfig({ history }) {
             <Route path="/goods" component={ GoodsListDataRouter } ></Route>
             {/* 商品详情 */}
             <Route path="/detail" component={ GoodsDetailDataRouter } ></Route>
+            <Route path="/detail/:sku" component={ GoodsDetailDataRouter } />
             {/* 创建关系 */}
 			<Route path="/create" component={ CreateRelevance }> </Route>
 			<Route path="/create/:sku" component={ CreateRelevance } /> 

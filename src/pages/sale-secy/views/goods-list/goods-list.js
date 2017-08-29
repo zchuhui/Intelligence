@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { hashHistory  } from 'react-router';
 import { Link } from 'dva/router';
 import styles from './goods-list.less';
 import moment from 'moment';
@@ -55,7 +56,7 @@ class GoodsList extends React.Component {
                     <span>
                         {   // 子表不显示该项
                             !record.isChildren?
-                            <Link to='/detail'>
+                            <Link to={"/detail/"+record.sku}>
                                 <Lazyload throttle={200} height={80} >
                                     <img src={ record.img_url} className={ styles.img } />
                                 </Lazyload>
@@ -334,6 +335,9 @@ class GoodsList extends React.Component {
                 <Menu.Item key="1">
                   <a key="cd_2" href="javascript:;">趋势图</a>
                 </Menu.Item>
+                <Menu.Item key="2">
+                  <a key="cd_3" href="javascript:;">详情</a>
+                </Menu.Item>
             </Menu>
         )
     }
@@ -579,7 +583,7 @@ class GoodsList extends React.Component {
     }
 
 
-    // 选择操作:对比 or 趋势图
+    // 选择操作:对比/趋势图/详情
     onClickSelct = (obj,item) => {
         // 趋势图
         if (item.key == 1) {
@@ -587,6 +591,9 @@ class GoodsList extends React.Component {
         }
         else if(item.key == 0) {
             this.showGoodsContrastTable(obj.pid,obj.sku);
+        }
+        else if(item.key == 2) {
+            hashHistory.push('/detail/'+obj.sku);
         }
     }
 

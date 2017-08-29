@@ -10,16 +10,37 @@ class GoodsDetailDataRouter extends React.Component {
     render(){
         return (
             <MainLayout headerMenuText="销售秘书">
+                {/* 菜单 */}
                 <MenuBar value={1}/>
-                <GoodsDetail />
+                {/* 价格对比 */}
+                <GoodsDetail 
+                    sku={this.props.params.sku}
+                    goods={this.props.goods}
+                />
             </MainLayout>
         )
     }
+
+    componentDidMount(){
+
+        // 根据sku请求数据
+        if(this.props.params.sku){
+            this.props.dispatch({
+                type: 'GoodsDetailModel/getGoodsBySku',
+                payload: {
+                    sku: this.props.params.sku
+                }
+            })
+        }
+
+    }
+
+
 }
 
 
 function mapStateToProps(state){
-    return {};
+    return {...state.GoodsDetailModel};
 }
 
 export default connect(mapStateToProps)(GoodsDetailDataRouter)
