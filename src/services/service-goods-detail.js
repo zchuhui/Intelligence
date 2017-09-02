@@ -17,3 +17,31 @@ export function getGoodsBySku(sku) {
 }
 
 
+/**
+ * 根据SKU获取商品价格汇总信息
+ * @param {string} sku 
+ */
+export function getPriceListBySku(sku) {
+    const url = `${Url}?com=products&t=priceSet&sku=${sku}`;
+    return request(url);
+}
+
+
+/**
+ * 获取单个商品某段时间内价格趋势图和对比关系
+ * @param {object} argument 
+ */
+export function getGoodsByArguments(argument) {
+    
+    let url = `${Url}?com=products&t=productOtherRunChart`;
+
+    // 把参数转为url格式，并追加
+    for (let i in argument) {
+        if (argument[i] !== "" && argument[i] !== undefined && argument[i] !== null) {
+            url += `&${i}=${argument[i]}`;
+        }
+    }
+    
+    return request(url);
+}
+

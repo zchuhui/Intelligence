@@ -14,12 +14,28 @@ class GoodsDetailDataRouter extends React.Component {
                 <MenuBar value={1}/>
                 {/* 价格对比 */}
                 <GoodsDetail 
-                    sku={this.props.params.sku}
-                    goods={this.props.goods}
+                    sku={this.props.params.sku} 
+                    goods={this.props.goods} 
+                    priceList={this.props.priceList} 
+                    compareInfoList={this.props.compareInfoList}
+                    relateInfo={this.props.relateInfo}
+                    runChart={this.props.runChart}
+                    attrInfo={this.props.attrInfo}
+                    onGoodsOtherRunChart={params => this.onGoodsOtherRunChart(params)}
                 />
             </MainLayout>
         )
     }
+
+
+    onGoodsOtherRunChart(argus){
+        console.log('argus',argus);
+        this.props.dispatch({
+            type: 'GoodsDetailModel/getGoodsByArguments',
+            payload: argus
+        })
+    }
+    
 
     componentDidMount(){
 

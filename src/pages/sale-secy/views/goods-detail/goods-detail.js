@@ -9,6 +9,8 @@ import styles from './goods-detail.less'
 import moment from 'moment';
 import echarts from 'echarts';
 import { Button, Icon, DatePicker, Select, Tag, Cascader, Table} from 'antd';
+import { Link } from 'dva/router';
+import DateTime from '../../../../utils/date-time'; 
 
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
@@ -18,41 +20,44 @@ class GoodsDetail extends React.Component {
     constructor(props, context) {
         super(props, context);
         
+        this.state = {
+            startDate: DateTime.getDateOfDays(30),
+            endDate: DateTime.getDateOfDays(1),
+            competeSite: 'banggood',
+            optionValuesByBg:[],
+            optionValuesByOther:[],
+        }
     }
     
     render() {
-
+        
         const columns = [
-            { title: '平台', dataIndex: 'name', key: 'name' },
-            { title: '价格', dataIndex: 'age', key: 'age' },
-            { title: '销量', dataIndex: 'address', key: 'address' },
-            { title: '关注数', dataIndex: 'fanCount', key: 'fanCount' },
-            { title: '提问数', dataIndex: 'questionCount', key: 'questionCount' },
+            { title: '平台', dataIndex: 'name', key: 'name',width:'20%'},
+            { title: '价格', dataIndex: 'price', key: 'price' },
+            { title: '销量', dataIndex: 'sales', key: 'sales' },
+            { title: '关注数', dataIndex: 'favorites', key: 'favorites' },
+            { title: '提问数', dataIndex: 'questions', key: 'questions' },
         ];
 
         const columnsPrice = [
             { title: '', dataIndex: 'name', key: 'name' },
-            { title: '有效时间', dataIndex: 'age', key: 'Time' },
-            { title: '优先级', dataIndex: 'address', key: 'priority' },
-            { title: '中仓', dataIndex: 'fanCount', key: 'chinaStoreHouse' },
-            { title: 'HK仓', dataIndex: 'fanCount', key: 'HKStoreHouse' },
-            { title: '美仓', dataIndex: 'fanCount', key: 'AmericaStoreHouse' },
-            { title: '英仓', dataIndex: 'fanCount', key: 'EnglishStoreHouse' },
-            { title: '欧仓', dataIndex: 'fanCount', key: 'EuropeStoreHouse' },
+            { title: '有效时间', dataIndex: 'valid', key: 'valid' },
+            { title: '优先级', dataIndex: 'level', key: 'level' },
+            { title: '中仓', dataIndex: 'price', key: 'price' },
+            { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' },
+            { title: '美仓', dataIndex: 'usa_price', key: 'usa_price' },
+            { title: '英仓', dataIndex: 'uk_price', key: 'uk' },
+            { title: '欧仓', dataIndex: 'au_price', key: 'au' },
+            { title: '法仓', dataIndex: 'fr_price', key: 'fr' },
+            { title: '德仓', dataIndex: 'de_price', key: 'de' },
         ];
         
-        const data = [
-            { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park',fanCount:332,questionCount:10, description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-            { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park',fanCount:3332,questionCount:10, description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-            { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park',fanCount:32,questionCount:100, description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
-        ];
-
         return (
             <div className={`${styles.mainWrap} ${styles.goodsDetailWrap}`}>
                 <div className={styles.goodsAttribute}>
                     <div className={styles.sku}>
                         <b>SKU: {this.props.sku}</b>
-                        <Button className={styles.fr}>返回</Button>
+                        <Link to='/goods'><Button className={styles.fr}>返回</Button></Link>
                     </div>
                     {
                         this.props.goods?
@@ -96,8 +101,7 @@ class GoodsDetail extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        :
-                        <div> not data </div>
+                        :null
                     }
                     
                 </div>
@@ -122,10 +126,10 @@ class GoodsDetail extends React.Component {
                         <section>
                             <div>
                                 <RangePicker 
-                                    defaultValue={[
-                                        moment(new Date()).subtract(30,"days"),
-                                        moment(),
-                                    ]} 
+                                    value={[
+                                        moment(this.state.startDate),
+                                        moment(this.state.endDate)
+                                    ]}
                                     ranges={{ 
                                         '今天': [moment(), moment()],
                                         '本周': [moment(), moment().endOf('week')], 
@@ -134,50 +138,83 @@ class GoodsDetail extends React.Component {
                                     format="YYYY-MM-DD" 
                                     style={{ width:210 }}
                                     allowClear={false}
+                                    disabledDate = {this.disabledDate}
+                                    onChange={ this.onGetDateRange.bind(this) }
                                 />
-                                <span className={styles.lateDate} >前天</span>
-                                <span className={styles.lateDate} >最近7天</span>
-                                <span className={styles.lateDate} >最近15天</span>
-                                <span className={styles.lateDate} >最近30天</span>
+                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,1)}>前天</span>
+                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
+                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,15)}>最近15天</span>
+                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
+                                
                             </div>
                             <div className={styles.clear}>
                                 <div className={styles.echartBox} >
                                     <div className={styles.changeAttr}>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
+                                        {
+                                            this.props.attrInfo?
+                                            this.props.attrInfo.map((item,index)=>{
+                                                return <Select className={styles.select} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
+                                                    {
+                                                        item.children.map((item2,index2)=>{
+                                                            return <Option value={item2.options_values_id}>{item2.value_name}</Option>
+                                                        })
+                                                    }
+                                                </Select>
+                                            })
+                                            :null
+                                        }
+
+                                        {
+                                            this.props.goods?
+                                            <Button onClick={
+                                                this.onGoodsOtherRunChart.bind(this,
+                                                {
+                                                    pid:this.props.goods.products_id,
+                                                    site:'banggood',
+                                                    startDate:this.state.startDate,
+                                                    endDate:this.state.endDate,
+                                                    optionValues:this.state.optionValuesByBg.join(',')
+                                                    
+                                                })}>确定</Button>
+                                            :null
+                                        }
+                                        
                                     </div>
                                     <div ref="chartBG" style={{width:'100%',height:250}}></div>
                                 </div>
                                 <div className={styles.echartBox} >
                                     <div className={styles.changeAttr}>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
-                                        <Select className={styles.select} defaultValue="属性1" onChange={this.handleChange}>
-                                            <Option value="1">属性1</Option>
-                                            <Option value="2">属性2</Option>
-                                            <Option value="3">属性3</Option>
-                                        </Select>
+                                       {
+                                            this.props.relateInfo?
+                                            <div>
+                                                <Select className={styles.select} style={{width:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
+                                                    {
+                                                        this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
+                                                            return <Option value={index} key={`relate_${index}`}>{item}</Option>
+                                                        })
+                                                    }
+                                                </Select>
+
+                                               {
+                                                 this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[0])
+                                               }
+                                               
+                                               {
+                                                this.props.goods?
+                                                <Button onClick={
+                                                    this.onGoodsOtherRunChart.bind(this,{
+                                                    pid:this.props.goods.products_id,
+                                                    site:this.state.competeSite,
+                                                    startDate:this.state.startDate,
+                                                    endDate:this.state.endDate,
+                                                    optionValues:this.state.optionValuesByOther.join(',')
+                                                })}>确定</Button>
+                                                :null
+                                               }
+                                            </div>
+                                            :null
+                                        }
+                                        
                                     </div>
                                     <div ref="chartCompete" style={{width:'100%',height:250}}></div>
                                 </div>
@@ -191,8 +228,7 @@ class GoodsDetail extends React.Component {
                             <div className={styles.tableWrap}>
                                 <Table
                                     columns={columns}
-                                    expandedRowRender={record => <p>{record.description}</p>}
-                                    dataSource={data}
+                                    dataSource={this.props.compareInfoList}
                                 />
                             </div>
                         </section>
@@ -204,8 +240,7 @@ class GoodsDetail extends React.Component {
                             <div className={styles.tableWrap}>
                                 <Table
                                     columns={columnsPrice}
-                                    expandedRowRender={record => <p>{record.description}</p>}
-                                    dataSource={data}
+                                    dataSource={this.props.priceList} 
                                 />
                             </div>
                         </section>
@@ -238,16 +273,13 @@ class GoodsDetail extends React.Component {
         }
     }
 
-
-    handleChange(value) {
-        console.log(`selected ${value}`);
-    }
-
-    
+    /**
+     * 载入图表
+     * @param {object} chartData 
+     */
     loadChart(chartData) {
 
-        const chartBG = echarts.init(this.refs.chartBG),
-              chartCompete = echarts.init(this.refs.chartCompete);
+        const chartBG = echarts.init(this.refs.chartBG);
         
         const option = {
             title: {
@@ -327,10 +359,116 @@ class GoodsDetail extends React.Component {
         }
 
         chartBG.setOption(option);
-        chartCompete.setOption(option);
     }
 
+    /**
+     * 载入图表
+     * @param {object} chartData 
+     */
+    loadCompeteChart(chartData) {
+        
+        const chartCompete = echarts.init(this.refs.chartCompete);
+        
+        const optionCompete = {
+            title: {
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter:function(params,ticket,callback){
+                    let dataIndex = params[0].dataIndex;
+                    return `<div>${chartData.nameArray[dataIndex]}</div>`;
+                }
+            },
+            legend: {
+            },
+            toolbox: {
+                feature: {
+                }
+            },
+            grid: {
+                top: '3%',
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true,
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data : chartData.dateArray,
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#666'   // 字体颜色
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#acdaff'    // x轴颜色
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    show: true,
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#666'       // 字体颜色
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#acdaff'    // y轴颜色
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '价格',
+                    type: 'line',
+                    stack: '总量',
+                    itemStyle: {
+                        normal: {
+                            color: '#acdaff',
+                            show: true,
+                        },
+                    },
+                    areaStyle: { normal: {} }, 
+                    data:chartData.priceArray,
+                }
+            ]
+        }
 
+        chartCompete.setOption(optionCompete);
+    }
+
+    /**
+     * 关联商品切换
+     * @param {number} value 
+     */
+    onChangeRelateInfo(value){
+        // 图表
+        this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[value].runChart));
+        
+        // 属性
+        this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[value]);
+        
+        this.setState({
+            competeSite:this.props.relateInfo.relateInfoByMenu[value],
+        })
+    }
+
+    /**
+     * 格式化图表数据
+     * @param {object} chartData 
+     */
     formatChartData(chartData){
         let dateArray  = [],
             priceArray = [],
@@ -363,15 +501,119 @@ class GoodsDetail extends React.Component {
         }
     }
 
+    /**
+     * 获取多少天前的数据
+     * @param {number} days 
+     */
+    onLatelyDate(days){
+
+        // 获取时间范围
+        let yesterday = DateTime.getDateOfDays(1),                // 昨天
+            latelyDay = DateTime.getDateOfDays(days+1);           // days天前的日期
+
+        // 前天
+        if(days == 1){
+            yesterday = DateTime.getDateOfDays(2);
+            latelyDay = DateTime.getDateOfDays(2);
+        }
+        
+        // 赋值
+        this.setState({
+            startDate:latelyDay,
+            endDate:yesterday
+        })
+    }
+
+    /**
+     * 日期控件操作
+     * @param {*} date 
+     * @param {*} dateString 
+     */
+    onGetDateRange(date,dateString){
+        let startDate = dateString[0],
+            endDate   = dateString[1];
+        
+        // 赋值
+        this.setState({
+            startDate:startDate,
+            endDate:endDate
+        })
+    }
+
+    /**
+     * 限制日期控件只能选今天或今天前的日期
+     * @param {*} current 
+     */
+    disabledDate(current) {
+        return current && current.valueOf() > Date.now();
+    }
+
+    /**
+     * 在数关联商品的属性
+     * @param {object} attrInfo 
+     */
+    loadAttrInfo(attrInfo){
+        return (
+                <span>
+                {
+                    attrInfo.values?
+                    <Select className={styles.select} key={attrInfo.option_id} defaultValue={attrInfo.name} onChange={this.handleChangeByOther.bind(this)}>
+                        {
+                            attrInfo.values.map((item2,index2)=>{
+                                return <Option value={item2.options_values_id} key={`ky_${index2}`}>{item2.value_name}</Option>
+                            })
+                        }
+                    </Select>
+                    :null
+                }
+                </span>
+        )
+    }
+
+    
+    handleChangeByBG(value) {
+        
+        let optionValues = this.state.optionValuesByBg;
+
+        if(!optionValues.contains(value)){
+            optionValues.push(value);
+            this.setState({
+                optionValuesByBg:optionValues,
+            });
+            console.log(optionValues);
+        }
+    }
+    
+    handleChangeByOther(value) {
+        let optionValues = this.state.optionValuesByOther;
+        
+        if(!optionValues.contains(value)){
+            optionValues.push(value);
+            this.setState({
+                optionValuesByOther:optionValues,
+            });
+            console.log(optionValues);
+        }
+    }
+
+    /**
+     * 根据参数请求最新数据
+     * @param {object} params 
+     */
+    onGoodsOtherRunChart(params){
+        this.props.onGoodsOtherRunChart(params);
+    }
 
     componentDidMount(){
-        
+        //console.log('compareInfoList',this.props.compareInfoList);
     }
 
 
     componentDidUpdate(){
-        if(this.props.goods.runChart){
-            this.loadChart(this.formatChartData(this.props.goods.runChart));
+        console.log(this.props.runChart);
+        if(this.props.runChart){
+            this.loadChart(this.formatChartData(this.props.runChart));
+            this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
         }
     }
 
