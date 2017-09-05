@@ -8,7 +8,7 @@ import React from 'react';
 import styles from './goods-detail.less'
 import moment from 'moment';
 import echarts from 'echarts';
-import { Button, Icon, DatePicker, Select, Tag, Cascader, Table} from 'antd';
+import { Button, Icon, DatePicker, Select, Tag, Cascader, Table, Spin} from 'antd';
 import { Link } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 
@@ -21,9 +21,9 @@ class GoodsDetail extends React.Component {
         super(props, context);
         
         this.state = {
-            startDate: DateTime.getDateOfDays(30),
+            startDate: DateTime.getDateOfDays(7),
             endDate: DateTime.getDateOfDays(1),
-            competeSite: 'banggood',
+            competeSite: '',
             optionValuesByBg:[],
             optionValuesByOther:[],
         }
@@ -33,23 +33,22 @@ class GoodsDetail extends React.Component {
         
         const columns = [
             { title: '平台', dataIndex: 'name', key: 'name',width:'20%'},
-            { title: '价格', dataIndex: 'price', key: 'price' },
-            { title: '销量', dataIndex: 'sales', key: 'sales' },
-            { title: '关注数', dataIndex: 'favorites', key: 'favorites' },
-            { title: '提问数', dataIndex: 'questions', key: 'questions' },
+            { title: '价格', dataIndex: 'price', key: 'price',width:'20%'},
+            { title: '销量', dataIndex: 'sales', key: 'sales',width:'20%'},
+            { title: '关注数', dataIndex: 'favorites', key: 'favorites',width:'20%'},
+            { title: '提问数', dataIndex: 'questions', key: 'questions',width:'20%'},
         ];
 
         const columnsPrice = [
-            { title: '', dataIndex: 'name', key: 'name' },
-            { title: '有效时间', dataIndex: 'valid', key: 'valid' },
-            { title: '优先级', dataIndex: 'level', key: 'level' },
-            { title: '中仓', dataIndex: 'price', key: 'price' },
-            { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' },
-            { title: '美仓', dataIndex: 'usa_price', key: 'usa_price' },
-            { title: '英仓', dataIndex: 'uk_price', key: 'uk' },
-            { title: '欧仓', dataIndex: 'au_price', key: 'au' },
-            { title: '法仓', dataIndex: 'fr_price', key: 'fr' },
-            { title: '德仓', dataIndex: 'de_price', key: 'de' },
+            { title: '', dataIndex: 'name', key: 'name',width:'15%'},
+            { title: '有效时间', dataIndex: 'valid', key: 'valid',width:'15%'},
+            { title: '中仓', dataIndex: 'price', key: 'price' ,width:'10%'},
+            { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' ,width:'10%'},
+            { title: '美仓', dataIndex: 'usa_price', key: 'usa_price',width:'10%'},
+            { title: '英仓', dataIndex: 'uk_price', key: 'uk' ,width:'10%'},
+            { title: '澳仓', dataIndex: 'au_price', key: 'au' ,width:'10%'},
+            { title: '法仓', dataIndex: 'fr_price', key: 'fr' ,width:'10%'},
+            { title: '德仓', dataIndex: 'de_price', key: 'de' ,width:'10%'},
         ];
         
         return (
@@ -60,48 +59,57 @@ class GoodsDetail extends React.Component {
                         <Link to='/goods'><Button className={styles.fr}>返回</Button></Link>
                     </div>
                     {
-                        this.props.goods?
-                        <div className={styles.clear}>
-                            <div className={`${styles.fl} ${styles.image}`}>
-                                <img src={this.props.goods.products_image} />
-                            </div>
-                            <div className={`${styles.detailBox}`}>
-                                <div className={styles.goodsTitle}>
-                                    <span className={styles.tips}>{ this.getProductsStatus(this.props.goods.products_status) }</span> 
-                                    <h2>{this.props.goods.products_name}</h2>
-                                </div>
+                        !this.props.goodsLoading?
+                        <Spin style={{width:'100%',height:50,marginTop:20}}/>
+                        :
+                        <div>
+                            {
+                                this.props.goods?
                                 <div className={styles.clear}>
-                                    <div className={`${styles.fl} ${styles.attrLeft}`}>
-                                        <p className={styles.clear}>
-                                            <span className={styles.fl}>品牌：{this.props.goods.brand}</span>
-                                            <span className={styles.fr}>上架时间：{this.props.goods.products_date_added}</span>
-                                        </p>
-                                        <p>分类：{this.props.goods.cateName }</p>
+                                    <div className={`${styles.fl} ${styles.image}`}>
+                                        <img src={this.props.goods.products_image} />
                                     </div>
-                                    <div className={`${styles.fr} ${styles.attrRight}`}>
-                                        <ul>
-                                            <li>
-                                                <p>当前价格：{this.props.goods.finalPrice }</p>
-                                                <p>加购数：{this.props.goods.basket }</p>
-                                            </li>
-                                            <li>
-                                                <p>平均转化率：{this.props.goods.changeRate }</p>
-                                                <p>关注数：{this.props.goods.favorites }</p>
-                                            </li>
-                                            <li>
-                                                <p>毛利率：{this.props.goods.maoriRate }</p>
-                                                <p>评论数：{this.props.goods.reviews }</p>
-                                            </li>
-                                            <li>
-                                                <p>库存：{this.props.goods.stocks }</p>
-                                                <p>提问数：{this.props.goods.questions }</p>
-                                            </li>
-                                        </ul>
+                                    <div className={`${styles.detailBox}`}>
+                                        <div className={styles.goodsTitle}>
+                                            <span className={styles.tips}>{ this.getProductsStatus(this.props.goods.products_status) }</span> 
+                                            <h2>{this.props.goods.products_name}</h2>
+                                        </div>
+                                        <div className={styles.clear}>
+                                            <div className={`${styles.fl} ${styles.attrLeft}`}>
+                                                <p className={styles.clear}>
+                                                    <span className={styles.fl}>品牌：{this.props.goods.brand}</span>
+                                                    <span className={styles.fr}>上架时间：{this.props.goods.products_date_added}</span>
+                                                </p>
+                                                <div>分类：{this.props.goods.cateName }</div>
+                                            </div>
+                                            <div className={`${styles.fr} ${styles.attrRight}`}>
+                                                <ul>
+                                                    <li>
+                                                        <p>当前价格：{this.props.goods.finalPrice }</p>
+                                                        <p>加购数：{this.props.goods.basket }</p>
+                                                    </li>
+                                                    <li>
+                                                        <p>平均转化率：{this.props.goods.changeRate }</p>
+                                                        <p>关注数：{this.props.goods.favorites }</p>
+                                                    </li>
+                                                    <li>
+                                                        <p>毛利率：{this.props.goods.maoriRate }</p>
+                                                        <p>评论数：{this.props.goods.reviews }</p>
+                                                    </li>
+                                                    <li>
+                                                        <p>库存：{this.props.goods.stocks }</p>
+                                                        <p>提问数：{this.props.goods.questions }</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                :<div style={{width:'100%',height:80,lineHeight:'50px',textAlign:'center'}}>
+                                    木有数据
+                                </div>
+                            }
                         </div>
-                        :null
                     }
                     
                 </div>
@@ -122,116 +130,130 @@ class GoodsDetail extends React.Component {
 
                     <div className={styles.content}>
 
-                        {/* 图表对比 start */}
-                        <section>
-                            <div>
-                                <RangePicker 
-                                    value={[
-                                        moment(this.state.startDate),
-                                        moment(this.state.endDate)
-                                    ]}
-                                    ranges={{ 
-                                        '今天': [moment(), moment()],
-                                        '本周': [moment(), moment().endOf('week')], 
-                                        '本月': [moment(), moment().endOf('month')] 
-                                    }} 
-                                    format="YYYY-MM-DD" 
-                                    style={{ width:210 }}
-                                    allowClear={false}
-                                    disabledDate = {this.disabledDate}
-                                    onChange={ this.onGetDateRange.bind(this) }
-                                />
-                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,1)}>前天</span>
-                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
-                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,15)}>最近15天</span>
-                                <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
-                                
-                            </div>
-                            <div className={styles.clear}>
-                                <div className={styles.echartBox} >
-                                    <div className={styles.changeAttr}>
-                                        {
-                                            this.props.attrInfo?
-                                            this.props.attrInfo.map((item,index)=>{
-                                                return <Select className={styles.select} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
-                                                    {
-                                                        item.children.map((item2,index2)=>{
-                                                            return <Option value={item2.options_values_id}>{item2.value_name}</Option>
-                                                        })
-                                                    }
-                                                </Select>
-                                            })
-                                            :null
-                                        }
-
-                                        {
-                                            this.props.goods?
-                                            <Button onClick={
-                                                this.onGoodsOtherRunChart.bind(this,
-                                                {
-                                                    pid:this.props.goods.products_id,
-                                                    site:'banggood',
-                                                    startDate:this.state.startDate,
-                                                    endDate:this.state.endDate,
-                                                    optionValues:this.state.optionValuesByBg.join(',')
-                                                    
-                                                })}>确定</Button>
-                                            :null
-                                        }
-                                        
-                                    </div>
-                                    <div ref="chartBG" style={{width:'100%',height:250}}></div>
+                        {
+                            !this.props.goodsLoading?
+                            <Spin style={{width:'100%',height:100,marginTop:45}}/>
+                            :
+                            <section>
+                                <div>
+                                    <RangePicker 
+                                        value={[
+                                            moment(this.state.startDate),
+                                            moment(this.state.endDate)
+                                        ]}
+                                        ranges={{ 
+                                            '今天': [moment(), moment()],
+                                            '本周': [moment(), moment().endOf('week')], 
+                                            '本月': [moment(), moment().endOf('month')] 
+                                        }} 
+                                        format="YYYY-MM-DD" 
+                                        style={{ width:210 }}
+                                        allowClear={false}
+                                        disabledDate = {this.disabledDate}
+                                        onChange={ this.onGetDateRange.bind(this) }
+                                    />
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,1)}>前天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,15)}>最近15天</span>
+                                    <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
+                                    
                                 </div>
-                                <div className={styles.echartBox} >
-                                    <div className={styles.changeAttr}>
-                                       {
-                                            this.props.relateInfo?
-                                            <div>
-                                                <Select className={styles.select} style={{width:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
-                                                    {
-                                                        this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
-                                                            return <Option value={index} key={`relate_${index}`}>{item}</Option>
-                                                        })
-                                                    }
-                                                </Select>
+                                <div className={styles.clear}>
+                                    <div className={styles.echartBox} >
+                                        <div className={styles.changeAttr}>
+                                            {
+                                                this.props.attrInfo?
+                                                this.props.attrInfo.map((item,index)=>{
+                                                    return <Select className={styles.select} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
+                                                        {
+                                                            item.children.map((item2,index2)=>{
+                                                                return <Option value={item2.options_values_id}>{item2.value_name}</Option>
+                                                            })
+                                                        }
+                                                    </Select>
+                                                })
+                                                :null
+                                            }
 
-                                               {
-                                                 this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[0])
-                                               }
-                                               
-                                               {
+                                            {
                                                 this.props.goods?
                                                 <Button onClick={
-                                                    this.onGoodsOtherRunChart.bind(this,{
-                                                    pid:this.props.goods.products_id,
-                                                    site:this.state.competeSite,
-                                                    startDate:this.state.startDate,
-                                                    endDate:this.state.endDate,
-                                                    optionValues:this.state.optionValuesByOther.join(',')
-                                                })}>确定</Button>
+                                                    this.onGoodsOtherRunChart.bind(this,
+                                                    {
+                                                        pid:this.props.goods.products_id,
+                                                        site:'banggood',
+                                                        startDate:this.state.startDate,
+                                                        endDate:this.state.endDate,
+                                                        optionValues:this.state.optionValuesByBg.join(',')
+                                                        
+                                                    })}>确定</Button>
                                                 :null
-                                               }
-                                            </div>
-                                            :null
-                                        }
+                                            }
+
+                                            <div ref="chartBG" style={{width:'100%',height:250,marginTop:20}}></div>
+                                        </div>
                                         
                                     </div>
-                                    <div ref="chartCompete" style={{width:'100%',height:250}}></div>
+                                    <div className={styles.echartBox} >
+                                        <div className={styles.changeAttr}>
+                                        {
+                                                this.props.relateInfo?
+                                                <div>
+                                                    <Select className={styles.select} style={{width:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
+                                                        {
+                                                            this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
+                                                                return <Option value={index} key={`relate_${index}`}>{item}</Option>
+                                                            })
+                                                        }
+                                                    </Select>
+
+                                                {
+                                                    this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[0])
+                                                }
+                                                {
+                                                    this.props.goods?
+                                                    <Button onClick={
+                                                        this.onGoodsOtherRunChart.bind(this,{
+                                                        pid:this.props.goods.products_id,
+                                                        site:this.state.competeSite,
+                                                        startDate:this.state.startDate,
+                                                        endDate:this.state.endDate,
+                                                        optionValues:this.state.optionValuesByOther.join(',')
+                                                    })}>确定</Button>
+                                                    :null
+                                                }
+                                                
+                                                    <div ref="chartCompete" style={{width:'100%',height:250,marginTop:20}}></div>
+                                                </div>
+                                                :
+                                                <div style={{textAlign:'center',lineHeight:'50px',marginTop:150}}>
+                                                    <p>该商品未关联竞品，无法查看竞品数据。</p>
+                                                    <Link  to={"/create/"+this.props.sku}><Button type="primary">马上关联</Button></Link>
+                                                </div>
+                                            }
+                                            
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
-                        {/* 图表对比 end */}
+                            </section>
+                        }
 
                         {/* 竞品对比 start */}
-                        <section className={styles.sectionTable}>
-                            <div className={styles.title}>竞品对比</div>
-                            <div className={styles.tableWrap}>
-                                <Table
-                                    columns={columns}
-                                    dataSource={this.props.compareInfoList}
-                                />
-                            </div>
-                        </section>
+                        {
+                            this.props.relateInfo?
+                            <section className={styles.sectionTable}>
+                                <div className={styles.title}>竞品对比</div>
+                                <div className={styles.tableWrap}>
+                                    <Table
+                                        columns={columns}
+                                        dataSource={this.props.compareInfoList}
+                                        pagination={false}
+                                    />
+                                </div>
+                            </section>
+                            :null
+                        }
+                        
                         {/* 竞品对比 end */}
 
                         {/* 价格汇总 start */}
@@ -241,6 +263,7 @@ class GoodsDetail extends React.Component {
                                 <Table
                                     columns={columnsPrice}
                                     dataSource={this.props.priceList} 
+                                    pagination={false}
                                 />
                             </div>
                         </section>
@@ -300,7 +323,7 @@ class GoodsDetail extends React.Component {
             grid: {
                 top: '3%',
                 left: '3%',
-                right: '4%',
+                right: '6%',
                 bottom: '3%',
                 containLabel: true,
             },
@@ -388,7 +411,7 @@ class GoodsDetail extends React.Component {
             grid: {
                 top: '3%',
                 left: '3%',
-                right: '4%',
+                right: '6%',
                 bottom: '3%',
                 containLabel: true,
             },
@@ -521,7 +544,10 @@ class GoodsDetail extends React.Component {
         this.setState({
             startDate:latelyDay,
             endDate:yesterday
-        })
+        });
+        
+         
+        this.getPriceDataByDate(latelyDay,yesterday);
     }
 
     /**
@@ -530,14 +556,54 @@ class GoodsDetail extends React.Component {
      * @param {*} dateString 
      */
     onGetDateRange(date,dateString){
+        // 获取日期并赋值到state
         let startDate = dateString[0],
             endDate   = dateString[1];
-        
         // 赋值
-        this.setState({
+        this.setState({startDate:startDate,endDate:endDate});
+
+        
+        this.getPriceDataByDate(startDate,endDate);
+
+    }
+
+    
+    /**
+     * 根据时间获取BG、竞品的数据
+     */
+    getPriceDataByDate(startDate,endDate){
+
+        // Bg
+        let paramsBg =  {  
+            pid:this.props.goods.products_id,
+            site:'banggood',
             startDate:startDate,
-            endDate:endDate
-        })
+            endDate:endDate,
+            optionValues:this.state.optionValuesByBg.join(',')
+        },
+        // 竞品
+        paramsCompete =  {
+            pid:this.props.goods.products_id,
+            site:this.state.competeSite,
+            startDate:startDate,
+            endDate:endDate,
+            optionValues:this.state.optionValuesByOther.join(',')
+        }
+
+        
+        // 请求数据
+        this.props.onGoodsOtherRunChart(paramsBg);
+        this.props.onGoodsOtherRunChart(paramsCompete);
+
+        // 载入竞品图表
+        this.timeout(2000).then((value) => {
+            let relateInfoNewChart = this.props.relateInfoNewChart;
+            if(relateInfoNewChart !== null)
+            {
+                this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
+            }
+        });
+
     }
 
     /**
@@ -570,7 +636,10 @@ class GoodsDetail extends React.Component {
         )
     }
 
-    
+    /**
+     * 获取BG模块的属性
+     * @param {string} value 
+     */
     handleChangeByBG(value) {
         
         let optionValues = this.state.optionValuesByBg;
@@ -580,11 +649,15 @@ class GoodsDetail extends React.Component {
             this.setState({
                 optionValuesByBg:optionValues,
             });
-            console.log(optionValues);
         }
     }
     
+    /**
+     * 获取竞品模块的属性
+     * @param {string} value 
+     */
     handleChangeByOther(value) {
+
         let optionValues = this.state.optionValuesByOther;
         
         if(!optionValues.contains(value)){
@@ -592,7 +665,6 @@ class GoodsDetail extends React.Component {
             this.setState({
                 optionValuesByOther:optionValues,
             });
-            console.log(optionValues);
         }
     }
 
@@ -601,21 +673,57 @@ class GoodsDetail extends React.Component {
      * @param {object} params 
      */
     onGoodsOtherRunChart(params){
+        // 请求数据
         this.props.onGoodsOtherRunChart(params);
+        
+        if(params.site !== 'banggood'){
+            // 载入竞品图表
+            this.timeout(2000).then((value) => {
+                let relateInfoNewChart = this.props.relateInfoNewChart;
+                if(relateInfoNewChart !== null)
+                {
+                    this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
+                }
+            });
+        }
     }
 
+    /**
+     * 异步定时器
+     * @param {时间} ms 
+     */
+    timeout(ms) {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, ms, 'done');
+        });
+    }
+
+
+
     componentDidMount(){
-        //console.log('compareInfoList',this.props.compareInfoList);
+        
+        this.timeout(3000).then((value) => {
+
+            if(this.props.relateInfo !== null){
+                this.setState({
+                    competeSite:this.props.relateInfo.relateInfoByMenu[0]
+                })
+            }
+            
+            if(this.props.relateInfo !== null){
+                this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
+            }
+        });
     }
 
 
     componentDidUpdate(){
-        console.log(this.props.runChart);
         if(this.props.runChart){
             this.loadChart(this.formatChartData(this.props.runChart));
-            this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
         }
     }
+
+
 
 }
 

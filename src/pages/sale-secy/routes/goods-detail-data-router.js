@@ -15,12 +15,14 @@ class GoodsDetailDataRouter extends React.Component {
                 {/* 价格对比 */}
                 <GoodsDetail 
                     sku={this.props.params.sku} 
+                    goodsLoading={this.props.goodsLoading}
                     goods={this.props.goods} 
                     priceList={this.props.priceList} 
                     compareInfoList={this.props.compareInfoList}
                     relateInfo={this.props.relateInfo}
                     runChart={this.props.runChart}
                     attrInfo={this.props.attrInfo}
+                    relateInfoNewChart={this.props.relateInfoNewChart}
                     onGoodsOtherRunChart={params => this.onGoodsOtherRunChart(params)}
                 />
             </MainLayout>
@@ -29,7 +31,6 @@ class GoodsDetailDataRouter extends React.Component {
 
 
     onGoodsOtherRunChart(argus){
-        console.log('argus',argus);
         this.props.dispatch({
             type: 'GoodsDetailModel/getGoodsByArguments',
             payload: argus
@@ -56,6 +57,7 @@ class GoodsDetailDataRouter extends React.Component {
 
 
 function mapStateToProps(state){
+    console.log('model : ',state.GoodsDetailModel);
     return {...state.GoodsDetailModel};
 }
 

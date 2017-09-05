@@ -99,6 +99,11 @@ export default async function request(url, options) {
 				message.destroy();
 				message.warning('网络繁忙，请重试');
 				break;
+			case 500:
+				// 请求失败状态
+				message.destroy();
+				message.warning('网络繁忙，请重试');
+				break;
 			default:
 				// 请求失败状态
 				message.destroy();
