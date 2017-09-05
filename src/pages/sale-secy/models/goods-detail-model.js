@@ -13,7 +13,7 @@ export default {
     namespace: 'GoodsDetailModel',
     
     state: {
-        goodsLoading: false,
+        goodsLoading: false,     // 初始化加载状态
         goods:null,              // 商品详情
         runChart:null,           // runChart图
         relateInfo:null,         // 关联信息
@@ -22,12 +22,16 @@ export default {
         compareInfoList:null,    // 表1：竞品对比
         priceList:null,          // 表2：价格汇总
 
+        chartLoading:true,       // 获取图表加载状态
         relateInfoNewChart:null, // 关联的最新表
     },
 
     reducers:{
         saveGoodLoading(state,{payload}){
             return {...state,goodsLoading:payload.goodsLoading}
+        },
+        saveGetChartLoading(state,{payload}){
+            return {...state,chartLoading:payload.chartLoading}
         },
 
         /**
@@ -66,8 +70,6 @@ export default {
                 relateInfoAttrInfo = [];                 // 关联商品属性
 
             if(relateInfo !== null){
-                // 如果是数组，则去掉
-                //if(attrInfo instanceof Array){return;}
 
                 for(let i in relateInfo){
                     relateInfoByMenu.push(i);
@@ -76,16 +78,28 @@ export default {
                     // 属性
                     let attrInfoItem = relateInfo[i].attrInfo;
                     if(attrInfoItem !== null){
-                        // 如果是数组，则去掉
-                        //if(attrInfoItem instanceof Array){return;}
+                        // attrs
+                        var arrItem = Object.keys(attrInfoItem).map(function(el){
+                            return attrInfoItem[el];
+                        });
 
-                        let arr = [];
-                        for(let k in attrInfoItem){
-                            relateInfoAttrInfo.push(attrInfoItem[k]);
-                        }
-                    } 
+                        // values
+                        arrItem.map((item,index) => {
+                            
+                            if(!item instanceof Array){
+
+                            }else{
+                                var arrItemValues = Object.keys(item.values).map(function(el){
+                                    return item.values[el];
+                                });
+                                item.values = arrItemValues;
+                            }
+                        })
+
+                        relateInfoAttrInfo.push(arrItem);
+                    }
+
                 }
-
                 relateInfo.relateInfoByMenu = relateInfoByMenu;
                 relateInfo.relateInfoRunChart = relateInfoRunChart;
                 relateInfo.relateInfoAttrInfo = relateInfoAttrInfo;
@@ -102,7 +116,7 @@ export default {
                 }else{
                     let arr = [];
                     for(let i in attrInfo){
-                         var arrItem = Object.keys(attrInfo[i].values).map(function(el){
+                        var arrItem = Object.keys(attrInfo[i].values).map(function(el){
                             return attrInfo[i].values[el];
                         });
     
@@ -136,7 +150,8 @@ export default {
             // 添加元素
             data.map((item,index)=>{
                 item.key = index; 
-                item.valid = item.valid.date; 
+                item.date = item.valid.date; 
+                item.is_date = item.valid.is_valid; 
             })
 
             return {...state,priceList:data}
@@ -169,7 +184,7 @@ export default {
 
                 compareInfoList.push(obj);
             }
-            console.log('save',compareInfoList,payload.data.runChart);
+
             return {
                 ...state,
                 compareInfoList:compareInfoList,
@@ -223,15 +238,19 @@ export default {
          * 获取单个商品某段时间内价格趋势图和对比关系
          */
         * getGoodsByArguments({payload},{select,call,put}){
-            console.log('params:',payload);
+
+            yield put({type:'saveGetChartLoading',payload:{chartLoading:false}});
+
             const {data} = yield call(ServiceGoodsDetail.getGoodsByArguments,payload);
-            console.log('params data:',data);
+
             if(payload.site == 'banggood'){
                 yield put({type:'saveGoodsBGByArguments',payload:data});
             }
             else{
                 yield put({type:'saveGoodsOtherByArguments',payload:data});
             }
+
+            yield put({type:'saveGetChartLoading',payload:{chartLoading:true}});
         }
 
     },

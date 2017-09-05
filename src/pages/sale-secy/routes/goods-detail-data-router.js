@@ -16,6 +16,7 @@ class GoodsDetailDataRouter extends React.Component {
                 <GoodsDetail 
                     sku={this.props.params.sku} 
                     goodsLoading={this.props.goodsLoading}
+                    chartLoading={this.props.chartLoading}
                     goods={this.props.goods} 
                     priceList={this.props.priceList} 
                     compareInfoList={this.props.compareInfoList}

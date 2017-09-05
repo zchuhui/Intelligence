@@ -77,7 +77,7 @@ class GoodsList extends React.Component {
                         {
                             !record.isChildren?
                             <div>
-                                <p>{record.sku}</p>
+                                <a href={record.product_url} target="_blank">{record.sku}</a>
                                 <p>{record.url_id}</p>
                                 <p style={{ marginTop:5}}>
                                     {   
@@ -123,7 +123,12 @@ class GoodsList extends React.Component {
                 title: "标题",
                 dataIndex: "pname",
                 key: "pname",
-                className: styles.columnTitle
+                className: styles.columnTitle,
+                render:(text,record) => (
+                    <div>
+                        <a href={record.product_url} target="_blank">{record.pname}</a>
+                    </div>
+                )
             }, {
                 title: "价格",
                 dataIndex: "price",

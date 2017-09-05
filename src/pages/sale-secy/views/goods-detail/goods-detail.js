@@ -26,6 +26,8 @@ class GoodsDetail extends React.Component {
             competeSite: '',
             optionValuesByBg:[],
             optionValuesByOther:[],
+
+            competeAttrInfos:null,   // 关联商品属性
         }
     }
     
@@ -41,7 +43,13 @@ class GoodsDetail extends React.Component {
 
         const columnsPrice = [
             { title: '', dataIndex: 'name', key: 'name',width:'15%'},
-            { title: '有效时间', dataIndex: 'valid', key: 'valid',width:'15%'},
+			{ title: '有效时间', dataIndex: 'date', key: 'date',width:'15%',
+			render:(text,record)=>(
+				<div>
+					<p>{record.date}</p>
+					<p>{record.is_date}</p>
+				</div>
+			)},
             { title: '中仓', dataIndex: 'price', key: 'price' ,width:'10%'},
             { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' ,width:'10%'},
             { title: '美仓', dataIndex: 'usa_price', key: 'usa_price',width:'10%'},
@@ -50,7 +58,7 @@ class GoodsDetail extends React.Component {
             { title: '法仓', dataIndex: 'fr_price', key: 'fr' ,width:'10%'},
             { title: '德仓', dataIndex: 'de_price', key: 'de' ,width:'10%'},
         ];
-        
+
         return (
             <div className={`${styles.mainWrap} ${styles.goodsDetailWrap}`}>
                 <div className={styles.goodsAttribute}>
@@ -158,83 +166,105 @@ class GoodsDetail extends React.Component {
                                     <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
                                     
                                 </div>
-                                <div className={styles.clear}>
-                                    <div className={styles.echartBox} >
-                                        <div className={styles.changeAttr}>
-                                            {
-                                                this.props.attrInfo?
-                                                this.props.attrInfo.map((item,index)=>{
-                                                    return <Select className={styles.select} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
-                                                        {
-                                                            item.children.map((item2,index2)=>{
-                                                                return <Option value={item2.options_values_id}>{item2.value_name}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
-                                                })
-                                                :null
-                                            }
+								<div className={styles.clear}>
+									<div className={styles.echartBox} >
+										<div className={styles.changeAttr}>
+											{
+												// 载入BG属性下拉列表
+												this.props.attrInfo?
+												this.props.attrInfo.map((item,index)=>{
+													return <Select className={styles.select} style={{minWidth:100}} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
+														{
+															item.children.map((item2,index2)=>{
+																return <Option value={item2.options_values_id}>{item2.value_name}</Option>
+															})
+														}
+													</Select>
+												})
+												:null
+											}
 
-                                            {
-                                                this.props.goods?
-                                                <Button onClick={
-                                                    this.onGoodsOtherRunChart.bind(this,
-                                                    {
-                                                        pid:this.props.goods.products_id,
-                                                        site:'banggood',
-                                                        startDate:this.state.startDate,
-                                                        endDate:this.state.endDate,
-                                                        optionValues:this.state.optionValuesByBg.join(',')
-                                                        
-                                                    })}>确定</Button>
-                                                :null
-                                            }
+											{
+												this.props.goods?
+												<Button onClick={
+													this.onGoodsOtherRunChart.bind(this,
+													{
+														pid:this.props.goods.products_id,
+														site:'banggood',
+														startDate:this.state.startDate,
+														endDate:this.state.endDate,
+														optionValues:this.state.optionValuesByBg.join(',')
+													})}>确定</Button>
+												:null
+											}
+											{
+												this.props.chartLoading?
+												<div ref="chartBG" style={{width:'100%',height:250,marginTop:20}}></div>
+												:<Spin style={{width:'100%',height:150,marginTop:100}}/>
+											}
+											
+										</div>
+										
+									</div>
+									<div className={styles.echartBox} >
+										<div className={styles.changeAttr}>
+										{
+												this.props.relateInfo?
+												<div>
+													{/* 竞品切换 */}
+													<Select className={styles.select} style={{minWidth:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
+														{
+															this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
+																return <Option value={index} key={`relate_${index}`}>{item}</Option>
+															})
+														}
+													</Select>
 
-                                            <div ref="chartBG" style={{width:'100%',height:250,marginTop:20}}></div>
-                                        </div>
-                                        
-                                    </div>
-                                    <div className={styles.echartBox} >
-                                        <div className={styles.changeAttr}>
-                                        {
-                                                this.props.relateInfo?
-                                                <div>
-                                                    <Select className={styles.select} style={{width:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
-                                                        {
-                                                            this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
-                                                                return <Option value={index} key={`relate_${index}`}>{item}</Option>
-                                                            })
-                                                        }
-                                                    </Select>
-
-                                                {
-                                                    this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[0])
-                                                }
-                                                {
-                                                    this.props.goods?
-                                                    <Button onClick={
-                                                        this.onGoodsOtherRunChart.bind(this,{
-                                                        pid:this.props.goods.products_id,
-                                                        site:this.state.competeSite,
-                                                        startDate:this.state.startDate,
-                                                        endDate:this.state.endDate,
-                                                        optionValues:this.state.optionValuesByOther.join(',')
-                                                    })}>确定</Button>
-                                                    :null
-                                                }
-                                                
-                                                    <div ref="chartCompete" style={{width:'100%',height:250,marginTop:20}}></div>
-                                                </div>
-                                                :
-                                                <div style={{textAlign:'center',lineHeight:'50px',marginTop:150}}>
-                                                    <p>该商品未关联竞品，无法查看竞品数据。</p>
-                                                    <Link  to={"/create/"+this.props.sku}><Button type="primary">马上关联</Button></Link>
-                                                </div>
-                                            }
-                                            
-                                        </div>
-                                    </div>
-                                </div>
+													{
+														// 载入属性下拉表
+														this.state.competeAttrInfos?
+														this.state.competeAttrInfos.map((item,index)=>{
+															return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name} onChange={this.handleChangeByOther.bind(this)}>
+															{
+																item.values.map((item2,index2)=>{
+																	return <Option value={item2.options_values_id} key={`ky_${index2}`}>{item2.value_name}</Option>
+																})
+															}
+														</Select>
+														})
+														:null
+														
+													}
+												
+													{
+														this.props.goods?
+														<Button onClick={
+															this.onGoodsOtherRunChart.bind(this,{
+															pid:this.props.goods.products_id,
+															site:this.state.competeSite,
+															startDate:this.state.startDate,
+															endDate:this.state.endDate,
+															optionValues:this.state.optionValuesByOther.join(',')
+														})}>确定</Button>
+														:null
+													}
+													{
+														this.props.chartLoading?
+														<div ref="chartCompete" style={{width:'100%',height:250,marginTop:20}}></div>
+														:<Spin style={{width:'100%',height:150,marginTop:100}}/>
+													}
+													
+												</div>
+												:
+												<div style={{textAlign:'center',lineHeight:'50px',marginTop:150}}>
+													<p>该商品未关联竞品，无法查看竞品数据。</p>
+													<Link  to={"/create/"+this.props.sku}><Button type="primary">马上关联</Button></Link>
+												</div>
+											}
+										</div>
+									</div>
+								</div>
+                                
                             </section>
                         }
 
@@ -253,9 +283,9 @@ class GoodsDetail extends React.Component {
                             </section>
                             :null
                         }
-                        
                         {/* 竞品对比 end */}
 
+                        
                         {/* 价格汇总 start */}
                         <section className={styles.sectionTable}>
                             <div className={styles.title}>价格汇总</div>
@@ -389,7 +419,7 @@ class GoodsDetail extends React.Component {
      * @param {object} chartData 
      */
     loadCompeteChart(chartData) {
-        
+
         const chartCompete = echarts.init(this.refs.chartCompete);
         
         const optionCompete = {
@@ -478,13 +508,11 @@ class GoodsDetail extends React.Component {
      */
     onChangeRelateInfo(value){
         // 图表
-        this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[value].runChart));
-        
-        // 属性
-        this.loadAttrInfo(this.props.relateInfo.relateInfoAttrInfo[value]);
+        //this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[value].runChart));
         
         this.setState({
             competeSite:this.props.relateInfo.relateInfoByMenu[value],
+            competeAttrInfos:this.props.relateInfo.relateInfoAttrInfo[value],
         })
     }
 
@@ -623,7 +651,7 @@ class GoodsDetail extends React.Component {
                 <span>
                 {
                     attrInfo.values?
-                    <Select className={styles.select} key={attrInfo.option_id} defaultValue={attrInfo.name} onChange={this.handleChangeByOther.bind(this)}>
+                    <Select className={styles.select} style={{minWidth:100}} key={attrInfo.option_id} defaultValue={attrInfo.name} onChange={this.handleChangeByOther.bind(this)}>
                         {
                             attrInfo.values.map((item2,index2)=>{
                                 return <Option value={item2.options_values_id} key={`ky_${index2}`}>{item2.value_name}</Option>
@@ -685,7 +713,11 @@ class GoodsDetail extends React.Component {
                     this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
                 }
             });
-        }
+        }else{
+			this.timeout(2000).then((value) => {
+				this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
+			})
+		}
     }
 
     /**
@@ -701,18 +733,19 @@ class GoodsDetail extends React.Component {
 
 
     componentDidMount(){
-        
-        this.timeout(3000).then((value) => {
 
+        this.timeout(3000).then((value) => {
             if(this.props.relateInfo !== null){
                 this.setState({
-                    competeSite:this.props.relateInfo.relateInfoByMenu[0]
+					competeSite:this.props.relateInfo.relateInfoByMenu[0],
+					competeAttrInfos:this.props.relateInfo.relateInfoAttrInfo[0],
                 })
             }
             
             if(this.props.relateInfo !== null){
                 this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
-            }
+			}
+			
         });
     }
 
