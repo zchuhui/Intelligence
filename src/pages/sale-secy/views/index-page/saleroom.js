@@ -35,8 +35,8 @@ class Saleroom extends React.Component {
 					<div className={styles.saleroomWrap}>
 
 						<div className={styles.head}>
-							<span>你拥有 
-								<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件 &nbsp; &nbsp; &nbsp; &nbsp;
+							<span>当前BG拥有 
+								<b>{this.props.productTotal ? this.props.productTotal.productTotal : 0}</b> 件在售商品 &nbsp; &nbsp; &nbsp; &nbsp;
 							</span>
 							<span>环比增长 
 								<span className={styles.exponentTop}>

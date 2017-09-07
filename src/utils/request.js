@@ -131,9 +131,6 @@ export async function originRequest(url, options) {
 			url = `${url}&token=${token}`;
 		}
 
-		// 替换 #
-		url = url.replace("#","%");
-
 		// 请求数据
 		const response = await fetch(url, options);
 		
@@ -159,7 +156,8 @@ export async function originRequest(url, options) {
 	 }catch(e){
 		message.destroy();
 		message.warning("网络异常");
-	} 
+	}
 }
+
 
 

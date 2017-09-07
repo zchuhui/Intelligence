@@ -131,7 +131,7 @@ class Searcher extends React.Component {
                                 />
                             </InputGroup>
                                 
-                            <Input id="sku" style={{ width: 180, verticalAlign:'top'}} placeholder="sku / poa" />
+                            <Input id="sku" style={{ width: 180, verticalAlign:'top'}} placeholder="SKU / PID" />
                             
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 

@@ -134,8 +134,13 @@ class CreateRelevance extends React.Component {
                                         <div>
                                             <div className={styles.panel}>
                                                 <div className={styles.skuToGoods}>
-                                                    <div className={styles.skuImg}>
-                                                        <img src={this.props.goods.data.img_url} />
+                                                    <div className={styles.skuImg} 
+                                                        onMouseEnter={this.showGoodsDetail.bind(this,this.props.goods.data,'BG')}
+                                                        onMouseLeave={this.hideGoodsDetail.bind(this)}
+                                                        >
+                                                        <a href={this.props.goods.data.product_url} target="_blank">
+                                                            <img src={this.props.goods.data.img_url} />
+                                                        </a>
                                                     </div>
                                                     <p>BG</p>
                                                 </div>
@@ -145,7 +150,11 @@ class CreateRelevance extends React.Component {
                                                     {
                                                         this.props.similarGoodsList ?
                                                             <div>
-                                                                <Tabs defaultActiveKey='tabpane-0' onChange={this.getSite.bind(this)} style={{height:312}}>
+                                                                <Tabs 
+                                                                    defaultActiveKey='tabpane-0' 
+                                                                    onChange={this.getSite.bind(this)} 
+                                                                    size="small"
+                                                                    >
                                                                     {
                                                                         this.props.similarGoodsList.map((item, index) =>
                                                                             <TabPane tab={item.tname} key={`tabpane-${item.tkey}`}>
@@ -754,15 +763,19 @@ class CreateRelevance extends React.Component {
      * 显示相似商品的详情
      * @param {object} detail 
      */
-    showGoodsDetail(detail){
+    showGoodsDetail(detail,sitename){
 
         let div = document.createElement('div'),
             img = document.createElement('img'),
             p   = document.createElement('p');
-
+        
         div.setAttribute('id','detailShow');
-        p.innerHTML = `【商品名称】：${detail.products_name_en}`;
         img.setAttribute('src',detail.img_url);
+        if(sitename == 'BG'){
+            p.innerHTML = `【商品名称】：${detail.pname}`;
+        }else{
+            p.innerHTML = `【商品名称】：${detail.products_name_en}`;
+        }
         
         div.appendChild(img);
         div.appendChild(p);

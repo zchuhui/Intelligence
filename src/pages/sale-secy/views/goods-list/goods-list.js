@@ -77,8 +77,11 @@ class GoodsList extends React.Component {
                         {
                             !record.isChildren?
                             <div>
-                                <a href={record.product_url} target="_blank">{record.sku}</a>
-                                <p>{record.url_id}</p>
+                                <a href={record.product_url} target="_blank">
+                                    <p>{record.sku}</p>
+                                    <p>{record.url_id}</p>
+                                </a>
+                                
                                 <p style={{ marginTop:5}}>
                                     {   
                                         // 是否关联，如果为关联，则显示关联连接

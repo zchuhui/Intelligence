@@ -61,9 +61,15 @@ class Category extends React.Component {
                                         {
                                             this.props.myProductInCate.map((item,index)=>
                                             <div className={styles.itemPanel} key={`shop-${item.pid}`}>
-                                                <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                                <div className={styles.imgWrap}>
+                                                    <a href={item.product_url} target="_blank">
+                                                        <img src={item.img_url} />
+                                                    </a>
+                                                </div>
                                                 <div className={styles.itemContent}>
-                                                    <div className={styles.itemTitle}>{item.pname}</div>
+                                                    <div className={styles.itemTitle}>
+                                                        <a href={item.product_url} target="_blank">{item.pname}</a>
+                                                    </div>
                                                     <div className={styles.itemDetail}>
                                                         <span>{item.price} 美元</span>
                                                         <span className={styles.fr}>
@@ -92,9 +98,13 @@ class Category extends React.Component {
                                     {
                                         this.props.productInCate.map((item,index)=>
                                         <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
-                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.imgWrap}>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            </div>
                                             <div className={styles.itemContent}>
-                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemTitle}>
+                                                    <a href={item.product_url} target="_blank">{item.pname}</a>
+                                                </div>
                                                 <div className={styles.itemDetail}>
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>

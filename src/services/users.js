@@ -1,5 +1,7 @@
 import { originRequest } from '../utils/request';
 import { Url } from '../config/config.url';
+import LocalStorage from '../utils/local-storage';
+
 
 /**
  * 登录
@@ -7,9 +9,13 @@ import { Url } from '../config/config.url';
  * @return {object}      登录信息
  */
 export function login(args) {
-	let url = `${Url}?com=login&t=validate&username=${args.username}&password=${args.password}`;
+	// 转义特殊字符
+	let pwd = args.password.replace(/\&/g, "%26").replace(/\#/g, "%23");
+
+	const url = `${Url}?com=login&t=validate&username=${args.username}&password=${pwd}`;
+
 	return originRequest(url,{
-        method:'POST',
+		method:'POST',
     });
 }
 

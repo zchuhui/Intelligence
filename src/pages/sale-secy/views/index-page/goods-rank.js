@@ -29,10 +29,10 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.salesRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`sales-${index}`}>
                                             <div className={styles.imgWrap}>
-                                                <img src={item.img_url}/>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
                                             </div>
                                             <div className={styles.itemContent}>
-                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
                                                 <div className={styles.itemDetail}>
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
@@ -55,10 +55,10 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.payAmountRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`saler-${index}`}>
                                             <div className={styles.imgWrap}>
-                                                <img src={item.img_url}/>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
                                             </div>
                                             <div className={styles.itemContent}>
-                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
                                                 <div className={styles.itemDetail}>
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>
@@ -75,14 +75,100 @@ class GoodsRank extends React.Component {
                                 }
                             </li>
                             <li>
-                                <h3>转化率排行榜</h3>
+                                <h3>访客排行榜</h3>
                                 {
                                     this.props.myProductRank.changeRateRank?
                                     this.props.myProductRank.changeRateRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`zhl-${index}`}>
-                                            <div className={styles.imgWrap}><img src={item.img_url}/></div>
+                                            <div className={styles.imgWrap}>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            </div>
                                             <div className={styles.itemContent}>
-                                                <div className={styles.itemTitle}>{item.pname}</div>
+                                                <div className={styles.itemTitle}>
+                                                    <a href={item.product_url} target="_blank">{item.pname}</a>
+                                                </div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>{item.price} 美元</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            //this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{parseFloat(item.rate).toFixed(2)} %</b>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                        </ul>
+                        <ul className={styles.clear}>
+                            <li>
+                                <h3>当天新品销售量排行榜</h3>
+                                {
+                                    this.props.myProductRank.salesRank?
+                                    this.props.myProductRank.salesRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={`sales-${index}`}>
+                                            <div className={styles.imgWrap}>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            </div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>{item.price} 美元</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            //this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.sales_ins} 件</b>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                            <li>
+                                <h3>加购量排行榜</h3>
+                                {
+                                    this.props.myProductRank.payAmountRank?
+                                    this.props.myProductRank.payAmountRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={`saler-${index}`}>
+                                            <div className={styles.imgWrap}>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            </div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
+                                                <div className={styles.itemDetail}>
+                                                    <span>{item.price} 美元</span>
+                                                    <span className={styles.fr}>
+                                                        {
+                                                            //this.formatTrendNumber(item.no)
+                                                        }
+                                                    </span>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 美元</b>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    )
+                                    :null
+                                }
+                            </li>
+                            <li>
+                                <h3>收藏量排行榜</h3>
+                                {
+                                    this.props.myProductRank.changeRateRank?
+                                    this.props.myProductRank.changeRateRank.map((item,index) => 
+                                        <div className={styles.itemPanel} key={`zhl-${index}`}>
+                                            <div className={styles.imgWrap}>
+                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            </div>
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.itemTitle}>
+                                                    <a href={item.product_url} target="_blank">{item.pname}</a>
+                                                </div>
                                                 <div className={styles.itemDetail}>
                                                     <span>{item.price} 美元</span>
                                                     <span className={styles.fr}>

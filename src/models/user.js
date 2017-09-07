@@ -4,12 +4,12 @@
  * Author:zhuangchuhui
  */
 
-import * as usersService from '../services/users';
+import * as UsersService from '../services/users';
 import LocalStorage from '../utils/local-storage';
 import { CODE200, ERRORMESSAGE } from '../constants/constant';
 import { message } from 'antd';
 
-
+ 
 const saveTime = 60 * 24;        // localStorage的保存天数，默认设定为一天，单位为分钟
 
 export default {
@@ -62,7 +62,7 @@ export default {
                 yield put({ type: 'showLoading' });
 
                 // 开始请求数据
-                const { data } = yield call(usersService.login, payload.loginInfo);
+                const { data } = yield call(UsersService.login, payload.loginInfo);
                 
                 if (data.code == CODE200) {
                     
@@ -89,9 +89,6 @@ export default {
                 }
             }
             catch (e) {
-                message.destroy();
-                message.warning(ERRORMESSAGE);
-                
                 // 传入失败信息，用于页面展示
                 yield put({ type: 'saveError', payload:{msg:e.message} });
             }
@@ -131,7 +128,7 @@ export default {
             window.location.href = "/login";
 
             // 请求响应后台
-            const data = yield call(usersService.logout);
+            const data = yield call(UsersService.logout);
 
             // 清空state数据
             yield put({ type: 'clearLoginInfo', payload: data });
