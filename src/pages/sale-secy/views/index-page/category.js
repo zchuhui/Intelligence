@@ -27,7 +27,7 @@ class Category extends React.Component {
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
                     <span className={styles.fl}>你的类目情况</span>
-                    {
+                    {/* {
                         this.props.cateSet.length > 0?
                         <div className={styles.fr}>
                             <Select labelInValue defaultValue={{key: this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid}} onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
@@ -39,7 +39,7 @@ class Category extends React.Component {
                             </Select>
                         </div>
                         :null
-                    }
+                    } */}
                 </div>
                 
                 <div className={styles.categoryWrap}>

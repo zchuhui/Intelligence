@@ -557,10 +557,10 @@ class GoodsDetail extends React.Component {
      * @param {number} days 
      */
     onLatelyDate(days){
-
+        
         // 获取时间范围
         let yesterday = DateTime.getDateOfDays(1),                // 昨天
-            latelyDay = DateTime.getDateOfDays(days+1);           // days天前的日期
+            latelyDay = DateTime.getDateOfDays(days);           // days天前的日期
 
         // 前天
         if(days == 1){

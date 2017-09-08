@@ -7,7 +7,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import styles from './create-relevance.less';
-import { Tabs, Button, Input, Icon, message, Alert, Spin } from 'antd';
+import { Tabs, Button, Input, Icon, message, Alert, Spin,Select } from 'antd';
 import defaultImage from './default.png';
 import Clipboard  from 'clipboard'; 
 import Lazyload from 'react-lazyload';
@@ -15,7 +15,7 @@ import MainLayout from '../../../../components/layout-main/layout-main';
 import MenuBar from '../menu-bar/menu-bar';
 
 const TabPane = Tabs.TabPane;
-
+const Option = Select.Option;
 
 class CreateRelevance extends React.Component {
 
@@ -39,12 +39,14 @@ class CreateRelevance extends React.Component {
             similarGoodsList: [],
             siteKey: 0,
             marginLeftVal: 0,
+            showIndex:0,
 
             // 选中的产品
             relevanceGoodsList: [],
 
             // 关联提示
             relevanceText: null,
+            
 
         }
     }
@@ -146,14 +148,46 @@ class CreateRelevance extends React.Component {
                                                 </div>
 
                                                 {/*相似的商品 start*/}
-                                                <div style={{ width: 800, height: 400, display: 'inline-block' }}>
+                                                <div style={{ width: 800, height: 200, display: 'inline-block' }}>
                                                     {
                                                         this.props.similarGoodsList ?
                                                             <div>
-                                                                <Tabs 
+                                                                <div className={styles.clear} style={{height:60,}}>
+                                                                    <Select
+                                                                        labelInValue={true} 
+                                                                        defaultValue = {{ 
+                                                                            key: this.props.similarGoodsList[0].tkey,
+                                                                            label: this.props.similarGoodsList[0].tname}} 
+                                                                        style={{ width: 130,marginLeft:35 }}
+                                                                        onChange={this.getSite.bind(this)}
+                                                                        className={styles.fl}
+                                                                    >
+                                                                        {
+                                                                            this.props.similarGoodsList.map((item,index)=>
+                                                                                <Option value={item.tkey}>{item.tname}</Option>
+                                                                            )
+                                                                        }
+                                                                    </Select>
+
+                                                                    {/*手动输入商品*/}
+                                                                    <div className={styles.fl} style={{marginLeft:20}}>
+                                                                        <Input style={{ width: 430 }} placeholder="手动添加sku或url" ref="inputSku2" />
+                                                                        <Button type='primary' style={{ marginLeft: 20 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                                                                        
+                                                                        <p style={{color: 'red',lineHeight:'24px',textIndent:'5px' }}>
+                                                                            {
+                                                                                this.props.goodsBySite.code == 200 ?
+                                                                                    <span>{this.props.goodsBySite.msg}</span>
+                                                                                    : <span>{this.props.goodsBySite.msg}</span>
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                        
+                                                                {/* <Tabs 
                                                                     defaultActiveKey='tabpane-0' 
                                                                     onChange={this.getSite.bind(this)} 
-                                                                    size="small"
+                                                                    tabPosition='top' 
                                                                     >
                                                                     {
                                                                         this.props.similarGoodsList.map((item, index) =>
@@ -164,26 +198,22 @@ class CreateRelevance extends React.Component {
                                                                             </TabPane>
                                                                         )
                                                                     }
-                                                                </Tabs>
-                                                                {/*手动输入商品*/}
-                                                                <div style={{ marginLeft: 25, marginTop: 20 }}>
-                                                                    <Input style={{ width: 150 }} placeholder="手动添加sku或url" ref="inputSku2" />
-                                                                    <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySiteAndSku.bind(this)}>搜索</Button>
+                                                                </Tabs> */}
+                                                                
+                                                                <div className={styles.similarGoodsBox}>
                                                                     {
-                                                                    /*  this.props.goodsBySite.code == 200 ?
-                                                                            <Button style={{ marginLeft: 5 }} onClick={this.selectGoodsBySite.bind(this)}>选中该商品</Button>
-                                                                            : null */
-
+                                                                        this.props.similarGoodsList.map((item, index) => 
+                                                                        <div className={styles.similarGoodsItems} >
+                                                                            {
+                                                                                this.state.showIndex == index ?
+                                                                                this.getItemList(item.children)
+                                                                                :null
+                                                                            }
+                                                                        </div>
+                                                                        )
                                                                     }
-
-                                                                    <span style={{ marginLeft: 10, color: 'red' }}>
-                                                                        {
-                                                                            this.props.goodsBySite.code == 200 ?
-                                                                                <span>{this.props.goodsBySite.msg}</span>
-                                                                                : <span>{this.props.goodsBySite.msg}</span>
-                                                                        }
-                                                                    </span>
                                                                 </div>
+                                                                
                                                             </div>
                                                             : null
                                                     }
@@ -337,18 +367,21 @@ class CreateRelevance extends React.Component {
      * 选择站点，切换相似商品栏
      * @param {string} key 
      */
-    getSite(key) {
+    getSite(value) {
 
-        key = key.split('-')[1];
-        
-        // 选择站点
+        /* let key = value.split('-')[1];
         let site = this.props.similarGoodsList[key].tname;
+        console.log(key,site) */
+
+        let site = value.label,
+            key  = value.key;
 
         // 存储到state中
         this.setState({
             currentSite: site,
             siteKey: key,
             marginLeftVal: 0,  // 清除移动
+            showIndex: key
         });
 
 
