@@ -371,7 +371,7 @@ class CreateRelevance extends React.Component {
 
         /* let key = value.split('-')[1];
         let site = this.props.similarGoodsList[key].tname;
-        console.log(key,site) */
+         */
 
         let site = value.label,
             key  = value.key;
@@ -797,7 +797,7 @@ class CreateRelevance extends React.Component {
      * @param {object} detail 
      */
     showGoodsDetail(detail,sitename){
-        console.log("detai::",detail,sitename);
+
         let div = document.createElement('div'),
             img = document.createElement('img'),
             p   = document.createElement('p'),

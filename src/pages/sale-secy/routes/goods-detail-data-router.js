@@ -58,7 +58,6 @@ class GoodsDetailDataRouter extends React.Component {
 
 
 function mapStateToProps(state){
-    console.log('model : ',state.GoodsDetailModel);
     return {...state.GoodsDetailModel};
 }
 

@@ -170,8 +170,9 @@ class Category extends React.Component {
      * @param {Array} prices  [圆柱图数据]
      */
 	loadChart(cateSet,prices){
-        console.log("load chart");
+
         const catePieChartId = this.refs.catePieChart;
+        
         if(cateSet && catePieChartId){
 
             // 初始化Echart

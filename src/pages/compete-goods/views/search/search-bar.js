@@ -73,9 +73,6 @@ class SearchBar extends Component {
                     <span id="tagList">
                         { this.getObjectValToArray() }
                     </span>
-                    { 
-                        /*this.getObjectValToArray().map((item,index) => <Tag className={styles.tag} onClose={ this.delTag.bind(this) }> { item } </Tag>)*/
-                    }
                 </div>
                 <div className={ styles.main }>
                     {/* <div className={ styles.title }>
@@ -169,11 +166,6 @@ class SearchBar extends Component {
         );
     }
 
-
-    // 删除标签（未完成）
-    delTag = (item, key) => {
-        console.log("delete tag")
-    }
 
     // 搜索
     handlerSearchClick(e) {
@@ -375,7 +367,6 @@ class SearchBar extends Component {
             this.state.args.startTime = dateString[0];
             this.state.args.endTime = dateString[1];
 
-            console.log(this.state.args);
             this.props.handleSearchArgs(this.state.args);
         }
     }

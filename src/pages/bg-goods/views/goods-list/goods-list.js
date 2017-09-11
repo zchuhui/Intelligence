@@ -631,9 +631,6 @@ class GoodsList extends React.Component {
                     }]
             });
         }
-        else{
-            //console.log('not id')
-        }
     }
 
 
@@ -875,7 +872,6 @@ class GoodsList extends React.Component {
     // 自定义竞品-确定选项
     onCustomOK = () => {
         let list = this.state.customGoods.checkedList;
-        //console.log(list);
         
         // 关闭弹窗
         this.setState({

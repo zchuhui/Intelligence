@@ -585,9 +585,6 @@ class GoodsList extends React.Component {
                     }]
             });
         }
-        else{
-            //console.log('not id')
-        }
     }
 
 

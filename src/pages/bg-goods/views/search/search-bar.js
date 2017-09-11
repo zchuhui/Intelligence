@@ -394,7 +394,6 @@ class Searcher extends React.Component {
             this.state.args.startTime = dateString[0];
             this.state.args.endTime = dateString[1];
 
-            //console.log(this.state.args);
             this.props.handleSearchArgs(this.state.args);
         }
     }

@@ -359,7 +359,7 @@ class CreateRelevance extends React.Component {
         // 获取site key
         let parentKey = this.state.siteKey;
         let goodsite = this.props.goodsBySite;
-        console.log('goodsite',goodsite);
+
         // 如果已有数据
         if (goodsite.code == 200) {
 
@@ -763,7 +763,6 @@ class CreateRelevance extends React.Component {
     syncRelevanceGoodsLlist() {
         let propsRelevanceGoodsList = this.props.relevanceGoodsList;
         let stateRelevanceGoodsList = this.state.relevanceGoodsList;
-        //console.log('relevan:',propsRelevanceGoodsList,stateRelevanceGoodsList);
 
         if (propsRelevanceGoodsList) {
             let index;
@@ -793,7 +792,7 @@ class CreateRelevance extends React.Component {
                 this.setState({
                     relevanceGoodsList: stateRelevanceGoodsList,
                 });
-                console.log('stateRelevanceGoodsList',stateRelevanceGoodsList);
+
             }
         }
     }
@@ -881,9 +880,6 @@ class CreateRelevance extends React.Component {
 
 
 function mapStateToProps(state) {
-    
-    /* const {relevanceGoodsList } = state.CreateRelevanceModel;
-    console.log('relevanceGoodsList',relevanceGoodsList);  */
     return { ...state.CreateRelevanceModel };
 }
 
