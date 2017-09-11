@@ -797,27 +797,41 @@ class CreateRelevance extends React.Component {
      * @param {object} detail 
      */
     showGoodsDetail(detail,sitename){
-
+        console.log("detai::",detail,sitename);
         let div = document.createElement('div'),
             img = document.createElement('img'),
-            p   = document.createElement('p');
+            p   = document.createElement('p'),
+            divAttr = document.createElement('div');
         
         div.setAttribute('id','detailShow');
         img.setAttribute('src',detail.img_url);
+        
+        // 区分BG与竞品的显示视图
         if(sitename == 'BG'){
             p.innerHTML = `【商品名称】：${detail.pname}`;
         }else{
             p.innerHTML = `【商品名称】：${detail.products_name_en}`;
         }
-        
+
+        // 添加属性
+        if(detail.attr_info){
+            detail.attr_info.map((item,index)=>{
+                let pElement = document.createElement('p');
+                pElement.innerHTML = `【${item.attr_name}】: ${item.attr_list.replace(/ /,', ')} `;
+                
+                divAttr.appendChild(pElement);
+            })
+        }
+
         div.appendChild(img);
         div.appendChild(p);
+        div.appendChild(divAttr);
 
+        // 添加样式
         div.style.position   = 'fixed';
         div.style.right      = '50px';
         div.style.bottom     = '50px';
         div.style.width      = '400px';
-        div.style.height     = '450px';
         div.style.background = '#fff';
         div.style.overflow   = 'hidden';
         div.style.boxShadow  = '0 5px 15px #999';
@@ -827,7 +841,8 @@ class CreateRelevance extends React.Component {
         p.style.overflow     = 'hidden';
         p.style.whiteSpace   = 'nowrap';
         p.style.textOverflow = 'ellipsis';
-        p.style.lineHeight   = '30px';
+        p.style.lineHeight   = '24px';
+        divAttr.style.lineHeight = '24px';
 
         img.style.width      = '100%';
         img.style.height     = 'auto';

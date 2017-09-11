@@ -35,7 +35,11 @@ class GoodsDetail extends React.Component {
         
         const columns = [
             { title: '平台', dataIndex: 'name', key: 'name',width:'20%'},
-            { title: '价格', dataIndex: 'price', key: 'price',width:'20%'},
+            { title: '价格', dataIndex: 'price', key: 'price',width:'20%',render:(text,record)=>(
+                <div>
+                    $ {record.price}
+                </div>
+            )},
             { title: '销量', dataIndex: 'sales', key: 'sales',width:'20%'},
             { title: '关注数', dataIndex: 'favorites', key: 'favorites',width:'20%'},
             { title: '提问数', dataIndex: 'questions', key: 'questions',width:'20%'},
@@ -46,17 +50,32 @@ class GoodsDetail extends React.Component {
 			{ title: '有效时间', dataIndex: 'date', key: 'date',width:'15%',
 			render:(text,record)=>(
 				<div>
+                <p>{record.is_date == '有效'?<span style={{color:'green'}}>{record.is_date}</span>
+                        :<span style={{color:'red'}}>{record.is_date}</span>}</p>
 					<p>{record.date}</p>
-					<p>{record.is_date}</p>
 				</div>
 			)},
-            { title: '中仓', dataIndex: 'price', key: 'price' ,width:'10%'},
-            { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' ,width:'10%'},
-            { title: '美仓', dataIndex: 'usa_price', key: 'usa_price',width:'10%'},
-            { title: '英仓', dataIndex: 'uk_price', key: 'uk' ,width:'10%'},
-            { title: '澳仓', dataIndex: 'au_price', key: 'au' ,width:'10%'},
-            { title: '法仓', dataIndex: 'fr_price', key: 'fr' ,width:'10%'},
-            { title: '德仓', dataIndex: 'de_price', key: 'de' ,width:'10%'},
+            { title: '中仓', dataIndex: 'price', key: 'price' ,width:'10%',render:(text,record)=>(
+                <div>{record.price=='--'?record.price:`$ ${record.price}`}</div>
+            )},
+            { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' ,width:'10%',render:(text,record)=>(
+                <div>{record.hk_price=='--'?record.hk_price:`$ ${record.hk_price}`}</div>
+            )},
+            { title: '美仓', dataIndex: 'usa_price', key: 'usa_price',width:'10%',render:(text,record)=>(
+                <div>{record.usa_price=='--'?record.usa_price:`$ ${record.usa_price}`}</div>
+            )},
+            { title: '英仓', dataIndex: 'uk_price', key: 'uk' ,width:'10%',render:(text,record)=>(
+                <div>{record.uk_price=='--'?record.uk_price:`$ ${record.uk_price}`}</div>
+            )},
+            { title: '澳仓', dataIndex: 'au_price', key: 'au' ,width:'10%',render:(text,record)=>(
+                <div>{record.au_price=='--'?record.au_price:`$ ${record.au_price}`}</div>
+            )},
+            { title: '法仓', dataIndex: 'fr_price', key: 'fr' ,width:'10%',render:(text,record)=>(
+                <div>{record.fr_price=='--'?record.fr_price:`$ ${record.fr_price}`}</div>
+            )},
+            { title: '德仓', dataIndex: 'de_price', key: 'de' ,width:'10%',render:(text,record)=>(
+                <div>{record.de_price=='--'?record.de_price:`$ ${record.de_price}`}</div>
+            )},
         ];
 
         return (
@@ -93,7 +112,7 @@ class GoodsDetail extends React.Component {
                                             <div className={`${styles.fr} ${styles.attrRight}`}>
                                                 <ul>
                                                     <li>
-                                                        <p>当前价格：{this.props.goods.finalPrice }</p>
+                                                        <p>昨天价格：$ {this.props.goods.finalPrice }</p>
                                                         <p>加购数：{this.props.goods.basket }</p>
                                                     </li>
                                                     <li>
