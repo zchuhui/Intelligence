@@ -46,14 +46,15 @@ const saveUserInfoSj = (data) => {
  */
 export default async function request(url, options) {
 
+	// 替换#号
+	url = url.replace(/\#/g, "%23");
+
 	// 在请求的url加上 token,用于登录验证
 	const token = LocalStorage.get('token');
 	if(token){
 		url = `${url}&token=${token}`;
 	}
 
-	// 替换 #
-	url = url.replace("#","%");
 
 	// 请求数据
 	const response = await fetch(url, options);
