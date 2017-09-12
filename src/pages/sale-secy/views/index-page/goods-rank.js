@@ -77,8 +77,8 @@ class GoodsRank extends React.Component {
                             <li>
                                 <h3>访客排行榜</h3>
                                 {
-                                    this.props.myProductRank.changeRateRank?
-                                    this.props.myProductRank.changeRateRank.map((item,index) => 
+                                    this.props.myProductRank.uvRank?
+                                    this.props.myProductRank.uvRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`zhl-${index}`}>
                                             <div className={styles.imgWrap}>
                                                 <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
@@ -94,7 +94,7 @@ class GoodsRank extends React.Component {
                                                             //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{parseFloat(item.rate).toFixed(2)} %</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.uv_ins}</b>
                                                 </div>
                                             </div>
                                         </div> 
@@ -107,8 +107,8 @@ class GoodsRank extends React.Component {
                             <li>
                                 <h3>当天新品销售量排行榜</h3>
                                 {
-                                    this.props.myProductRank.salesRank?
-                                    this.props.myProductRank.salesRank.map((item,index) => 
+                                    this.props.myProductRank.salesDailyNewRank?
+                                    this.props.myProductRank.salesDailyNewRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`sales-${index}`}>
                                             <div className={styles.imgWrap}>
                                                 <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
@@ -133,8 +133,8 @@ class GoodsRank extends React.Component {
                             <li>
                                 <h3>加购量排行榜</h3>
                                 {
-                                    this.props.myProductRank.payAmountRank?
-                                    this.props.myProductRank.payAmountRank.map((item,index) => 
+                                    this.props.myProductRank.basketRank?
+                                    this.props.myProductRank.basketRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`saler-${index}`}>
                                             <div className={styles.imgWrap}>
                                                 <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
@@ -148,7 +148,7 @@ class GoodsRank extends React.Component {
                                                             //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.pay_amount} 美元</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.rate}件</b>
                                                 </div>
                                             </div>
                                         </div> 
@@ -159,8 +159,8 @@ class GoodsRank extends React.Component {
                             <li>
                                 <h3>收藏量排行榜</h3>
                                 {
-                                    this.props.myProductRank.changeRateRank?
-                                    this.props.myProductRank.changeRateRank.map((item,index) => 
+                                    this.props.myProductRank.favoritesRank?
+                                    this.props.myProductRank.favoritesRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`zhl-${index}`}>
                                             <div className={styles.imgWrap}>
                                                 <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
@@ -176,7 +176,7 @@ class GoodsRank extends React.Component {
                                                             //this.formatTrendNumber(item.no)
                                                         }
                                                     </span>
-                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{parseFloat(item.rate).toFixed(2)} %</b>
+                                                    <b className={`${styles.fr} ${styles.exponentOrange}`}>{item.favorites_ins} </b>
                                                 </div>
                                             </div>
                                         </div> 
