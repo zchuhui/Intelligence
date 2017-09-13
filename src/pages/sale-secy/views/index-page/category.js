@@ -26,7 +26,7 @@ class Category extends React.Component {
         return (
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
-                    <span className={styles.fl}>你的类目情况</span>
+                    <span className={styles.fl}>类目情况</span>
                     {/* {
                         this.props.cateSet.length > 0?
                         <div className={styles.fr}>
@@ -49,7 +49,7 @@ class Category extends React.Component {
                             <li>
                                 <div ref='catePieChart' style={{width:'100%',height:600,}}></div>
                             </li>
-                            <li>
+                            {/* <li>
                                 {
                                     this.props.loading?
                                     <div className={styles.loadWrap} style={{minHeight:593}}>
@@ -85,7 +85,7 @@ class Category extends React.Component {
                                         }
                                     </div>
                                 }
-                            </li>
+                            </li> */}
                             <li>
                             {
                                 this.props.loading?

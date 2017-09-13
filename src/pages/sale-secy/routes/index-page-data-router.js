@@ -87,10 +87,10 @@ class DataRouter extends React.Component {
 										getCategoryByCid={cid => this.getCategoryByCid(cid)}
 									/> 
 									{/* 对比关系 */}
-									<Correlation
+									{/* <Correlation
 										loading={this.props.comparisonLoading}
 										goodsComparisonList={this.props.goodsComparisonList} 
-									/>
+									/> */}
 								</div>
 						}
 						
