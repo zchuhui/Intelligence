@@ -129,7 +129,7 @@ class RivalNew extends React.Component {
      * 载入折线图表
      * @param {object} chartData 
      */
-    loadChart(chartData,id) {
+    loadChart(chartData,id,siteName) {
 
         const chartBG = echarts.init(id);
         
@@ -211,6 +211,13 @@ class RivalNew extends React.Component {
         }
 
         chartBG.setOption(option);
+
+
+        chartBG.on("click", function(params){
+            alert(siteName+":"+params.name);
+            
+        });
+
     }
 
 
@@ -303,7 +310,7 @@ class RivalNew extends React.Component {
         
         this.getPriceDataByDate(startDate,endDate);
 
-    }
+    } 
 
     /**
      * 根据时间获取BG、竞品的数据
@@ -366,7 +373,7 @@ class RivalNew extends React.Component {
 
     componentDidMount(){
         const data = {
-            data:['2015-02-05','2015-02-05','2015-02-05','2015-02-05','2015-02-05','2015-02-05'],
+            data:['2015-02-01','2015-02-02','2015-02-03','2015-02-04','2015-02-05','2015-02-06'],
             value:[32,12,44,33,22,2]
         }
         const pieData = {
@@ -375,16 +382,16 @@ class RivalNew extends React.Component {
         }
 
 
-        this.loadChart(data,this.refs.greabestChartId);
+        this.loadChart(data,this.refs.greabestChartId,'gearbest');
         this.loadPieChart(pieData,this.refs.greabestPieChartId);
 
-        this.loadChart(data,this.refs.ltjsChartId);
+        this.loadChart(data,this.refs.ltjsChartId,'lightinthebox');
         this.loadPieChart(pieData,this.refs.ltjsPieChartId);
 
-        this.loadChart(data,this.refs.dxChartId);
+        this.loadChart(data,this.refs.dxChartId,'dx');
         this.loadPieChart(pieData,this.refs.dxPieChartId);
 
-        this.loadChart(data,this.refs.tomtopChartId);
+        this.loadChart(data,this.refs.tomtopChartId,'tomtop');
         this.loadPieChart(pieData,this.refs.tomtopPieChartId);
 
 
