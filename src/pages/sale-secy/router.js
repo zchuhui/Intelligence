@@ -3,7 +3,10 @@ import { Router, Route } from 'dva/router';
 import IndePageDataRouter from './routes/index-page-data-router';
 import GoodsListDataRouter from './routes/goods-list-data-router';
 import GoodsDetailDataRouter from './routes/goods-detail-data-router';
+import RivalDataRouter from './routes/rival-data-router';
+import RivalViewDataRouter from './routes/rival-view-data-router';
 import CreateRelevance from './views/create-relevance/create-relevance';
+
 
 /**
  * 销售秘书模块路由
@@ -22,7 +25,10 @@ function RouterConfig({ history }) {
             {/* 创建关系 */}
 			<Route path="/create" component={ CreateRelevance }> </Route>
 			<Route path="/create/:sku" component={ CreateRelevance } /> 
-
+            {/* 竞品 */}
+            <Route path="/rival" component={ RivalDataRouter } ></Route>
+            <Route path="/view" component={ RivalViewDataRouter } ></Route>
+            <Route path="/view/:sku" component={ RivalViewDataRouter } />
    		</Router>
     );
 }
