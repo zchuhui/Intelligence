@@ -15,7 +15,7 @@ class GoodsRank extends React.Component {
         return (
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
-                    你的商品排名
+                    商品排名
                 </div>
                 {
                     this.props.myProductRank?
