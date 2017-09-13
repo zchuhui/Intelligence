@@ -14,6 +14,7 @@ app.model(require('./models/index-home-model'));
 app.model(require('./models/goods-list-model'));
 app.model(require('./models/goods-detail-model'));
 app.model(require('./models/create-relevance-model'));
+app.model(require('./models/rival-model'));
 
 // 4. Router
 app.router(require('./router'));

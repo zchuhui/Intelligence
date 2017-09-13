@@ -23,7 +23,7 @@ class RivalViewDataRouter extends React.Component {
 
 
 function mapStateToProps(state){
-    //return {...state.GoodsDetailModel};
+    return {...state.RivalModel};
 }
 
 export default connect(mapStateToProps)(RivalViewDataRouter)

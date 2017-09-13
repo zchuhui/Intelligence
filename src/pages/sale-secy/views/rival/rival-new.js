@@ -5,11 +5,13 @@
  */
 
 import React from 'react';
+import { connect } from 'dva';
 import styles from './rival-new.less'
 import moment from 'moment';
 import echarts from 'echarts';
 import { Button, DatePicker, Spin,} from 'antd';
 import { Link } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -212,10 +214,10 @@ class RivalNew extends React.Component {
 
         chartBG.setOption(option);
 
-
-        chartBG.on("click", function(params){
-            alert(siteName+":"+params.name);
-            
+        chartBG.on("click", function(params){ 
+            routerRedux.push('/view');
+            routerRedux.replace('/view');
+            console.log(siteName+":"+params.name);
         });
 
     }
@@ -403,8 +405,15 @@ class RivalNew extends React.Component {
         
     }
 
-
-
 }
 
+
 export default RivalNew;
+
+/* 
+function mapStateToProps(state) {
+    return { ...state.RivalModel};
+}
+
+
+export default connect(mapStateToProps)(RivalNew); */
