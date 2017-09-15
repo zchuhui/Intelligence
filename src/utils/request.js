@@ -78,7 +78,7 @@ export default async function request(url, options) {
 	// 返回数据验证
 	const code = ret.data.code;
 	const msg = ret.data.msg;
-
+	
 	// 如果请求成功，则返回数据，失败则统一处理
 	if(code == 200){
 		return ret;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'dva/router';
+import { Router, Route,hashHistory} from 'dva/router';
 import IndePageDataRouter from './routes/index-page-data-router';
 import GoodsListDataRouter from './routes/goods-list-data-router';
 import GoodsDetailDataRouter from './routes/goods-detail-data-router';
@@ -28,7 +28,8 @@ function RouterConfig({ history }) {
             {/* 竞品 */}
             <Route path="/rival" component={ RivalDataRouter } ></Route>
             <Route path="/view" component={ RivalViewDataRouter } ></Route>
-            <Route path="/view/:sku" component={ RivalViewDataRouter } />
+            <Route path="/view/:name" component={ RivalViewDataRouter } />
+
    		</Router>
     );
 }
