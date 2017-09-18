@@ -177,7 +177,6 @@ class RivalNewView extends React.Component {
                             columns={columns}
                             dataSource={this.props.rivalViewList !==null?this.props.rivalViewList.list:null}
                             pagination={false}
-                            rowKey={record => `${record.url_id}` }
                         />
                         
                         <div className={styles.piginationWrap}>
@@ -185,7 +184,6 @@ class RivalNewView extends React.Component {
                                 this.props.rivalViewList !==null?
                                 <Pagination
                                     className="ant-table-pagination"
-                                    showQuickJumper 
                                     total={parseInt(this.props.rivalViewList.page.count)} 
                                     current={this.props.rivalViewList.page.page}
                                     pageSize={this.props.rivalViewList.page.pageSize}

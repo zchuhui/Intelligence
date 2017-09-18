@@ -276,7 +276,6 @@ class RivalNew extends React.Component {
                 {
                     name: `${siteName}上新数`,
                     type: 'line',
-                    stack: '总量',
                     itemStyle: {
                         normal: {
                             color: '#acdaff',
@@ -289,7 +288,6 @@ class RivalNew extends React.Component {
                 {
                     name: 'BG上新数',
                     type: 'line',
-                    stack: '总量',
                     itemStyle: {
                         normal: {
                             color: '#ff7082',

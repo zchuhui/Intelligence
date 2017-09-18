@@ -252,7 +252,7 @@ class CreateRelevance extends React.Component {
                                                             <Link to="/goods" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
                                                     }
 
-                                                    <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>关联</Button>
+                                                    <Button type="primary" style={{ width: 100 }} onClick={this.toStepThree.bind(this)}>保存</Button>
                                                 </div>
                                             </div>
                                         </div>
