@@ -5,11 +5,12 @@
  */
 
 import React from 'react';
+import { connect } from 'dva';
 import styles from './rival-new.less'
 import moment from 'moment';
 import echarts from 'echarts';
 import { Button, DatePicker, Spin,} from 'antd';
-import { Link } from 'dva/router';
+import { Link,hashHistory} from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -26,7 +27,44 @@ class RivalNew extends React.Component {
     }
     
     render() {
-        
+
+        // 跳转链接配置
+        const paths = {
+            gearbest:{
+                pathname:`/view`,
+                state:{
+                    site:'gearbest',
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                }
+            },
+            lightinthebox:{
+                pathname:`/view`,
+                state:{
+                    site:'lightinthebox',
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                }
+            },
+            dx:{
+                pathname:`/view`,
+                state:{
+                    site:'dx',
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                }
+            },
+            tomtop:{
+                pathname:`/view`,
+                state:{
+                    site:'tomtop',
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                }
+            },
+        }
+
+
         return (
             <div className={`${styles.mainWrap} ${styles.rivalWrap}`}>
                 <div className={styles.menu}>
@@ -61,63 +99,104 @@ class RivalNew extends React.Component {
                         <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,30)}>最近30天</span>
                         
                     </div>
-                        
-                    {/* Gearbest 模块 */}
-                    <section>
-                        <div className={styles.sectionHead}> 
-                            <b>Gearbest</b> &nbsp; 在<span className={styles.colorOrange}>{this.state.startDate}-{this.state.startDate}</span>
-                            共上新品<span className={styles.colorOrange}>999件</span>(BG上新 <span className={styles.colorOrange}>999件</span>商品)
-                            
-                            <Link to='view'><Button type='primary' className={styles.fr}>查看商品</Button></Link>
-                        </div>
-                        <div>
-                            <div ref="greabestChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
-                            <div ref="greabestPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
-                        </div>
-                    </section>
                     
-                    {/* 兰亭集势 模块 */}
-                    <section>
-                        <div className={styles.sectionHead}> 
-                            <b>兰亭集势</b> &nbsp; 在<span className={styles.colorOrange}>{this.state.startDate}-{this.state.startDate}</span>
-                            共上新品<span className={styles.colorOrange}>999件</span>(BG上新 <span className={styles.colorOrange}>999件</span>商品)
-                            
-                            <Link to='view'><Button type='primary' className={styles.fr}>查看商品</Button></Link>
-                        </div>
+                    {
+                        this.props.loading?
+                        <div style={{textAlign:'center',marginTop:150}}><Spin /></div>
+                        :
                         <div>
-                            <div ref="ltjsChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
-                            <div ref="ltjsPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
-                        </div>
-                    </section>
+                            {
+                                this.props.rivalData !== null ? 
+                                <div>
+                                    {/* Gearbest 模块 */}
+                                    <section>
+                                        <div className={styles.sectionHead}> 
+                                            <b>Gearbest</b> &nbsp; 在
+                                            <span className={styles.colorOrange}>
+                                                {
+                                                    this.state.startDate == this.state.endDate? 
+                                                    <span>{this.state.startDate}</span> : <span>{this.state.startDate} - {this.state.endDate}</span>
+                                                }
+                                            </span>
+                                            共上新品<span className={styles.colorOrange}>{this.props.rivalData.site_list[0].product_count}件</span>
+                                            (BG上新 <span className={styles.colorOrange}>{this.props.rivalData.bg_product_count}件</span>商品)
+                                            
+                                            <Link to={paths.gearbest}><Button type='primary' className={styles.fr}>查看商品</Button></Link>
+                                        </div>
+                                        <div>
+                                            <div ref="greabestChartId" style={{display:'inline-block', width:'60%',height:250}}>data</div>
+                                            <div ref="greabestPieChartId" style={{display:'inline-block', width:'40%',height:250}}>data</div>
+                                        </div>
+                                    </section>
+                                    
+                                    {/* 兰亭集势 模块 */}
+                                    <section>
+                                        <div className={styles.sectionHead}> 
+                                            <b>兰亭集势</b> &nbsp; 在
+                                            <span className={styles.colorOrange}>
+                                                {
+                                                    this.state.startDate == this.state.endDate? 
+                                                    <span>{this.state.startDate}</span> : <span>{this.state.startDate} - {this.state.endDate}</span>
+                                                }
+                                            </span>
+                                            共上新品<span className={styles.colorOrange}>{this.props.rivalData.site_list[1].product_count}件</span>
+                                            (BG上新 <span className={styles.colorOrange}>{this.props.rivalData.bg_product_count}件</span>商品)
+                                            
+                                            <Link to={paths.lightinthebox}><Button type='primary' className={styles.fr}>查看商品</Button></Link>
+                                        </div>
+                                        <div>
+                                            <div ref="ltjsChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
+                                            <div ref="ltjsPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
+                                        </div>
+                                    </section>
 
-                    {/* DX 模块 */}
-                    <section>
-                        <div className={styles.sectionHead}> 
-                            <b>DX</b> &nbsp; 在<span className={styles.colorOrange}>{this.state.startDate}-{this.state.startDate}</span>
-                            共上新品<span className={styles.colorOrange}>999件</span>(BG上新 <span className={styles.colorOrange}>999件</span>商品)
-                            
-                            <Link to='view'><Button type='primary' className={styles.fr}>查看商品</Button></Link>
-                        </div>
-                        <div>
-                            <div ref="dxChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
-                            <div ref="dxPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
-                        </div>
-                    </section>
+                                    {/* DX 模块 */}
+                                    <section>
+                                        <div className={styles.sectionHead}> 
+                                            <b>DX</b> &nbsp; 在
+                                            <span className={styles.colorOrange}>
+                                                {
+                                                    this.state.startDate == this.state.endDate? 
+                                                    <span>{this.state.startDate}</span> : <span>{this.state.startDate} - {this.state.endDate}</span>
+                                                }
+                                            </span>
+                                            共上新品<span className={styles.colorOrange}>{this.props.rivalData.site_list[2].product_count}件</span>
+                                            (BG上新 <span className={styles.colorOrange}>{this.props.rivalData.bg_product_count}件</span>商品)
+                                            
+                                            <Link to={paths.dx}><Button type='primary' className={styles.fr}>查看商品</Button></Link>
+                                        </div>
+                                        <div>
+                                            <div ref="dxChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
+                                            <div ref="dxPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
+                                        </div>
+                                    </section>
 
-                    {/* Tom Top 模块 */}
-                    <section>
-                        <div className={styles.sectionHead}> 
-                            <b>兰亭集势</b> &nbsp; 在<span className={styles.colorOrange}>{this.state.startDate}-{this.state.startDate}</span>
-                            共上新品<span className={styles.colorOrange}>999件</span>(BG上新 <span className={styles.colorOrange}>999件</span>商品)
-                            
-                            <Link to='view'><Button type='primary' className={styles.fr}>查看商品</Button></Link>
+                                    {/* Tom Top 模块 */}
+                                    <section>
+                                        <div className={styles.sectionHead}> 
+                                            <b>TomTop</b> &nbsp; 在
+                                            <span className={styles.colorOrange}>
+                                                {
+                                                    this.state.startDate == this.state.endDate? 
+                                                    <span>{this.state.startDate}</span> : <span>{this.state.startDate} - {this.state.endDate}</span>
+                                                }
+                                            </span>
+                                            共上新品<span className={styles.colorOrange}>{this.props.rivalData.site_list[3].product_count}件</span>
+                                            (BG上新 <span className={styles.colorOrange}>{this.props.rivalData.bg_product_count}件</span>商品)
+                                            
+                                            <Link to={paths.tomtop}><Button type='primary' className={styles.fr}>查看商品</Button></Link>
+                                        </div>
+                                        <div>
+                                            <div ref="tomtopChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
+                                            <div ref="tomtopPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
+                                        </div>
+                                    </section>
+                                </div>
+                                :
+                                <div style={{textAlign:'center',marginTop:150}}>数据载入失败</div>
+                            }
                         </div>
-                        <div>
-                            <div ref="tomtopChartId" style={{display:'inline-block', width:'60%',height:250}}></div>
-                            <div ref="tomtopPieChartId" style={{display:'inline-block', width:'40%',height:250}}></div>
-                        </div>
-                    </section>
-
+                    }
                 </div>
             </div>
         );
@@ -129,10 +208,10 @@ class RivalNew extends React.Component {
      * 载入折线图表
      * @param {object} chartData 
      */
-    loadChart(chartData,id) {
+    loadChart(chartData,id,siteName) {
 
         const chartBG = echarts.init(id);
-        
+
         const option = {
             title: {
             },
@@ -140,7 +219,7 @@ class RivalNew extends React.Component {
                 trigger: 'axis',
                 /* formatter:function(params,ticket,callback){
                     let dataIndex = params[0].dataIndex;
-                    return `<div>${chartData.nameArray[dataIndex]}</div>`;
+                    //return `<div>${chartData.nameArray[dataIndex]}</div>`; 
                 } */
             },
             legend: {
@@ -195,24 +274,50 @@ class RivalNew extends React.Component {
             ],
             series: [
                 {
-                    name: '价格',
+                    name: `${siteName}上新数`,
                     type: 'line',
-                    stack: '总量',
                     itemStyle: {
                         normal: {
                             color: '#acdaff',
                             show: true,
+                            position: 'top'
                         },
                     },
-                    areaStyle: { normal: {} }, 
                     data:chartData.value,
+                },
+                {
+                    name: 'BG上新数',
+                    type: 'line',
+                    itemStyle: {
+                        normal: {
+                            color: '#ff7082',
+                            show: true,
+                        },
+                    },
+                    data:chartData.bgvalue,
                 }
             ]
         }
 
         chartBG.setOption(option);
-    }
 
+
+        // 添加点击事件，跳转链接
+        chartBG.on("click", function(params){ 
+
+            const path = {
+                pathname:`/view`,
+                state:{
+                    site:siteName,
+                    startDate: params.name,
+                    endDate: params.name
+                }
+            }
+
+            hashHistory.push(path);
+        });
+
+    }
 
     /**
      * 载入饼状图
@@ -231,7 +336,7 @@ class RivalNew extends React.Component {
         let option = {
             tooltip : {
                 trigger: 'item',
-                formatter: "占比：{d}%"
+                formatter: "占比：{d}% ({c}件)"
             },
             grid: {
                 left: '3%',
@@ -251,7 +356,7 @@ class RivalNew extends React.Component {
                 {
                     name: '',
                     type: 'pie',
-                    radius : '70%',
+                    radius : '60%',
                     center: ['50%', '50%'],
                     data:data
                 }
@@ -261,7 +366,6 @@ class RivalNew extends React.Component {
         chartId.setOption(option);
     }
 
-
     /**
      * 获取多少天前的数据
      * @param {number} days 
@@ -269,23 +373,26 @@ class RivalNew extends React.Component {
     onLatelyDate(days){
         
         // 获取时间范围
-        let yesterday = DateTime.getDateOfDays(1),                // 昨天
-            latelyDay = DateTime.getDateOfDays(days);           // days天前的日期
+        let endDate = DateTime.getDateOfDays(1),                // 昨天
+            startDate = DateTime.getDateOfDays(days);           // days天前的日期
 
         // 前天
         if(days == 1){
-            yesterday = DateTime.getDateOfDays(2);
-            latelyDay = DateTime.getDateOfDays(2);
+            endDate = DateTime.getDateOfDays(2);
+            startDate = DateTime.getDateOfDays(2);
         }
         
         // 赋值
         this.setState({
-            startDate:latelyDay,
-            endDate:yesterday
+            startDate:startDate,
+            endDate:endDate
         });
-        
          
-        this.getPriceDataByDate(latelyDay,yesterday);
+        // 根据时间请求数据
+        this.props.getRivalDataByDate({
+            startDate:startDate,
+            endDate:endDate
+        });
     }
 
     /**
@@ -297,51 +404,17 @@ class RivalNew extends React.Component {
         // 获取日期并赋值到state
         let startDate = dateString[0],
             endDate   = dateString[1];
+            
         // 赋值
         this.setState({startDate:startDate,endDate:endDate});
 
-        
-        this.getPriceDataByDate(startDate,endDate);
-
-    }
-
-    /**
-     * 根据时间获取BG、竞品的数据
-     */
-    getPriceDataByDate(startDate,endDate){
-
-        // Bg
-        let paramsBg =  {  
-            pid:this.props.goods.products_id,
-            site:'banggood',
+        // 根据时间请求数据
+        this.props.getRivalDataByDate({
             startDate:startDate,
-            endDate:endDate,
-            optionValues:this.state.optionValuesByBg.join(',')
-        },
-        // 竞品
-        paramsCompete =  {
-            pid:this.props.goods.products_id,
-            site:this.state.competeSite,
-            startDate:startDate,
-            endDate:endDate,
-            optionValues:this.state.optionValuesByOther.join(',')
-        }
-
-        
-        // 请求数据
-        this.props.onGoodsOtherRunChart(paramsBg);
-        this.props.onGoodsOtherRunChart(paramsCompete);
-
-        // 载入竞品图表
-        this.timeout(2000).then((value) => {
-            let relateInfoNewChart = this.props.relateInfoNewChart;
-            if(relateInfoNewChart !== null)
-            {
-                this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
-            }
+            endDate:endDate
         });
 
-    }
+    } 
 
     /**
      * 限制日期控件只能选今天或今天前的日期
@@ -365,39 +438,39 @@ class RivalNew extends React.Component {
 
 
     componentDidMount(){
-        const data = {
-            data:['2015-02-05','2015-02-05','2015-02-05','2015-02-05','2015-02-05','2015-02-05'],
-            value:[32,12,44,33,22,2]
-        }
-        const pieData = {
-            data:['class1','class2','class3','class4','class5'],
-            value:[32,12,44,33,22]
-        }
-
-
-        this.loadChart(data,this.refs.greabestChartId);
-        this.loadPieChart(pieData,this.refs.greabestPieChartId);
-
-        this.loadChart(data,this.refs.ltjsChartId);
-        this.loadPieChart(pieData,this.refs.ltjsPieChartId);
-
-        this.loadChart(data,this.refs.dxChartId);
-        this.loadPieChart(pieData,this.refs.dxPieChartId);
-
-        this.loadChart(data,this.refs.tomtopChartId);
-        this.loadPieChart(pieData,this.refs.tomtopPieChartId);
-
-
        
     }
 
 
     componentDidUpdate(){
-        
+        // 载入Echart图表
+        if(!this.props.loading && this.props.rivalData !== null){
+            this.props.rivalData.site_list.map((item,index)=>{
+                switch(item.site){
+                    case 'gearbest':
+                        this.loadChart(item.new_list,this.refs.greabestChartId,item.site);
+                        this.loadPieChart(item.category_present,this.refs.greabestPieChartId);
+                        break;
+                    case 'lightinthebox':
+                        this.loadChart(item.new_list,this.refs.ltjsChartId,item.site);
+                        this.loadPieChart(item.category_present,this.refs.ltjsPieChartId);
+                        break;
+                    case 'dx':
+                        this.loadChart(item.new_list,this.refs.dxChartId,item.site);
+                        this.loadPieChart(item.category_present,this.refs.dxPieChartId);
+                        break;
+                    case 'tomtop':
+                        this.loadChart(item.new_list,this.refs.tomtopChartId,item.site);
+                        this.loadPieChart(item.category_present,this.refs.tomtopPieChartId);
+                        break;
+                    
+                }
+            })
+           
+        }
     }
 
-
-
 }
+
 
 export default RivalNew;

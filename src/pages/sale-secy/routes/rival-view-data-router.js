@@ -13,17 +13,44 @@ class RivalViewDataRouter extends React.Component {
                 {/* 菜单 */}
                 <MenuBar value={2}/>
                 
-                <RivalNewView />
-                
+                <RivalNewView 
+                    rivalViewLoading = {this.props.rivalViewLoading}
+                    rivalViewList = {this.props.rivalViewList}
+                    getRivalDataByParams = {params => this.getRivalDataByParams(params)}
+                    menus={this.props.menus}
+                    params={this.props.location.state}
+                />
             </MainLayout>
         )
+    }
+
+    /**
+     * 搜索
+     * @param {object} params 
+     */
+    getRivalDataByParams(params){
+        // 根据时间请求数据
+        this.props.dispatch({
+            type: 'RivalModel/getRivalDataByParams',
+            payload: params,
+        })
+    }
+
+
+
+    componentDidMount(){
+        
+        // 获取品牌菜单
+        this.props.dispatch({ type: 'Menus/getBanggoodBrands'});
+
     }
     
 }
 
 
+
 function mapStateToProps(state){
-    //return {...state.GoodsDetailModel};
+    return {...state.RivalModel,menus:state.Menus};
 }
 
 export default connect(mapStateToProps)(RivalViewDataRouter)
