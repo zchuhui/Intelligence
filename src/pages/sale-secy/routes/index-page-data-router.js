@@ -43,8 +43,8 @@ class DataRouter extends React.Component {
 								allowClear={false}
 								showToday={false}
 								/>
-							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>上一天</Button>
-							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>下一天</Button>
+							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 0)}>前一天</Button>
+							<Button size="small" className={styles.toDay} onClick={this.onPrevOrNextDay.bind(this, 1)}>后一天</Button>
 						</div>
 						
 						{

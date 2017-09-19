@@ -50,7 +50,7 @@ export default {
                 
 				// 请求获取数据
                 const { data } = yield call(ServiceRival.getRivalDataByDate,payload);
-                
+               
 				if(data){
 					yield put({ type:'saveRivalData', payload:data});
 				}

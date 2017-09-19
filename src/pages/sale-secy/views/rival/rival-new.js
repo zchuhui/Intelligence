@@ -34,6 +34,7 @@ class RivalNew extends React.Component {
                 pathname:`/view`,
                 state:{
                     site:'gearbest',
+                    cid:null,
                     startDate: this.state.startDate,
                     endDate: this.state.endDate,
                 }
@@ -42,6 +43,7 @@ class RivalNew extends React.Component {
                 pathname:`/view`,
                 state:{
                     site:'lightinthebox',
+                    cid:null,
                     startDate: this.state.startDate,
                     endDate: this.state.endDate,
                 }
@@ -50,6 +52,7 @@ class RivalNew extends React.Component {
                 pathname:`/view`,
                 state:{
                     site:'dx',
+                    cid:null,
                     startDate: this.state.startDate,
                     endDate: this.state.endDate,
                 }
@@ -58,6 +61,7 @@ class RivalNew extends React.Component {
                 pathname:`/view`,
                 state:{
                     site:'tomtop',
+                    cid:null,
                     startDate: this.state.startDate,
                     endDate: this.state.endDate,
                 }
@@ -217,10 +221,11 @@ class RivalNew extends React.Component {
             },
             tooltip: {
                 trigger: 'axis',
-                /* formatter:function(params,ticket,callback){
-                    let dataIndex = params[0].dataIndex;
-                    //return `<div>${chartData.nameArray[dataIndex]}</div>`; 
-                } */
+                formatter:function(params){
+                    return params[0].axisValue+"<br/>"+
+                           params[0].seriesName+': '+params[0].value + "件 <br/>"+
+                           params[1].seriesName+': '+params[1].value+"件";
+                }
             },
             legend: {
             },
@@ -309,6 +314,7 @@ class RivalNew extends React.Component {
                 pathname:`/view`,
                 state:{
                     site:siteName,
+                    cid:null,
                     startDate: params.name,
                     endDate: params.name
                 }
@@ -323,13 +329,13 @@ class RivalNew extends React.Component {
      * 载入饼状图
      * @param {object} chartData 
      */
-    loadPieChart(chartData,id){
+    loadPieChart(chartData,id,siteName){
         
         const chartId = echarts.init(id);
         let data = [];
 
         chartData.data.map((item,index)=>{
-            let obj = {'name':item,'value':chartData.value[index]};
+            let obj = {'name':item,'value':chartData.value[index],'cid':chartData.cid[index]};
             data.push(obj);
         })
 
@@ -364,6 +370,27 @@ class RivalNew extends React.Component {
         }
 
         chartId.setOption(option);
+
+        // 获取时间
+        const startDate = this.state.startDate;
+        const endDate = this.state.endDate;
+
+        // 添加点击事件，跳转链接
+        chartId.on("click", function(params){ 
+            console.log(params);
+            const path = {
+                pathname:`/view`,
+                state:{
+                    site:siteName,                  // 站点名称
+                    cid:params.data.cid,            // 分类名称
+                    startDate: startDate, 
+                    endDate: endDate,
+                }
+            }
+            
+            hashHistory.push(path);
+
+        });
     }
 
     /**
@@ -449,19 +476,19 @@ class RivalNew extends React.Component {
                 switch(item.site){
                     case 'gearbest':
                         this.loadChart(item.new_list,this.refs.greabestChartId,item.site);
-                        this.loadPieChart(item.category_present,this.refs.greabestPieChartId);
+                        this.loadPieChart(item.category_present,this.refs.greabestPieChartId,item.site);
                         break;
                     case 'lightinthebox':
                         this.loadChart(item.new_list,this.refs.ltjsChartId,item.site);
-                        this.loadPieChart(item.category_present,this.refs.ltjsPieChartId);
+                        this.loadPieChart(item.category_present,this.refs.ltjsPieChartId,item.site);
                         break;
                     case 'dx':
                         this.loadChart(item.new_list,this.refs.dxChartId,item.site);
-                        this.loadPieChart(item.category_present,this.refs.dxPieChartId);
+                        this.loadPieChart(item.category_present,this.refs.dxPieChartId,item.site);
                         break;
                     case 'tomtop':
                         this.loadChart(item.new_list,this.refs.tomtopChartId,item.site);
-                        this.loadPieChart(item.category_present,this.refs.tomtopPieChartId);
+                        this.loadPieChart(item.category_present,this.refs.tomtopPieChartId,item.site);
                         break;
                     
                 }

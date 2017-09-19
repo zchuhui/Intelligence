@@ -49,17 +49,21 @@ class RivalNewView extends React.Component {
             </div>)},
             { title: '竞争平台', dataIndex: 'site', width:'10%'},
             { title: '标题', dataIndex: 'pname', width:'15%',render:(text,record)=>(
-            <div>
-                <p style={{maxWidth:300}}> {record.pname}</p>
-                {/* <div>
-                    <span className={styles.relatedY}></span>
-                    <span className={styles.relatedN}></span>
-                    <span className={styles.traceY}></span>
-                    <span className={styles.traceN}></span>
-                </div> */}
+            <div >
+                <p style={{maxWidth:300,textAlign:'left',marginBottom:5}}> {record.pname}</p>
+                <div>
+                    {
+                        record.status == 1 ?
+                        <span title="已关联" className={`${styles.relatedY} ${styles.fl}`}></span>
+                        :
+                        <span title="未关联" className={`${styles.relatedN} ${styles.fl}`}></span>
+                    }
+                    {/* <span className={styles.traceY}></span>
+                    <span className={styles.traceN}></span> */}
+                </div>
             </div>
             )},
-            { title: '价格', dataIndex: 'price', width:'7%',render:(text,record)=>(
+            { title: '价格', dataIndex: 'price', width:'10%',render:(text,record)=>(
                 <div>
                     {
                         record.poa.length >0?
@@ -76,10 +80,15 @@ class RivalNewView extends React.Component {
                     }
                 </div>
             )},
-            { title: '上新时间', dataIndex: 'add_time', width:'8%'},
-            { title: '评论数', dataIndex: 'reviews', width:'7%'},
-            { title: '关注数', dataIndex: 'favorites', width:'7%'},
-            { title: '提问数', dataIndex: 'questions', width:'6%'},
+            { title: '上新时间', dataIndex: 'add_time', width:'10%',render:(text,record)=>(
+                <div>
+                    <p>{record.add_time.split(' ')[0]}</p>
+                    <p>{record.add_time.split(' ')[1]}</p>
+                </div>
+            )},
+            { title: '评论数', dataIndex: 'reviews', width:'5%'},
+            { title: '关注数', dataIndex: 'favorites', width:'5%'},
+            { title: '提问数', dataIndex: 'questions', width:'5%'},
             { title: '分类', dataIndex: 'cateName', width:'10%',
             render:(text,record) => (
                 <div className={styles.cateName} title={record.cateName}>
@@ -117,6 +126,7 @@ class RivalNewView extends React.Component {
 
                         <Cascader 
                             options={this.props.menus.cate} 
+                            defaultValue={[this.props.params.site,this.props.params.cid]}
                             placeholder="竞品平台-分类"
                             onChange = {this.onSelectSiteAndCid.bind(this)}
                             changeOnSelect 
@@ -367,9 +377,10 @@ class RivalNewView extends React.Component {
 
         // 获取
         if(this.props.params){
-            
+
             this.setState({
                 site:this.props.params.site,
+                cid:this.props.params.cid,
                 startDate:this.props.params.startDate,
                 endDate:this.props.params.endDate
             })
@@ -377,6 +388,7 @@ class RivalNewView extends React.Component {
             // 首次搜索
             this.props.getRivalDataByParams({
                 site:this.props.params.site,
+                cid:this.props.params.cid,
                 startDate:this.props.params.startDate,
                 endDate:this.props.params.endDate
             })
