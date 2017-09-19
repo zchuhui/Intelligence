@@ -10,7 +10,7 @@ import { CODE200, ERRORMESSAGE } from '../constants/constant';
 import { message } from 'antd';
 
  
-const saveTime = 60 * 24;        // localStorage的保存天数，默认设定为一天，单位为分钟
+const saveTime = 60 * 24;        // 用户登录状态存储时间，默认设定为一天，单位为分钟
 
 export default {
     namespace: 'User',
@@ -19,21 +19,33 @@ export default {
         loginStatus: 0, // 登录状态，是否登录成功
         loginMsg: '',   // 登录提示信息
         userInfo: {},   // 登录成功获取的用户信息
-        loading: 0,     // 登录中的加载状态
+        loading: false,     // 登录中的加载状态
     },
     reducers: {
         // 存储登录成功后的信息到state
         save(state, { payload }) {
+            // 记录登录状态
             let loginStatus = 0;
             if (payload.code == CODE200) {
                 loginStatus = 1;
             }
-            return { ...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: payload.msg, loading: 0 };
+            
+            // 登录提示
+            let msg = '';
+            if(payload.msg == 'The administrator is not exist!'){
+                msg = '该账号无效，请重新核对';
+            }else if(payload.msg == 'The password is error!'){
+                msg = '密码有误，请重新输入';
+            }else{
+                msg = '服务器异常，请稍后重试';
+            }
+
+            return { ...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: msg, loading: false };
         },
 
-        // 显示登录加载状态
+        // 显示登录加载状态,清除提示
         showLoading(state, { payload }) {
-            return { ...state, loading: 1 };
+            return { ...state, loading: true,loginMsg:'' };
         },
 
         // 退出登录，清除信息
@@ -51,7 +63,8 @@ export default {
 
         // 报错时存储信息
         saveError(state, { payload }) {
-            return { ...state, loginMsg: payload.msg, loading: 0, loginStatus: 0 };
+            const msg = '服务器异常，请稍后重试';
+            return { ...state, loginMsg: msg, loading: false, loginStatus: 0 };
         }
     },
     effects: {
@@ -60,12 +73,11 @@ export default {
             try {
                 // 显示加载状态
                 yield put({ type: 'showLoading' });
-
                 // 开始请求数据
                 const { data } = yield call(UsersService.login, payload.loginInfo);
                 
                 if (data.code == CODE200) {
-                    
+
                     // 存储数据
                     yield put({ type: 'save', payload: data });
 
@@ -177,7 +189,6 @@ export default {
                 }
             }
             else {
-                //console.log("no login info");
                 // 没登录则马上跳到登录页
                 if (pathname !== '/login') {
                     window.location.href = "/login";
