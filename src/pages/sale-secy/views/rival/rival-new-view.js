@@ -8,7 +8,7 @@ import React from 'react';
 import styles from './rival-new.less'
 import moment from 'moment';
 import echarts from 'echarts';
-import { Button, DatePicker, Spin, Select, Input, Table, Pagination, Popover, message} from 'antd';
+import { Button, DatePicker, Spin, Select, Input, Table, Pagination, Popover, message, Cascader, Icon} from 'antd';
 import { Link } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 import Clipboard  from 'clipboard';
@@ -26,6 +26,7 @@ class RivalNewView extends React.Component {
         
         this.state = {
             site:'gearbest',                        // 站点
+            cid:null,
             startDate: DateTime.getDateOfDays(7),   // 起始时间
             endDate: DateTime.getDateOfDays(1),     // 结束时间
             bid:null,                               // 品牌Id
@@ -62,7 +63,7 @@ class RivalNewView extends React.Component {
                 <div>
                     {
                         record.poa.length >0?
-                        <Popover content={ 
+                        <Popover content={  
                             record.poa.map((item,index)=>
                             <p key={index}>
                                 {item.name} :  ${ item.value }
@@ -95,6 +96,8 @@ class RivalNewView extends React.Component {
             { title: '操作', width:'10%',render:(text,record) => (<div><Button type="primary">采购</Button></div>)},
         ];
         
+        // url输入框清空 icon
+        const suffix = this.state.url ? <Icon type="close-circle" onClick={this.emitEmpty.bind(this)} /> : null;
 
         return (
             <div className={`${styles.mainWrap} ${styles.rivalWrap}`}>
@@ -111,17 +114,15 @@ class RivalNewView extends React.Component {
                 <div className={`${styles.content} ${styles.rivalNewView}`}>
                     {/* 搜索栏 */}
                     <div className={styles.searchBar}>
-                        <Select 
-                            defaultValue={this.props.params.site} 
-                            className={styles.mr10} 
-                            onChange={this.onSelectSite.bind(this)}
-                            style={{ width: 120}}
-                        >
-                            <Option value="gearbest">gearbest</Option>
-                            <Option value="lightinthebox">lightinthebox</Option>
-                            <Option value="dx">dx</Option>
-                            <Option value="tomtop">tomtop</Option>
-                        </Select>
+
+                        <Cascader 
+                            options={this.props.menus.cate} 
+                            placeholder="竞品平台-分类"
+                            onChange = {this.onSelectSiteAndCid.bind(this)}
+                            changeOnSelect 
+                            allowClear
+                            style={{ marginRight:10, width:300, marginBottom:10}}
+                        />
                         <Select
                             showSearch
                             style={{ width: 120}}
@@ -167,7 +168,15 @@ class RivalNewView extends React.Component {
                                 onChange={ this.onGetDateRange.bind(this) }
                             />
                         </InputGroup>
-                        <Input placeholder="URL" style={{width:300}} className={styles.mr10} id="txtUrlId" onChange={this.onInputUrl.bind(this)} />
+                        <Input placeholder="URL" 
+                            style={{width:300}} 
+                            className={styles.mr10} 
+                            id="txtUrlId"  
+                            value = {this.state.url}
+                            onChange={this.onInputUrl.bind(this)} 
+                            suffix={suffix}
+                            ref={node => this.urlInput = node}
+                        />
                         <Button type="primary" onClick={this.search.bind(this)}>搜索</Button>
                     </div>
                     
@@ -200,14 +209,29 @@ class RivalNewView extends React.Component {
         
     }
 
-    /**
-     * 选择站点
-     * @param {string} value 
-     */
-    onSelectSite(value){
-        this.setState({
-            site:value,
-        })
+    
+     /**
+      * 选择站点与分类
+      */
+     onSelectSiteAndCid(value){
+        
+        var len = value.length;
+
+        if (len == 1) {
+            this.state.site = value[0];
+            this.state.cid = null;
+        }
+        
+        if (len > 1) {
+            this.state.site = value[0];
+            this.state.cid = value[len - 1];
+        }
+
+        if(len<1){
+            this.state.site =null;
+            this.state.cid = null;
+        }
+
     }
 
     /**
@@ -245,6 +269,14 @@ class RivalNewView extends React.Component {
             url:val
         })
     }
+
+    /**
+     * 清空url文本
+     */
+    emitEmpty(){
+        this.urlInput.focus();
+        this.setState({ url: null });
+    } 
     
 
     /**
@@ -298,6 +330,9 @@ class RivalNewView extends React.Component {
         }
         if(this.state.url !== null){
             params.url = this.state.url;
+        }
+        if(this.state.cid !== null){
+            params.cid = this.state.cid;
         }
 
         this.props.getRivalDataByParams(params)

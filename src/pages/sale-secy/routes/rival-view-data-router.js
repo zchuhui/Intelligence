@@ -42,6 +42,7 @@ class RivalViewDataRouter extends React.Component {
         
         // 获取品牌菜单
         this.props.dispatch({ type: 'Menus/getBanggoodBrands'});
+        this.props.dispatch({ type: 'Menus/getCates'});
 
     }
     
