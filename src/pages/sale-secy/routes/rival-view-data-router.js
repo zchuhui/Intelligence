@@ -17,8 +17,11 @@ class RivalViewDataRouter extends React.Component {
                     rivalViewLoading = {this.props.rivalViewLoading}
                     rivalViewList = {this.props.rivalViewList}
                     getRivalDataByParams = {params => this.getRivalDataByParams(params)}
+                    setRelatedBgBySku = {params => this.setRelatedBgBySku(params)}
                     menus={this.props.menus}
                     params={this.props.location.state}
+                    relatedLoading={this.props.relatedLoading}
+                    relatedStatus={this.props.relatedStatus}
                 />
             </MainLayout>
         )
@@ -36,7 +39,14 @@ class RivalViewDataRouter extends React.Component {
         })
     }
 
+    setRelatedBgBySku(params){
+        this.props.dispatch({
+            type: 'RivalModel/setRelatedBgBySku',
+            payload: params,
+        })
+    }
 
+    
 
     componentDidMount(){
         

@@ -59,7 +59,7 @@ class Category extends React.Component {
                                     <div>
                                         <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 你的商品排行</h3>
                                         {
-                                            this.props.myProductInCate.map((item,index)=>
+                                            this.props.productInCate.map((item,index)=>
                                             <div className={styles.itemPanel} key={`shop-${item.pid}`}>
                                                 <div className={styles.imgWrap}>
                                                     <a href={item.product_url} target="_blank">
@@ -96,7 +96,7 @@ class Category extends React.Component {
                                 <div>
                                     <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 商品排行</h3>
                                     {
-                                        this.props.productInCate.map((item,index)=>
+                                        this.props.myProductInCate.map((item,index)=>
                                         <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
                                             <div className={styles.imgWrap}>
                                                 <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>

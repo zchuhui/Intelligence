@@ -223,8 +223,10 @@ class RivalNew extends React.Component {
                 trigger: 'axis',
                 formatter:function(params){
                     return params[0].axisValue+"<br/>"+
-                           params[0].seriesName+': '+params[0].value + "件 <br/>"+
-                           params[1].seriesName+': '+params[1].value+"件";
+                           '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#acdaff"></span>'+
+                           params[0].seriesName+': '+params[0].value + " 件 <br/>"+
+                           '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#ff7082"></span>'+                           
+                           params[1].seriesName+': '+params[1].value+" 件";
                 }
             },
             legend: {
@@ -450,18 +452,6 @@ class RivalNew extends React.Component {
     disabledDate(current) {
         return current && current.valueOf() > Date.now();
     }
-
-
-    /**
-     * 异步定时器
-     * @param {时间} ms 
-     */
-    timeout(ms) {
-        return new Promise((resolve, reject) => {
-            setTimeout(resolve, ms, 'done');
-        });
-    }
-
 
 
     componentDidMount(){

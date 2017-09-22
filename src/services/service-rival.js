@@ -4,6 +4,7 @@
  * Author:zhuangchuhui
  */
 import request from "../utils/request";
+import { originRequest } from '../utils/request';
 import { Url } from "../config/config.url";
 
 
@@ -36,4 +37,10 @@ export function getRivalDataByParams(params) {
 }
 
 
+export function setRelatedBgBySku(params) {
+    const url = `${Url}?com=products&t=relateBgProduct&sku=${params.sku}&bgsku=${params.bgSku}`;
+    return originRequest(url,{
+		method:'POST',
+    });
+}
 

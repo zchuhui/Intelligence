@@ -31,37 +31,58 @@ class RivalNewView extends React.Component {
             endDate: DateTime.getDateOfDays(1),     // 结束时间
             bid:null,                               // 品牌Id
             status:null,                            // 关联状态
-            url:null,
+            url:null,                               // 搜索url
+            page:1,                                 // 页数
+
+            bgSku:null,                             // 关联的bgSku
         }
     }
     
     render() {
 
+        // 数据表格式
         const columns = [
-            { title: '商品', dataIndex: 'img_url', width:'10%',render:(text,record)=>(<div>
-                <p><img className={styles.productImg} src={record.img_url} /></p>
-                <Button 
-                    type="primary" size="small" 
-                    className='copyUrl' 
-                    data-clipboard-text={record.product_url}
-                    onClick={this.onCopyUrl.bind(this)}
-                >复制链接</Button>
-            </div>)},
+            { title: '商品', dataIndex: 'img_url', width:'10%',render:(text,record)=>(
+                <div>
+                    <p><img className={styles.productImg} src={record.img_url} /></p>
+                    <Button 
+                        type="primary" size="small" 
+                        className='copyUrl' 
+                        data-clipboard-text={record.product_url}
+                        onClick={this.onCopyUrl.bind(this)}
+                    >复制链接</Button>
+                </div>)
+            },
             { title: '竞争平台', dataIndex: 'site', width:'10%'},
             { title: '标题', dataIndex: 'pname', width:'15%',render:(text,record)=>(
-            <div >
-                <p style={{maxWidth:300,textAlign:'left',marginBottom:5}}> {record.pname}</p>
-                <div>
-                    {
-                        record.status == 1 ?
-                        <span title="已关联" className={`${styles.relatedY} ${styles.fl}`}></span>
-                        :
-                        <span title="未关联" className={`${styles.relatedN} ${styles.fl}`}></span>
-                    }
-                    {/* <span className={styles.traceY}></span>
-                    <span className={styles.traceN}></span> */}
+                <div >
+                    <p style={{maxWidth:300,textAlign:'left',marginBottom:5}}> {record.pname}</p>
+                    <div>
+                        <Popover 
+                            title="关联" 
+                            trigger="click" 
+                            content={
+                            <div>
+                                <Input 
+                                    placeholder="输入BG的SKU" 
+                                    onChange={this.onChangeInputBgSku.bind(this)} 
+                                    defaultValue={record.relate_sku !== "0"?record.relate_sku:null}
+                                    style={{marginBottom:5,width:150}}
+                                    /> &nbsp; 
+                                <Button type="primary" onClick={this.onRelatedBGBySku.bind(this,record.sku)} loading={this.props.relatedLoading}>关联</Button>
+                            </div>
+                        }>
+                            {
+                                record.status == 1 ?
+                                <span title="已关联" className={`${styles.relatedY} ${styles.fl}`} onClick={this.onShowRelated.bind(this,record.relate_sku)}></span>
+                                :
+                                <span title="未关联" className={`${styles.relatedN} ${styles.fl}`} onClick={this.onShowRelated.bind(this,record.relate_sku)}></span>
+                            }
+                        </Popover>
+                        {/* <span className={styles.traceY}></span>
+                        <span className={styles.traceN}></span> */}
+                    </div>
                 </div>
-            </div>
             )},
             { title: '价格', dataIndex: 'price', width:'10%',render:(text,record)=>(
                 <div>
@@ -102,7 +123,7 @@ class RivalNewView extends React.Component {
             )
             },
             { title: '品牌', dataIndex: 'bname', width:'10%'},
-            { title: '操作', width:'10%',render:(text,record) => (<div><Button type="primary">采购</Button></div>)},
+            /* { title: '操作', width:'10%',render:(text,record) => (<div><Button type="primary">采购</Button></div>)}, */
         ];
         
         // url输入框清空 icon
@@ -189,7 +210,8 @@ class RivalNewView extends React.Component {
                         />
                         <Button type="primary" onClick={this.search.bind(this)}>搜索</Button>
                     </div>
-                    
+                                
+                    {/* 数据表 */}
                     <div className={styles.tableWrap}>
                         <Table
                             loading={ this.props.rivalViewLoading } 
@@ -325,6 +347,7 @@ class RivalNewView extends React.Component {
      * 搜索
      */
     search(){
+        // 参数
         let params = {
             site:this.state.site,
             startDate:this.state.startDate,
@@ -332,6 +355,7 @@ class RivalNewView extends React.Component {
             page:1,
         }
 
+        // 判断参数是否已存在，存在则加上
         if(this.state.bid !== null){
             params.bid = this.state.bid;
         }
@@ -345,16 +369,19 @@ class RivalNewView extends React.Component {
             params.cid = this.state.cid;
         }
 
+        // 调用搜索函数
         this.props.getRivalDataByParams(params)
     }
 
-
     /**
-     * 
+     * 分页
      * @param {number} currentPage
      */
     changePagination(currentPage){
+        // 存储当前分页到state
+        this.setState({page:currentPage});
 
+        // 获取参数
         let params = {
             site:this.state.site,
             startDate:this.state.startDate,
@@ -362,15 +389,86 @@ class RivalNewView extends React.Component {
             page:currentPage
         }
 
+        // 判断参数是否已存在，存在则加上
         if(this.state.bid !== null){
             params.bid = this.state.bid;
         }
         if(this.state.status !== null){
             params.status = this.state.status;
         }
+        if(this.state.url !== null){
+            params.url = this.state.url;
+        }
+        if(this.state.cid !== null){
+            params.cid = this.state.cid;
+        }
 
+        // 调用搜索函数
         this.props.getRivalDataByParams(params);
     }
+
+    /**
+     * sku文本框赋值
+     * @param {object} e 
+     */
+    onChangeInputBgSku(e) {
+        // 把文本框的值存储到state
+        this.setState({
+            bgSku:e.target.value,
+        })
+    }
+
+    /**
+     * 展示弹框时，同步sku值
+     */
+    onShowRelated(relate_sku){
+        relate_sku==null?
+        this.setState({ bgSku:null })
+        :
+        this.setState({ bgSku:relate_sku })
+    }
+
+    /**
+     * 关联商品
+     * @param {string} sku 
+     */
+    onRelatedBGBySku(sku){
+        if(this.state.bgSku == null || this.state.bgSku=='' || this.state.bgSku==0){
+            message.destroy();
+            message.warning("请先输入sku!");
+        }else{
+            // 开始关联
+            this.props.setRelatedBgBySku({
+                sku:sku,
+                bgSku:this.state.bgSku
+            });
+
+            // 关联后，2秒后刷新
+            this.timeout(2000).then((value) => {
+                // 判断是关联成功，失败则不刷新
+                if(this.props.relatedStatus){
+                    this.props.getRivalDataByParams({
+                        site:this.state.site,
+                        cid:this.state.cid,
+                        startDate:this.state.startDate,
+                        endDate:this.state.endDate,
+                        page:this.state.page,
+                    })
+                }
+            });
+        }
+    }
+
+    /**
+     * 异步定时器
+     * @param {时间} ms 
+     */
+    timeout=(ms) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(resolve, ms, 'done');
+        });
+    }
+
 
 
     componentDidMount(){
@@ -396,8 +494,6 @@ class RivalNewView extends React.Component {
 
     }
 
-    componentDidUpdate(){
-    }
 
 }
 
