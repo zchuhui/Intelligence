@@ -132,9 +132,9 @@ export default {
                 relateInfoArray.push(relateInfo[item]);
             }
 
-
+            // 格式转换：BG
             if (info && info.sevenRunChart) {
-                // 载入BG趋势图
+                
                 for (let item in info.sevenRunChart) {
                     let array = [];
                     let sevenDays = [];
@@ -147,9 +147,24 @@ export default {
                 }
             }
 
-            if (relateInfoArray.sevenRunChart) {
-                // 载入关联的趋势图
-                for (let item in relateInfoArray.sevenRunChart) {
+            // 格式转换：关联
+            if (relateInfoArray.length > 0) {
+
+                relateInfoArray.map((m,index) => 
+                {
+                    for (let item in m.sevenRunChart) {
+                        let array = [];
+                        let sevenDays = [];
+                        for (let item2 in m.sevenRunChart[item]) {
+                            sevenDays.push(item2)
+                            array.push(m.sevenRunChart[item][item2]);
+                        }
+                        m[item] = array;            // 数组：值
+                        m['sevenDays'] = sevenDays; // 数组：日期
+                    }
+                })
+                
+                /* for (let item in relateInfoArray.sevenRunChart) {
                     let array = [];
                     let sevenDays = [];
                     for (let item2 in relateInfoArray.sevenRunChart[item]) {
@@ -158,7 +173,7 @@ export default {
                     }
                     relateInfoArray[item] = array;            // 数组：值
                     relateInfoArray['sevenDays'] = sevenDays; // 数组：日期
-                }
+                } */
             }
 
 

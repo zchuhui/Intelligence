@@ -27,7 +27,7 @@ export default {
 		similarGoodsList: null,
 
 		// 选中的关联商品
-		relevanceGoodsList: null,
+		relevanceGoodsList: [],
 
 		// 设置状态是否成功
 		setRevanceStatus: false
@@ -82,7 +82,41 @@ export default {
 		 * @param {*} param1 
 		 */
 		saveRelevanceGoodsList(state, { payload }) {
-			return { ...state, relevanceGoodsList: payload.data };
+
+			// 数据格式转换
+			let originData = payload.data;
+			let formatData = [];
+
+			if (originData) {
+
+				let index;
+				let obj;
+				
+				for (let item in originData) {
+					switch (item) {
+						case 'gearbest':
+							index = 0;
+							obj = originData[item];
+							break;
+						case 'lightinthebox':
+							index = 1;
+							obj = originData[item];
+							break;
+						case 'dx':
+							index = 2;
+							obj = originData[item];
+							break;
+						case 'tomtop':
+							index = 3;
+							obj = originData[item];
+							break;
+					}
+	
+					formatData[index] = obj;
+				}
+			}
+
+			return { ...state, relevanceGoodsList: formatData };
 		},
 		
 		/**
@@ -123,11 +157,14 @@ export default {
 					// 存储商品信息
 					yield put({ type: "saveRelevanceGoods", payload: data });
 
-					// 请求获取相似商品
-					yield put({type: "fetchSimilarGoodsList", payload: { title: data.data.pname }});
-
+					
 					// 请求获取已关联的商品
 					yield put({ type: "featchRevanceGoods", payload });
+
+					// 请求获取相似商品
+					yield put({type: "fetchSimilarGoodsList", payload: { title: data.data.pname }});
+					
+					
 				}
 
 				// 隐藏加载状态
@@ -161,6 +198,7 @@ export default {
 
 			// 请求数据
 			const { data } = yield call(BgService.fetchRevanceBySku, payload);
+
 			// 存储数据
 			yield put({ type: "saveRelevanceGoodsList", payload: data });
 		},

@@ -150,21 +150,25 @@ class CreateRelevance extends React.Component {
                                                 {/*相似的商品 start*/}
                                                 <div style={{ width: 800, height: 200, display: 'inline-block' }}>
                                                     {
-                                                        this.props.similarGoodsList ?
+                                                        this.props.similarGoodsList.length > 0 ?
                                                             <div>
+                                                                {
+                                                                    // 同步数据props与state的数据
+                                                                    this.syncSimilarGoodsList()
+                                                                }
                                                                 <div className={styles.clear} style={{height:60,}}>
                                                                     <Select
-                                                                        labelInValue={true} 
+                                                                        labelInValue
                                                                         defaultValue = {{ 
-                                                                            key: this.props.similarGoodsList[0].tkey,
-                                                                            label: this.props.similarGoodsList[0].tname}} 
+                                                                            key: this.props.similarGoodsList[0].tkey.toString(),
+                                                                            label: this.props.similarGoodsList[0].tname.toString()}} 
                                                                         style={{ width: 130,marginLeft:35 }}
                                                                         onChange={this.getSite.bind(this)}
                                                                         className={styles.fl}
                                                                     >
                                                                         {
                                                                             this.props.similarGoodsList.map((item,index)=>
-                                                                                <Option value={item.tkey}>{item.tname}</Option>
+                                                                                <Option value={item.tkey.toString()} key={item.tkey+index}>{item.tname}</Option>
                                                                             )
                                                                         }
                                                                     </Select>
@@ -215,7 +219,8 @@ class CreateRelevance extends React.Component {
                                                                 </div>
                                                                 
                                                             </div>
-                                                            : null
+                                                            : 
+                                                            <div style={{textAlign:'center'}}><Spin /></div>
                                                     }
 
                                                 </div>
@@ -226,22 +231,43 @@ class CreateRelevance extends React.Component {
                                             <div className={styles.panelBottom}>
                                                 <div className={styles.title}>关联产品</div>
                                                 {/*选中的商品 start*/}
-                                                <ul className={styles.similarGoods}>
-                                                    {
-                                                        this.state.relevanceGoodsList.map((item, index) =>
-                                                            <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
-                                                                <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
-                                                                    <div className={styles.imgWrap}><img src={item.img_url} /></div>
-                                                                    <div className={styles.deleteItemShow}></div>
-                                                                </div>
-                                                                <div><p className={styles.brand}>{item.site}</p></div>
-                                                                <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
-                                                            </li>
-                                                        )
-                                                    }
 
-                                                </ul>
+                                                {   
+                                                    // 同步数据props与state的数据
+                                                    this.syncRelevanceGoodsLlist()
+                                                }
+                                                {
+                                                    this.state.relevanceGoodsList.length > 0?
+                                                    <div>
+                                                        <ul className={styles.similarGoods}>
+                                                            {
+                                                                this.state.relevanceGoodsList.map((item, index) =>
+                                                                <li className={styles.deleteSelectGoods} key={`relevance-${index}`}>
+                                                                    <div className={styles.goodsShowPanel} onClick={this.cancelRelevanceGoods.bind(this, index, item)}>
+                                                                        <div className={styles.imgWrap}><img src={item.img_url} /></div>
+                                                                        <div className={styles.deleteItemShow}></div>
+                                                                    </div>
+                                                                    <div><p className={styles.brand}>{item.site}</p></div>
+                                                                    <div><Button 
+                                                                            className='copyUrl' 
+                                                                            type="dashed" 
+                                                                            size="small" 
+                                                                            data-clipboard-text={item.product_url} 
+                                                                            onClick={this.onCopyUrl.bind(this)}
+                                                                            >
+                                                                            复制链接
+                                                                            </Button>
+                                                                    </div>
+                                                                </li>
+                                                                )
+                                                            }
+                                                        </ul>
+                                                    </div>  
+                                                    :null
+                                                }
+                                                
                                                 {/*选中的商品 end*/}
+
 
                                                 <div style={{ textAlign: 'center', height: 100, margin: '60px auto' }}>
                                                     {
@@ -276,14 +302,21 @@ class CreateRelevance extends React.Component {
                                                         this.props.setRevanceStatus ?
                                                             <div style={{ textAlign: 'center', }}>
                                                                 <Icon type="check-circle" style={{ fontSize: 30, color: '#79bb51', verticalAlign: 'top' }} />
-                                                                <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>{this.state.relevanceText}</span>
+                                                                <span 
+                                                                    style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>
+                                                                    {this.state.relevanceText}
+                                                                </span>
                                                                 <div><Link to="/goods"><Icon type="rollback" />返回BG关联报表</Link> </div>
                                                                 
                                                             </div>
                                                             :
                                                             <div style={{ textAlign: 'center', }}> 
                                                                 <Icon type="frown" style={{ fontSize: 30, color: '#999', verticalAlign: 'top' }} />
-                                                                <span style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>保存失败</span>
+                                                                <span 
+                                                                    style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}
+                                                                    >
+                                                                    保存失败
+                                                                </span>
                                                                 <div><Link to='/goods'><Icon type="rollback" />返回BG关联报表</Link> </div>
                                                             </div>
                                                     }
@@ -305,7 +338,12 @@ class CreateRelevance extends React.Component {
                                                                     <p className={styles.brand}>{item.site}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button>
+                                                                    <Button 
+                                                                        className='copyUrl' 
+                                                                        type="dashed" size="small" 
+                                                                        data-clipboard-text={item.product_url} 
+                                                                        onClick={this.onCopyUrl.bind(this)}
+                                                                    >复制链接</Button>
                                                                 </div>
                                                             </li>
                                                         )
@@ -747,6 +785,8 @@ class CreateRelevance extends React.Component {
      * @param {object} data 
      */
     getItemList(data) {
+        this.state.similarGoodsList = this.props.similarGoodsList;
+
         if (data) {
             return (
                 <div className={styles.similarGoodsWrap}>
@@ -770,11 +810,20 @@ class CreateRelevance extends React.Component {
                                                 <div className={item2.select ? styles.goodsShowPanelCurrent : styles.goodsShowPanel}
                                                      id={item2.cid} onClick={this.selectSimilarGoods.bind(this, index2, item2)}
                                                      >
-                                                    <div className={styles.imgWrap} id="imgWrapId" onMouseEnter={this.showGoodsDetail.bind(this,item2)} onMouseLeave={this.hideGoodsDetail.bind(this)}>
+                                                    <div className={styles.imgWrap} 
+                                                        id="imgWrapId" 
+                                                        onMouseEnter={this.showGoodsDetail.bind(this,item2)} 
+                                                        onMouseLeave={this.hideGoodsDetail.bind(this)}>
                                                         <img src={item2.img_url} />
                                                     </div>
                                                 </div>
-                                                <div><Button className='copyUrl' type="dashed" size="small" data-clipboard-text={item2.product_url} onClick={this.onCopyUrl.bind(this)}>复制链接</Button></div>
+                                                <div>
+                                                    <Button className='copyUrl' 
+                                                        type="dashed" size="small" 
+                                                        data-clipboard-text={item2.product_url} 
+                                                        onClick={this.onCopyUrl.bind(this)}
+                                                    >复制链接</Button>
+                                                </div>
                                             </li>
                                         ))
 
@@ -906,51 +955,15 @@ class CreateRelevance extends React.Component {
     /**
      * 把modle里面的相似、关联商品，取到本地state里面
      */
-    syncRelevanceGoodsLlist() { 
+    syncRelevanceGoodsLlist(data) { 
+        this.state.relevanceGoodsList = this.props.relevanceGoodsList;
+    }
 
-        // 取相识商品
-        this.setState({
-            similarGoodsList: this.props.similarGoodsList,
-        });
-
-        
-        // 取关联商品
-        let propsRelevanceGoodsList = this.props.relevanceGoodsList;
-        let stateRelevanceGoodsList = this.state.relevanceGoodsList;
-        if (propsRelevanceGoodsList) {
-
-            let index;
-            let obj;
-
-            for (let item in propsRelevanceGoodsList) {
-                switch (item) {
-                    case 'gearbest':
-                        index = 0;
-                        obj = propsRelevanceGoodsList[item];
-                        break;
-                    case 'lightinthebox':
-                        index = 1;
-                        obj = propsRelevanceGoodsList[item];
-                        break;
-                    case 'dx':
-                        index = 2;
-                        obj = propsRelevanceGoodsList[item];
-                        break;
-                    case 'tomtop':
-                        index = 3;
-                        obj = propsRelevanceGoodsList[item];
-                        break;
-                }
-
-                stateRelevanceGoodsList[index] = obj;
-
-                this.setState({
-                    relevanceGoodsList: stateRelevanceGoodsList,
-                });
-
-            }
-        }
-
+    /**
+     * 把modle里面的相似、关联商品，取到本地state里面
+     */
+    syncSimilarGoodsList(data) { 
+        this.state.similarGoodsList =this.props.similarGoodsList;
     }
     
     /**
@@ -1018,19 +1031,6 @@ class CreateRelevance extends React.Component {
             // 根据sku获取商品信息
             this.getGoodsBySku(this.props.params.sku);
         }
-
-        // 同步model与本地state的数据
-        this.timeout(1000).then((value) => {
-            this.syncRelevanceGoodsLlist();
-
-            if(this.state.relevanceGoodsList.length <= 0){
-                this.timeout(4000).then((value) => {
-                    this.syncRelevanceGoodsLlist();
-                });
-            }
-        });
-        
-        
 
     }
 

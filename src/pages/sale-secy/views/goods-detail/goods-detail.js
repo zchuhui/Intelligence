@@ -192,10 +192,10 @@ class GoodsDetail extends React.Component {
 												// 载入BG属性下拉列表
 												this.props.attrInfo?
 												this.props.attrInfo.map((item,index)=>{
-													return <Select className={styles.select} style={{minWidth:100}} key={item.option_id} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
+													return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
 														{
 															item.children.map((item2,index2)=>{
-																return <Option value={item2.options_values_id}>{item2.value_name}</Option>
+																return <Option value={item2.options_values_id.toString()} key={'o1_'+index2}>{item2.value_name}</Option>
 															})
 														}
 													</Select>
@@ -234,7 +234,7 @@ class GoodsDetail extends React.Component {
 													<Select className={styles.select} style={{minWidth:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
 														{
 															this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
-																return <Option value={index} key={`relate_${index}`}>{item}</Option>
+																return <Option value={index.toString()} key={`relate_${index}`}>{item}</Option>
 															})
 														}
 													</Select>
@@ -346,10 +346,14 @@ class GoodsDetail extends React.Component {
     }
 
     /**
-     * 载入图表
+     * 载入BG图表
      * @param {object} chartData 
      */
     loadChart(chartData) {
+        // 如果ID元素还没生成
+        if(!this.refs.chartBG){
+            return
+        }
 
         const chartBG = echarts.init(this.refs.chartBG);
         
@@ -434,10 +438,14 @@ class GoodsDetail extends React.Component {
     }
 
     /**
-     * 载入图表
+     * 载入关联商品图表
      * @param {object} chartData 
      */
     loadCompeteChart(chartData) {
+        // 如果ID元素还没生成
+        if(!this.refs.chartCompete){
+            return
+        }
 
         const chartCompete = echarts.init(this.refs.chartCompete);
         
@@ -673,7 +681,7 @@ class GoodsDetail extends React.Component {
                     <Select className={styles.select} style={{minWidth:100}} key={attrInfo.option_id} defaultValue={attrInfo.name} onChange={this.handleChangeByOther.bind(this)}>
                         {
                             attrInfo.values.map((item2,index2)=>{
-                                return <Option value={item2.options_values_id} key={`ky_${index2}`}>{item2.value_name}</Option>
+                                return <Option value={item2.options_values_id.toString} key={`ky1_${index2}`}>{item2.value_name}</Option>
                             })
                         }
                     </Select>

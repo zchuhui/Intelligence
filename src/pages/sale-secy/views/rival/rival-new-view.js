@@ -123,7 +123,20 @@ class RivalNewView extends React.Component {
             )
             },
             { title: '品牌', dataIndex: 'bname', width:'10%'},
-            /* { title: '操作', width:'10%',render:(text,record) => (<div><Button type="primary">采购</Button></div>)}, */
+            { title: '操作', width:'10%',render:(text,record) => (
+                <div>
+                    <Popover 
+                            title="确认发起该产品的采购申请吗？" 
+                            trigger="click" 
+                            content={
+                            <div style={{textAlign:'center'}}>
+                                <Button type="primary" onClick={this.onRelatedBGBySku.bind(this,record.sku)} loading={this.props.relatedLoading}>确认</Button>
+                            </div>
+                        }>
+                    <Button type="primary">采购</Button>
+                    </Popover>
+                </div>
+            )},
         ];
         
         // url输入框清空 icon

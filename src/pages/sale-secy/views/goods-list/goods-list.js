@@ -245,8 +245,9 @@ class GoodsList extends React.Component {
                                 </RadioGroup>
                             </div>
                             <div style={{display:'inline-block', height:50, width:'40%'}}>
-                                <RangePicker onChange={ this.getGoodsEcharData }
-                                    value={[
+                                <RangePicker 
+                                    onChange={ this.getGoodsEcharData }
+                                     value={[
                                         moment(this.state.defaultStartDate),
                                         moment(this.state.defaultEndDate)
                                     ]}
@@ -495,7 +496,7 @@ class GoodsList extends React.Component {
 
     // 对比商品Echart图载入
     eachEcharts = () => {
-
+        console.log('this.props.goodContrastData:',this.props.goodContrastData)
         // BG 趋势图
         if (this.refs.priceSet) {
             this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet,'价格');
@@ -506,25 +507,26 @@ class GoodsList extends React.Component {
         // 关联商品Echart图，目前最多只显示两个关联
         if (this.props.goodContrastData.relateInfo) {
             this.props.goodContrastData.relateInfo.map((item,index) => {
+                console.log('item',item);
                 if (index == 0) {
-                    this.loadGoodContrastEchart(this.refs.priceSet1,this.props.goodContrastData.info.priceSet,'价格');
-                    this.loadGoodContrastEchart(this.refs.salesSet1,this.props.goodContrastData.info.salesSet,'销量');
-                    this.loadGoodContrastEchart(this.refs.reviewSet1,this.props.goodContrastData.info.reviewSet,'评论');
+                    this.loadGoodContrastEchart(this.refs.priceSet1,item.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet1,item.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet1,item.reviewSet,'评论');
                 }
                 if (index == 1) {
-                    this.loadGoodContrastEchart(this.refs.priceSet2,this.props.goodContrastData.info.priceSet,'价格');
-                    this.loadGoodContrastEchart(this.refs.salesSet2,this.props.goodContrastData.info.salesSet,'销量');
-                    this.loadGoodContrastEchart(this.refs.reviewSet2,this.props.goodContrastData.info.reviewSet,'评论');
+                    this.loadGoodContrastEchart(this.refs.priceSet2,item.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet2,item.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet2,item.reviewSet,'评论');
                 }
                 if (index == 2) {
-                    this.loadGoodContrastEchart(this.refs.priceSet3,this.props.goodContrastData.info.priceSet,'价格');
-                    this.loadGoodContrastEchart(this.refs.salesSet3,this.props.goodContrastData.info.salesSet,'销量');
-                    this.loadGoodContrastEchart(this.refs.reviewSet3,this.props.goodContrastData.info.reviewSet,'评论');
+                    this.loadGoodContrastEchart(this.refs.priceSet3,item.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet3,item.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet3,item.reviewSet,'评论');
                 }
                 if (index == 3) {
-                    this.loadGoodContrastEchart(this.refs.priceSet4,this.props.goodContrastData.info.priceSet,'价格');
-                    this.loadGoodContrastEchart(this.refs.salesSet4,this.props.goodContrastData.info.salesSet,'销量');
-                    this.loadGoodContrastEchart(this.refs.reviewSet4,this.props.goodContrastData.info.reviewSet,'评论');
+                    this.loadGoodContrastEchart(this.refs.priceSet4,item.priceSet,'价格');
+                    this.loadGoodContrastEchart(this.refs.salesSet4,item.salesSet,'销量');
+                    this.loadGoodContrastEchart(this.refs.reviewSet4,item.reviewSet,'评论');
                 }
             })
         }
@@ -532,7 +534,6 @@ class GoodsList extends React.Component {
 
     // 载入对比商品数据
     loadGoodContrastEchart = (id,seriesData,textName) => {
-
         if (id) {
             // 初始化Echart
             let myChart = echarts.init(id);
@@ -547,28 +548,45 @@ class GoodsList extends React.Component {
                             return '<div><p>' +textName+': '+ params[0].value+'</p></div>';
                         }
                     },
+                    grid: {
+                        left: '0%',
+                        right: '0%',
+                        bottom: '0%',
+                        top:'5%',
+                        containLabel: true
+                    },
                     legend: {
                     },
                     xAxis: {
-                        splitNumber: 2,  
-                        scale: true,  
-                        show:false,  
-                        axisLabel:{
-                            interval:0
-                        },
-                        splitLine:{  
-                    　　　　show:false  
-                    　　} ,
+						show: true,
+						axisLabel: {
+							show: false,
+							textStyle: {
+                                color: '#acdaff',   // x轴字体颜色
+                                fontSite:6,
+							}
+						},
+						axisLine: {
+							lineStyle: {
+								color: '#acdaff'    // x轴颜色
+							}
+						},
                         data: sevenDays
                     },
                     yAxis: {
                         type : 'value',  
-                        splitNumber: 2,  
-                        scale: true,  
-                        show:false,  
-                        splitLine:{  
-                    　　　　show:false  
-                    　　 } 
+                        show: true,
+						splitLine: {
+							show: false
+						},
+						axisLabel: {
+							show: false,
+						},
+						axisLine: {
+							lineStyle: {
+								color: '#acdaff'    // y轴颜色
+							}
+						}
                     },
                     series: [{
                         name: textName,
@@ -713,6 +731,11 @@ class GoodsList extends React.Component {
             startTime:dateString[0],
             endTime:dateString[1]
         }
+        
+        this.setState({
+            defaultStartDate:dateString[0],
+            defaultEndDate:dateString[1]
+        })
 
         // 请求数据
         this.props.getGoodsEcharData(args);
