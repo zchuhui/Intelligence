@@ -6,7 +6,7 @@
 
 import React from 'react';
 import styles from './sale-secy.less';
-import { Icon, Spin, Radio, Select } from 'antd';
+import { Icon, Spin, Radio, Select,Cascader} from 'antd';
 import echarts from 'echarts';
 
 const Option = Select.Option;
@@ -27,19 +27,6 @@ class Category extends React.Component {
             <div className={styles.panel}>
                 <div className={styles.panelTitle}>
                     <span className={styles.fl}>类目情况</span>
-                    {/* {
-                        this.props.cateSet.length > 0?
-                        <div className={styles.fr}>
-                            <Select labelInValue defaultValue={{key: this.state.selectVal?this.state.selectVal:this.props.cateSet[0].cid}} onChange={this.onChangeCategory.bind(this)} style={{ width: 160 }} >
-                                {
-                                    this.props.cateSet.map((item,index)=>
-                                        <Option key={`opt-${index}`} value={item.cid}>{item.name}</Option>
-                                    )
-                                }
-                            </Select>
-                        </div>
-                        :null
-                    } */}
                 </div>
                 
                 <div className={styles.categoryWrap}>
@@ -47,7 +34,24 @@ class Category extends React.Component {
                         this.props.myProductInCate.map?
                         <ul className={styles.clear}>
                             <li>
-                                <div ref='catePieChart' style={{width:'100%',height:600,}}></div>
+                               {/*  {
+                                    this.props.banggoodCate.length > 0?
+                                    <div style={{height:50}}>
+                                        <Cascader 
+                                            options={ 
+                                                this.props.banggoodCate[0].children?
+                                                this.props.banggoodCate[0].children
+                                                :this.props.banggoodCate
+                                            } 
+                                            placeholder="分类" 
+                                            onChange = {this.onGetCateItem}
+                                            changeOnSelect 
+                                            style={{ marginRight:10, width:300, marginBottom:10}}
+                                        />
+                                    </div>
+                                    :null
+                                } */}
+                                <div ref='catePieChart' style={{width:'100%',height:550,}}></div>
                             </li>
                             {/* <li>
                                 {
@@ -133,7 +137,7 @@ class Category extends React.Component {
 
     
     componentDidMount(){
-
+        
         // 延迟3秒加载Echart图表
         this.timeout(3000).then((value) => {
             if(this.props.cateSet){
@@ -146,6 +150,11 @@ class Category extends React.Component {
     componentDidUpdate(){
         
     }
+
+
+    /* onGetCateItem =(value,selectedOptions)=>{
+        console.log(value,selectedOptions);
+    } */
 
     /**
      * 切换类目，根据类目获取数据
@@ -176,9 +185,9 @@ class Category extends React.Component {
         if(cateSet && catePieChartId){
 
             // 初始化Echart
-            let catePieChart = echarts.init(catePieChartId);  
+            const catePieChart = echarts.init(catePieChartId);  
 
-            let option = {
+            const option = {
                 tooltip : {
                     trigger: 'item',
                     formatter: "占比：{d}%"
@@ -211,51 +220,19 @@ class Category extends React.Component {
             // 绘制饼形图
             catePieChart.setOption(option);
 
-            
-            /**
-             * Echart图点击的事件
-             * @param {object} param 
-             * @param {int} i 
-             * @param {int} cid 
-             */
-            let everyClick = (param, i, cid) => {
-                if (param.seriesIndex == 0 && param.dataIndex == i) {
+            // 点击重新请求数据
+            catePieChart.on('click',(param)=>{
 
+                // Echart 传入点击事件 
+                if(setChartClickCount == 0){
                     // 请求数据
-                    this.props.getCategoryByCid(cid);
-
-                    // 获取类目信息
-                    const cateName = param.data.name;
-                    this.setState({
-                        selectVal:cid,
-                        selectLabel:cateName,
-                    });
-                }
-            }
+                    this.props.getCategoryByCid(param.data.value);
                 
-            
-            /**
-             * 增加监听事件
-             * @param {object} param 
-             */
-            let eConsole = (param)=>{
-                if (typeof param.seriesIndex != "undefined") {
-                    if (param.type == "click") {
-                        var peiLenght = option.legend.data.length;
-
-                        // 获取总共给分隔的扇形数
-                        for (var i = 0; i < peiLenght; i++) {
-                            everyClick(param, i, option.legend.data[i]);
-                        }
-                    }
-                }
-            }
-
-            // Echart 传入点击事件 
-            if(setChartClickCount == 0){
-                catePieChart.on("click", eConsole);
-                setChartClickCount = 0;
-            } 
+                    // 存储数据到state
+                    this.state.selectVal = param.data.value;
+                    this.state.selectLabel =param.data.name;
+                } 
+            });
         }
     }
     

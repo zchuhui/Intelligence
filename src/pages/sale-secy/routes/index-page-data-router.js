@@ -83,7 +83,7 @@ class DataRouter extends React.Component {
 										myProductInCate={this.props.myProductInCate}
 										productInCate={this.props.productInCate}
 										myCateSalesFromPrice={this.props.myCateSalesFromPrice}
-
+										banggoodCate={this.props.banggoodCate}
 										getCategoryByCid={cid => this.getCategoryByCid(cid)}
 									/> 
 									{/* 对比关系 */}
@@ -106,6 +106,9 @@ class DataRouter extends React.Component {
 		// 获取昨天的日期
 		const time = moment(moment().format('YYYY-MM-DD')).subtract(1,"days").format("YYYY-MM-DD");
 		this.getsaleSecyInfoToDate(time);
+
+		// 获取BG类目信息
+		this.getBgCates();
 	}
 
 	/**
@@ -198,11 +201,22 @@ class DataRouter extends React.Component {
 		return current && current.valueOf() > Date.now();  
 	}
 
+	/**
+	 * 获取BG类目信息
+	 */
+	getBgCates() {
+		this.props.dispatch({
+			type: 'Menus/getBanggoodCates'
+		})
+	}
+
 }
 
 
 function mapStateToProps(state) {
-	return { ...state.SaleSecyModel };
+	// bg分类
+	const { banggoodCate } = state.Menus;
+	return { ...state.SaleSecyModel,banggoodCate};
 }
 
 export default connect(mapStateToProps)(DataRouter);

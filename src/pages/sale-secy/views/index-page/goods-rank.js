@@ -103,7 +103,7 @@ class GoodsRank extends React.Component {
                                 }
                             </li>
                         </ul>
-                        <ul className={styles.clear}>
+                        {/* <ul className={styles.clear}>
                             <li>
                                 <h3>当天新品销售量排行榜</h3>
                                 {
@@ -184,7 +184,7 @@ class GoodsRank extends React.Component {
                                     :null
                                 }
                             </li>
-                        </ul>
+                        </ul> */}
                     </div>
                     :
                     <div className={styles.dataNullWrap}>木有数据 &nbsp; <Icon type="frown-o" /></div>
