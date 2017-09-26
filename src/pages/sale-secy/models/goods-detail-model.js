@@ -70,9 +70,9 @@ export default {
                 relateInfoAttrInfo = [];                 // 关联商品属性
 
             if(relateInfo !== null){
-
                 for(let i in relateInfo){
-                    relateInfoByMenu.push(i);
+                    let menuItem = {'name':i,'pid':relateInfo[i].pid};
+                    relateInfoByMenu.push(menuItem);
                     relateInfoRunChart.push(relateInfo[i]);
                     
                     // 属性

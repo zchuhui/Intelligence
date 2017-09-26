@@ -23,6 +23,7 @@ class GoodsDetail extends React.Component {
         this.state = {
             startDate: DateTime.getDateOfDays(7),
             endDate: DateTime.getDateOfDays(1),
+            competePid: '',
             competeSite: '',
             optionValuesByBg:[],
             optionValuesByOther:[],
@@ -231,10 +232,10 @@ class GoodsDetail extends React.Component {
 												this.props.relateInfo?
 												<div>
 													{/* 竞品切换 */}
-													<Select className={styles.select} style={{minWidth:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0]} onChange={this.onChangeRelateInfo.bind(this)}>
+													<Select className={styles.select} style={{minWidth:100}}  defaultValue={this.props.relateInfo.relateInfoByMenu[0].name} onChange={this.onChangeRelateInfo.bind(this)}>
 														{
 															this.props.relateInfo.relateInfoByMenu.map((item,index)=>{
-																return <Option value={index.toString()} key={`relate_${index}`}>{item}</Option>
+																return <Option value={index.toString()} key={`relate_${index}`}>{item.name}</Option>
 															})
 														}
 													</Select>
@@ -259,12 +260,12 @@ class GoodsDetail extends React.Component {
 														this.props.goods?
 														<Button onClick={
 															this.onGoodsOtherRunChart.bind(this,{
-															pid:this.props.goods.products_id,
+															pid:this.state.competePid,
 															site:this.state.competeSite,
 															startDate:this.state.startDate,
 															endDate:this.state.endDate,
 															optionValues:this.state.optionValuesByOther.join(',')
-														})}>确定</Button>
+														})}>确定.</Button>
 														:null
 													}
 													{
@@ -533,12 +534,13 @@ class GoodsDetail extends React.Component {
      * 关联商品切换
      * @param {number} value 
      */
-    onChangeRelateInfo(value){
+    onChangeRelateInfo(value,params){
         // 图表
         //this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[value].runChart));
-        
+
         this.setState({
-            competeSite:this.props.relateInfo.relateInfoByMenu[value],
+            competeSite:this.props.relateInfo.relateInfoByMenu[value].name,
+            competePid:this.props.relateInfo.relateInfoByMenu[value].pid,
             competeAttrInfos:this.props.relateInfo.relateInfoAttrInfo[value],
         })
     }
@@ -638,7 +640,7 @@ class GoodsDetail extends React.Component {
         },
         // 竞品
         paramsCompete =  {
-            pid:this.props.goods.products_id,
+            pid:this.state.competePid,
             site:this.state.competeSite,
             startDate:startDate,
             endDate:endDate,
@@ -747,6 +749,23 @@ class GoodsDetail extends React.Component {
 		}
     }
 
+
+    syncPropState=()=>{
+        
+        if(this.props.runChart){
+            this.loadChart(this.formatChartData(this.props.runChart));
+        }
+
+        if(this.props.relateInfo !== null){
+            this.state.competeSite=this.props.relateInfo.relateInfoByMenu[0].name;
+            this.state.competePid=this.props.relateInfo.relateInfoByMenu[0].pid;
+            this.state.competeAttrInfos=this.props.relateInfo.relateInfoAttrInfo[0];
+            
+            this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
+         }
+    }
+    
+
     /**
      * 异步定时器
      * @param {时间} ms 
@@ -757,30 +776,28 @@ class GoodsDetail extends React.Component {
         });
     }
 
-
+    
 
     componentDidMount(){
 
-        this.timeout(3000).then((value) => {
-            if(this.props.relateInfo !== null){
-                this.setState({
-					competeSite:this.props.relateInfo.relateInfoByMenu[0],
+        //this.timeout(3000).then((value) => {
+            /* if(this.props.relateInfo !== null){
+               this.setState({
+					competeSite:this.props.relateInfo.relateInfoByMenu[0].name,
+					competePid:this.props.relateInfo.relateInfoByMenu[0].pid,
 					competeAttrInfos:this.props.relateInfo.relateInfoAttrInfo[0],
                 })
-            }
-            
-            if(this.props.relateInfo !== null){
+
                 this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
-			}
+            } */
 			
-        });
+        //});
     }
 
 
     componentDidUpdate(){
-        if(this.props.runChart){
-            this.loadChart(this.formatChartData(this.props.runChart));
-        }
+        // Echarts图
+        this.syncPropState();
     }
 
 

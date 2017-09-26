@@ -32,6 +32,7 @@ class GoodsDetailDataRouter extends React.Component {
 
 
     onGoodsOtherRunChart(argus){
+        
         this.props.dispatch({
             type: 'GoodsDetailModel/getGoodsByArguments',
             payload: argus
