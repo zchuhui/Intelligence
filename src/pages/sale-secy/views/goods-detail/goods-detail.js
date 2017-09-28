@@ -11,6 +11,7 @@ import echarts from 'echarts';
 import { Button, Icon, DatePicker, Select, Tag, Cascader, Table, Spin} from 'antd';
 import { Link } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
+import ImageRelate from './relate.png';
 
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
@@ -276,7 +277,8 @@ class GoodsDetail extends React.Component {
 													
 												</div>
 												:
-												<div style={{textAlign:'center',lineHeight:'50px',marginTop:150}}>
+												<div className={styles.noRelateStatus}>
+                                                    <img src={ImageRelate} />
 													<p>该商品未关联竞品，无法查看竞品数据。</p>
 													<Link  to={"/create/"+this.props.sku}><Button type="primary">马上关联</Button></Link>
 												</div>
@@ -284,7 +286,6 @@ class GoodsDetail extends React.Component {
 										</div>
 									</div>
 								</div>
-                                
                             </section>
                         }
 

@@ -148,7 +148,7 @@ class Category extends React.Component {
     }
 
     componentDidUpdate(){
-        
+        //console.log(this.props.banggoodCate,this.props.cateSet);
     }
 
 
