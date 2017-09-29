@@ -16,31 +16,25 @@ export default {
     namespace: 'User',
 
     state: {
-        loginStatus: 0, // 登录状态，是否登录成功
-        loginMsg: '',   // 登录提示信息
-        userInfo: {},   // 登录成功获取的用户信息
+        loginStatus: 0,     // 登录状态，是否登录成功
+        loginMsg: '',       // 登录提示信息
+        userInfo: {},       // 登录成功获取的用户信息
         loading: false,     // 登录中的加载状态
     },
     reducers: {
-        // 存储登录成功后的信息到state
+
+        // 存储登录信息
         save(state, { payload }) {
-            // 记录登录状态
-            let loginStatus = 0;
+
+            let loginStatus = 0;   // 登录状态
+            let userInfo;          // 用户信息
+
             if (payload.code == CODE200) {
                 loginStatus = 1;
-            }
-            
-            // 登录提示
-            let msg = '';
-            if(payload.msg == 'The administrator is not exist!'){
-                msg = '该账号无效，请重新核对';
-            }else if(payload.msg == 'The password is error!'){
-                msg = '密码有误，请重新输入';
-            }else{
-                msg = '服务器异常，请稍后重试';
+                userInfo = payload.data.userInfo
             }
 
-            return { ...state, userInfo: payload.data.userInfo, loginStatus: loginStatus, loginMsg: msg, loading: false };
+            return { ...state, userInfo: userInfo, loginStatus: loginStatus, loading: false };
         },
 
         // 显示登录加载状态,清除提示
@@ -61,50 +55,40 @@ export default {
             return { ...state, loginStatus: payload.loginStatus, userInfo: info };
         },
 
-        // 报错时存储信息
-        saveError(state, { payload }) {
-            const msg = '服务器异常，请稍后重试';
-            return { ...state, loginMsg: msg, loading: false, loginStatus: 0 };
-        }
     },
     effects: {
         // 点击登录
         * login({ payload }, { select, call, put }) {
-            try {
-                // 显示加载状态
-                yield put({ type: 'showLoading' });
-                // 开始请求数据
-                const { data } = yield call(UsersService.login, payload.loginInfo);
+        
+            yield put({ type: 'showLoading' }); 
+
+            const {data, msg, code}  = yield call(UsersService.login, payload.loginInfo);
+
+            if (code == CODE200) {
+
+                // 存储数据
+                yield put({ type: 'save', payload: {data,msg,code} });
                 
-                if (data.code == CODE200) {
+                // 存储用户名、密码
+                LocalStorage.set('username', payload.loginInfo.username, saveTime);
+                LocalStorage.set('password', payload.loginInfo.password, saveTime);
+                LocalStorage.set('token', data.token, saveTime);
+                LocalStorage.set('loginStatus', 1, saveTime);
+                
+                // 获取用户权限
+                const userinfo_sj = LocalStorage.get('sj_info');
+                
 
-                    // 存储数据
-                    yield put({ type: 'save', payload: data });
-
-                    // 存储用户名、密码
-                    LocalStorage.set('username', payload.loginInfo.username, saveTime);
-                    LocalStorage.set('password', payload.loginInfo.password, saveTime);
-                    LocalStorage.set('token', data.data.token, saveTime);
-                    LocalStorage.set('loginStatus', 1, saveTime);
-
-                    // 获取用户权限
-                    const userinfo_sj = LocalStorage.get('sj_info');
-                    // 如果有用户权限，则跳转到首页,否则跳转到BG列表页
-                    if(userinfo_sj)
-                        window.location.href = "/sale-secy";
-                    else
-                        window.location.href = "/sale-secy#/goods";
-                    
-                } else {
-                    // 传入失败信息，用于页面展示
-                    yield put({ type: 'save', payload: data });
-                }
-            }
-            catch (e) {
-                // 传入失败信息，用于页面展示
-                yield put({ type: 'saveError', payload:{msg:e.message} });
-            }
-
+                // 如果有用户权限，则跳转到首页,否则跳转到BG列表页
+                if(userinfo_sj)
+                    window.location.href = "/sale-secy";
+                else
+                    window.location.href = "/sale-secy#/goods";
+                
+            } else {
+                // 登录失败
+                yield put({ type: 'save', payload: data });
+            } 
 
         },
 
@@ -173,7 +157,7 @@ export default {
 
             // 判断是否登录，已登录则显示用户信息
             if (username && password) {
-                //console.log('have login info');
+
                 // 如果已登录，则不停留在login页面
                 if (pathname == '/login') { 
                     //window.location.href = "/bg";

@@ -399,8 +399,6 @@ class CreateRelevance extends React.Component {
         }
     }
 
-    
-
     /**
      * 选择站点，切换相似商品栏
      * @param {string} key 
@@ -644,8 +642,9 @@ class CreateRelevance extends React.Component {
         }
         else {
             site = this.state.similarGoodsList[0].tname;
-        }
-
+        }   
+        sku = sku.replace(/\+/g, "%2B").replace(/\&/g, "%26").replace(/\#/g, "%23");
+        
         // 开始请求
         if (sku !== '') {
             // 根据sku获取商品详情

@@ -31,7 +31,7 @@ export default {
 
 		// 设置状态是否成功
 		setRevanceStatus: false
-	},
+	}, 
 
 	reducers: {
 
@@ -64,7 +64,8 @@ export default {
 		 * @param {*} param1 
 		 */
 		saveRelevanceGoods(state, { payload }) {
-			return { ...state, goods: payload };
+			console.log("payload:",payload);
+			return { ...state, goods: {data:payload} };
 		},
 		
 		/**
@@ -84,7 +85,7 @@ export default {
 		saveRelevanceGoodsList(state, { payload }) {
 
 			// 数据格式转换
-			let originData = payload.data;
+			let originData = payload;
 			let formatData = [];
 
 			if (originData) {
@@ -154,15 +155,15 @@ export default {
 				const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
 				
 				if (data) {
+
 					// 存储商品信息
 					yield put({ type: "saveRelevanceGoods", payload: data });
-
 					
 					// 请求获取已关联的商品
 					yield put({ type: "featchRevanceGoods", payload });
 
 					// 请求获取相似商品
-					yield put({type: "fetchSimilarGoodsList", payload: { title: data.data.pname }});
+					yield put({type: "fetchSimilarGoodsList", payload: { title: data.pname }});
 					
 					
 				}
@@ -174,33 +175,6 @@ export default {
 				// 隐藏加载状态
 				yield put({ type: "toggleCreateRelevanceLoading", payload: { loading: false }});
 			}
-		},
-
-		/**
-		 * 获取相似商品列表（步骤二）
-		 * @param {*} param0
-		 * @param {*} param1
-		 */
-		*fetchSimilarGoodsList({ payload }, { select, call, put }) {
-
-			// 请求获取相似商品
-			const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
-			// 存储相似商品  
-			yield put({ type: "saveSimilarGoodsList", payload: { data: data.data } });
-		},
-
-		/**
-		 * 获取已关联的商品 (步骤二)
-		 * @param {*} param0 
-		 * @param {*} param1 
-		 */
-		*featchRevanceGoods({ payload }, { select, call, put }) {
-
-			// 请求数据
-			const { data } = yield call(BgService.fetchRevanceBySku, payload);
-
-			// 存储数据
-			yield put({ type: "saveRelevanceGoodsList", payload: data });
 		},
 
 		/**
@@ -216,6 +190,7 @@ export default {
 
 				// 请求获取数据
 				const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+				console.log("data1",data);
 				// 存储数据
 				yield put({ type: "saveRelevanceGoodsBySite", payload: data });
 
@@ -226,6 +201,26 @@ export default {
 				// 隐藏加载状态
 				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
 			}
+		},
+
+		/**
+		 * 获取相似商品列表（步骤二）
+		 * @param {*} param0
+		 * @param {*} param1
+		 */
+		*fetchSimilarGoodsList({ payload }, { select, call, put }) {
+			const { data } = yield call(BgService.fetchSimilarGoodsList, payload);
+			yield put({ type: "saveSimilarGoodsList", payload: { data: data } });
+		},
+
+		/**
+		 * 获取已关联的商品 (步骤二)
+		 * @param {*} param0 
+		 * @param {*} param1 
+		 */
+		*featchRevanceGoods({ payload }, { select, call, put }) {
+			const { data } = yield call(BgService.fetchRevanceBySku, payload);
+			yield put({ type: "saveRelevanceGoodsList", payload: data });
 		},
 
 		/**
@@ -240,15 +235,14 @@ export default {
 				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: true }});
 
 				// 请求设置
-				const { data } = yield call(BgService.setRelevanceGoods, payload);
-				// 存储设置信息
-				yield put({ type: "toggleSetRevanceStatus",payload: { status: true }});
+				const { data, code} = yield call(BgService.setRelevanceGoods, payload);
 
-				// 隐藏加载状态
-				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
-
-				// 关联成功后，自动返回BG列表
-				//setTimeout(function() {window.location.href = "/bg";}, 2000);
+				if(code == CODE200){
+					yield put({ type: "toggleSetRevanceStatus",payload: { status: true }});
+					
+					// 隐藏加载状态
+					yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
+				}
 				
 			} catch (e) {
 				// 存储关联失败信息

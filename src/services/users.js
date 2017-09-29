@@ -1,30 +1,33 @@
-import { originRequest } from '../utils/request';
+
+import request from '../utils/request-axios';
 import { Url } from '../config/config.url';
-import LocalStorage from '../utils/local-storage';
 
 
 /**
  * 登录
- * @param  {string} args 用户名、密码
- * @return {object}      登录信息
+ * @return {object} 
  */
-export function login(args) {
-	// 转义特殊字符
-	let pwd = args.password.replace(/\&/g, "%26").replace(/\#/g, "%23");
-
-	const url = `${Url}?com=login&t=validate&username=${args.username}&password=${pwd}`;
-
-	return originRequest(url,{
-		method:'POST',
-    });
+export function login(params) {
+	params.com = "login";
+	params.t = "validate";
+	
+	return request(Url, {
+		method: 'post',
+		data: params,
+	});
 }
 
 
 /**
  * 退出登录
- * @return {object}     退出登录信息
+ * @return {object} 
  */
-export function logout() {
-	let url = `${Url}?com=login&t=logout`;
-  	return originRequest(url);
+export function logout(params) {
+	params.com = "login";
+	params.t = "logout";
+
+	return request(Url, {
+		method: 'post',
+		data: params,
+	});
 }

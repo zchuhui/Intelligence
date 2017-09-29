@@ -60,13 +60,16 @@ export default {
     reducers: {
 
         // 把数据存储到state
-        save(state, { payload: { data: data } }) {
-            return { ...state, data, loading: false };
+        save(state, { payload }) {
+            console.log('payload ',payload);
+            return { ...state, data:payload, loading: false };
         },
+
         // 切换loading状态
         toggleLoading(state, { payload }) {
             return { ...state, loading: payload.loading };
         },
+
         // 更新搜索参数
         updateSearchArgs(state, { payload }) {
             return { ...state, searchArguments: payload.searchArguments };
@@ -75,28 +78,24 @@ export default {
         // 更新主商品趋势图
         updateGoodsEchartData(state, { payload }) {
 
-            let data = payload.data.data;
+            // 格式化数据
 
-            // 时间段
-            let startTime = payload.startTime;
-            let endTime = payload.endTime;
-
-            // 对应echart的结构数据
-            let legendData = [];
-            let seriesData = [];
-            let xAxisData = dataScope(startTime, endTime);
+            let data = payload.data,              // data
+                startTime = payload.startTime,    // 开始时间
+                endTime = payload.endTime,        // 结束时间
+                legendData = [],                  // 存储echart的结构数据
+                seriesData = [],                  // 存储echart的结构数据 
+                xAxisData = dataScope(startTime, endTime);     // 存储echart的结构数据
 
             for (let i in data) {
-                let obj = data[i];
-                let arrItem = {
-                    name: dataToLabel(i),
-                    type: 'line',
-                }
+                let obj = data[i],
+                    arrItem = {
+                            name: dataToLabel(i),
+                            type: 'line',
+                        },
+                    arrItemData = [];
 
                 legendData.push(dataToLabel(i));
-
-
-                let arrItemData = [];
 
                 for (let k in obj) {
                     arrItemData.push((obj[k]));
@@ -111,9 +110,9 @@ export default {
                 xAxisData: xAxisData
             }
 
-
             return { ...state, goodsEchartData: goodsEchartData };
         },
+
         // 更新主商品趋势图载入状态
         updateGoodsEchartDataLoading(state, { payload }) {
             return { ...state, goodsEchartDataLoading: payload.goodsEchartDataLoading };
@@ -123,9 +122,10 @@ export default {
         updateGoodContrastData(state, { payload }) {
 
             // 转化数据格式
-            let data = payload.data,
-                info = payload.data.info,
-                relateInfo = payload.data.relateInfo,
+            
+            let data = payload,
+                info = payload.info,
+                relateInfo = payload.relateInfo,
                 relateInfoArray = [];
 
             for (let item in relateInfo) {
@@ -164,16 +164,6 @@ export default {
                     }
                 })
                 
-                /* for (let item in relateInfoArray.sevenRunChart) {
-                    let array = [];
-                    let sevenDays = [];
-                    for (let item2 in relateInfoArray.sevenRunChart[item]) {
-                        sevenDays.push(item2)
-                        array.push(relateInfoArray.sevenRunChart[item][item2]);
-                    }
-                    relateInfoArray[item] = array;            // 数组：值
-                    relateInfoArray['sevenDays'] = sevenDays; // 数组：日期
-                } */
             }
 
 
@@ -182,10 +172,12 @@ export default {
 
             return { ...state, goodContrastData: data };
         },
+
         // 清空商品对比数据
         clearGoodContrastData(state, { payload }) {
             return { ...state, goodContrastData: [] };
         },
+
         // 更新商品对比数据载入状态
         updateGoodContrastDataLoading(state, { payload }) {
             return { ...state, goodContrastDataLoading: payload.goodContrastDataLoading };
@@ -193,25 +185,6 @@ export default {
     },
 
     effects: {
-        // 获取BG列表数据
-        * fetch({ dispatch,payload }, { select, call, put }) {
-
-            yield put({ type: 'toggleLoading', payload: { loading: true } });
-
-            try {
-
-                // 请求数据
-                const { data } = yield call(BgService.fetch, payload);
-                // 存储数据
-                yield put({ type: 'save', payload: data });
-
-            } catch (e) {
-                //message.warning(ERRORMESSAGE);
-            }
-
-            yield put({ type: 'toggleLoading', payload: { loading: false } });
-
-        },
 
         // BG表搜索
         * search({ payload }, { select, call, put }) {
@@ -223,11 +196,11 @@ export default {
                 yield put({ type: 'updateSearchArgs', payload: { searchArguments: payload.searchArgs } });
 
                 // 从state中获取搜索参数
-                const searchArgs = yield select(state => state.RelevanceBGModel.searchArguments);
-                searchArgs.page = payload.page;
-                
+                const params = yield select(state => state.RelevanceBGModel.searchArguments);
+                params.page = payload.page;
+
                 // 请求数据
-                const { data } = yield call(BgService.search, { searchArguments: searchArgs });
+                const { data } = yield call(BgService.query, params);
 
                 // 存储数据
                 yield put({ type: 'save', payload: data });
@@ -247,20 +220,21 @@ export default {
             try {
 
                 // 从state中获取搜索参数
-                const searchArguments = yield select(state => state.RelevanceBGModel.searchArguments);
+                const params = yield select(state => state.RelevanceBGModel.searchArguments);
 
                 // 分页参数
                 if (payload.page) {
-                    searchArguments.page = payload.page;
+                    params.page = payload.page;
                 }
                 
                 // 排序参数
                 if (payload.sort) {
-                    searchArguments.sort = payload.sort;
+                    params.sort = payload.sort;
                 }
 
                 // 请求数据
-                const { data } = yield call(BgService.search, { searchArguments: searchArguments });
+                const { data } = yield call(BgService.query, params);
+
                 // 存储数据
                 yield put({ type: 'save', payload: data });
 
@@ -309,13 +283,10 @@ export default {
 
             yield put({ type: 'updateGoodContrastDataLoading', payload: { goodContrastDataLoading: true } });
         }
-        
     },
 
     subscriptions: {
         setup({ dispatch, history }) {
-            // 初始化首页
-            //dispatch({ type: 'fetch', payload: { page: 1 } });
         },
     }
 }
