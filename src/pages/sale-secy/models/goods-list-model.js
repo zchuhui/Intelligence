@@ -61,7 +61,6 @@ export default {
 
         // 把数据存储到state
         save(state, { payload }) {
-            console.log('payload ',payload);
             return { ...state, data:payload, loading: false };
         },
 

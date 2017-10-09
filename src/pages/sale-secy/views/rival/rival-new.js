@@ -379,7 +379,6 @@ class RivalNew extends React.Component {
 
         // 添加点击事件，跳转链接
         chartId.on("click", function(params){ 
-            console.log(params);
             const path = {
                 pathname:`/view`,
                 state:{

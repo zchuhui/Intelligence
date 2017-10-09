@@ -496,7 +496,7 @@ class GoodsList extends React.Component {
 
     // 对比商品Echart图载入
     eachEcharts = () => {
-        console.log('this.props.goodContrastData:',this.props.goodContrastData)
+
         // BG 趋势图
         if (this.refs.priceSet) {
             this.loadGoodContrastEchart(this.refs.priceSet,this.props.goodContrastData.info.priceSet,'价格');
@@ -507,7 +507,7 @@ class GoodsList extends React.Component {
         // 关联商品Echart图，目前最多只显示两个关联
         if (this.props.goodContrastData.relateInfo) {
             this.props.goodContrastData.relateInfo.map((item,index) => {
-                console.log('item',item);
+                
                 if (index == 0) {
                     this.loadGoodContrastEchart(this.refs.priceSet1,item.priceSet,'价格');
                     this.loadGoodContrastEchart(this.refs.salesSet1,item.salesSet,'销量');

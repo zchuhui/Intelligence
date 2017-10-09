@@ -15,7 +15,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 const fetch = (url, options) => {
   const { method = 'get', data } = options;
-  console.log('fetch',url,options);
   switch (method.toLowerCase()) {
     case 'get':
       return axios.get(url, { params: data })
@@ -47,7 +46,6 @@ function checkStatus (res) {
 function handelData (res) {
   const data = res.data
   
-   console.log("handelData",data);
   if (data && data.msg && data.code !== 200) {
     message.error(data.msg)
   }
@@ -76,7 +74,6 @@ export default function request (url, options) {
     url = `${url}?token=${LocalStorage.get('token')}`
   }
 
-  console.log(url,options);
 
   return fetch(url, options)
     .then(checkStatus)

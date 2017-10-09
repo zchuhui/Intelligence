@@ -683,10 +683,10 @@ class CreateRelevance extends React.Component {
                 relevanceArray = this.state.relevanceGoodsList;  // 加入已选队列中
         
         // 已有数据
-        if (goodsite.code == 200) {
+        if (goodsite.pid) {
             
             // 获取选中商品的site
-            const site = goodsite.data.site;
+            const site = goodsite.site;
 
             // 清除重复的商品
             for(let i in relevanceArray){
@@ -703,7 +703,7 @@ class CreateRelevance extends React.Component {
             }
 
             // 添加商品
-            relevanceArray[relevanceArray.length] = goodsite.data;
+            relevanceArray[relevanceArray.length] = goodsite;
 
             // 同步到state
             this.setState({

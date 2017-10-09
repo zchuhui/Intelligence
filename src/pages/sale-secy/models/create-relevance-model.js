@@ -64,7 +64,6 @@ export default {
 		 * @param {*} param1 
 		 */
 		saveRelevanceGoods(state, { payload }) {
-			console.log("payload:",payload);
 			return { ...state, goods: {data:payload} };
 		},
 		
@@ -190,7 +189,7 @@ export default {
 
 				// 请求获取数据
 				const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
-				console.log("data1",data);
+
 				// 存储数据
 				yield put({ type: "saveRelevanceGoodsBySite", payload: data });
 
