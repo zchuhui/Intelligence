@@ -366,7 +366,10 @@ class GoodsDetail extends React.Component {
                 trigger: 'axis',
                 formatter:function(params,ticket,callback){
                     let dataIndex = params[0].dataIndex;
-                    return `<div>${chartData.nameArray[dataIndex]}</div>`;
+                    const dataPrice = chartData.nameArray[dataIndex].split('|')[0];
+                    const dataType = chartData.nameArray[dataIndex].split('|')[1];
+                    const dataSales = chartData.nameArray[dataIndex].split('|')[2];
+                    return `<div><p>价格：${dataPrice}</p><p>类型：${dataType}</p><p>销量：${dataSales}</p></div>`;
                 }
             },
             legend: {

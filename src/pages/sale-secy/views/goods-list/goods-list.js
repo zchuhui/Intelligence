@@ -118,6 +118,23 @@ class GoodsList extends React.Component {
                        
                    </span>
                 ),
+            },{
+                title: "上架时间",
+                dataIndex: "products_date_added",
+                key: "products_date_added",
+                render:(text,record) => (
+                    <div>
+                        {
+                            record.products_date_added? 
+                            <div>
+                                <p>{record.products_date_added.split(' ')[0]}</p>
+                                <p>{record.products_date_added.split(' ')[1]}</p>
+                            </div>
+                            :null
+                        }
+                        
+                    </div>
+                )
             }, {
                 title: "站点",
                 dataIndex: "site",
@@ -251,10 +268,11 @@ class GoodsList extends React.Component {
                                         moment(this.state.defaultStartDate),
                                         moment(this.state.defaultEndDate)
                                     ]}
-                                    format="YYYY-MM-DD"
+                                    format="YYYY-MM-DD" 
                                     style={{width:240, margin:'0 auto'}}
                                     ref='echartTime'
                                     disabledDate = {this.disabledDate}
+                                    allowClear={false}
                                 />
                                 <span className={styles.lateDateWrap}>
                                     <span className={styles.lateDate} onClick={this.onLatelyDate.bind(this,7)}>最近7天</span>

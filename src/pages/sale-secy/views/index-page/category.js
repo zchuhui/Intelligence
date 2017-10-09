@@ -190,7 +190,7 @@ class Category extends React.Component {
             const option = {
                 tooltip : {
                     trigger: 'item',
-                    formatter: "占比：{d}%"
+                    formatter: "占比：{d}% ({c}件)"
                 },
                 grid: {
                     left: '3%',
