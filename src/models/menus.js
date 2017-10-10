@@ -7,7 +7,6 @@
 import * as menusService from "../services/menus";
 import { CODE200 } from "../constants/constant";
 
-
 // 默认分类数据
 const defautCate = [
   {
@@ -25,14 +24,13 @@ const defautBrand = [
   }
 ];
 
-
 export default {
   namespace: "Menus",
 
   state: {
     cate: defautCate, // 竞品分类
     brand: defautBrand, // 品牌
-    banggoodCate: defautCate, // bg 分类
+    banggoodCate: defautCate // bg 分类
   },
 
   reducers: {
@@ -41,9 +39,9 @@ export default {
 	 * @param {*} state 
 	 * @param {*} param1 
 	 */
-    saveCate(state, { payload: { data: data } }) {
+    saveCate(state, { payload }) {
       // 把获取数据转为组件可用的数据格式
-      data = cateToMenu(data);
+      const data = cateToMenu(payload);
       return { ...state, cate: data };
     },
 
@@ -52,9 +50,9 @@ export default {
 	 * @param {*} state 
 	 * @param {*} param1 
 	 */
-    saveBanggoodCate(state, { payload: { data: data } }) {
+    saveBanggoodCate(state, { payload }) {
       // 把获取数据转为组件可用的数据格式
-      data = cateToMenu(data);
+      const data = cateToMenu(payload);
       return { ...state, banggoodCate: data };
     },
 
@@ -63,7 +61,8 @@ export default {
 	 * @param {*} state 
 	 * @param {*} param1 
 	 */
-    saveBrand(state, { payload: { data: data } }) {
+    saveBrand(state, { payload }) {
+      const data = payload;
       // 判断是数组还是对象，对象的话转为数组
       let array = [];
       if (data instanceof Array) {
@@ -74,7 +73,7 @@ export default {
         }
       }
       return { ...state, brand: array };
-    },
+    }
   },
 
   effects: {
@@ -84,72 +83,64 @@ export default {
      * @param {*} param1 
      */
     *getCates({ payload }, { select, call, put }) {
-      try{
-        const { data } = yield call(menusService.getMenuCate);
+      try {
+        const { data, code } = yield call(menusService.getMenuCate);
 
-        if (data.code == CODE200) {
+        if (code == CODE200) {
           yield put({ type: "saveCate", payload: data });
         }
-      }catch(e){}
+      } catch (e) {}
     },
 
     /**
      * 获取 Bangood 分类数据
-     * @param {*} param0 
+     * @param {*} param0  
      * @param {*} param1 
      */
     *getBanggoodCates({ payload }, { select, call, put }) {
-        try{
-          
-          const { data, code } = yield call(menusService.getMenuCateByBanggood);
+      try {
+        const { data, code } = yield call(menusService.getMenuCateByBanggood);
 
-          if (data.code == CODE200) {
-              yield put({ type: "saveBanggoodCate", payload: data });
-          }
-        }catch(e){ }
+        if (code == CODE200) {
+          yield put({ type: "saveBanggoodCate", payload: data });
+        }
+      } catch (e) {}
     },
 
     /**
-	 * 获取品牌数据
-	 * @param {*} param0 
-	 * @param {*} param1 
-	 */
+     * 获取品牌数据
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     *getBrands({ payload }, { select, call, put }) {
-      try{
-        const { data } = yield call(menusService.getMenuBrand);
+      try {
+        const { data, code } = yield call(menusService.getMenuBrand);
 
-        if (data.code == CODE200) {
+        if (code == CODE200) {
           yield put({ type: "saveBrand", payload: data });
         }
-      }catch(e){}
+      } catch (e) {}
     },
 
     /**
-	 * 获取 Banggood 品牌数据
-	 * @param {*} param0 
-	 * @param {*} param1 
-	 */
+     * 获取 Banggood 品牌数据
+     * @param {*} param0 
+     * @param {*} param1 
+     */
     *getBanggoodBrands({ payload }, { select, call, put }) {
-      try{
-          // 开始请求数据
-          const { data } = yield call(menusService.getMenuBrandByBanggood);
-          
-          // 存储数据
-          if (data.code == CODE200) {
-              yield put({ type: "saveBrand", payload: data });
-          }
-      }catch(e){}
+      try {
+        // 开始请求数据
+        const { data, code } = yield call(menusService.getMenuBrandByBanggood);
+        // 存储数据
+        if (code == CODE200) {
+          yield put({ type: "saveBrand", payload: data });
+        }
+      } catch (e) {}
     }
   },
 
-  subscriptions: {
-  }
+  subscriptions: {}
 };
-
-
-
-
-
 
 /**
  * 用递归遍历所有参数，
@@ -184,7 +175,6 @@ const cateToMenu = cate => {
 
   return arr;
 };
-
 
 /**
  * 数组操作：判断元素是否在素组里面

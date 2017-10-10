@@ -167,6 +167,13 @@ class SearchBar extends Component {
     }
 
 
+    
+    componentDidMount(){
+        //首次加载
+        this.props.handleSearchArgs(this.state.args);
+    }
+
+
     // 搜索
     handlerSearchClick(e) {
         e.preventDefault();

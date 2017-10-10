@@ -1,8 +1,10 @@
-/* import request from "../utils/request"; */
+/**
+ * BG商品表 Service
+ * Author:zhuangchuhui
+ * Date:2017-10-10
+ */
 import request from '../utils/request-axios';
-import { originRequest } from "../utils/request";
 import { Url } from "../config/config.url";
-import DataTime from "../utils/date-time.js";
 
 
  /**

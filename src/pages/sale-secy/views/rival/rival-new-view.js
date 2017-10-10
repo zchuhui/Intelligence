@@ -235,12 +235,12 @@ class RivalNewView extends React.Component {
                         
                         <div className={styles.piginationWrap}>
                             {
-                                this.props.rivalViewList !==null?
+                                this.props.rivalViewList !== null && this.props.rivalViewList.page !== undefined?
                                 <Pagination
                                     className="ant-table-pagination"
-                                    total={parseInt(this.props.rivalViewList.page.count)} 
                                     current={this.props.rivalViewList.page.page}
                                     pageSize={this.props.rivalViewList.page.pageSize}
+                                    total={parseInt(this.props.rivalViewList.page.count)} 
                                     onChange={this.changePagination.bind(this)}
                                 />
                                 :null
@@ -453,9 +453,9 @@ class RivalNewView extends React.Component {
             // 开始关联
             this.props.setRelatedBgBySku({
                 sku:sku,
-                bgSku:this.state.bgSku
+                bgsku:this.state.bgSku
             });
-
+            
             // 关联后，2秒后刷新
             this.timeout(2000).then((value) => {
                 // 判断是关联成功，失败则不刷新

@@ -40,7 +40,7 @@ export default {
         saveGoods(state,{ payload }){
 
             // 对比信息
-            let compareInfo = payload.data.compareInfo,
+            let compareInfo = payload.compareInfo,
                 compareInfoList = [];
             for(let i in compareInfo){
 
@@ -64,7 +64,7 @@ export default {
 
 
             // 关联信息
-            let relateInfo = payload.data.relateInfo,
+            let relateInfo = payload.relateInfo,
                 relateInfoByMenu = [],                   // 关联商品（用于菜单切换）
                 relateInfoRunChart = [],                 // 图表
                 relateInfoAttrInfo = [];                 // 关联商品属性
@@ -107,7 +107,7 @@ export default {
             }
 
             // 属性集合
-            let attrInfo = payload.data.attrInfo,
+            let attrInfo = payload.attrInfo,
                 attrInfoList = [];
             if(attrInfo !== null){
                 // 如果是数组，则去掉
@@ -129,10 +129,10 @@ export default {
 
             return {
                 ...state,
-                goods: payload.data,
+                goods: payload,
                 compareInfoList: compareInfoList,
                 relateInfo: relateInfo,
-                runChart: payload.data.runChart,
+                runChart: payload.runChart,
                 attrInfo: attrInfoList
             }
         },
@@ -141,10 +141,9 @@ export default {
          * 存储价格汇总列表
          */
         savePriceList(state,{ payload }){
-
             // object转成数组格式
-            let data = Object.keys(payload.data).map(function(el){
-                return payload.data[el];
+            let data = Object.keys(payload).map(function(el){
+                return payload[el];
             });
 
             // 添加元素
@@ -163,7 +162,7 @@ export default {
         saveGoodsBGByArguments(state,{payload}){
             
             // 对比信息
-            let compareInfo = payload.data.compareInfo,
+            let compareInfo = payload.compareInfo,
                 compareInfoList = [];
 
             for(let i in compareInfo){
@@ -188,7 +187,7 @@ export default {
             return {
                 ...state,
                 compareInfoList:compareInfoList,
-                runChart:payload.data.runChart,
+                runChart:payload.runChart,
             }
         },
 
@@ -198,7 +197,7 @@ export default {
         saveGoodsOtherByArguments(state,{payload}){
             return {
                 ...state,
-                relateInfoNewChart:payload.data
+                relateInfoNewChart:payload
             }
         },
         
@@ -213,9 +212,9 @@ export default {
             yield put({type:'saveGoodLoading',payload:{goodsLoading:false}});
             try{
                 const { data } = yield call(ServiceGoodsDetail.getGoodsBySku,payload.sku);
+                
                 yield put({type:'saveGoods',payload:data});
     
-                
                 // 获取价格汇总信息
                 yield put({type:'getPriceListBySku',payload})
             }catch(e){
@@ -242,7 +241,6 @@ export default {
             yield put({type:'saveGetChartLoading',payload:{chartLoading:false}});
 
             const {data} = yield call(ServiceGoodsDetail.getGoodsByArguments,payload);
-
             if(payload.site == 'banggood'){
                 yield put({type:'saveGoodsBGByArguments',payload:data});
             }

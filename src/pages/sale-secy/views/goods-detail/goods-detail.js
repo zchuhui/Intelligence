@@ -266,7 +266,7 @@ class GoodsDetail extends React.Component {
 															startDate:this.state.startDate,
 															endDate:this.state.endDate,
 															optionValues:this.state.optionValuesByOther.join(',')
-														})}>确定.</Button>
+														})}>确定</Button>
 														:null
 													}
 													{
@@ -659,7 +659,7 @@ class GoodsDetail extends React.Component {
         // 载入竞品图表
         this.timeout(2000).then((value) => {
             let relateInfoNewChart = this.props.relateInfoNewChart;
-            if(relateInfoNewChart !== null)
+            if(relateInfoNewChart !== null && relateInfoNewChart.runChart !== undefined)
             {
                 this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
             }
@@ -741,7 +741,7 @@ class GoodsDetail extends React.Component {
             // 载入竞品图表
             this.timeout(2000).then((value) => {
                 let relateInfoNewChart = this.props.relateInfoNewChart;
-                if(relateInfoNewChart !== null)
+                if(relateInfoNewChart !== null && relateInfoNewChart.runChart !== undefined)
                 {
                     this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
                 }

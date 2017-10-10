@@ -1,39 +1,23 @@
-import request from '../utils/request';
-import { IS_SERVER } from '../constants/constant';
-import { Url } from '../config/config.url';
 
 /**
- * 根据页数获取数据
- * @param {object} param0 
+ * 竞品模块
+ * Author:zhuangchuhui
+ * Date:2017-10-10
  */
-export function fetch({page}) { 
-	//添加两个默认参数，并加上页数
-	const apiArgs= `com=ajax&t=productList&page=${page}`;
-
-	let url = `${Url}?${apiArgs}`;
-
-  	return request(url);
-}
+import request from '../utils/request-axios';
+import { Url } from '../config/config.url';
 
 
 /**
  * 搜索数据
- * @param {object} args 
+ * @param {object} params 
  */
-export function search(args) { 
-	
-	const argument = args.searchArgs;
-	let argumentStr = `com=ajax&t=productList`;
-	
-	// 把参数转为url格式
-	for(let i in argument){ 
-		if(argument[i] !== '' && argument[i] !== undefined && argument[i] !== null ){ 
-			argumentStr += `&${i}=${argument[i]}`
-		}
-	}
-	
-	let url = `${Url}?${argumentStr}`;
-	
-  	return request(url);
+export function search(params) { 
+	params = params.searchArgs;
+	Object.assign(params,{'com':'ajax','t':'productList'})
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 

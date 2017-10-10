@@ -98,7 +98,7 @@ class Category extends React.Component {
                                 </div>
                                 :
                                 <div>
-                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 商品排行</h3>
+                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 销量排行</h3>
                                     {
                                         this.props.myProductInCate.map((item,index)=>
                                         <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
@@ -139,7 +139,7 @@ class Category extends React.Component {
     componentDidMount(){
         
         // 延迟3秒加载Echart图表
-        this.timeout(3000).then((value) => {
+        this.timeout(2000).then((value) => {
             if(this.props.cateSet){
                 this.loadChart(this.formatDataToEchartPieData(this.props.cateSet));
             }
@@ -147,14 +147,6 @@ class Category extends React.Component {
         
     }
 
-    componentDidUpdate(){
-        //console.log(this.props.banggoodCate,this.props.cateSet);
-    }
-
-
-    /* onGetCateItem =(value,selectedOptions)=>{
-        console.log(value,selectedOptions);
-    } */
 
     /**
      * 切换类目，根据类目获取数据
@@ -244,7 +236,7 @@ class Category extends React.Component {
 		let obj = {
             cidArray:[],
 			labelArray:[],
-			valueArray:[],
+            valueArray:[]
 		}
 
 		if(runChart && runChart.map){
@@ -260,12 +252,15 @@ class Category extends React.Component {
                         obj2.name = nameVal;
                     }
                     // 存储占比值
-                    if(i == 'per'){
+                    /* if(i == 'per'){
                         obj2.value = item[i].split('%')[0];
-                    }
+                    } */
                     // 存储 cid
                     if(i == 'cid'){
                         obj.cidArray.push(item[i]);
+                    }
+                    if(i == 'num'){
+                        obj2.value = item[i];
                     }
                 }
                 obj.valueArray.push(obj2);

@@ -1,4 +1,5 @@
-import request from '../utils/request';
+//import request from '../utils/request';
+import request from '../utils/request-axios';
 import { Url } from '../config/config.url';
 
 // 获取站点菜单
@@ -7,37 +8,59 @@ export function getMenuSite() {
 }
 
 
-// 获取分类菜单
+/**
+ * 获取竞品分类菜单
+ */
 export function getMenuCate() { 
-	
-	let currentUrl = `${Url}?com=ajax&t=getCateList`;
-
-  	return request(currentUrl);
+	const params = {'com':'ajax','t':'getCateList'};
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 
+/**
+ * 获取竞品品牌菜单
+ */
+export function getMenuBrand() { 
+	const params = {'com':'ajax','t':'getBrandList'};
+    return request(Url, {
+          method: 'get',
+          data: params,
+	});
+}
+	
 
-// 获取banggood站点的分类菜单
+/**
+ * 获取banggood站点的分类菜单
+ */
 export function getMenuCateByBanggood() { 
 	
-	let currentUrl = `${Url}?com=ajax&t=getCateList&site=banggood`;
+	const params = {'com':'ajax','t':'getCateList','site':'banggood'};
+    return request(Url, {
+          method: 'get',
+          data: params,
+	});
 
-  	return request(currentUrl);
+	/* let currentUrl = `${Url}?com=ajax&t=getCateList&site=banggood`;
+
+  	return request(currentUrl); */
 }
 
 
-// 获取所有品牌菜单
-export function getMenuBrand() { 
-
-	let currentUrl = `${Url}?com=ajax&t=getBrandList`;
-	
-  	return request(currentUrl);
-}
-
-// 获取Banggood的品牌菜单
+/**
+ * 获取Banggood的品牌菜单
+ */
 export function getMenuBrandByBanggood() { 
 	 
+	const params = {'com':'ajax','t':'getBrandList','site':'banggood'};
+    return request(Url, {
+          method: 'get',
+          data: params,
+	});
+	/* 
 	let currentUrl = `${Url}?com=ajax&t=getBrandList&site=banggood`;
 	
-  	return request(currentUrl);
+  	return request(currentUrl); */
 }
 

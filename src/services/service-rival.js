@@ -3,8 +3,7 @@
  * Date:2017-9-13
  * Author:zhuangchuhui
  */
-import request from "../utils/request";
-import { originRequest } from '../utils/request';
+import request from '../utils/request-axios';
 import { Url } from "../config/config.url";
 
 
@@ -13,34 +12,35 @@ import { Url } from "../config/config.url";
  * @param {object} params 
  */
 export function getRivalDataByDate(params) {
-    const url = `${Url}?com=products&t=productNewCountList&startDate=${params.startDate}&endDate=${params.endDate}`;
-    
-    return request(url);
+    Object.assign(params,{'com':'products','t':'productNewCountList'})
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
-
+ 
 
 /**
  * 搜索竞品数据
  * @param {object} params 
  */
 export function getRivalDataByParams(params) {
-    let url = `${Url}?com=products&t=getProductsNewList`;
-    // 把参数转为url格式，并追加
-    for (let i in params) {
-        if (params[i] !== "" &&params[i] !== undefined && params[i] !== null) 
-        {
-            const item = encodeURIComponent(params[i]);   // 转义
-            url += `&${i}=${item}`;                       // 拼接
-        }
-    }
-    return request(url);
+    Object.assign(params,{'com':'products','t':'getProductsNewList'})
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 
-
+/**
+ * 竞品关联BG商品
+ * @param {object} params 
+ */
 export function setRelatedBgBySku(params) {
-    const url = `${Url}?com=products&t=relateBgProduct&sku=${params.sku}&bgsku=${params.bgSku}`;
-    return originRequest(url,{
-		method:'POST',
+    Object.assign(params,{'com':'products','t':'relateBgProduct'})
+    return request(Url, {
+          method: 'post',
+          data: params,
     });
 }
 

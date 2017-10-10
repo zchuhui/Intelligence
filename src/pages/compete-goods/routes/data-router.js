@@ -39,6 +39,7 @@ class CompeteRouter extends React.Component {
         )
     }
 
+
     /**
      * 搜索
      * @param {*搜索参数} args 
@@ -93,13 +94,17 @@ class CompeteRouter extends React.Component {
         });
     }
 
+    componentDidMount(){
+        // 载入两个菜单数据
+        this.props.dispatch({ type: 'Menus/getCates'});
+        this.props.dispatch({ type: 'Menus/getBrands'});
+    }
     
 }
 
 
 function mapStateToProps(state) {
     const menus = state.Menus;
-    
     return {
         menus,...state.CompeteGoods
     };

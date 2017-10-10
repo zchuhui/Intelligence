@@ -3,7 +3,7 @@
  * Date:2017-8-29
  * Author:zhuangchuhui
  */
-import request from "../utils/request";
+import request from '../utils/request-axios';
 import { Url } from "../config/config.url";
 
 
@@ -12,8 +12,11 @@ import { Url } from "../config/config.url";
  * @param {string} sku 
  */
 export function getGoodsBySku(sku) {
-    const url = `${Url}?com=products&sku=${sku}`;
-    return request(url);
+    const params = {'com':'products','sku':sku};
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 
 
@@ -22,26 +25,23 @@ export function getGoodsBySku(sku) {
  * @param {string} sku 
  */
 export function getPriceListBySku(sku) {
-    const url = `${Url}?com=products&t=priceSet&sku=${sku}`;
-    return request(url);
+    const params = {'com':'products','t':'priceSet','sku':sku};
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 
 
 /**
  * 获取单个商品某段时间内价格趋势图和对比关系
- * @param {object} argument 
+ * @param {object} params 
  */
-export function getGoodsByArguments(argument) {
-    
-    let url = `${Url}?com=products&t=productOtherRunChart`;
-
-    // 把参数转为url格式，并追加
-    for (let i in argument) {
-        if (argument[i] !== "" && argument[i] !== undefined && argument[i] !== null) {
-            url += `&${i}=${argument[i]}`;
-        }
-    }
-    
-    return request(url);
+export function getGoodsByArguments(params) {
+    Object.assign(params,{'com':'products','t':'productOtherRunChart'})
+    return request(Url, {
+          method: 'get',
+          data: params,
+    });
 }
 

@@ -158,18 +158,6 @@ class GoodsList extends React.Component {
 					      onChange={this.onSearchDateQuantum.bind(this)}
 
 					    />*/}
-					   {/* <Button type="primary" className={styles.fr} onClick={ this.showModal }>自定义列</Button>
-	            		<Button type="primary" className={styles.fr} onClick={ this.handlerClick } style={{marginRight:10}}>批量操作</Button>*/}
-
-					    {/*<Modal
-				          title="自定义列"
-				          visible={this.state.visible}  
-				          onOk={this.handleOk}
-				          onCancel={this.handleCancel} 
-				          >
-				          <p>Some contents...</p>
-							
-				        </Modal>*/}
 
 	            	</div>
 					

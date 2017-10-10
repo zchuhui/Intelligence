@@ -68,15 +68,13 @@ export default {
 		* getSaleSecyInfo({payload},{select,call,put}){
 			
 			try{
-
-			
 				yield put({type:'updateLoading', payload:{loading:true}})
 
 				// 请求获取数据
 				const { data } = yield call(SaleSecyService.getSalesSecretaryInfo,payload);
-
+				
 				if(data){
-					yield put({ type:'saveSaleSecyInfo', payload:data.data});
+					yield put({ type:'saveSaleSecyInfo', payload:data});
 					
 					// 继续加载排行榜数据
 					yield put({ type: 'getRankAndCatetory',payload});
@@ -98,14 +96,13 @@ export default {
 				
 				const { data } = yield call(SaleSecyService.getSalesSecretaryCateInfo,payload);
 				
-				yield put({ type:'saveSaleSecyInfo', payload:data.data});
+				yield put({ type:'saveSaleSecyInfo', payload:data});
 
 				// 如果参数里没有cid，说明是全部数据切换的，所以也载入对比数据
 				if(!payload.cid){
 					// 继续加载商品对比信息
-					yield put({ type: 'getSalesSecretaryComparison',payload});
+					//yield put({ type: 'getSalesSecretaryComparison',payload});   // 目前取消该功能
 				}
-				
 			} catch (error) {
 				//message.warning(ERRORMESSAGE);
 			}

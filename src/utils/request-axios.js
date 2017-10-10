@@ -45,12 +45,11 @@ function checkStatus (res) {
 
 function handelData (res) {
   const data = res.data
-  
-  if (data && data.msg && data.code !== 200) {
+  if (data && data.msg && parseInt(data.code) !== 200) {
     message.error(data.msg)
   }
   else if(data && data.msg && data.code == 200) {
-	//message.success(data.msg)
+	  //message.success(data.msg)
   }
   return { ...data }
 }
