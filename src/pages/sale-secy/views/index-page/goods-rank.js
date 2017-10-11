@@ -6,6 +6,7 @@
 
 import React from 'react';
 import styles from './sale-secy.less';
+import { Link } from 'dva/router';
 import { Icon } from 'antd';
 import Lazyload from 'react-lazyload';
 
@@ -29,7 +30,9 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.salesRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`sales-${index}`}>
                                             <div className={styles.imgWrap}>
-                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                                <Link to={"/detail/"+item.sku} target="_blank">
+                                                    <img src={item.img_url}/>
+                                                </Link>
                                             </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
@@ -55,7 +58,9 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.payAmountRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`saler-${index}`}>
                                             <div className={styles.imgWrap}>
-                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                                <Link to={"/detail/"+item.sku} target="_blank">
+                                                    <img src={item.img_url}/>
+                                                </Link>
                                             </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}><a href={item.product_url} target="_blank">{item.pname}</a></div>
@@ -81,7 +86,9 @@ class GoodsRank extends React.Component {
                                     this.props.myProductRank.uvRank.map((item,index) => 
                                         <div className={styles.itemPanel} key={`zhl-${index}`}>
                                             <div className={styles.imgWrap}>
-                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                                <Link to={"/detail/"+item.sku} target="_blank">
+                                                    <img src={item.img_url}/>
+                                                </Link>
                                             </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>

@@ -57,9 +57,7 @@ class GoodsList extends React.Component {
                         {   // 子表不显示该项
                             !record.isChildren?
                             <Link to={"/detail/"+record.sku}>
-                                <Lazyload throttle={200} height={80} >
                                     <img src={ record.img_url} className={ styles.img } />
-                                </Lazyload>
                             </Link>
                             :<div style={{position:'absolute',top:'-1px',left:0,width:'100%',borderTop:'1px solid #fff'}}> 
                             </div>
@@ -563,7 +561,7 @@ class GoodsList extends React.Component {
                     tooltip: {
                         trigger: 'axis',
                         formatter:function(params,ticket,callback){
-                            return '<div><p>' +textName+': '+ params[0].value+'</p></div>';
+                            return `<div style="text-align:left"><p>时间: ${params[0].axisValueLabel}</p><p>${textName}: ${params[0].value}</p></div>`;
                         }
                     },
                     grid: {

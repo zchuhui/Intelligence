@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { Link } from 'dva/router';
 import styles from './sale-secy.less';
 import { Icon, Spin, Radio, Select,Cascader} from 'antd';
 import echarts from 'echarts';
@@ -102,8 +103,11 @@ class Category extends React.Component {
                                     {
                                         this.props.myProductInCate.map((item,index)=>
                                         <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
-                                            <div className={styles.imgWrap}>
-                                                <a href={item.product_url} target="_blank"><img src={item.img_url}/></a>
+                                            <div className={styles.imgWrap}> 
+                                                {/* <a href={item.product_url} target="_blank"><img src={item.img_url}/></a> */}
+                                                <Link to={"/detail/"+item.sku} target="_blank">
+                                                    <img src={item.img_url}/>
+                                                </Link>
                                             </div>
                                             <div className={styles.itemContent}>
                                                 <div className={styles.itemTitle}>
@@ -139,7 +143,7 @@ class Category extends React.Component {
     componentDidMount(){
         
         // 延迟3秒加载Echart图表
-        this.timeout(2000).then((value) => {
+        this.timeout(3000).then((value) => {
             if(this.props.cateSet){
                 this.loadChart(this.formatDataToEchartPieData(this.props.cateSet));
             }
@@ -182,7 +186,7 @@ class Category extends React.Component {
             const option = {
                 tooltip : {
                     trigger: 'item',
-                    formatter: "占比：{d}% ({c}件)"
+                    formatter: "销量占比：{d}% ({c}件)"
                 },
                 grid: {
                     left: '3%',

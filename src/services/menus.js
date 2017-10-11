@@ -41,10 +41,6 @@ export function getMenuCateByBanggood() {
           method: 'get',
           data: params,
 	});
-
-	/* let currentUrl = `${Url}?com=ajax&t=getCateList&site=banggood`;
-
-  	return request(currentUrl); */
 }
 
 
@@ -58,9 +54,5 @@ export function getMenuBrandByBanggood() {
           method: 'get',
           data: params,
 	});
-	/* 
-	let currentUrl = `${Url}?com=ajax&t=getBrandList&site=banggood`;
-	
-  	return request(currentUrl); */
 }
 
