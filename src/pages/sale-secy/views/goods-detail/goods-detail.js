@@ -12,6 +12,7 @@ import { Button, Icon, DatePicker, Select, Tag, Cascader, Table, Spin} from 'ant
 import { Link } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 import ImageRelate from './relate.png';
+import UndevelopedAlert from '../undeveloped-alert/undeveloped-alert';
 
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
@@ -84,7 +85,7 @@ class GoodsDetail extends React.Component {
             <div className={`${styles.mainWrap} ${styles.goodsDetailWrap}`}>
                 <div className={styles.goodsAttribute}>
                     <div className={styles.sku}>
-                        <b>SKU: {this.props.sku}</b>
+                        <b>{this.props.sku}</b>
                         <Link to='/goods'><Button className={styles.fr}>返回</Button></Link>
                     </div>
                     {
@@ -147,10 +148,10 @@ class GoodsDetail extends React.Component {
                     {/* 菜单 star */}
                     <div className={styles.detailMenu}>
                         <ul>
-                            <li>销售情况</li>
-                            <li>运营情况</li>
-                            <li>商品特征</li>
-                            <li>用户特征</li>
+                            <li><UndevelopedAlert text="销售情况"/></li>
+                            <li><UndevelopedAlert text="运营情况"/></li>
+                            <li><UndevelopedAlert text="商品特征"/></li>
+                            <li><UndevelopedAlert text="用户特征"/></li>
                             <li className={styles.current}>价格对比</li>
                         </ul>
                     </div>

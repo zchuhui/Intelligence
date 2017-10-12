@@ -44,3 +44,15 @@ export function setRelatedBgBySku(params) {
     });
 }
 
+/**
+ * 采购
+ * @param {object} params 
+ */
+export function addPurchaseProducts(params) {
+    Object.assign(params,{'com':'purchase','t':'addPurchaseProducts'});
+    return request(Url, {
+          method: 'post',
+          data: params,
+    });
+}
+

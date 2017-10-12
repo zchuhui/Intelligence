@@ -12,6 +12,7 @@ import { Button, DatePicker, Spin, Select, Input, Table, Pagination, Popover, me
 import { Link } from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
 import Clipboard  from 'clipboard';
+import UndevelopedAlert from '../undeveloped-alert/undeveloped-alert';
 
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option,
@@ -125,16 +126,30 @@ class RivalNewView extends React.Component {
             { title: '品牌', dataIndex: 'bname', width:'10%'},
             { title: '操作', width:'10%',render:(text,record) => (
                 <div>
-                    <Popover 
+                    {
+                        /* record.purInfo == null || record.purInfo.length == 0?
+                        <Popover 
                             title="确认发起该产品的采购申请吗？" 
                             trigger="click" 
                             content={
                             <div style={{textAlign:'center'}}>
-                                <Button type="primary" onClick={this.onRelatedBGBySku.bind(this,record.sku)} loading={this.props.relatedLoading}>确认</Button>
+                                <Button type="primary" onClick={this.onStock.bind(this,record.pid)} loading={this.props.stockLoading}>确认</Button>
                             </div>
                         }>
-                    <Button type="primary">采购</Button>
-                    </Popover>
+                            <Button type="primary">采购</Button>
+                        </Popover>
+                        :
+                        <Popover 
+                            content={ record.purInfo.log} 
+                            trigger="hover">
+                            <div style={{textAlign:'center'}}>
+                                <p>{ record.purInfo.adopt_status}</p>
+                                <p>{ record.purInfo.purchase_status}</p>
+                            </div>
+                        </Popover> */
+                    }
+                    <Button type="primary"><UndevelopedAlert text="采购"/></Button>
+                    
                 </div>
             )},
         ];
@@ -148,9 +163,9 @@ class RivalNewView extends React.Component {
                 <div className={styles.menu}>
                     <ul>
                         <li className={styles.current}>竞品新品</li>
-                        <li>竞品热销</li>
-                        <li>竞品波动</li>
-                        <li>竞品评论</li>
+                        <li><UndevelopedAlert text="竞品热销"/></li>
+                        <li><UndevelopedAlert text="竞品热论"/></li>
+                        <li><UndevelopedAlert text="竞品推荐"/></li>
                     </ul>
                 </div>
 
@@ -335,8 +350,6 @@ class RivalNewView extends React.Component {
             endDate   = dateString[1];
         // 赋值
         this.setState({startDate:startDate,endDate:endDate});
-        
-
     }
 
     /**
@@ -473,6 +486,31 @@ class RivalNewView extends React.Component {
     }
 
     /**
+     * 采购
+     * @param {string} pid 
+     */
+    onStock(pid){
+        this.props.setStock({
+            pid:pid
+        });
+        
+        // 关联后，3秒后刷新
+        this.timeout(3000).then((value) => {
+            // 判断是关联成功，失败则不刷新
+            if(this.props.stockStatus){
+                this.props.getRivalDataByParams({
+                    site:this.state.site,
+                    cid:this.state.cid,
+                    startDate:this.state.startDate,
+                    endDate:this.state.endDate,
+                    page:this.state.page,
+                })
+            }
+        }); 
+        
+    }
+
+    /**
      * 异步定时器
      * @param {时间} ms 
      */
@@ -485,7 +523,6 @@ class RivalNewView extends React.Component {
 
 
     componentDidMount(){
-
         // 获取
         if(this.props.params){
 
@@ -505,6 +542,21 @@ class RivalNewView extends React.Component {
             })
         }
 
+    }
+
+    componentDidUpdate(){
+        /* console.log('this.props.stockStatus',this.props.stockStatus);
+
+         // 判断是关联成功，失败则不刷新
+         if(this.props.stockStatus){
+            this.props.getRivalDataByParams({
+                site:this.state.site,
+                cid:this.state.cid,
+                startDate:this.state.startDate,
+                endDate:this.state.endDate,
+                page:this.state.page,
+            });
+        } */
     }
 
 

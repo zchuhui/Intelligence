@@ -18,10 +18,15 @@ class RivalViewDataRouter extends React.Component {
                     rivalViewList = {this.props.rivalViewList}
                     getRivalDataByParams = {params => this.getRivalDataByParams(params)}
                     setRelatedBgBySku = {params => this.setRelatedBgBySku(params)}
+                    setStock = {params => this.setStock(params)}
                     menus={this.props.menus}
                     params={this.props.location.state}
+
                     relatedLoading={this.props.relatedLoading}
                     relatedStatus={this.props.relatedStatus}
+
+                    stockLoading={this.props.stockLoading}
+                    stockStatus={this.props.stockStatus}
                 />
             </MainLayout>
         )
@@ -39,6 +44,10 @@ class RivalViewDataRouter extends React.Component {
         })
     }
 
+    /**
+     * 关联
+     * @param {object} params 
+     */
     setRelatedBgBySku(params){
         this.props.dispatch({
             type: 'RivalModel/setRelatedBgBySku',
@@ -46,8 +55,18 @@ class RivalViewDataRouter extends React.Component {
         })
     }
 
-    
+    /**
+     * 采购
+     * @param {object} params 
+     */
+    setStock(params){
+        this.props.dispatch({
+            type: 'RivalModel/setStock',
+            payload: params,
+        })
+    }
 
+    
     componentDidMount(){
         
         // 获取品牌菜单

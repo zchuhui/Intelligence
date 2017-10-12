@@ -18,8 +18,11 @@ export default {
         rivalViewLoading:true,
         rivalViewList:null,
 
-        relatedLoading:false,
-        relatedStatus:false,
+        relatedLoading:false,     // 关联加载
+        relatedStatus:false,      // 关联状态
+
+        stockLoading:false,      // 采购加载
+        stockStatus:false,       // 采购状态
     },
 
     reducers:{
@@ -49,7 +52,17 @@ export default {
         // 更新关联状态
         updateRelatedStatus(state,{payload}){
             return {...state,relatedStatus:payload}
-        }
+        },
+
+        // 更新采购加载状态
+        updateStockLoading(state,{payload}){
+            return {...state, stockLoading:payload}
+        },
+
+        // 更新采购状态
+        updateStockStatus(state,{payload}){
+            return {...state, stockStatus:payload}
+        },
 
     },
 
@@ -122,6 +135,29 @@ export default {
             yield put({ type:'updateRelatedLoading', payload:false});
         },
 
+        // 商品采购
+		* setStock({payload},{select,call,put}){
+            
+            yield put({ type:'updateStockLoading', payload:true});
+
+            // 请求获取数据
+            const {data, code, msg} = yield call(ServiceRival.addPurchaseProducts,payload);
+            //console.log(data,code,msg);
+
+            if(code == CODE200){
+                message.success(msg)
+                yield put({ type:'updateStockStatus', payload:true});
+            }else{
+                yield put({ type:'updateStockStatus', payload:false});
+            }
+            
+            yield put({ type:'updateStockLoading', payload:false});
+        },
+        /* // 
+		* setStockStatus({payload},{select,call,put}){
+            yield put({ type:'updateStockStatus', payload:false});
+        }
+ */
     },
 
     subscriptions:{

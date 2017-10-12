@@ -46,6 +46,7 @@ function checkStatus (res) {
 function handelData (res) {
   const data = res.data
   if (data && data.msg && parseInt(data.code) !== 200) {
+    message.destroy();
     message.error(data.msg)
   }
   else if(data && data.msg && data.code == 200) {
@@ -58,10 +59,13 @@ function handleError (error) {
   const data = error.response.data
 
   if (data.errors) {
+    message.destroy();
     message.error(`${data.message}：${data.errors}`, 5)
   } else if (data.error) {
+    message.destroy();
     message.error(`${data.error}：${data.error_description}`, 5)
   } else {
+    message.destroy();
     message.error('未知错误！', 5)
   }
   return { success: false }

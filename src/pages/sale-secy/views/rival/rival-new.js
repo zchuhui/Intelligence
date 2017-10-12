@@ -12,6 +12,7 @@ import echarts from 'echarts';
 import { Button, DatePicker, Spin,} from 'antd';
 import { Link,hashHistory} from 'dva/router';
 import DateTime from '../../../../utils/date-time'; 
+import UndevelopedAlert from '../undeveloped-alert/undeveloped-alert';
 
 const { MonthPicker, RangePicker } = DatePicker;
 
@@ -74,9 +75,9 @@ class RivalNew extends React.Component {
                 <div className={styles.menu}>
                     <ul>
                         <li className={styles.current}>竞品新品</li>
-                        <li>竞品热销</li>
-                        <li>竞品波动</li>
-                        <li>竞品评论</li>
+                        <li><UndevelopedAlert text="竞品热销"/></li>
+                        <li><UndevelopedAlert text="竞品热论"/></li>
+                        <li><UndevelopedAlert text="竞品推荐"/></li>
                     </ul>
                 </div>
                 <div className={styles.content}>

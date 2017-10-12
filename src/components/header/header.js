@@ -41,13 +41,14 @@ class Header extends React.Component {
 
                     {/*菜单 start*/}
                     <div className={ styles.menuWrap }>
-                        <em className={ styles.leftTip }></em>
+                        <h5 style={{fontSize:16,color:'#fff'}}>销售秘书</h5>
+                        {/* <em className={ styles.leftTip }></em>
                         <Dropdown overlay={menu} >
                             <span className={ styles.menus }> 
                                 <Icon className={ styles.menuIcon} type="bars" />   
                                 { this.props.headerMenuText } 
                             </span>
-                        </Dropdown>
+                        </Dropdown> */}
                     </div>
                     {/*菜单 end*/}
 
