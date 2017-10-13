@@ -27,7 +27,7 @@ export default {
 
 		cateLoading:false,       // 类目加载
 		productInCate:{},        // 第一个类目 商品排行
-		myProductInCate:{},      // 第一个类目 你的商品排行
+		myProductInCate:null,      // 第一个类目 你的商品排行
 		cateSet:{},              // 分类饼图
 		myCateSalesFromPrice:{}, // 第一个类目 商品排行 		
 		

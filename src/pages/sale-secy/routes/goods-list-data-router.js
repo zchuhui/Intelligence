@@ -141,7 +141,7 @@ function mapStateToProps(state) {
 
     // BG表数据
     const {  data } = state.RelevanceBGModel;
-    
+
     // 数据格式转换：遍历列表数据，转成子表可用的数据格式
     if (data && data.list) {
         
@@ -166,7 +166,6 @@ function mapStateToProps(state) {
             }
         });
     }
-    
     
     return {
         menus,

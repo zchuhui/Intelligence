@@ -32,7 +32,7 @@ class Category extends React.Component {
                 
                 <div className={styles.categoryWrap}>
                     {
-                        this.props.myProductInCate.map?
+                        this.props.myProductInCate !== null?
                         <ul className={styles.clear}>
                             <li>
                                {/*  {
@@ -99,7 +99,8 @@ class Category extends React.Component {
                                 </div>
                                 :
                                 <div>
-                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet[0].name} | 销量排行</h3>
+
+                                    <h3>{this.state.selectLabel?this.state.selectLabel:this.props.cateSet.length>0 ? this.props.cateSet[0].name :null} | 销量排行</h3>
                                     {
                                         this.props.myProductInCate.map((item,index)=>
                                         <div className={styles.itemPanel}  key={`shops-${item.pid}`}>
@@ -159,7 +160,7 @@ class Category extends React.Component {
     onChangeCategory(_this){
         let cid = _this.key,
           label = _this.label;
-
+        
         this.setState({
             selectVal:cid,
             selectLabel:label,
@@ -175,11 +176,8 @@ class Category extends React.Component {
      * @param {Array} prices  [圆柱图数据]
      */
 	loadChart(cateSet,prices){
-
         const catePieChartId = this.refs.catePieChart;
-        
-        if(cateSet && catePieChartId){
-
+        if(cateSet.valueArray && catePieChartId){
             // 初始化Echart
             const catePieChart = echarts.init(catePieChartId);  
 
@@ -222,8 +220,8 @@ class Category extends React.Component {
                 // Echart 传入点击事件 
                 if(setChartClickCount == 0){
                     // 请求数据
-                    this.props.getCategoryByCid(param.data.value);
-                
+                    this.props.getCategoryByCid(param.data.cid);
+
                     // 存储数据到state
                     this.state.selectVal = param.data.value;
                     this.state.selectLabel =param.data.name;
@@ -261,7 +259,8 @@ class Category extends React.Component {
                     } */
                     // 存储 cid
                     if(i == 'cid'){
-                        obj.cidArray.push(item[i]);
+                        //obj.cidArray.push(item[i]);
+                        obj2.cid = item[i];
                     }
                     if(i == 'num'){
                         obj2.value = item[i];

@@ -80,10 +80,10 @@ export default {
                 
 
                 // 如果有用户权限，则跳转到首页,否则跳转到BG列表页
-                if(userinfo_sj)
+                //if(userinfo_sj)
                     window.location.href = "/sale-secy";
-                else
-                    window.location.href = "/sale-secy#/goods";
+                //else
+                //    window.location.href = "/sale-secy#/goods";
                 
             } else {
                 // 登录失败

@@ -50,16 +50,44 @@ class GoodsDetail extends React.Component {
 
         const columnsPrice = [
             { title: '', dataIndex: 'name', key: 'name',width:'15%'},
-			{ title: '有效时间', dataIndex: 'date', key: 'date',width:'15%',
+			/* { title: '有效时间', dataIndex: 'date', key: 'date',width:'15%',
 			render:(text,record)=>(
 				<div>
-                <p>{record.is_date == '有效'?<span style={{color:'green'}}>{record.is_date}</span>
-                        :<span style={{color:'red'}}>{record.is_date}</span>}</p>
+                    <p>{record.is_date == '有效'?<span style={{color:'green'}}>{record.is_date}</span>
+                            :<span style={{color:'red'}}>{record.is_date}</span>}</p>
 					<p>{record.date}</p>
 				</div>
-			)},
+			)}, */
             { title: '中仓', dataIndex: 'price', key: 'price' ,width:'10%',render:(text,record)=>(
-                <div>{record.price=='--'?record.price:`$ ${record.price}`}</div>
+                <div>
+                    {
+                            record.is_date == '无效'?
+                            <div style={{color:'#999'}}>
+                                <p>{record.is_date}</p>
+                                <p>{record.price=='--'?record.price:`$ ${record.price}`}</p>
+					            <p>{record.date}</p>
+                            </div>
+                            :
+                            <div>
+                                 {record.is_date == '当天售价'?
+                                 <div style={{color:'#489200'}}>
+                                    <p>{record.is_date}</p>
+                                    <p>{record.price=='--'?record.price:`$ ${record.price}`}</p>
+                                    <p>{record.date}</p>
+                                 </div>
+                                 :
+                                 <div>
+                                    <p>{record.is_date}</p>
+                                    <p>{record.price=='--'?record.price:`$ ${record.price}`}</p>
+                                    <p>{record.date}</p>
+                                 </div>
+                                 }
+                            </div>
+                        }
+                    
+
+                </div>
+
             )},
             { title: 'HK仓', dataIndex: 'hk_price', key: 'hk' ,width:'10%',render:(text,record)=>(
                 <div>{record.hk_price=='--'?record.hk_price:`$ ${record.hk_price}`}</div>

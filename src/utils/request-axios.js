@@ -45,19 +45,21 @@ function checkStatus (res) {
 
 function handelData (res) {
   const data = res.data
-  if (data && data.msg && parseInt(data.code) !== 200) {
+  if(data && data.msg && data.code == 401) {
+    // 未登录状态
+	  window.location.href = "/login";
+  }
+  else if (data && data.msg && parseInt(data.code) !== 200) {
+    // 错误数据
     message.destroy();
     message.error(data.msg)
   }
-  else if(data && data.msg && data.code == 200) {
-	  //message.success(data.msg)
-  }
+   
   return { ...data }
 }
 
 function handleError (error) {
   const data = error.response.data
-
   if (data.errors) {
     message.destroy();
     message.error(`${data.message}：${data.errors}`, 5)

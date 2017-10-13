@@ -190,24 +190,20 @@ export default {
             
             yield put({ type: 'toggleLoading', payload: { loading: true } });
 
-            try {
-                // 更新参数到state
-                yield put({ type: 'updateSearchArgs', payload: { searchArguments: payload.searchArgs } });
+            // 更新参数到state
+            yield put({ type: 'updateSearchArgs', payload: { searchArguments: payload.searchArgs } });
 
-                // 从state中获取搜索参数
-                const params = yield select(state => state.RelevanceBGModel.searchArguments);
-                params.page = payload.page;
+            // 从state中获取搜索参数
+            const params = yield select(state => state.RelevanceBGModel.searchArguments);
+            params.page = payload.page;
 
-                // 请求数据
-                const { data } = yield call(BgService.query, params);
-
+            // 请求数据
+            const { data,code } = yield call(BgService.query, params);
+            if(code == CODE200){
                 // 存储数据
                 yield put({ type: 'save', payload: data });
-                
-            } catch (e) {
-                //message.warning(ERRORMESSAGE);
             }
-
+            
             yield put({ type: 'toggleLoading', payload: { loading: false } });
         },
 

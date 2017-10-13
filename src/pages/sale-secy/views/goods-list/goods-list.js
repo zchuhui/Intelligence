@@ -206,9 +206,9 @@ class GoodsList extends React.Component {
                     
             	</div>
             	{ /* 操作栏 end*/ }
-
+                
             	<div className={ styles.tableWrap }>
-					{ /* 数据列表 start */ }
+                    
 					<Table 
 						dataSource={ this.props.data.list }
 						loading={ this.props.loading } 
@@ -219,9 +219,8 @@ class GoodsList extends React.Component {
 						>
 						
 					  </Table>
-					{ /* 数据列表 end */ }
-
-					{/* 分页 start*/}
+					
+					
 					<div className={styles.piginationWrap}>
 						<Pagination
 				          className="ant-table-pagination"
@@ -232,7 +231,6 @@ class GoodsList extends React.Component {
 				          onChange={this.props.changePagination.bind(this)}
 				        />
 					</div>
-					{/* 分页 end */}
 
 				</div>
 
