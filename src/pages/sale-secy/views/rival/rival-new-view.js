@@ -36,6 +36,9 @@ class RivalNewView extends React.Component {
             page:1,                                 // 页数
 
             bgSku:null,                             // 关联的bgSku
+
+            relatedStatus:false,
+            stockStatus:false,
         }
     }
     
@@ -69,6 +72,7 @@ class RivalNewView extends React.Component {
                                     onChange={this.onChangeInputBgSku.bind(this)} 
                                     defaultValue={record.relate_sku !== "0"?record.relate_sku:null}
                                     style={{marginBottom:5,width:150}}
+                                    allowClear={true}
                                     /> &nbsp; 
                                 <Button type="primary" onClick={this.onRelatedBGBySku.bind(this,record.sku)} loading={this.props.relatedLoading}>关联</Button>
                             </div>
@@ -348,6 +352,7 @@ class RivalNewView extends React.Component {
         // 获取日期并赋值到state
         let startDate = dateString[0],
             endDate   = dateString[1];
+
         // 赋值
         this.setState({startDate:startDate,endDate:endDate});
     }
@@ -468,20 +473,6 @@ class RivalNewView extends React.Component {
                 sku:sku,
                 bgsku:this.state.bgSku
             });
-            
-            // 关联后，2秒后刷新
-            this.timeout(2000).then((value) => {
-                // 判断是关联成功，失败则不刷新
-                if(this.props.relatedStatus){
-                    this.props.getRivalDataByParams({
-                        site:this.state.site,
-                        cid:this.state.cid,
-                        startDate:this.state.startDate,
-                        endDate:this.state.endDate,
-                        page:this.state.page,
-                    })
-                }
-            });
         }
     }
 
@@ -493,21 +484,6 @@ class RivalNewView extends React.Component {
         this.props.setStock({
             pid:pid
         });
-        
-        // 关联后，3秒后刷新
-        this.timeout(3000).then((value) => {
-            // 判断是关联成功，失败则不刷新
-            if(this.props.stockStatus){
-                this.props.getRivalDataByParams({
-                    site:this.state.site,
-                    cid:this.state.cid,
-                    startDate:this.state.startDate,
-                    endDate:this.state.endDate,
-                    page:this.state.page,
-                })
-            }
-        }); 
-        
     }
 
     /**
@@ -545,18 +521,42 @@ class RivalNewView extends React.Component {
     }
 
     componentDidUpdate(){
-        /* console.log('this.props.stockStatus',this.props.stockStatus);
 
-         // 判断是关联成功，失败则不刷新
-         if(this.props.stockStatus){
-            this.props.getRivalDataByParams({
-                site:this.state.site,
-                cid:this.state.cid,
-                startDate:this.state.startDate,
-                endDate:this.state.endDate,
-                page:this.state.page,
+        // 关联成功，刷新列表
+        if(this.props.relatedStatus && !this.state.relatedStatus){
+            this.state.relatedStatus = this.props.relatedStatus;
+
+            this.timeout(2000).then((value) => {
+                this.props.getRivalDataByParams({
+                    site:this.state.site,
+                    cid:this.state.cid,
+                    startDate:this.state.startDate,
+                    endDate:this.state.endDate,
+                    page:this.state.page,
+                })
             });
-        } */
+
+            this.state.relatedStatus = false;
+
+        }
+        
+        // 采购成功，刷新列表
+        if(this.props.stockStatus && !this.state.stockStatus){
+            this.state.stockStatus = this.props.stockStatus;
+
+            this.timeout(2000).then((value) => {
+                this.props.getRivalDataByParams({
+                    site:this.state.site,
+                    cid:this.state.cid,
+                    startDate:this.state.startDate,
+                    endDate:this.state.endDate,
+                    page:this.state.page,
+                })
+            });
+
+            this.state.stockStatus = false;
+        }
+
     }
 
 

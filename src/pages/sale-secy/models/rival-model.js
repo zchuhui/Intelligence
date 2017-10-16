@@ -79,7 +79,7 @@ export default {
                 const { data } = yield call(ServiceRival.getRivalDataByDate,payload);
                 
 				if(data){
-					yield put({ type:'saveRivalData', payload:data});
+                    yield put({ type:'saveRivalData', payload:data});
 				}
 				
 				yield put({type:'updateLoading', payload:{loading:false}})
@@ -91,6 +91,10 @@ export default {
     
         // 获取竞品列表数据
 		* getRivalDataByParams({payload},{select,call,put}){
+            // 清除关联、采购状态
+            yield put({ type:'updateRelatedStatus', payload:false});
+            yield put({ type:'updateStockStatus', payload:false});
+
             try{
                 // 先清空数据
                 yield put({ type:'saveRivalViewList', payload:{data:null}});
@@ -102,6 +106,7 @@ export default {
                 
                 if(data){
                     yield put({ type:'saveRivalViewList', payload:data});
+
                 }
                 yield put({type:'updateRivalViewLoading', payload:{loading:false}})
             
@@ -118,7 +123,7 @@ export default {
 
             yield put({ type:'updateRelatedLoading', payload:true});
 
-			try{
+			//try{
 				// 请求获取数据
                 const {data, code, msg} = yield call(ServiceRival.setRelatedBgBySku,payload);
                
@@ -128,9 +133,9 @@ export default {
 				}else{
                     yield put({ type:'updateRelatedStatus', payload:false});
                 }
-			}catch(e){
+			/* }catch(e){
                 yield put({ type:'updateRelatedStatus', payload:false});
-            }
+            } */
             
             yield put({ type:'updateRelatedLoading', payload:false});
         },

@@ -130,15 +130,27 @@ class GoodsDetail extends React.Component {
                                     <div className={`${styles.detailBox}`}>
                                         <div className={styles.goodsTitle}>
                                             <span className={styles.tips}>{ this.getProductsStatus(this.props.goods.products_status) }</span> 
-                                            <h2>{this.props.goods.products_name}</h2>
+                                            <h2><a href={this.props.goods.products_url} target="_blank">{this.props.goods.products_name}</a></h2>
                                         </div>
                                         <div className={styles.clear}>
                                             <div className={`${styles.fl} ${styles.attrLeft}`}>
                                                 <p className={styles.clear}>
-                                                    <span className={styles.fl}>品牌：{this.props.goods.brand}</span>
+                                                    <span className={styles.fl}>品牌：<a href={this.props.goods.brand_url} target="_blank">{this.props.goods.brand}</a></span>
                                                     <span className={styles.fr}>上架时间：{this.props.goods.products_date_added}</span>
                                                 </p>
-                                                <div>分类：{this.props.goods.cateName }</div>
+                                                <div>分类：
+                                                    {
+                                                        this.props.goods.cate_list?this.props.goods.cate_list.map((item,index)=>(
+                                                            <span>
+                                                                <a href={item.url} target="_blank">{item.name}</a> 
+                                                                {
+                                                                    (index+1) < this.props.goods.cate_list.length?<span>></span>:null
+                                                                }
+                                                            </span>
+                                                        )):null
+                                                    }
+                                                    
+                                                </div>
                                             </div>
                                             <div className={`${styles.fr} ${styles.attrRight}`}>
                                                 <ul>
