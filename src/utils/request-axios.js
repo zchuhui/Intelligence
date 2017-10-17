@@ -68,7 +68,7 @@ function handleError (error) {
     message.error(`${data.error}：${data.error_description}`, 5)
   } else {
     message.destroy();
-    message.error('未知错误！', 5)
+    message.error('服务器开小差，请重试！', 5)
   }
   return { success: false }
 }
