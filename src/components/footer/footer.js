@@ -8,7 +8,10 @@ class Footer extends React.Component {
 	render() {
 		return(
 			<div className={styles.footerWrap}>
-				<p>Copyright 2017 RongCloud京公网安备 11010502027139京ICP备15042119号-1</p> 
+				<p>
+					Copyright © 2006-2017 Banggood Ltd. All Rights Reserved. <br /> 
+					版权所有为广州棒谷网络科技有限公司 粤ICP备15016191号
+				</p> 
 			</div>
 		)
 	}
