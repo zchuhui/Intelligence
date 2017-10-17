@@ -399,10 +399,10 @@ class GoodsList extends React.Component {
                                 </Col>
                                 {/*BG 商品*/}
                                 <Col span={Math.floor(20/(this.props.goodContrastData.relateInfo.length+1))}>
-                                        <ul className={styles.tableCol}>
+                                        <ul className={styles.tableCol}> 
                                             <li><img src={this.props.goodContrastData.info.img_url}/></li>
                                             <li>{this.props.goodContrastData.info.site}</li>
-                                            <li title={this.props.goodContrastData.info.cateName}>{this.props.goodContrastData.info.cateName}</li>
+                                            <li className={styles.overflow} title={this.props.goodContrastData.info.cateName}>{this.props.goodContrastData.info.cateName}</li>
                                             <li title={this.props.goodContrastData.info.attrName}>{this.props.goodContrastData.info.attrName}</li>
                                             <li>{this.props.goodContrastData.info.price}</li>
                                             <li>{this.props.goodContrastData.info.thirtyPrice}</li>

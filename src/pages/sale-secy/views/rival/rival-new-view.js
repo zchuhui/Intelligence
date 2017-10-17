@@ -72,7 +72,6 @@ class RivalNewView extends React.Component {
                                     onChange={this.onChangeInputBgSku.bind(this)} 
                                     defaultValue={record.relate_sku !== "0"?record.relate_sku:null}
                                     style={{marginBottom:5,width:150}}
-                                    allowClear={true}
                                     /> &nbsp; 
                                 <Button type="primary" onClick={this.onRelatedBGBySku.bind(this,record.sku)} loading={this.props.relatedLoading}>关联</Button>
                             </div>
