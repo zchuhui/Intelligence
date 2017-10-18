@@ -559,7 +559,11 @@ class GoodsList extends React.Component {
                     tooltip: {
                         trigger: 'axis',
                         formatter:function(params,ticket,callback){
-                            return `<div style="text-align:left"><p>时间: ${params[0].axisValueLabel}</p><p>${textName}: ${params[0].value}</p></div>`;
+                            let value = params[0].value; 
+                            if(textName == '价格'){
+                                value = '$ '+value ;
+                            }
+                            return `<div style="text-align:left"><p>时间: ${params[0].axisValueLabel}</p><p>${textName}: ${value}</p></div>`;
                         }
                     },
                     grid: {
