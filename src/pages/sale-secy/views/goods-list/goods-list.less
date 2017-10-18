@@ -72,7 +72,9 @@
             border-bottom:1px solid #eee;
             vertical-align: middle;
             padding:0 10px;
-            
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
 
             img{
                 height:60px;
@@ -84,11 +86,7 @@
         }
         .chartWrap{
             height:100px;
-        }
-        li.overflow{
-            overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: nowrap;
+            overflow: visible !important;
         }
     }
     .tableColTitle{

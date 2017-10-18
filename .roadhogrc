@@ -1,9 +1,7 @@
 {
   "entry": [
-    "src/pages/compete-goods/index.js",
     "src/pages/login/login.js",
-    "src/pages/bg-goods/bg.js",
-    "src/pages/sale-secy/sale-secy.js"
+    "src/pages/sale-secy/index.js"
     ],
   "disableCSSModules": false,
   "publicPath": "/",
@@ -12,21 +10,13 @@
   "autoprefixer": null,
   "proxy": {
     "/api": {
-      "target": "https://betabia.banggood.com/index.php",
+      "target": "https://bia.banggood.com/index.php",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     },
     "/login": {
       "target": "http://localhost:8000/",
       "pathRewrite": { "^/login" : "/login.html" }
-    },
-    "/bg": {
-      "target": "http://localhost:8000/",
-      "pathRewrite": { "^/bg" : "/bg.html" }
-    },
-    "/sale-secy": {
-      "target": "http://localhost:8000/",
-      "pathRewrite": { "^/sale-secy" : "/sale-secy.html" }
     }
   },
   "extraBabelPlugins": [

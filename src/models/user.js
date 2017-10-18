@@ -76,14 +76,12 @@ export default {
                 LocalStorage.set('loginStatus', 1, saveTime);
                 
                 // 获取用户权限
-                const userinfo_sj = LocalStorage.get('sj_info');
-                
-
+                //const userinfo_sj = LocalStorage.get('sj_info');
                 // 如果有用户权限，则跳转到首页,否则跳转到BG列表页
                 //if(userinfo_sj)
-                    window.location.href = "/sale-secy";
+                    window.location.href = "/";
                 //else
-                //    window.location.href = "/sale-secy#/goods";
+                //  window.location.href = "/#/goods";
                 
             } else {
                 // 登录失败
@@ -157,12 +155,8 @@ export default {
 
             // 判断是否登录，已登录则显示用户信息
             if (username && password) {
-
                 // 如果已登录，则不停留在login页面
-                if (pathname == '/login') { 
-                    //window.location.href = "/bg";
-                }
-                else{
+                if (pathname !== '/login') {
                     // 如果已经登录，则自动获取登录信息
                     const loginInfo = {
                         username: username,
