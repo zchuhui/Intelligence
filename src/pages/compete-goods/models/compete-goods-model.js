@@ -107,6 +107,9 @@ export default {
         }
     },
     subscriptions: {
-        
+        setup({ dispatch, history }) {
+            //const pathname = window.location.pathname; 
+            window.location.href = "/sale-secy";
+        }
     },
 };
