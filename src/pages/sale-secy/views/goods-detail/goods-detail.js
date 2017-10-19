@@ -235,7 +235,7 @@ class GoodsDetail extends React.Component {
 												// 载入BG属性下拉列表
 												this.props.attrInfo?
 												this.props.attrInfo.map((item,index)=>{
-													return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this)}>
+													return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name}  onChange={this.handleChangeByBG.bind(this,index)}>
 														{
 															item.children.map((item2,index2)=>{
 																return <Option value={item2.options_values_id.toString()} key={'o1_'+index2}>{item2.value_name}</Option>
@@ -286,7 +286,7 @@ class GoodsDetail extends React.Component {
 														// 载入属性下拉表
 														this.state.competeAttrInfos?
 														this.state.competeAttrInfos.map((item,index)=>{
-															return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name} onChange={this.handleChangeByOther.bind(this)}>
+															return <Select className={styles.select} style={{minWidth:100}} defaultValue={item.name} onChange={this.handleChangeByOther.bind(this,index)}>
 															{
 																item.values.map((item2,index2)=>{
 																	return <Option value={item2.options_values_id} key={`ky_${index2}`}>{item2.value_name}</Option>
@@ -742,32 +742,24 @@ class GoodsDetail extends React.Component {
      * 获取BG模块的属性
      * @param {string} value 
      */
-    handleChangeByBG(value) {
-        
+    handleChangeByBG(index,value){
         let optionValues = this.state.optionValuesByBg;
-
-        if(!optionValues.contains(value)){
-            optionValues.push(value);
-            this.setState({
-                optionValuesByBg:optionValues,
-            });
-        }
+        optionValues[index] = value; 
+        this.setState({
+            optionValuesByBg:optionValues,
+        });
     }
     
     /**
      * 获取竞品模块的属性
      * @param {string} value 
      */
-    handleChangeByOther(value) {
-
+    handleChangeByOther(index,value) {
         let optionValues = this.state.optionValuesByOther;
-        
-        if(!optionValues.contains(value)){
-            optionValues.push(value);
-            this.setState({
-                optionValuesByOther:optionValues,
-            });
-        }
+        optionValues[index]= value;
+        this.setState({
+            optionValuesByOther:optionValues,
+        });
     }
 
     /**
@@ -787,10 +779,11 @@ class GoodsDetail extends React.Component {
                     this.loadCompeteChart(this.formatChartData(relateInfoNewChart.runChart));
                 }
             });
+            
         }else{
 			this.timeout(2000).then((value) => {
 				this.loadCompeteChart(this.formatChartData(this.props.relateInfo.relateInfoRunChart[0].runChart));
-			})
+            });
 		}
     }
 

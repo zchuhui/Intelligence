@@ -49,13 +49,12 @@ export default {
                 obj.key = 'parent_'+i; 
 
                 for(let j in obj){
-                    
                     if(j == 'poa' && obj[j].length > 0){
                         obj.children = obj[j]; 
                         obj.children.map((item,index)=>{
-                            item.name = `${item.attrName} - ${item.poa_sku}`;
+                            item.name = item.attrName?`${item.attrName} - ${item.poa_sku}`:item.poa_sku;
                             item.key = Math.random(); 
-                        })
+                        });
                     }
                 }
 
@@ -126,7 +125,7 @@ export default {
                 }
             }
 
-
+            
             return {
                 ...state,
                 goods: payload,
