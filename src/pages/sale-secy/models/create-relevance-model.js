@@ -64,7 +64,7 @@ export default {
 		 * @param {*} param1 
 		 */
 		saveRelevanceGoods(state, { payload }) {
-			return { ...state, goods: {data:payload} };
+			return { ...state, goods: {data:payload},sku:payload.sku };
 		},
 		
 		/**
@@ -145,35 +145,21 @@ export default {
 		 * @param {*} param1
 		 */
 		*fetchGoodsDetailBySku({ payload }, { select, call, put }) {
-			try{
+			// 显示加载状态
+			yield put({type: "toggleCreateRelevanceLoading",payload: { loading: true }});
 
-				// 显示加载状态
-				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: true }});
-
-				// 请求获取商品信息
-				const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+			const { data, code } = yield call(BgService.fetchGoodsDetailBySku, payload);
+			if (code == CODE200) { 
+				yield put({ type: "saveRelevanceGoods", payload: data });
 				
-				if (data) {
-
-					// 存储商品信息
-					yield put({ type: "saveRelevanceGoods", payload: data });
-					
-					// 请求获取已关联的商品
-					yield put({ type: "featchRevanceGoods", payload });
-
-					// 请求获取相似商品
-					yield put({type: "fetchSimilarGoodsList", payload: { title: data.pname }});
-					
-					
-				}
-
-				// 隐藏加载状态
-				yield put({ type: "toggleCreateRelevanceLoading", payload: { loading: false }});
-				
-			}catch(e){
-				// 隐藏加载状态
-				yield put({ type: "toggleCreateRelevanceLoading", payload: { loading: false }});
+				// 请求获取已关联的商品
+				yield put({ type: "featchRevanceGoods", payload });
+				// 请求获取相似商品
+				yield put({type: "fetchSimilarGoodsList", payload: { title: data.pname }});
 			}
+
+			// 隐藏加载状态
+			yield put({ type: "toggleCreateRelevanceLoading", payload: { loading: false }});
 		},
 
 		/**
@@ -182,24 +168,18 @@ export default {
 		 * @param {*} param1 
 		 */
 		*fetchGoodsBySkuAndSite({ payload }, { select, call, put }) {
-			try{
 
-				// 显示加载状态
-				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: true } });
+			// 显示加载状态
+			yield put({type: "toggleCreateRelevanceLoading",payload: { loading: true } });
 
-				// 请求获取数据
-				const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
+			// 请求获取数据
+			const { data } = yield call(BgService.fetchGoodsDetailBySku, payload);
 
-				// 存储数据
-				yield put({ type: "saveRelevanceGoodsBySite", payload: data });
+			// 存储数据
+			yield put({ type: "saveRelevanceGoodsBySite", payload: data });
 
-				// 隐藏加载状态
-				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
-			
-			}catch(e){
-				// 隐藏加载状态
-				yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
-			}
+			// 隐藏加载状态
+			yield put({type: "toggleCreateRelevanceLoading",payload: { loading: false }});
 		},
 
 		/**

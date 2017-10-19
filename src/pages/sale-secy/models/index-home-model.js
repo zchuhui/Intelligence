@@ -131,11 +131,10 @@ export default {
 
 	subscriptions:{
 		setup({ dispatch, history }) {
-			const pathname = window.location.pathname; console.log('url:',pathname);
+			const pathname = window.location.pathname;
 			if(pathname !== '/'){
 				window.location.href = "/";
 			}
-			
         },
 	}
 

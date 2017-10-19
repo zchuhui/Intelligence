@@ -405,10 +405,6 @@ class CreateRelevance extends React.Component {
      */
     getSite(value) {
 
-        /* let key = value.split('-')[1];
-        let site = this.props.similarGoodsList[key].tname;
-         */
-
         let site = value.label,
             key  = value.key;
 
@@ -436,7 +432,8 @@ class CreateRelevance extends React.Component {
      * 跳转到步骤二
      */
     toStepTwo() {
-        if (this.props.goods.code === 200) {
+        const inputSku = this.refs.inputSku.refs.input.value;
+        if (inputSku !== "" && this.props.sku == inputSku) { 
             this.setState({
                 step1: 'none',
                 step2: '',

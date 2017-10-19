@@ -52,7 +52,7 @@ function handelData (res) {
   else if (data && data.msg && parseInt(data.code) !== 200) {
     // 错误数据
     message.destroy();
-    message.error(data.msg)
+    message.warning(data.msg);
   }
    
   return { ...data }
