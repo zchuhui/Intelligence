@@ -61,6 +61,29 @@ export default {
 
         // 把数据存储到state
         save(state, { payload }) {
+
+            // 转成子表可用的数据格式
+            payload.list.map((item, index) => {
+                
+                // 添加key，不然会报错
+                item['key_id'] = Math.random();
+
+                if (item.relate_info) {
+                    let array = Object.keys(item.relate_info).map((el) => {
+                        // 添加children标示
+                        item.relate_info[el]['isChildren'] = 1;
+                        return item.relate_info[el];
+                    });
+
+                    // 添加key，不然会报错
+                    array.map((item2,index2) => {
+                        item2['key_id'] = Math.random();
+                    })
+
+                    item['children'] = array;
+                }
+            });
+            
             return { ...state, data:payload, loading: false };
         },
 

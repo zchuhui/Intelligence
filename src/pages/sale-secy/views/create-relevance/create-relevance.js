@@ -121,7 +121,7 @@ class CreateRelevance extends React.Component {
                                     </div>
 
                                     <div style={{ textAlign: 'center', height: 100 }}>
-                                        <Link to="/goods" style={{display: 'inline-block',marginRight: 10}}><Button style={{ width: 100 }}>返回</Button></Link>
+                                        <Link to="/goods" style={{display: 'inline-block',marginRight: 10}}><Button onClick={this.saveSessionInfo()} style={{ width: 100 }}>返回</Button></Link>
                                         {/* <Button style={{ width: 100 }} onClick={this.jumpBGList.bind(this,'/bg')}>返回</Button> */}
                                         <Button type="primary" style={{ width: 100 }} onClick={this.toStepTwo.bind(this)}>下一步</Button>
                                     </div>
@@ -306,7 +306,7 @@ class CreateRelevance extends React.Component {
                                                                     style={{ display: 'inline-block', height: 60, lineHeight: 2, marginLeft: 10, fontSize: 16 }}>
                                                                     {this.state.relevanceText}
                                                                 </span>
-                                                                <div><Link to="/goods"><Icon type="rollback" />返回BG关联报表</Link> </div>
+                                                                <div><Link to="/goods" onClick={this.saveSessionInfo()}><Icon type="rollback" />返回BG关联报表</Link> </div>
                                                                 
                                                             </div>
                                                             :
@@ -996,6 +996,11 @@ class CreateRelevance extends React.Component {
     onCopyUrl(url){
         message.destroy();
         message.warning("复制成功！");
+    }
+
+    
+    saveSessionInfo(){
+        sessionStorage.setItem('isRelevance','1');
     }
 
 

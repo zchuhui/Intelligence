@@ -62,15 +62,17 @@ class GoodsListDataRouter extends React.Component {
 
     /**
      * 分页
-     * @param {int} current     // 页码
+     * @param {int} page     // 页码
      */
-    changePagination(current) {
+    changePagination(page) {
         this.props.dispatch({
             type: 'RelevanceBGModel/pagination',
             payload: {
-                page: current,
+                page: page,
             }
         });
+        
+        sessionStorage.setItem('page',page);
     }
 
     /**
@@ -130,43 +132,14 @@ class GoodsListDataRouter extends React.Component {
         // 载入两个菜单数据
         this.props.dispatch({ type: 'Menus/getBanggoodCates'});
         this.props.dispatch({ type: 'Menus/getBanggoodBrands'});
+
     }
     
 }
 
 
 function mapStateToProps(state) {
-    //菜单
     const menus = state.Menus;
-
-    // BG表数据
-    const {  data } = state.RelevanceBGModel;
-
-    // 数据格式转换：遍历列表数据，转成子表可用的数据格式
-    if (data && data.list) {
-        
-        data.list.map((item, index) => {
-            
-            // 添加key，不然会报错
-            item['key_id'] = Math.random();
-
-            if (item.relate_info) {
-                let array = Object.keys(item.relate_info).map((el) => {
-                    // 添加children标示
-                    item.relate_info[el]['isChildren'] = 1;
-                    return item.relate_info[el];
-                });
-
-                // 添加key，不然会报错
-                array.map((item2,index2) => {
-                     item2['key_id'] = Math.random();
-                })
-
-                item['children'] = array;
-            }
-        });
-    }
-    
     return {
         menus,
         ...state.RelevanceBGModel

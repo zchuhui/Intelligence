@@ -8,16 +8,12 @@ import React from 'react';
 import styles from './search-bar.less'
 import moment from 'moment';
 import { Menu, Dropdown, Button, Icon, DatePicker, Input, InputNumber, Select, Tag, Cascader } from 'antd';
+import DateTime from '../../../../utils/date-time'; 
 
 const { MonthPicker, RangePicker } = DatePicker;
 const SubMenu = Menu.SubMenu;
 const InputGroup = Input.Group;
 const Option = Select.Option;
-
-
-// 默认抓取时间为一个月内
-const firstDay = moment(new Date()).subtract(30,"days").format("YYYY-MM-DD");
-const endDay  = moment(new Date()).subtract(1,"days").format("YYYY-MM-DD"); 
 
 
 class Searcher extends React.Component {
@@ -37,8 +33,8 @@ class Searcher extends React.Component {
                 sku: '',
                 price1: '',
                 price2: '',
-                startTime:firstDay,
-                endTime:endDay,
+                startTime:DateTime.getDateOfDays(30),
+                endTime:DateTime.getDateOfDays(1),
                 page: 1,
             },
             
@@ -168,8 +164,34 @@ class Searcher extends React.Component {
     }
 
     componentDidMount(){
-        // 先搜索一次，为返回的菜单准备
-        this.props.handleSearchArgs(this.state.args);
+        this.defaultLoading();
+    }
+
+    // 首次搜索
+    defaultLoading(){
+        // 获取关联页返回标识
+        const isRelevance = parseInt(sessionStorage.getItem('isRelevance'));
+        
+        if(isRelevance){
+            // 获取session存储的查询条件，并查询
+            const sessionArgs = JSON.parse(sessionStorage.getItem('searchArgs'));
+            this.props.handleSearchArgs(sessionArgs);
+
+            this.state.args = sessionArgs;
+            
+            this.state.argsShow.price1 = sessionArgs.price1;
+            this.state.argsShow.price2 = sessionArgs.price2;
+            this.state.argsShow.sku = sessionArgs.sku;
+
+            if(sessionStorage.getItem('page')){
+                this.state.args.page = sessionStorage.getItem('page');
+            }
+            
+            //清除标识
+            sessionStorage.setItem('isRelevance','false');
+        }else{
+            this.props.handleSearchArgs(this.state.args); 
+        }
     }
 
     /**
@@ -193,10 +215,11 @@ class Searcher extends React.Component {
 
         this.state.args.page = 1;
 
+        // session存储搜索参数
+        sessionStorage.setItem('searchArgs',JSON.stringify(this.state.args));
 
         // 开始搜索
         this.props.handleSearchArgs(this.state.args);
-
     }
 
 
