@@ -144,7 +144,12 @@ class GoodsList extends React.Component {
                 className: styles.columnTitle,
                 render:(text,record) => (
                     <div>
-                        <a href={record.product_url} target="_blank">{record.pname}</a>
+                        {
+                            record.site == "banggood"?
+                            <a href={record.product_url} target="_blank">{record.pname}</a>
+                            : record.pname
+                        }
+                        
                     </div>
                 )
             }, {
