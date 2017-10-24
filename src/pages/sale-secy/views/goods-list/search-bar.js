@@ -16,6 +16,8 @@ const InputGroup = Input.Group;
 const Option = Select.Option;
 
 
+let statustip = '0';
+
 class Searcher extends React.Component {
     constructor(props, context) {
         super(props, context);
@@ -29,7 +31,7 @@ class Searcher extends React.Component {
                 site: '',
                 cid: '',
                 bid: '',
-                status: '',
+                status: '0',
                 sku: '',
                 price1: '',
                 price2: '',
@@ -64,9 +66,6 @@ class Searcher extends React.Component {
                     
                 </div>
                 <div className={ styles.main }>
-                    {/* <div className={ styles.title }>
-                        <span>筛选分类</span>
-                    </div> */}
 
                     {/*搜索栏 start*/}
                     <div className={ styles.searchContent}>
@@ -101,23 +100,30 @@ class Searcher extends React.Component {
                                     :null
                                 }
                             </Select>
-
-                            <Select
-                                style={{ width: 200, marginRight:10, verticalAlign:'top'}}
-                                placeholder="关注状态" 
-                                onChange={ this.getStatus }
-                                >
-                                <Option key="0">全部</Option>
-                                <Option key="1">已关联</Option>
-                                <Option key="2">未关联</Option>
-                            </Select>
-
+                            {
+                                this.state.args.status?
+                                <Select
+                                    id="status"
+                                    style={{ width: 200, marginRight:10, verticalAlign:'top'}}
+                                    placeholder="关注状态" 
+                                    labelInValue
+                                    defaultValue={{key:statustip}}
+                                    onChange={ this.getStatus}
+                                    >
+                                    <Option value="0">全部</Option>
+                                    <Option value="1">已关联</Option>
+                                    <Option value="2">未关联</Option>
+                                </Select>
+                                :null
+                            }
+                            
                             <InputGroup compact className={styles.dateGroup}>
                                 <Input
-                                    id="price1" 
+                                    id="price1"
                                     ref = "price1"
                                     style={{ width: 100, textAlign: 'center' }} 
-                                    placeholder="价格区间"  />
+                                    placeholder="价格区间"  
+                                />
                                 <Input style={{ width: 24, borderLeft: 0, pointerEvents: 'none' }} placeholder="~" />
                                 <Input
                                     id="price2" 
@@ -127,7 +133,12 @@ class Searcher extends React.Component {
                                 />
                             </InputGroup>
                                 
-                            <Input id="sku" style={{ width: 180, verticalAlign:'top'}} placeholder="SKU / PID" />
+                            <Input 
+                                id="sku" 
+                                style={{ width: 180, verticalAlign:'top'}} 
+                                placeholder="SKU / PID" 
+
+                            />
                             
                             <div className={ styles.pickerDate }  >
                                 <RangePicker 
@@ -163,32 +174,53 @@ class Searcher extends React.Component {
         )
     }
 
+    
     componentDidMount(){
         this.defaultLoading();
+    }
+    
+    componentDidUpdate(){
+        statustip = this.state.args.status;
     }
 
     // 首次搜索
     defaultLoading(){
         // 获取关联页返回标识
         const isRelevance = parseInt(sessionStorage.getItem('isRelevance'));
+        const sessionArgs = JSON.parse(sessionStorage.getItem('searchArgs'));
         
+        // 判断是否已存储搜索参数
         if(isRelevance){
-            // 获取session存储的查询条件，并查询
-            const sessionArgs = JSON.parse(sessionStorage.getItem('searchArgs'));
-            this.props.handleSearchArgs(sessionArgs);
 
-            this.state.args = sessionArgs;
-            
-            this.state.argsShow.price1 = sessionArgs.price1;
-            this.state.argsShow.price2 = sessionArgs.price2;
-            this.state.argsShow.sku = sessionArgs.sku;
+            if(sessionArgs){
+                this.state.args = sessionArgs; 
+                this.state.argsShow.price1 = sessionArgs.price1;
+                this.state.argsShow.price2 = sessionArgs.price2;
+                this.state.argsShow.sku = sessionArgs.sku;
+    
+                if(sessionArgs.status == '0'){
+                    this.state.argsShow.status = '全部';
+                }else if(sessionArgs.status == '1'){
+                    this.state.argsShow.status = '已关联';   
+                }else if(sessionArgs.status == '2'){
+                    this.state.argsShow.status = '未关联';
+                }
+    
+                document.getElementById('price1').value = sessionArgs.price1;
+                document.getElementById('price2').value = sessionArgs.price2;
+                document.getElementById('sku').value = sessionArgs.sku;
+
+            }
 
             if(sessionStorage.getItem('page')){
                 this.state.args.page = sessionStorage.getItem('page');
             }
             
-            //清除标识
-            sessionStorage.setItem('isRelevance','false');
+            this.props.handleSearchArgs(this.state.args);
+            
+            //清除搜索参数
+            sessionStorage.removeItem('isRelevance');
+
         }else{
             this.props.handleSearchArgs(this.state.args); 
         }
@@ -331,16 +363,8 @@ class Searcher extends React.Component {
      * 获取关联状态
      */
     getStatus = (value) => {
-
-        this.state.args.status = value;
-        
-        if (value == 1) {
-            this.state.argsShow.status = "已关联";
-        } else if(value == 2){
-            this.state.argsShow.status = "未关联";
-        }else{
-            this.state.argsShow.status = "全部";
-        }
+        this.state.args.status = value.key;
+        this.state.argsShow.status = value.label;
     }
 
     /**

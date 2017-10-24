@@ -52,6 +52,9 @@ class CreateRelevance extends React.Component {
     }
 
     render() {
+
+        const suffix = this.props.sku?<Icon type="check" style={{color: 'rgb(121, 187, 81)'}} />:null;
+
         return (
             <MainLayout headerMenuText="销售秘书">
 
@@ -106,16 +109,23 @@ class CreateRelevance extends React.Component {
                                             }
                                         </div>
                                         <div className={styles.inputWrap}>
-                                            <p>输入BG-SKU，<br />根据SKU获取其主图并显示</p>
-                                            <Input style={{ width: 150 }} placeholder="输入SKU" ref="inputSku" />
-                                            <Button style={{ marginLeft: 5 }} onClick={this.getGoodsBySku.bind(this, null)}>获取</Button>
-                                            <div style={{ height: 50 }}>
+                                            <p>输入BG-SKU，根据SKU获取其主图并显示</p>
+                                            <Input 
+                                                style={{ width: 218 }} 
+                                                placeholder="输入SKU" 
+                                                ref="inputSku" 
+                                                suffix={suffix}
+                                            />
+                                            <div>
+                                                <Button onClick={this.getGoodsBySku.bind(this, null)}>获取</Button>
+                                            </div>
+                                            {/* <div style={{ height: 50 }}>
                                                 {
                                                     this.props.goods.msg ?
                                                         <p style={{ color: 'red' }}>{this.props.goods.msg}</p>
                                                         : null
                                                 }
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                     </div>
@@ -395,7 +405,7 @@ class CreateRelevance extends React.Component {
             })
         } else {
             message.destroy();
-            message.warning("请输入商品的SKU!");
+            message.warning("请先输入商品的SKU!");
         }
     }
 
@@ -433,16 +443,19 @@ class CreateRelevance extends React.Component {
      */
     toStepTwo() {
         const inputSku = this.refs.inputSku.refs.input.value;
-        if (inputSku !== "" && this.props.sku == inputSku) { 
+        if(inputSku == ""){
+            message.destroy();
+            message.warning("请先输入商品");
+        }
+        else if (this.props.sku !== inputSku) { 
+            message.destroy();
+            message.warning("请先获取商品");
+        } else {
             this.setState({
                 step1: 'none',
                 step2: '',
-
                 progress2: true,
             })
-        } else {
-            message.destroy();
-            message.warning("请先输入一个商品");
         }
     }
 

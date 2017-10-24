@@ -218,8 +218,8 @@ export default {
 
             // 从state中获取搜索参数
             const params = yield select(state => state.RelevanceBGModel.searchArguments);
-            params.page = payload.page;
-
+            //params.page = payload.page;
+            
             // 请求数据
             const { data,code } = yield call(BgService.query, params);
             if(code == CODE200){
@@ -305,7 +305,11 @@ export default {
 
     subscriptions: {
         setup({ dispatch, history }) {
+            // 清除搜索参数sessionStorage
+            sessionStorage.removeItem('searchArgs');
+            sessionStorage.removeItem('page'); 
         },
+       
     }
 }
 
