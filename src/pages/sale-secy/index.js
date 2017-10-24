@@ -1,8 +1,13 @@
 import dva from 'dva';
 import createLoading from 'dva-loading'; //加载
+import { message } from 'antd';
 
 // 1. Initialize
-const app = dva();
+const app = dva({
+    onError (error) {
+        message.error(error.message);
+      },
+});
 
 // 2. Plugins
 app.use(createLoading());
