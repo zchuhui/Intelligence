@@ -19,7 +19,7 @@ export default {
         rivalViewList:null,
 
         relatedLoading:false,     // 关联加载
-        relatedStatus:false,      // 关联状态
+        relatedStatus:0,       // 关联状态
 
         stockLoading:false,      // 采购加载
         stockStatus:false,       // 采购状态
@@ -92,7 +92,7 @@ export default {
         // 获取竞品列表数据
 		* getRivalDataByParams({payload},{select,call,put}){
             // 清除关联、采购状态
-            yield put({ type:'updateRelatedStatus', payload:false});
+            yield put({ type:'updateRelatedStatus', payload:0});
             yield put({ type:'updateStockStatus', payload:false});
 
             try{
@@ -106,7 +106,6 @@ export default {
                 
                 if(data){
                     yield put({ type:'saveRivalViewList', payload:data});
-
                 }
                 yield put({type:'updateRivalViewLoading', payload:{loading:false}})
             
@@ -123,20 +122,14 @@ export default {
 
             yield put({ type:'updateRelatedLoading', payload:true});
 
-			//try{
-				// 请求获取数据
-                const {data, code, msg} = yield call(ServiceRival.setRelatedBgBySku,payload);
-               
-				if(code == CODE200){
-                    message.success(msg)
-                    yield put({ type:'updateRelatedStatus', payload:true});
-				}else{
-                    yield put({ type:'updateRelatedStatus', payload:false});
-                }
-			/* }catch(e){
-                yield put({ type:'updateRelatedStatus', payload:false});
-            } */
+            const {data, code, msg} = yield call(ServiceRival.setRelatedBgBySku,payload);
             
+            if(code == CODE200){
+                message.success(msg)
+                yield put({ type:'updateRelatedStatus', payload:1});
+            }else{
+                yield put({ type:'updateRelatedStatus', payload:2});
+            }
             yield put({ type:'updateRelatedLoading', payload:false});
         },
 

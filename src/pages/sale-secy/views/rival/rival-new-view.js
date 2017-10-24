@@ -520,11 +520,8 @@ class RivalNewView extends React.Component {
     }
 
     componentDidUpdate(){
-
         // 关联成功，刷新列表
-        if(this.props.relatedStatus && !this.state.relatedStatus){
-            this.state.relatedStatus = this.props.relatedStatus;
-
+        if(this.props.relatedStatus == 1){
             this.timeout(2000).then((value) => {
                 this.props.getRivalDataByParams({
                     site:this.state.site,
@@ -534,10 +531,20 @@ class RivalNewView extends React.Component {
                     page:this.state.page,
                 })
             });
-
-            this.state.relatedStatus = false;
-
         }
+        // 关联失败
+        else if(this.props.relatedStatus == 2 ){
+            this.timeout(2000).then((value) => {
+                this.props.getRivalDataByParams({
+                    site:this.state.site,
+                    cid:this.state.cid,
+                    startDate:this.state.startDate,
+                    endDate:this.state.endDate,
+                    page:this.state.page,
+                })
+            });
+        }
+        
         
         // 采购成功，刷新列表
         if(this.props.stockStatus && !this.state.stockStatus){
